@@ -1,0 +1,117 @@
+<resources>
+    <string name="app_name">Список продуктов</string>
+    <string name="create_list">Создать список</string>
+    <string name="product_to_buy_label">Продукт, который нужно купить</string>
+    <string name="broccoli">Брокколи</string>
+    <string name="category">Категория</string>
+    <string name="category_fruits_vegetables_berries">Фрукты / Овощи / Ягоды</string>
+    <string name="category_meat_fish_shrimp">Мясо / Рыба / Морепродукты</string>
+    <string name="category_dairy_products">Молочные продукты</string>
+    <string name="category_bakery_and_sweets">Выпечка / Сладости</string>
+    <string name="category_other">Другое</string>
+    <string name="add">Добавить</string>
+    <string name="list_preview">Предпросмотр списка</string>
+    <string name="clear_list">Очистить список</string>
+    <string name="exit_with_saving">Выйти (с сохранением)</string>
+    <string name="start_shopping">Начать покупку</string>
+    <string name="explanation">На основе списка будут созданы уведомления. С ними можно взаимодействовать на экране блокировки.</string>
+    <string name="delete">Удалить</string>
+    <string name="next">Далее</string>
+    <string name="whats_next">Что дальше?</string>
+    <string name="list_is_empty">Список пуст…</string>
+
+    <string-array name="fruits_and_vegetables">
+        <item>Яблоки|Яблоко</item>
+        <item>Банан</item>
+        <item>Брокколи</item>
+        <item>Морковь|Морковка</item>
+        <item>Перец Чили</item>
+        <item>Перец Болгарский|Болгарский Перец|Сладкий Перец|Перец Сладкий</item>
+        <item>Огурцы|Огурец</item>
+        <item>Чеснок</item>
+        <item>Виноград</item>
+        <item>Кукуруза</item>
+        <item>Кокос</item>
+        <item>Ананас</item>
+        <item>Абрикос</item>
+
+        <item>Грейпфрут</item>
+        <item>Мандарин</item>
+        <item>Апельсин</item>
+        <item>Лимон</item>
+        <item>Лайм</item>
+
+        <item>Лук</item>
+        <item>Персик</item>
+        <item>Перец|Перцы</item>
+        <item>Картошка|Картофель</item>
+        <item>Помидор</item>
+        <item>Вишня|Черешня|Вишни|Черешни</item>
+        <item>Сельдерей</item>
+        <item>Арбуз</item>
+        <item>Дыня|Дынь</item>
+        <item>Клубника|Клубники</item>
+        <item>Малина|Малинка</item>
+        <item>Голубика|Голубики|Чериника|Чериники</item>
+        <item>Горох|Горошек</item>
+        <item>Киви</item>
+        <item>Шпинат</item>
+    </string-array>
+
+    <string-array name="dairy_products">
+        <item>Молоко|Молочное</item>
+        <item>Сыр</item>
+        <item>Творог</item>
+        <item>Йогурт</item>
+        <item>Кефир</item>
+        <item>Маскарпоне</item>
+        <item>Сыр фета</item>
+        <item>Сливочное масло</item>
+    </string-array>
+
+    <string-array name="meat_fish_shrimp">
+        <item>Свинина|Свинные|Свинная|Свинное|Свиньи</item>
+        <item>Говядина|Говяжьи|Говяжья|Говяжье</item>
+        <item>Курятина|Куриные|Куриная|Куриное|Курицы</item>
+        <item>Лосось</item>
+        <item>Тунец</item>
+        <item>Шпрот</item>
+        <item>Селедка|Селёдка</item>
+        <item>Скумбрия|Скумбрии</item>
+        <item>Креветка|Креветки</item>
+        <item>Мидия|Мидии</item>
+        <item>Икра</item>
+    </string-array>
+
+    <string-array name="bakery_and_sweets">
+        <item>Хлеб</item>
+        <item>Тост</item>
+        <item>Багет</item>
+        <item>Булочки|Булочка|Булка|Булки</item>
+        <item>Круассан</item>
+        <item>Вафля|Вафли|Вафелька|Вафельки</item>
+        <item>Варенье</item>
+        <item>Конфета|Конфеты</item>
+        <item>Мука</item>
+        <item>Бисквит</item>
+        <item>Чизкейк</item>
+        <item>Мороженое</item>
+    </string-array>
+
+    <string-array name="other">
+        <item>Мартини</item>
+        <item>Пиво</item>
+        <item>Виски</item>
+        <item>Оливковое масло</item>
+        <item>Яйца|Яйцо</item>
+        <item>Вода</item>
+        <item>Кофе</item>
+        <item>Чай</item>
+        <item>Какао</item>
+        <item>Сок</item>
+        <item>Рис</item>
+        <item>Овсянка</item>
+        <item>Памперсы|Подгузники</item>
+    </string-array>
+
+</resources>
