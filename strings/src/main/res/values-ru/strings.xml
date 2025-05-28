@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Список продуктов</string>
+
+    <string name="grocery_list">Список продуктов</string>
     <string name="create_list">Создать список</string>
     <string name="product_to_buy_label">Продукт, который нужно купить</string>
     <string name="broccoli">Брокколи</string>

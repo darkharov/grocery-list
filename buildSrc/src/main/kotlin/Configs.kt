@@ -4,6 +4,8 @@ object Configs {
 
     const val APPLICATION_ID = "app.grocery.list"
 
+    const val SERIALIZATION = "2.0.21"
+
     object Sdk {
         const val MIN = 26
         const val COMPILE = 35

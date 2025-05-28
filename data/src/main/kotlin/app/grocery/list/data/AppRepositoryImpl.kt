@@ -48,6 +48,9 @@ internal class AppRepositoryImpl @Inject constructor(
                 }
             }
 
-    override fun getProductListCount(): Flow<Int> =
+    override fun getNumberOfAddedProducts(): Flow<Int> =
         productDao.count()
+
+    override fun atLeastOneProductAdded(): Flow<Boolean> =
+        productDao.count().map { it > 0 }
 }

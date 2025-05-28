@@ -9,9 +9,9 @@ import kotlinx.collections.immutable.persistentListOf
 @Immutable
 internal data class ProductInputFormProps(
     val title: TextFieldValue,
-    val numberOfAddedProducts: Int = 0,
-    val categories: ImmutableList<CategoryProps> = persistentListOf(),
-    val selectedCategory: CategoryProps? = null,
+    val atLeastOneProductAdded: Boolean,
+    val categories: ImmutableList<CategoryProps>,
+    val selectedCategory: CategoryProps?,
 )
 
 internal object ProductInputFormMocks {

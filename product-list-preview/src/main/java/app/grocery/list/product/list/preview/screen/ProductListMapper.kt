@@ -1,8 +1,7 @@
-package app.grocery.list.product.list.preview.mapping
+package app.grocery.list.product.list.preview.screen
 
 import app.grocery.list.domain.CategoryAndProducts
 import app.grocery.list.domain.Product
-import app.grocery.list.product.list.preview.screen.ProductListPreviewProps
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.collections.immutable.ImmutableList

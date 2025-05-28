@@ -1,11 +1,8 @@
-package app.grocery.list.product.list.preview
+package app.grocery.list.product.list.preview.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.domain.AppRepository
-import app.grocery.list.product.list.preview.mapping.ProductListMapper
-import app.grocery.list.product.list.preview.screen.ProductListPreviewCallbacks
-import app.grocery.list.product.list.preview.screen.ProductListPreviewProps
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -42,14 +39,14 @@ internal class ProductListPreviewViewModel @Inject constructor(
         }
     }
 
-    override fun onNextOptionSelected() {
-        events.trySend(Event.OnNexOptionSelected)
+    override fun onNext() {
+        events.trySend(Event.OnGoToActions)
     }
 
     fun events(): ReceiveChannel<Event> =
         events
 
     enum class Event {
-        OnNexOptionSelected,
+        OnGoToActions,
     }
 }

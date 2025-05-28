@@ -10,7 +10,7 @@ import app.grocery.list.product.input.form.screen.elements.title.input.ProductTi
 internal interface ProductInputFormCallbacks :
     ProductTitleInputCallbacks,
     CategoryPickerCallbacks {
-    fun onGoToPreviewClick()
+    fun onReadyToGoToPreview()
     fun onProductInputComplete(productTitle: String, categoryId: Int)
 }
 
@@ -18,6 +18,6 @@ internal interface ProductInputFormCallbacks :
 internal open class ProductInputFormCallbacksMock : ProductInputFormCallbacks,
     ProductTitleInputCallbacks by ProductTitleInputCallbacksMock,
     CategoryPickerCallbacks by CategoryPickerCallbacksMock {
-    override fun onGoToPreviewClick() {}
+    override fun onReadyToGoToPreview() {}
     override fun onProductInputComplete(productTitle: String, categoryId: Int) {}
 }

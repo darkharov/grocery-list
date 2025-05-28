@@ -1,13 +1,10 @@
-package app.grocery.list.product.input.form
+package app.grocery.list.product.input.form.screen
 
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.Product
-import app.grocery.list.product.input.form.mapping.ProductCategoryMapper
-import app.grocery.list.product.input.form.screen.ProductInputFormCallbacks
-import app.grocery.list.product.input.form.screen.ProductInputFormProps
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -40,20 +37,20 @@ internal class ProductInputFormViewModel @Inject constructor(
     private fun createPropsFlow(): StateFlow<ProductInputFormProps?> =
         combine(
             productTitle,
-            repository.getProductListCount(),
             categories(),
             selectedCategory(),
+            repository.atLeastOneProductAdded(),
         ) {
                 productTitle,
-                numberOfAddedProducts,
                 categories,
                 selectedCategory,
+                atLeastOneProductAdded,
             ->
             ProductInputFormProps(
                 title = productTitle,
-                numberOfAddedProducts = numberOfAddedProducts,
                 categories = categories,
                 selectedCategory = selectedCategory,
+                atLeastOneProductAdded = atLeastOneProductAdded,
             )
         }.stateIn(
             viewModelScope,
@@ -107,7 +104,7 @@ internal class ProductInputFormViewModel @Inject constructor(
         explicitlySelectedCategory.value = category
     }
 
-    override fun onGoToPreviewClick() {
+    override fun onReadyToGoToPreview() {
         events.trySend(Event.OnGoToPreview)
     }
 

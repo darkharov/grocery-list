@@ -1,4 +1,4 @@
-package app.grocery.list.commons.compose.theme.elements
+package app.grocery.list.commons.compose.theme.elements.toolbar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
@@ -29,6 +30,7 @@ import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.theme.EmojiProvider
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalEmojiProvider
+import app.grocery.list.commons.compose.theme.elements.AppCounter
 
 @Composable
 fun AppToolbar(
@@ -109,16 +111,6 @@ private fun AppToolbarPreview() {
     GroceryListTheme {
         AppToolbar(
             title = "Title",
-        )
-    }
-}
-
-@PreviewLightDark
-@Composable
-private fun AppToolbarWithNoTitlePreview() {
-    GroceryListTheme {
-        AppToolbar(
-            title = "",
         )
     }
 }

@@ -9,5 +9,6 @@ interface AppRepository {
     suspend fun deleteProduct(productId: Int)
     suspend fun putProduct(product: Product)
     fun getProductList(): Flow<List<CategoryAndProducts>>
-    fun getProductListCount(): Flow<Int>
+    fun getNumberOfAddedProducts(): Flow<Int>
+    fun atLeastOneProductAdded(): Flow<Boolean>
 }
