@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.CircularProgressIndicator
@@ -20,11 +19,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import app.grocery.list.commons.compose.theme.GroceryListTheme
@@ -85,87 +87,80 @@ private fun Form(
     props: ProductInputFormProps,
     callbacks: ProductInputFormCallbacks,
 ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+    ) {
+        Elements(
+            props = props,
+            callbacks = callbacks,
+        )
+    }
+}
+
+@Composable
+private fun Elements(
+    props: ProductInputFormProps,
+    callbacks: ProductInputFormCallbacks,
+) {
     val horizontalOffset = dimensionResource(R.dimen.margin_16_32_64)
-    val titleFocusRequester = remember { FocusRequester() }
     val categoryFocusRequester = remember { FocusRequester() }
     val selectedCategory = props.selectedCategory
+    val softwareKeyboardController = LocalSoftwareKeyboardController.current
+    val titleFocusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) {
         titleFocusRequester.requestFocus()
     }
-    Column(
+    Spacer(
         modifier = Modifier
-            .imePadding()
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        ProductTitleField(
-            title = props.title,
-            callbacks = callbacks,
-            focusRequester = titleFocusRequester,
-            imeAction = if (selectedCategory == null) {
-                ImeAction.Next
-            } else {
-                ImeAction.Done
-            },
-            keyboardActions = KeyboardActions {
-                finalizeInput(
-                    props = props,
-                    selectedCategory = selectedCategory,
-                    categoryFocusRequester = categoryFocusRequester,
-                    titleFocusRequester = titleFocusRequester,
-                    callbacks = callbacks,
-                )
-            },
-            modifier = Modifier
-                .padding(horizontal = horizontalOffset),
-        )
-        CategoryPicker(
-            categories = props.categories,
-            selection = selectedCategory,
-            callbacks = callbacks,
-            focusRequester = categoryFocusRequester,
-            onSelectionComplete = {
-                titleFocusRequester.requestFocus()
-            },
-            modifier = Modifier
-                .padding(horizontal = horizontalOffset),
-        )
-        Spacer(
-            modifier = Modifier
-                .height(32.dp),
-        )
-        Row(
-            modifier = Modifier
-                .padding(horizontal = horizontalOffset),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            AppButton(
-                text = stringResource(R.string.add),
-                onClick = {
-                    finalizeInput(
-                        props = props,
-                        selectedCategory = selectedCategory,
-                        categoryFocusRequester = categoryFocusRequester,
-                        titleFocusRequester = titleFocusRequester,
-                        callbacks = callbacks,
-                    )
-                },
-                enabled = props.title.text.isNotBlank(),
-                modifier = Modifier
-                    .weight(1f),
+            .height(80.dp)
+    )
+    ProductTitleField(
+        title = props.title,
+        callbacks = callbacks,
+        focusRequester = titleFocusRequester,
+        imeAction = if (selectedCategory == null) {
+            ImeAction.Next
+        } else {
+            ImeAction.Done
+        },
+        keyboardActions = KeyboardActions {
+            finalizeInput(
+                props = props,
+                selectedCategory = selectedCategory,
+                categoryFocusRequester = categoryFocusRequester,
+                titleFocusRequester = titleFocusRequester,
+                callbacks = callbacks,
+                softwareKeyboardController = softwareKeyboardController,
             )
-            AppButton(
-                text = "${stringResource(R.string.next)} >>",
-                onClick = {
-                    callbacks.onReadyToGoToPreview()
-                },
-                enabled = props.atLeastOneProductAdded && props.title.text.isBlank(),
-                modifier = Modifier
-                    .weight(1f),
-            )
-        }
-    }
+        },
+        modifier = Modifier
+            .padding(horizontal = horizontalOffset),
+    )
+    CategoryPicker(
+        categories = props.categories,
+        selection = selectedCategory,
+        callbacks = callbacks,
+        focusRequester = categoryFocusRequester,
+        onSelectionComplete = {
+            titleFocusRequester.requestFocus()
+        },
+        modifier = Modifier
+            .padding(horizontal = horizontalOffset),
+    )
+    Spacer(
+        modifier = Modifier
+            .height(32.dp),
+    )
+    Buttons(
+        horizontalOffset = horizontalOffset,
+        props = props,
+        selectedCategory = selectedCategory,
+        categoryFocusRequester = categoryFocusRequester,
+        titleFocusRequester = titleFocusRequester,
+        callbacks = callbacks,
+        softwareKeyboardController = softwareKeyboardController,
+    )
 }
 
 private fun finalizeInput(
@@ -174,6 +169,7 @@ private fun finalizeInput(
     categoryFocusRequester: FocusRequester,
     titleFocusRequester: FocusRequester,
     callbacks: ProductInputFormCallbacks,
+    softwareKeyboardController: SoftwareKeyboardController?,
 ) {
     if (props.title.text.isNotBlank()) {
         if (selectedCategory != null) {
@@ -186,7 +182,52 @@ private fun finalizeInput(
             categoryFocusRequester.requestFocus()
         }
     } else if (props.atLeastOneProductAdded) {
+        softwareKeyboardController?.hide()
         callbacks.onReadyToGoToPreview()
+    }
+}
+
+@Composable
+private fun Buttons(
+    horizontalOffset: Dp,
+    props: ProductInputFormProps,
+    selectedCategory: CategoryProps?,
+    categoryFocusRequester: FocusRequester,
+    titleFocusRequester: FocusRequester,
+    callbacks: ProductInputFormCallbacks,
+    softwareKeyboardController: SoftwareKeyboardController?,
+) {
+    Row(
+        modifier = Modifier
+            .padding(horizontal = horizontalOffset),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        AppButton(
+            text = stringResource(R.string.add),
+            onClick = {
+                finalizeInput(
+                    props = props,
+                    selectedCategory = selectedCategory,
+                    categoryFocusRequester = categoryFocusRequester,
+                    titleFocusRequester = titleFocusRequester,
+                    callbacks = callbacks,
+                    softwareKeyboardController = softwareKeyboardController,
+                )
+            },
+            enabled = props.title.text.isNotBlank(),
+            modifier = Modifier
+                .weight(1f),
+        )
+        AppButton(
+            text = "${stringResource(R.string.next)} >>",
+            onClick = {
+                softwareKeyboardController?.hide()
+                callbacks.onReadyToGoToPreview()
+            },
+            enabled = props.atLeastOneProductAdded && props.title.text.isBlank(),
+            modifier = Modifier
+                .weight(1f),
+        )
     }
 }
 
