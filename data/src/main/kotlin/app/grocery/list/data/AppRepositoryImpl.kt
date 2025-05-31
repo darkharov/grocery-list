@@ -33,7 +33,7 @@ internal class AppRepositoryImpl @Inject constructor(
 
     override suspend fun putProduct(product: Product) {
         val entity = productMapper.toDataEntity(product)
-        productDao.insert(entity)
+        productDao.insertOrReplace(entity)
     }
 
     override fun getProductList(): Flow<List<CategoryAndProducts>> =

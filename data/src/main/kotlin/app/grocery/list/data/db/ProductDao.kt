@@ -3,14 +3,15 @@ package app.grocery.list.data.db
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.MapColumn
+import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 internal interface ProductDao {
 
-    @Insert
-    suspend fun insert(entity: ProductEntity)
+    @Insert(onConflict = REPLACE)
+    suspend fun insertOrReplace(entity: ProductEntity)
 
     @Query("DELETE FROM product WHERE product_id = :productId")
     suspend fun delete(productId: Int)
