@@ -1,6 +1,7 @@
-package app.grocery.list.commons.compose.theme.elements.toolbar
+package app.grocery.list.commons.compose.theme.elements
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,11 +19,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
@@ -30,10 +33,31 @@ import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.theme.EmojiProvider
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalEmojiProvider
-import app.grocery.list.commons.compose.theme.elements.AppCounter
 
 @Composable
 fun AppToolbar(
+    title: String,
+    modifier: Modifier = Modifier,
+    counterValue: Int? = null,
+) {
+    AppToolbarInternal(
+        title = title,
+        modifier = modifier,
+        titleTrailingContent = {
+            if (counterValue != null) {
+                AppCounter(
+                    value = counterValue,
+                    modifier = Modifier.padding(
+                        horizontal = 6.dp,
+                    )
+                )
+            }
+        }
+    )
+}
+
+@Composable
+internal fun AppToolbarInternal(
     title: String,
     modifier: Modifier = Modifier,
     titleTrailingContent: @Composable () -> Unit = {},
@@ -111,6 +135,22 @@ private fun AppToolbarPreview() {
     GroceryListTheme {
         AppToolbar(
             title = "Title",
+        )
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun AppToolbarWithCounterPreview() {
+    var counterValue by remember { mutableIntStateOf(9) }
+    GroceryListTheme {
+        AppToolbar(
+            title = "Title",
+            counterValue = counterValue,
+            modifier = Modifier
+                .clickable {
+                    counterValue++
+                }
         )
     }
 }

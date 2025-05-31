@@ -17,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -25,8 +24,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import app.grocery.list.commons.app.ApplicationActivityMarker
 import app.grocery.list.commons.compose.theme.ThemeUtil
-import app.grocery.list.commons.compose.theme.elements.AppCounter
-import app.grocery.list.commons.compose.theme.elements.toolbar.AppToolbar
+import app.grocery.list.commons.compose.theme.elements.AppToolbar
 import app.grocery.list.notifications.NotificationPublisher
 import app.grocery.list.product.input.form.ProductInputForm
 import app.grocery.list.product.input.form.ProductInputFormNavigation
@@ -64,12 +62,12 @@ class MainActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val numberOfAddedProduct by viewModel.numberOfAddedProduct.collectAsState()
+            val numberOfAddedProducts by viewModel.numberOfAddedProducts.collectAsState()
             val navController = rememberNavController()
             val navigationFacade = remember { NavigationFacade(navController) }
             themeUtil.GroceryListTheme {
                 Content(
-                    numberOfAddedProduct = numberOfAddedProduct,
+                    numberOfAddedProducts = numberOfAddedProducts,
                     navigationFacade = navigationFacade,
                     navController = navController,
                 )
@@ -119,7 +117,7 @@ class MainActivity :
 
 @Composable
 private fun Content(
-    numberOfAddedProduct: Int,
+    numberOfAddedProducts: Int,
     navController: NavHostController,
     navigationFacade: MainActivity.NavigationFacade,
 ) {
@@ -127,13 +125,7 @@ private fun Content(
         topBar = {
             AppToolbar(
                 title = stringResource(R.string.grocery_list),
-                titleTrailingContent = {
-                    AppCounter(
-                        value = numberOfAddedProduct,
-                        modifier = Modifier
-                            .padding(horizontal = 6.dp),
-                    )
-                },
+                counterValue = numberOfAddedProducts,
             )
         },
     ) { padding ->

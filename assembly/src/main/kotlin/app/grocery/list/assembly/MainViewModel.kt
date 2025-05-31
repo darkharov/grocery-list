@@ -13,7 +13,7 @@ class MainViewModel @Inject constructor(
     repository: AppRepository,
 ) : ViewModel() {
 
-    val numberOfAddedProduct =
+    val numberOfAddedProducts =
         repository
             .getNumberOfAddedProducts()
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
