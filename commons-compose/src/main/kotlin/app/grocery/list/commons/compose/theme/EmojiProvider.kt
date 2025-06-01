@@ -27,7 +27,7 @@ class EmojiProviderImpl @Inject internal constructor(
     private val context: Context,
 ) : EmojiProvider {
 
-    private val allEmojis = context.resources.getStringArray(R.array.toolbar_emojis)
+    private val allEmojis = context.resources.getStringArray(R.array.emojis)
     private val list = mutableSetOf(*(allEmojis))
 
     private var initialObtain = true
