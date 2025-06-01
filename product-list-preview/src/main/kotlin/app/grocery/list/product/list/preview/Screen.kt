@@ -1,4 +1,4 @@
-package app.grocery.list.product.list.preview.screen
+package app.grocery.list.product.list.preview
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -40,8 +40,6 @@ import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.elements.AppHorizontalDivider
 import app.grocery.list.commons.compose.theme.elements.AppHorizontalDividerMode
 import app.grocery.list.commons.compose.theme.elements.WideAppButton
-import app.grocery.list.product.list.preview.ProductListPreviewNavigation
-import app.grocery.list.product.list.preview.R
 
 @Composable
 internal fun ProductListPreviewScreen(

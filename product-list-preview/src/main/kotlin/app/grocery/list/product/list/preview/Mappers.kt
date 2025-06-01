@@ -1,4 +1,4 @@
-package app.grocery.list.product.list.preview.screen
+package app.grocery.list.product.list.preview
 
 import app.grocery.list.domain.CategoryAndProducts
 import app.grocery.list.domain.Product

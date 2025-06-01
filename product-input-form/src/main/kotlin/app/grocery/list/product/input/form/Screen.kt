@@ -1,4 +1,4 @@
-package app.grocery.list.product.input.form.screen
+package app.grocery.list.product.input.form
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,8 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.elements.AppButton
-import app.grocery.list.product.input.form.ProductInputFormNavigation
-import app.grocery.list.product.input.form.R
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPicker
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
 import app.grocery.list.product.input.form.screen.elements.title.input.ProductTitleField

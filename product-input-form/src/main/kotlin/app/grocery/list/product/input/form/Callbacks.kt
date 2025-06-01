@@ -1,4 +1,4 @@
-package app.grocery.list.product.input.form.screen
+package app.grocery.list.product.input.form
 
 import androidx.compose.runtime.Stable
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPickerCallbacks

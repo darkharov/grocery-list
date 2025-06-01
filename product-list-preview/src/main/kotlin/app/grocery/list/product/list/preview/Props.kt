@@ -1,4 +1,4 @@
-package app.grocery.list.product.list.preview.screen
+package app.grocery.list.product.list.preview
 
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable

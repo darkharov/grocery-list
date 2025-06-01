@@ -1,4 +1,4 @@
-package app.grocery.list.product.list.actions.screen
+package app.grocery.list.product.list.actions
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,11 +14,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.elements.AppButtonType
 import app.grocery.list.commons.compose.theme.elements.WideAppButton
-import app.grocery.list.product.list.actions.ProductListActionsNavigation
-import app.grocery.list.product.list.actions.R
+import app.grocery.list.product.list.actions.ProductListActionsViewModel.Event
+import kotlinx.serialization.Serializable
 
 @Composable
 internal fun ProductListActionsScreen(
@@ -28,13 +30,13 @@ internal fun ProductListActionsScreen(
     LaunchedEffect(viewModel) {
         for (event in viewModel.events()) {
             when (event) {
-                ProductListActionsViewModel.Event.OnListCleared -> {
+                Event.OnListCleared -> {
                     navigation.onListCleared()
                 }
-                ProductListActionsViewModel.Event.OnExitFromApp -> {
+                Event.OnExitFromApp -> {
                     navigation.onExitFromApp()
                 }
-                ProductListActionsViewModel.Event.OnStartShopping -> {
+                Event.OnStartShopping -> {
                     navigation.onStartShopping()
                 }
             }

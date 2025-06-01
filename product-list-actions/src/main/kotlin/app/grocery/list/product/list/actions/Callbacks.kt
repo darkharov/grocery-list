@@ -1,4 +1,4 @@
-package app.grocery.list.product.list.actions.screen
+package app.grocery.list.product.list.actions
 
 internal interface ProductListActionsCallbacks {
     fun onClearList()

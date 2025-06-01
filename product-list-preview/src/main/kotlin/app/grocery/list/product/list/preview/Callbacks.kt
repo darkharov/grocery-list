@@ -1,4 +1,4 @@
-package app.grocery.list.product.list.preview.screen
+package app.grocery.list.product.list.preview
 
 internal interface ProductListPreviewCallbacks {
     fun onDeletedClick(productId: Int)

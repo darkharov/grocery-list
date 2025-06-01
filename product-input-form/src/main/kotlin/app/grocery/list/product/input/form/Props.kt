@@ -1,10 +1,9 @@
-package app.grocery.list.product.input.form.screen
+package app.grocery.list.product.input.form
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.input.TextFieldValue
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 internal data class ProductInputFormProps(

@@ -2,7 +2,6 @@ package app.grocery.list.product.list.preview
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import app.grocery.list.product.list.preview.screen.ProductListPreviewScreen
 import kotlinx.serialization.Serializable
 
 @Serializable

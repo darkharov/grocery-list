@@ -27,8 +27,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.product.input.form.ProductInputFormMocks
 import app.grocery.list.product.input.form.R
-import app.grocery.list.product.input.form.screen.ProductInputFormMocks
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 

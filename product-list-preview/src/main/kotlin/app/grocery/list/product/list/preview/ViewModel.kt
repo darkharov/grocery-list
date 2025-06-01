@@ -1,4 +1,4 @@
-package app.grocery.list.product.list.preview.screen
+package app.grocery.list.product.list.preview
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -1,4 +1,4 @@
-package app.grocery.list.product.input.form.screen
+package app.grocery.list.product.input.form
 
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
