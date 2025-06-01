@@ -39,7 +39,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.elements.AppHorizontalDivider
 import app.grocery.list.commons.compose.theme.elements.AppHorizontalDividerMode
-import app.grocery.list.commons.compose.theme.elements.WideAppButton
+import app.grocery.list.commons.compose.theme.elements.app.button.AppButtonProps
+import app.grocery.list.commons.compose.theme.elements.app.button.WideAppButton
 
 @Composable
 internal fun ProductListPreviewScreen(
@@ -110,11 +111,12 @@ private fun Items(
                 .weight(1f),
         )
         WideAppButton(
-            text = "${stringResource(R.string.next)} >>",
+            props = AppButtonProps.Next(
+                enabled = props.categories.isNotEmpty(),
+            ),
             onClick = {
                 callbacks.onNext()
             },
-            enabled = props.categories.isNotEmpty(),
             modifier = Modifier
                 .padding(vertical = 16.dp),
         )

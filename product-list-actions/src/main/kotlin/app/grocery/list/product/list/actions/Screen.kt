@@ -14,13 +14,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.theme.GroceryListTheme
-import app.grocery.list.commons.compose.theme.elements.AppButtonType
-import app.grocery.list.commons.compose.theme.elements.WideAppButton
+import app.grocery.list.commons.compose.theme.elements.app.button.AppButtonProps
+import app.grocery.list.commons.compose.theme.elements.app.button.WideAppButton
 import app.grocery.list.product.list.actions.ProductListActionsViewModel.Event
-import kotlinx.serialization.Serializable
 
 @Composable
 internal fun ProductListActionsScreen(
@@ -57,24 +54,30 @@ private fun ProductListActionsScreen(
         verticalArrangement = Arrangement.Center,
     ) {
         WideAppButton(
-            text = stringResource(R.string.clear_list),
-            type = AppButtonType.Negative,
-            drawableEndId = R.drawable.ic_delete,
+            props = AppButtonProps.Custom(
+                text = stringResource(R.string.clear_list),
+                background = AppButtonProps.Background.Negative,
+                drawableEndId = R.drawable.ic_delete,
+            ),
             onClick = {
                 callbacks.onClearList()
             },
         )
         WideAppButton(
-            text = stringResource(R.string.exit_with_saving),
-            drawableEndId = R.drawable.ic_exit,
+            props = AppButtonProps.Custom(
+                text = stringResource(R.string.exit_with_saving),
+                drawableEndId = R.drawable.ic_exit,
+            ),
             onClick = {
                 callbacks.onExitFromApp()
             },
         )
         WideAppButton(
-            text = stringResource(R.string.start_shopping),
-            type = AppButtonType.Positive,
-            drawableEndId = R.drawable.ic_cart,
+            props = AppButtonProps.Custom(
+                text = stringResource(R.string.start_shopping),
+                background = AppButtonProps.Background.Positive,
+                drawableEndId = R.drawable.ic_cart,
+            ),
             onClick = {
                 callbacks.onStartShopping()
             },

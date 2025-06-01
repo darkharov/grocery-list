@@ -30,7 +30,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import app.grocery.list.commons.compose.theme.GroceryListTheme
-import app.grocery.list.commons.compose.theme.elements.AppButton
+import app.grocery.list.commons.compose.theme.elements.app.button.AppButton
+import app.grocery.list.commons.compose.theme.elements.app.button.AppButtonProps
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPicker
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
 import app.grocery.list.product.input.form.screen.elements.title.input.ProductTitleField
@@ -201,7 +202,10 @@ private fun Buttons(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         AppButton(
-            text = stringResource(R.string.add),
+            props = AppButtonProps.Custom(
+                text = stringResource(R.string.add),
+                enabled = props.title.text.isNotBlank(),
+            ),
             onClick = {
                 finalizeInput(
                     props = props,
@@ -212,17 +216,17 @@ private fun Buttons(
                     softwareKeyboardController = softwareKeyboardController,
                 )
             },
-            enabled = props.title.text.isNotBlank(),
             modifier = Modifier
                 .weight(1f),
         )
         AppButton(
-            text = "${stringResource(R.string.next)} >>",
+            props = AppButtonProps.Next(
+                enabled = props.atLeastOneProductAdded && props.title.text.isBlank(),
+            ),
             onClick = {
                 softwareKeyboardController?.hide()
                 callbacks.onReadyToGoToPreview()
             },
-            enabled = props.atLeastOneProductAdded && props.title.text.isBlank(),
             modifier = Modifier
                 .weight(1f),
         )
