@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -112,6 +113,10 @@ private fun Content(
                 AppTextButton(
                     text = StringValue.ResId(android.R.string.cancel),
                     onClick = onCancel,
+                )
+                Spacer(
+                    modifier = Modifier
+                        .width(8.dp)
                 )
             }
             AppTextButton(
