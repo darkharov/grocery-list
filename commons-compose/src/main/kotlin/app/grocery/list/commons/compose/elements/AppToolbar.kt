@@ -22,6 +22,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -104,7 +105,7 @@ internal fun AppToolbarInternal(
 @Composable
 private fun decoratedTitle(title: String, emojiProvider: EmojiProvider) =
     if (title.isNotBlank()) {
-        val emoji = remember { emojiProvider.obtain() }
+        val emoji = rememberSaveable { emojiProvider.obtain() }
         DisposableEffect(Unit) {
             onDispose {
                 emojiProvider.release(emoji)
