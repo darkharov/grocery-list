@@ -17,8 +17,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.theme.GroceryListTheme
-import app.grocery.list.commons.compose.theme.elements.app.button.AppButtonProps
-import app.grocery.list.commons.compose.theme.elements.app.button.WideAppButton
+import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
+import app.grocery.list.commons.compose.elements.app.button.WideAppButton
 import app.grocery.list.product.list.actions.ProductListActionsViewModel.Event
 import kotlinx.serialization.Serializable
 

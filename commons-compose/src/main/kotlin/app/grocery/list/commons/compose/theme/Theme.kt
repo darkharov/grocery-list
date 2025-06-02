@@ -4,6 +4,9 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import app.grocery.list.commons.compose.EmojiProvider
+import app.grocery.list.commons.compose.EmojiProviderImpl
+import app.grocery.list.commons.compose.LocalEmojiProvider
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,7 +26,7 @@ fun GroceryListTheme(
 
 @Composable
 private fun GroceryListTheme(
-    emojiProvider: EmojiProviderImpl,
+    emojiProvider: EmojiProvider,
     content: @Composable () -> Unit
 ) {
     CompositionLocalProvider(

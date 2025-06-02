@@ -1,4 +1,4 @@
-package app.grocery.list.commons.compose.theme.elements
+package app.grocery.list.commons.compose.elements
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,10 +29,10 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import app.grocery.list.commons.compose.EmojiProvider
+import app.grocery.list.commons.compose.LocalEmojiProvider
 import app.grocery.list.commons.compose.R
-import app.grocery.list.commons.compose.theme.EmojiProvider
 import app.grocery.list.commons.compose.theme.GroceryListTheme
-import app.grocery.list.commons.compose.theme.LocalEmojiProvider
 
 @Composable
 fun AppToolbar(

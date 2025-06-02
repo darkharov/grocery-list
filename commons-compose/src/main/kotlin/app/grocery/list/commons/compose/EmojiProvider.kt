@@ -1,8 +1,7 @@
-package app.grocery.list.commons.compose.theme
+package app.grocery.list.commons.compose
 
 import android.content.Context
 import androidx.compose.runtime.staticCompositionLocalOf
-import app.grocery.list.commons.compose.R
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton

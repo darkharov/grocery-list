@@ -24,7 +24,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import app.grocery.list.commons.app.ApplicationActivityMarker
 import app.grocery.list.commons.compose.theme.ThemeUtil
-import app.grocery.list.commons.compose.theme.elements.AppToolbar
+import app.grocery.list.commons.compose.elements.AppToolbar
 import app.grocery.list.notifications.NotificationPublisher
 import app.grocery.list.product.input.form.ProductInputForm
 import app.grocery.list.product.input.form.ProductInputFormNavigation

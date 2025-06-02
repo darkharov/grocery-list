@@ -1,4 +1,4 @@
-package app.grocery.list.commons.compose.theme.elements
+package app.grocery.list.commons.compose.elements
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.EnterTransition

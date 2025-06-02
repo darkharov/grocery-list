@@ -1,4 +1,4 @@
-package app.grocery.list.commons.compose.theme.elements.app.button
+package app.grocery.list.commons.compose.elements.app.button
 
 import androidx.annotation.DrawableRes
 import androidx.compose.material3.MaterialTheme

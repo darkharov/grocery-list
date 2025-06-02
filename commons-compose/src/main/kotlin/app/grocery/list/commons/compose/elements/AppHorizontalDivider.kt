@@ -1,4 +1,4 @@
-package app.grocery.list.commons.compose.theme.elements
+package app.grocery.list.commons.compose.elements
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -19,8 +19,8 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.theme.GroceryListTheme
-import app.grocery.list.commons.compose.theme.elements.AppHorizontalDividerMode.Shadow.Downward
-import app.grocery.list.commons.compose.theme.elements.AppHorizontalDividerMode.Shadow.Upward
+import app.grocery.list.commons.compose.elements.AppHorizontalDividerMode.Shadow.Downward
+import app.grocery.list.commons.compose.elements.AppHorizontalDividerMode.Shadow.Upward
 
 private val colors = listOf(
     Color.Transparent,
