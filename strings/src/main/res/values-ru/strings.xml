@@ -8,7 +8,7 @@
     <string name="category_fruits_vegetables_berries">Фрукты / Овощи / Ягоды</string>
     <string name="category_meat_fish_shrimp">Мясо / Рыба / Морепродукты</string>
     <string name="category_dairy_products">Молочные продукты</string>
-    <string name="category_bakery_and_sweets">Выпечка / Сладости</string>
+    <string name="category_flour_products_and_sweets">Мучное / Сладости</string>
     <string name="category_other">Другое</string>
     <string name="add">Добавить</string>
     <string name="list_preview">Предпросмотр списка</string>
@@ -16,10 +16,9 @@
     <string name="clear_product_list_confirmation">Вы действительно хотите удалить все элементы из списка?</string>
     <string name="exit_with_saving">Выйти (с сохранением)</string>
     <string name="start_shopping">Начать покупку</string>
-    <string name="explanation">На основе списка будут созданы уведомления. С ними можно взаимодействовать на экране блокировки.</string>
+    <string name="start_shopping_explanation">На основе списка будут созданы уведомления. С ними удобнее взаимодействовать на экране блокировки.</string>
     <string name="delete">Удалить</string>
     <string name="next">Далее</string>
-    <string name="whats_next">Что дальше?</string>
     <string name="list_is_empty">Список пуст…</string>
 
     <string-array name="fruits_and_vegetables">
@@ -85,7 +84,7 @@
         <item>Икра</item>
     </string-array>
 
-    <string-array name="bakery_and_sweets">
+    <string-array name="flour_products_and_sweets">
         <item>Хлеб</item>
         <item>Тост</item>
         <item>Багет</item>
@@ -98,10 +97,15 @@
         <item>Бисквит</item>
         <item>Чизкейк</item>
         <item>Мороженое</item>
+        <item>Макароны</item>
+        <item>Спагетти</item>
+        <item>Вермишель</item>
+        <item>Лапша</item>
+        <item>Сахар</item>
+        <item>Кола</item>
     </string-array>
 
     <string-array name="other">
-        <item>Мартини</item>
         <item>Пиво</item>
         <item>Виски</item>
         <item>Оливковое масло</item>
@@ -112,8 +116,17 @@
         <item>Какао</item>
         <item>Сок</item>
         <item>Рис</item>
+        <item>Гречка|Гречневая</item>
+        <item>Кус-кус|Кускус</item>
         <item>Овсянка</item>
-        <item>Памперсы|Подгузники</item>
+        <item>Подгузники</item>
+        <item>Соль</item>
+        <item>Молотый перец|Перец молотый|Чёрный перец|Перец чёрный|Паприка|Порошкообразный перец|Перец порошкообразный</item>
+        <item>Порошок</item>
+        <item>Губки|Губка</item>
+        <item>Туалетная бумага|Туалетка</item>
+        <item>Рулон|Бумажные полотенца</item>
+        <item>Прокладки</item>
     </string-array>
 
 </resources>

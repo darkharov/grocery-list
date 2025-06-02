@@ -8,7 +8,7 @@
     <string name="category_fruits_vegetables_berries">Fruits / Vegetables / Berries</string>
     <string name="category_meat_fish_shrimp">Meat / Fish / Seafood</string>
     <string name="category_dairy_products">Dairy Products</string>
-    <string name="category_bakery_and_sweets">Bakery / Sweets</string>
+    <string name="category_flour_products_and_sweets">Flour products / Sweets</string>
     <string name="category_other">Other</string>
     <string name="add">Add</string>
     <string name="list_preview">List Preview</string>
@@ -16,10 +16,9 @@
     <string name="clear_product_list_confirmation">Are you sure you want to remove all products from the list?</string>
     <string name="exit_with_saving">Exit (with saving)</string>
     <string name="start_shopping">Start Shopping</string>
-    <string name="explanation">Notifications will be created based on the list. You can interact with them on the lock screen.</string>
+    <string name="start_shopping_explanation">Notifications will be created based on the list. They are easier to interact with on the lock screen.</string>
     <string name="delete">Delete</string>
     <string name="next">Next</string>
-    <string name="whats_next">What\'s next?</string>
     <string name="list_is_empty">The list is empty…</string>
 
     <string-array name="fruits_and_vegetables">
@@ -85,7 +84,7 @@
         <item>Caviar</item>
     </string-array>
 
-    <string-array name="bakery_and_sweets">
+    <string-array name="flour_products_and_sweets">
         <item>Bread</item>
         <item>Toast</item>
         <item>Baguette</item>
@@ -98,10 +97,15 @@
         <item>Biscuit</item>
         <item>Cheesecake</item>
         <item>Ice Cream</item>
+        <item>Pasta</item>
+        <item>Spaghetti</item>
+        <item>Vermicelli</item>
+        <item>Noodle</item>
+        <item>Sugar</item>
+        <item>Cola</item>
     </string-array>
 
     <string-array name="other">
-        <item>Martini</item>
         <item>Beer</item>
         <item>Whiskey|Whisky</item>
         <item>Olive oil</item>
@@ -112,8 +116,17 @@
         <item>Cocoa</item>
         <item>Juice</item>
         <item>Rice</item>
+        <item>Buckwheat</item>
+        <item>Couscous</item>
         <item>Oatmeal</item>
-        <item>Pampers|Diapers</item>
+        <item>Diapers</item>
+        <item>Salt</item>
+        <item>Ground Pepper</item>
+        <item>Powder</item>
+        <item>Sponge</item>
+        <item>Toilet paper</item>
+        <item>Pads</item>
+        <item>Roll|Paper towels</item>
     </string-array>
 
 </resources>

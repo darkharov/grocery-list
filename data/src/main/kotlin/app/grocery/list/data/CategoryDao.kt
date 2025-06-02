@@ -14,7 +14,7 @@ internal class CategoryDao @Inject constructor(
     private val categoriesKeywordsIds = mapOf(
         R.string.category_fruits_vegetables_berries to R.array.fruits_and_vegetables,
         R.string.category_meat_fish_shrimp to R.array.meat_fish_shrimp,
-        R.string.category_bakery_and_sweets to R.array.bakery_and_sweets,
+        R.string.category_flour_products_and_sweets to R.array.flour_products_and_sweets,
         R.string.category_dairy_products to R.array.dairy_products,
         R.string.category_other to R.array.other,
     )

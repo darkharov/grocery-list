@@ -128,7 +128,7 @@ private fun Content(callbacks: ProductListActionsCallbacks) {
             },
         )
         Text(
-            text = stringResource(R.string.explanation),
+            text = stringResource(R.string.start_shopping_explanation),
             modifier = Modifier
                 .padding(
                     horizontal = dimensionResource(R.dimen.margin_16_32_64),
