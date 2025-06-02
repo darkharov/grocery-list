@@ -65,7 +65,7 @@ internal fun AppToolbarInternal(
     val emojiProvider = LocalEmojiProvider.current
     Box(
         modifier = modifier
-            .background(MaterialTheme.colorScheme.surface)
+            .background(MaterialTheme.colorScheme.inverseSurface)
             .windowInsetsPadding(
                 WindowInsets
                     .systemBars
