@@ -2,7 +2,9 @@ package app.grocery.list.product.list.actions
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -82,9 +85,11 @@ private fun ProductListActionsScreen(
 private fun Content(callbacks: ProductListActionsCallbacks) {
     Column(
         modifier = Modifier
+            .padding(12.dp)
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
     ) {
+        val gap = 8.dp
         WideAppButton(
             props = AppButtonProps.Custom(
                 text = stringResource(R.string.clear_list),
@@ -95,6 +100,10 @@ private fun Content(callbacks: ProductListActionsCallbacks) {
                 callbacks.onGoToClearListConfirmation()
             },
         )
+        Spacer(
+            modifier = Modifier
+                .height(gap),
+        )
         WideAppButton(
             props = AppButtonProps.Custom(
                 text = stringResource(R.string.exit_with_saving),
@@ -103,6 +112,10 @@ private fun Content(callbacks: ProductListActionsCallbacks) {
             onClick = {
                 callbacks.onExitFromApp()
             },
+        )
+        Spacer(
+            modifier = Modifier
+                .height(gap),
         )
         WideAppButton(
             props = AppButtonProps.Custom(
