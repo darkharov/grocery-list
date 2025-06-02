@@ -8,6 +8,9 @@ import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -17,12 +20,22 @@ internal class ProductListActionsViewModel @Inject constructor(
     ProductListActionsCallbacks {
 
     private val events = Channel<Event>()
+    private val dialog = MutableStateFlow<ProductListActionsDialog?>(null)
 
-    override fun onClearList() {
+    override fun onGoToClearListConfirmation() {
+        dialog.value = ProductListActionsDialog.ConfirmClearList
+    }
+
+    override fun onClearListConfirmed() {
         viewModelScope.launch(Dispatchers.IO) {
+            dialog.value = null
             repository.clearProducts()
             events.trySend(Event.OnListCleared)
         }
+    }
+
+    override fun onClearListDenied() {
+        dialog.value = null
     }
 
     override fun onExitFromApp() {
@@ -35,6 +48,9 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     fun events(): ReceiveChannel<Event> =
         events
+
+    fun dialog(): StateFlow<ProductListActionsDialog?> =
+        dialog.asStateFlow()
 
     enum class Event {
         OnListCleared,

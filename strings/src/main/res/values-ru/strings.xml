@@ -13,6 +13,7 @@
     <string name="add">Добавить</string>
     <string name="list_preview">Предпросмотр списка</string>
     <string name="clear_list">Очистить список</string>
+    <string name="clear_product_list_confirmation">Вы действительно хотите удалить все элементы из списка?</string>
     <string name="exit_with_saving">Выйти (с сохранением)</string>
     <string name="start_shopping">Начать покупку</string>
     <string name="explanation">На основе списка будут созданы уведомления. С ними можно взаимодействовать на экране блокировки.</string>
