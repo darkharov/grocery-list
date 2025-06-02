@@ -143,8 +143,7 @@ private fun AppDialogWithIconPreview() {
 
 @Composable
 @PreviewLightDark
-private fun AppDialogOkOnlyPreview(
-) {
+private fun AppDialogOkOnlyPreview() {
     GroceryListTheme {
         AppDialogScreen(
             text = StringValue.StringWrapper("Alert text of this dialog"),
