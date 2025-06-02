@@ -88,7 +88,7 @@ internal fun AppCounter(
                     ""
                 },
                 color = Color.White,
-                fontSize = 12.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.ExtraBold,
                 letterSpacing = 0.sp,
                 textAlign = TextAlign.Center,
