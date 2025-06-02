@@ -14,10 +14,26 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.elements.app.button.AppButtonProps
 import app.grocery.list.commons.compose.theme.elements.app.button.WideAppButton
 import app.grocery.list.product.list.actions.ProductListActionsViewModel.Event
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object ProductListActions
+
+fun NavGraphBuilder.productListActionsScreen(
+    navigation: ProductListActionsNavigation,
+) {
+    composable<ProductListActions> {
+        ProductListActionsScreen(
+            navigation = navigation,
+        )
+    }
+}
 
 @Composable
 internal fun ProductListActionsScreen(

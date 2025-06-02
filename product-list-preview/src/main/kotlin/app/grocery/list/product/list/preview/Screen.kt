@@ -36,11 +36,27 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.elements.AppHorizontalDivider
 import app.grocery.list.commons.compose.theme.elements.AppHorizontalDividerMode
 import app.grocery.list.commons.compose.theme.elements.app.button.AppButtonProps
 import app.grocery.list.commons.compose.theme.elements.app.button.WideAppButton
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object ProductListPreview
+
+fun NavGraphBuilder.productListPreviewScreen(
+    navigation: ProductListPreviewNavigation,
+) {
+    composable<ProductListPreview> {
+        ProductListPreviewScreen(
+            navigation = navigation,
+        )
+    }
+}
 
 @Composable
 internal fun ProductListPreviewScreen(

@@ -29,6 +29,8 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.elements.app.button.AppButton
 import app.grocery.list.commons.compose.theme.elements.app.button.AppButtonProps
@@ -36,6 +38,20 @@ import app.grocery.list.product.input.form.screen.elements.category.picker.Categ
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
 import app.grocery.list.product.input.form.screen.elements.title.input.ProductTitleField
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object ProductInputForm
+
+fun NavGraphBuilder.productInputFormScreen(
+    navigation: ProductInputFormNavigation,
+) {
+    composable<ProductInputForm> {
+        ProductInputFormScreen(
+            navigation = navigation,
+        )
+    }
+}
 
 @Composable
 internal fun ProductInputFormScreen(
