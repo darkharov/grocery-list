@@ -31,9 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.elements.app.button.AppButton
 import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
+import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPicker
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
 import app.grocery.list.product.input.form.screen.elements.title.input.ProductTitleField
@@ -128,7 +128,7 @@ private fun Elements(
     }
     Spacer(
         modifier = Modifier
-            .height(80.dp)
+            .height(dimensionResource(R.dimen.product_input_form_top_offset))
     )
     ProductTitleField(
         title = props.title,
