@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -5,6 +8,17 @@ plugins {
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
     kotlin("plugin.serialization") version Configs.SERIALIZATION
+}
+
+val keystorePropertiesFile = rootProject.file("keystore-release.properties")
+val keystoreProperties: Properties? =
+try {
+    val temp = Properties()
+    temp.load(FileInputStream(keystorePropertiesFile))
+    temp
+} catch (ignored: Exception) {
+    // guest mode
+    null
 }
 
 android {
@@ -19,10 +33,31 @@ android {
         versionName = "1.0"
     }
 
+    signingConfigs {
+        create("release") {
+            if (keystoreProperties != null) {
+                keyAlias = keystoreProperties["keyAlias"] as String
+                keyPassword = keystoreProperties["keyPassword"] as String
+                storeFile = file(keystoreProperties["storeFile"] as String)
+                storePassword = keystoreProperties["storePassword"] as String
+            }
+        }
+        create("customDebug") {
+            keyAlias = "grocery-list"
+            keyPassword = "123456"
+            storeFile = file("../keystore-debug.jks")
+            storePassword = "123456"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
+        }
+        debug {
+            signingConfig = signingConfigs.getByName("customDebug")
         }
     }
     compileOptions {
