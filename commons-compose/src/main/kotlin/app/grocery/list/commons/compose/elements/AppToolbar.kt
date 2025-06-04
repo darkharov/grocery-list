@@ -1,20 +1,27 @@
 package app.grocery.list.commons.compose.elements
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,9 +33,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.EmojiProvider
 import app.grocery.list.commons.compose.LocalEmojiProvider
@@ -39,18 +50,18 @@ import app.grocery.list.commons.compose.theme.GroceryListTheme
 fun AppToolbar(
     title: String,
     modifier: Modifier = Modifier,
+    onUpClick: (() -> Unit)? = null,
     counterValue: Int? = null,
 ) {
     AppToolbarInternal(
         title = title,
         modifier = modifier,
+        onUpClick = onUpClick,
         titleTrailingContent = {
             if (counterValue != null) {
                 AppCounter(
                     value = counterValue,
-                    modifier = Modifier.padding(
-                        horizontal = 6.dp,
-                    )
+                    modifier = Modifier,
                 )
             }
         }
@@ -61,10 +72,13 @@ fun AppToolbar(
 internal fun AppToolbarInternal(
     title: String,
     modifier: Modifier = Modifier,
+    onUpClick: (() -> Unit)? = null,
     titleTrailingContent: @Composable () -> Unit = {},
 ) {
     val emojiProvider = LocalEmojiProvider.current
-    Box(
+    val elementSize = 48.dp
+    val screenHorizontalPadding = dimensionResource(R.dimen.margin_16_32_64)
+    Row(
         modifier = modifier
             .background(MaterialTheme.colorScheme.inverseSurface)
             .windowInsetsPadding(
@@ -72,32 +86,71 @@ internal fun AppToolbarInternal(
                     .systemBars
                     .union(WindowInsets.displayCutout)
                     .only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal),
-            ),
+            )
+            .height(84.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
+        OptionalUpIcon(
+            size = elementSize,
+            screenHorizontalPadding = screenHorizontalPadding,
+            onClick = onUpClick,
+            modifier = Modifier,
+        )
+        Text(
+            text = decoratedTitle(title, emojiProvider),
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
-                .height(84.dp)
-                .padding(horizontal = dimensionResource(R.dimen.margin_16_32_64))
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
+                .weight(1f),
+        )
+        Box(
+            modifier = Modifier
+                .padding(end = screenHorizontalPadding)
+                .width(elementSize),
+            contentAlignment = Alignment.CenterEnd,
         ) {
-            Spacer(
-                modifier = Modifier
-                    .weight(1f),
+            titleTrailingContent()
+        }
+    }
+}
+
+@Composable
+private fun OptionalUpIcon(
+    size: Dp,
+    screenHorizontalPadding: Dp,
+    onClick: (() -> Unit)?,
+    modifier: Modifier = Modifier,
+) {
+    val innerPadding = 12.dp
+    val shift = innerPadding + 3.dp
+    Box(
+        modifier = modifier
+            .padding(
+                start = screenHorizontalPadding - shift,
+                end = shift,
             )
-            Text(
-                text = decoratedTitle(title, emojiProvider),
-                modifier = Modifier,
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleMedium,
-            )
-            Box(
+            .size(size),
+        contentAlignment = Alignment.Center,
+    ) {
+        AnimatedVisibility(
+            visible = onClick != null,
+            enter = fadeIn(),
+            exit = fadeOut(),
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_back),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
-                    .weight(1f),
-            ) {
-                titleTrailingContent()
-            }
+                    .clip(CircleShape)
+                    .clickable { onClick?.invoke() }
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            )
         }
     }
 }
@@ -147,6 +200,24 @@ private fun AppToolbarWithCounterPreview() {
     GroceryListTheme {
         AppToolbar(
             title = "Title",
+            onUpClick = {},
+            counterValue = counterValue,
+            modifier = Modifier
+                .clickable {
+                    counterValue++
+                }
+        )
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun AppToolbarWithLongTitleAndCounterPreview() {
+    var counterValue by remember { mutableIntStateOf(2) }
+    GroceryListTheme {
+        AppToolbar(
+            title = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vel lacus malesuada, tincidunt ligula ac, bibendum metus. ",
+            onUpClick = {},
             counterValue = counterValue,
             modifier = Modifier
                 .clickable {

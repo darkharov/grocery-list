@@ -12,9 +12,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.lifecycleScope
@@ -23,8 +27,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import app.grocery.list.commons.app.ApplicationActivityMarker
-import app.grocery.list.commons.compose.theme.ThemeUtil
 import app.grocery.list.commons.compose.elements.AppToolbar
+import app.grocery.list.commons.compose.theme.ThemeUtil
 import app.grocery.list.notifications.NotificationPublisher
 import app.grocery.list.product.input.form.ProductInputForm
 import app.grocery.list.product.input.form.ProductInputFormNavigation
@@ -121,11 +125,22 @@ private fun Content(
     navController: NavHostController,
     navigationFacade: MainActivity.NavigationFacade,
 ) {
+    var upAvailable: Boolean by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(navController) {
+        navController.addOnDestinationChangedListener { controller, _, _ ->
+            upAvailable = controller.currentDestination?.id != controller.graph.startDestinationId
+        }
+    }
     Scaffold(
         topBar = {
             AppToolbar(
                 title = stringResource(R.string.grocery_list),
                 counterValue = numberOfAddedProducts,
+                onUpClick = if (upAvailable) {
+                    { navController.popBackStack() }
+                } else {
+                    null
+                }
             )
         },
     ) { padding ->
