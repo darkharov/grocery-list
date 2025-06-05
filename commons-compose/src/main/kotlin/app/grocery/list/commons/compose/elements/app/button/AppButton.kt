@@ -32,7 +32,9 @@ fun WideAppButton(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = dimensionResource(R.dimen.margin_16_32_64)),
+            .padding(
+                horizontal = dimensionResource(R.dimen.margin_16_32_64),
+            ),
         props = props,
     )
 }
