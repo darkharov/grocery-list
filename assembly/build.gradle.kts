@@ -12,14 +12,14 @@ plugins {
 
 val keystorePropertiesFile = rootProject.file("keystore-release.properties")
 val keystoreProperties: Properties? =
-try {
-    val temp = Properties()
-    temp.load(FileInputStream(keystorePropertiesFile))
-    temp
-} catch (ignored: Exception) {
-    // guest mode
-    null
-}
+    try {
+        val temp = Properties()
+        temp.load(FileInputStream(keystorePropertiesFile))
+        temp
+    } catch (ignored: Exception) {
+        // guest mode
+        null
+    }
 
 android {
     namespace = "${Configs.APPLICATION_ID}.assembly"
