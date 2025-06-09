@@ -7,9 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.viewModels
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -148,7 +146,6 @@ private fun Content(
             navController = navController,
             startDestination = ProductInputForm,
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
                 .padding(padding),
             builder = {
                 productInputFormScreen(navigationFacade)
