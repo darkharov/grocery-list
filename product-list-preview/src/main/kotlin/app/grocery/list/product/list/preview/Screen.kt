@@ -35,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
@@ -222,10 +223,6 @@ private fun LazyListScope.items(
                 product = product,
                 callbacks = callbacks,
                 modifier = Modifier
-                    .padding(
-                        horizontal = dimensionResource(R.dimen.margin_16_32_64),
-                        vertical = 2.dp,
-                    )
                     .animateItem(),
             )
         }
@@ -251,8 +248,12 @@ private fun Product(
     callbacks: ProductListPreviewCallbacks,
     modifier: Modifier = Modifier,
 ) {
+    val horizontalPadding = dimensionResource(R.dimen.margin_16_32_64)
     Row(
-        modifier = modifier,
+        modifier = modifier
+            .padding(
+                vertical = 2.dp,
+            ),
         horizontalArrangement = Arrangement
             .spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -260,6 +261,9 @@ private fun Product(
         Text(
             text = product.title,
             modifier = Modifier
+                .padding(
+                    start = horizontalPadding,
+                )
                 .weight(1f),
             style = MaterialTheme.typography.titleMedium
                 .copy(fontWeight = FontWeight.Normal),
@@ -267,6 +271,7 @@ private fun Product(
         Icon(
             painter = painterResource(R.drawable.ic_delete),
             contentDescription = stringResource(R.string.delete),
+            paddingEnd = horizontalPadding,
             onClick = {
                 callbacks.onDelete(productId = product.id)
             },
@@ -277,13 +282,16 @@ private fun Product(
 @Composable
 private fun Icon(
     painter: Painter,
+    contentDescription: String?,
+    paddingEnd: Dp,
     onClick: () -> Unit,
-    contentDescription: String? = null,
 ) {
+    val innerPadding = 9.dp
     Image(
         painter = painter,
         contentDescription = contentDescription,
         modifier = Modifier
+            .padding(end = paddingEnd - innerPadding)
             .clickable(
                 interactionSource = remember {
                     MutableInteractionSource()
@@ -294,7 +302,7 @@ private fun Icon(
                 }
             )
             .size(36.dp)
-            .padding(9.dp),
+            .padding(innerPadding),
         colorFilter = ColorFilter.tint(
             color = MaterialTheme.colorScheme.onSurface,
         ),
