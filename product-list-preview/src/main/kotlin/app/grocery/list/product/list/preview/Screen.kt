@@ -266,6 +266,7 @@ private fun Product(
         )
         Icon(
             painter = painterResource(R.drawable.ic_delete),
+            contentDescription = stringResource(R.string.delete),
             onClick = {
                 callbacks.onDelete(productId = product.id)
             },
