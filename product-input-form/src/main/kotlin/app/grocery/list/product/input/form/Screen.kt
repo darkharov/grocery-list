@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -78,18 +79,19 @@ internal fun ProductInputFormScreen(
 internal fun ProductInputFormScreen(
     props: ProductInputFormProps?,
     callbacks: ProductInputFormCallbacks,
+    modifier: Modifier = Modifier,
 ) {
     if (props == null) {
-        Preloader()
+        Preloader(modifier)
     } else {
-        Form(props, callbacks)
+        Form(props, callbacks, modifier)
     }
 }
 
 @Composable
-private fun Preloader() {
+private fun Preloader(modifier: Modifier) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
@@ -101,9 +103,10 @@ private fun Preloader() {
 private fun Form(
     props: ProductInputFormProps,
     callbacks: ProductInputFormCallbacks,
+    modifier: Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize(),
     ) {
         Elements(
@@ -253,10 +256,14 @@ private fun Buttons(
 @Composable
 private fun ProductInputScreenInitialStatePreview() {
     GroceryListTheme {
-        ProductInputFormScreen(
-            props = null,
-            callbacks = ProductInputFormCallbacksMock(),
-        )
+        Scaffold { padding ->
+            ProductInputFormScreen(
+                props = null,
+                callbacks = ProductInputFormCallbacksMock(),
+                modifier = Modifier
+                    .padding(padding),
+            )
+        }
     }
 }
 
@@ -264,22 +271,26 @@ private fun ProductInputScreenInitialStatePreview() {
 @Composable
 private fun ProductInputScreenPreview() {
     GroceryListTheme {
-        val props by remember {
-            mutableStateOf(
-                ProductInputFormProps(
-                    title = TextFieldValue(),
-                    categories = ProductInputFormMocks.categories.toImmutableList(),
-                    selectedCategory = null,
-                    atLeastOneProductAdded = false,
+        Scaffold { padding ->
+            val props by remember {
+                mutableStateOf(
+                    ProductInputFormProps(
+                        title = TextFieldValue(),
+                        categories = ProductInputFormMocks.categories.toImmutableList(),
+                        selectedCategory = null,
+                        atLeastOneProductAdded = false,
+                    )
                 )
+            }
+            ProductInputFormScreen(
+                props = props,
+                callbacks = object : ProductInputFormCallbacksMock() {
+                    override fun onProductTitleChange(newValue: TextFieldValue) {}
+                    override fun onProductInputComplete(productTitle: String, categoryId: Int) {}
+                },
+                modifier = Modifier
+                    .padding(padding),
             )
         }
-        ProductInputFormScreen(
-            props = props,
-            callbacks = object : ProductInputFormCallbacksMock() {
-                override fun onProductTitleChange(newValue: TextFieldValue) {}
-                override fun onProductInputComplete(productTitle: String, categoryId: Int) {}
-            }
-        )
     }
 }

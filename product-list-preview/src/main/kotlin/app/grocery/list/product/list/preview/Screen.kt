@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -38,11 +39,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.elements.AppHorizontalDivider
 import app.grocery.list.commons.compose.elements.AppHorizontalDividerMode
 import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
 import app.grocery.list.commons.compose.elements.app.button.WideAppButton
+import app.grocery.list.commons.compose.theme.GroceryListTheme
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -308,9 +309,13 @@ private fun ProductListPreviewPreview(
     props: ProductListPreviewProps,
 ) {
     GroceryListTheme {
-        ProductListPreviewScreen(
-            props = props,
-            callbacks = ProductListPreviewCallbacksMock,
-        )
+        Scaffold { padding ->
+            ProductListPreviewScreen(
+                props = props,
+                callbacks = ProductListPreviewCallbacksMock,
+                modifier = Modifier
+                    .padding(padding),
+            )
+        }
     }
 }

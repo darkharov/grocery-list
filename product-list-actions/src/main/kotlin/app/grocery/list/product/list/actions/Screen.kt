@@ -1,7 +1,5 @@
 package app.grocery.list.product.list.actions
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.content.res.Configuration.UI_MODE_TYPE_NORMAL
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,7 +17,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -76,17 +75,18 @@ internal fun ProductListActionsScreen(
 private fun ProductListActionsScreen(
     dialog: ProductListActionsDialog?,
     callbacks: ProductListActionsCallbacks,
+    modifier: Modifier = Modifier,
 ) {
-    Content(callbacks)
+    Content(callbacks, modifier)
     if (dialog != null) {
         Dialog(dialog, callbacks)
     }
 }
 
 @Composable
-private fun Content(callbacks: ProductListActionsCallbacks) {
+private fun Content(callbacks: ProductListActionsCallbacks, modifier: Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(12.dp)
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -167,15 +167,7 @@ private fun Dialog(
     }
 }
 
-@Preview(
-    name = "Light",
-    showBackground = true
-)
-@Preview(
-    name = "Dark",
-    uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL,
-    showBackground = true,
-)
+@PreviewLightDark
 @Composable
 private fun ProductListActionsScreenWithDialogPreview(
     @PreviewParameter(
@@ -184,9 +176,13 @@ private fun ProductListActionsScreenWithDialogPreview(
     dialog: ProductListActionsDialog?,
 ) {
     GroceryListTheme {
-        ProductListActionsScreen(
-            callbacks = ProductListActionsCallbacksMock,
-            dialog = dialog,
-        )
+        Scaffold { padding ->
+            ProductListActionsScreen(
+                callbacks = ProductListActionsCallbacksMock,
+                dialog = dialog,
+                modifier = Modifier
+                    .padding(padding),
+            )
+        }
     }
 }
