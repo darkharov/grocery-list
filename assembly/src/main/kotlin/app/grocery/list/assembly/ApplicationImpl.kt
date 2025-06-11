@@ -1,6 +1,7 @@
 package app.grocery.list.assembly
 
 import android.app.Application
+import commons.android.ActivityDecorator
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 

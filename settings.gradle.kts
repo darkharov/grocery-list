@@ -21,7 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Notes"
 include(":assembly")
-include(":commons-app")
+include(":commons-android")
 include(":commons-compose")
 include(":data")
 include(":domain")

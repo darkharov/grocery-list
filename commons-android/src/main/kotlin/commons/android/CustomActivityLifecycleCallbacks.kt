@@ -1,4 +1,4 @@
-package app.grocery.list.assembly
+package commons.android
 
 import android.app.Activity
 import android.app.Application.ActivityLifecycleCallbacks

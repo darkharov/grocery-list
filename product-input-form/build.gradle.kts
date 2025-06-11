@@ -40,7 +40,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":commons-compose"))
     implementation(project(":strings"))
-    implementation(project(":commons-app"))
+    implementation(project(":commons-android"))
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.androidx.core.ktx)
     implementation(libs.hilt.android)

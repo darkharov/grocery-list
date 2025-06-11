@@ -1,4 +1,4 @@
-package app.grocery.list.commons.app
+package commons.android
 
 interface ApplicationActivityMarker {
     val isSplashScreen get() = false

@@ -36,9 +36,11 @@ data object ProductListActions
 
 fun NavGraphBuilder.productListActionsScreen(
     navigation: ProductListActionsNavigation,
+    delegate: ProductListActionsDelegate,
 ) {
     composable<ProductListActions> {
         ProductListActionsScreen(
+            delegate = delegate,
             navigation = navigation,
         )
     }
@@ -48,18 +50,19 @@ fun NavGraphBuilder.productListActionsScreen(
 internal fun ProductListActionsScreen(
     viewModel: ProductListActionsViewModel = hiltViewModel(),
     navigation: ProductListActionsNavigation,
+    delegate: ProductListActionsDelegate,
 ) {
     LaunchedEffect(viewModel) {
         for (event in viewModel.events()) {
             when (event) {
                 Event.OnListCleared -> {
-                    navigation.onListCleared()
+                    navigation.onReturnToInitialScreen()
                 }
                 Event.OnExitFromApp -> {
-                    navigation.onExitFromApp()
+                    delegate.onExitFromApp()
                 }
                 Event.OnStartShopping -> {
-                    navigation.onStartShopping()
+                    delegate.onStartShopping()
                 }
             }
         }

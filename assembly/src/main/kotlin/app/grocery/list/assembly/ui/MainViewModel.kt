@@ -1,4 +1,4 @@
-package app.grocery.list.assembly
+package app.grocery.list.assembly.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

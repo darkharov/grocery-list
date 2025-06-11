@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "${Configs.APPLICATION_ID}.commons.app"
+    namespace = "commons.android"   // It is a cross-project module, so without ${Configs.APPLICATION_ID} prefix
     compileSdk = Configs.Sdk.COMPILE
 
     defaultConfig {
@@ -29,7 +29,7 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.javax.inject)
+    implementation(libs.androidx.core.splashscreen)
 }

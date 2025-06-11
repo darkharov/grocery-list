@@ -4,7 +4,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
-val DarkBackground = Color(0xFF_191300)
+private val DarkBackground = Color(0xFF_191300)
 private val DarkSurface = Color(0xFF_332600)
 private val DarkInverseSurface = Color(0xFF_664c00)
 private val DarkPrimary = Color(0xFF_ffbf01)
