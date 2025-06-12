@@ -19,7 +19,7 @@ internal class ProductListActionsViewModel @Inject constructor(
 ) : ViewModel(),
     ProductListActionsCallbacks {
 
-    private val events = Channel<Event>()
+    private val events = Channel<Event>(Channel.UNLIMITED)
     private val dialog = MutableStateFlow<ProductListActionsDialog?>(null)
 
     override fun onGoToClearListConfirmation() {

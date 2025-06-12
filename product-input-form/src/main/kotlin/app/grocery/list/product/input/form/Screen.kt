@@ -30,8 +30,10 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.app.button.AppButton
 import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
@@ -60,12 +62,14 @@ internal fun ProductInputFormScreen(
     navigation: ProductInputFormNavigation,
 ) {
     val props by viewModel.props().collectAsState()
-    LaunchedEffect(viewModel) {
-        for (event in viewModel.events()) {
-            when (event) {
-                ProductInputFormViewModel.Event.OnGoToPreview -> {
-                    navigation.onGoToPreview()
-                }
+    EventConsumer(
+        key = viewModel,
+        lifecycleState = Lifecycle.State.RESUMED,
+        events = viewModel.events(),
+    ) { event ->
+        when (event) {
+            ProductInputFormViewModel.Event.OnGoToPreview -> {
+                navigation.onGoToPreview()
             }
         }
     }

@@ -21,7 +21,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -38,8 +37,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppHorizontalDivider
 import app.grocery.list.commons.compose.elements.AppHorizontalDividerMode
 import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
@@ -66,12 +67,14 @@ internal fun ProductListPreviewScreen(
     navigation: ProductListPreviewNavigation,
 ) {
     val props by viewModel.props.collectAsState()
-    LaunchedEffect(viewModel) {
-        for (event in viewModel.events()) {
-            when (event) {
-                ProductListPreviewViewModel.Event.OnGoToActions -> {
-                    navigation.onGoToActions()
-                }
+    EventConsumer(
+        key = viewModel,
+        lifecycleState = Lifecycle.State.RESUMED,
+        events = viewModel.events(),
+    ) { event ->
+        when (event) {
+            ProductListPreviewViewModel.Event.OnGoToActions -> {
+                navigation.onGoToActions()
             }
         }
     }

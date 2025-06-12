@@ -32,7 +32,7 @@ internal class ProductInputFormViewModel @Inject constructor(
     private val explicitlySelectedCategory = MutableStateFlow<CategoryProps?>(null)
 
     private val props: StateFlow<ProductInputFormProps?> = createPropsFlow()
-    private val events = Channel<Event>()
+    private val events = Channel<Event>(Channel.UNLIMITED)
 
     private fun createPropsFlow(): StateFlow<ProductInputFormProps?> =
         combine(

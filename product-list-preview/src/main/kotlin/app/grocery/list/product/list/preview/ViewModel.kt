@@ -31,7 +31,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
                 null,
             )
 
-    private val events = Channel<Event>()
+    private val events = Channel<Event>(Channel.UNLIMITED)
 
     override fun onDelete(productId: Int) {
         viewModelScope.launch(Dispatchers.IO) {

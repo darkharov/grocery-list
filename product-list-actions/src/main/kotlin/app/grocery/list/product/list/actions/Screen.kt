@@ -10,7 +10,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -21,8 +20,10 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppDialogScreen
 import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
 import app.grocery.list.commons.compose.elements.app.button.WideAppButton
@@ -52,18 +53,20 @@ internal fun ProductListActionsScreen(
     navigation: ProductListActionsNavigation,
     delegate: ProductListActionsDelegate,
 ) {
-    LaunchedEffect(viewModel) {
-        for (event in viewModel.events()) {
-            when (event) {
-                Event.OnListCleared -> {
-                    navigation.onReturnToInitialScreen()
-                }
-                Event.OnExitFromApp -> {
-                    delegate.onExitFromApp()
-                }
-                Event.OnStartShopping -> {
-                    delegate.onStartShopping()
-                }
+    EventConsumer(
+        key = viewModel,
+        lifecycleState = Lifecycle.State.RESUMED,
+        events = viewModel.events(),
+    ) { event ->
+        when (event) {
+            Event.OnListCleared -> {
+                navigation.onReturnToInitialScreen()
+            }
+            Event.OnExitFromApp -> {
+                delegate.onExitFromApp()
+            }
+            Event.OnStartShopping -> {
+                delegate.onStartShopping()
             }
         }
     }
