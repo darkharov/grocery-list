@@ -45,7 +45,7 @@ internal fun AppContent(
                     { navController.popBackStack() }
                 } else {
                     null
-                }
+                },
             )
         },
     ) { padding ->
@@ -53,14 +53,13 @@ internal fun AppContent(
             navController = navController,
             startDestination = ProductInputForm,
             modifier = Modifier
-                .padding(padding),
-            builder = {
-                val navigation = AppNavigationFacade(navController)
-                productInputFormScreen(navigation)
-                productListPreviewScreen(navigation)
-                productListActionsScreen(navigation, delegates)
-            }
-        )
+                .padding(padding)
+        ) {
+            val navigation = AppNavigationFacade(navController)
+            productInputFormScreen(navigation)
+            productListPreviewScreen(navigation)
+            productListActionsScreen(navigation, delegates)
+        }
     }
 }
 
