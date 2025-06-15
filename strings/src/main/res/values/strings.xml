@@ -125,8 +125,8 @@
         <item>Powder</item>
         <item>Sponge</item>
         <item>Toilet paper</item>
-        <item>Pads</item>
         <item>Roll|Paper towels</item>
+        <item>Pads</item>
     </string-array>
 
 </resources>
