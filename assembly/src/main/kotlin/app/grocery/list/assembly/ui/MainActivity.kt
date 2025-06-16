@@ -12,10 +12,12 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import app.grocery.list.assembly.ui.content.AppContent
-import app.grocery.list.assembly.ui.content.AppDelegatesFacade
+import app.grocery.list.assembly.ui.content.AppContentDelegate
 import app.grocery.list.commons.compose.theme.ThemeUtil
 import app.grocery.list.notifications.NotificationPublisher
+import app.grocery.list.preparing.for_.shopping.PreparingForShopping
 import commons.android.ApplicationActivityMarker
+import commons.android.ScreenLockedReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.flow.filterNotNull
@@ -26,7 +28,7 @@ import kotlinx.coroutines.launch
 class MainActivity :
     ComponentActivity(),
     ApplicationActivityMarker,
-    AppDelegatesFacade {
+    AppContentDelegate {
 
     override val isSplashScreen = true
 
@@ -35,24 +37,34 @@ class MainActivity :
 
     private val viewModel by viewModels<MainViewModel>()
     private val postNotifications = postNotificationLauncher()
+    private var currentRoute: String? = null
 
     private fun postNotificationLauncher() =
         registerForActivityResult(RequestPermission()) { granted ->
             if (granted) {
-                postNotificationsAndExitFromApp()
+                viewModel.notifyPushNotificationsGranted()
             }
         }
 
-    private fun postNotificationsAndExitFromApp() {
-        lifecycleScope.launch {
-            val productList = viewModel.productList.filterNotNull().first()
-            notificationPublisher.tryToPost(productList)
-            finish()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setupContent()
+        observeScreenLock()
+    }
+
+    private fun observeScreenLock() {
+        ScreenLockedReceiver.register(this) {
+            if (currentRoute == PreparingForShopping::class.qualifiedName) {
+                lifecycleScope.launch {
+                    val productList = viewModel.productList.filterNotNull().first()
+                    notificationPublisher.tryToPost(productList)
+                    finish()
+                }
+            }
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private fun setupContent() {
         setContent {
             val numberOfAddedProducts by viewModel.numberOfAddedProducts.collectAsState()
             val navController = rememberNavController()
@@ -61,6 +73,7 @@ class MainActivity :
                     numberOfAddedProducts = numberOfAddedProducts,
                     navController = navController,
                     delegates = this,
+                    appEvents = viewModel.appEvents(),
                 )
             }
         }
@@ -74,7 +87,11 @@ class MainActivity :
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             postNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
         } else {
-            postNotificationsAndExitFromApp()
+            viewModel.notifyPushNotificationsGranted()
         }
+    }
+
+    override fun onScreenChange(route: String) {
+        currentRoute = route
     }
 }

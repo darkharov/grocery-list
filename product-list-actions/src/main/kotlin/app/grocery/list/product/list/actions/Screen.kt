@@ -6,16 +6,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -127,22 +123,13 @@ private fun Content(callbacks: ProductListActionsCallbacks, modifier: Modifier) 
         )
         WideAppButton(
             props = AppButtonProps.Custom(
-                text = stringResource(R.string.start_shopping),
+                text = stringResource(R.string.i_am_at_shop),
                 background = AppButtonProps.Background.Positive,
                 drawableEndId = R.drawable.ic_cart,
             ),
             onClick = {
                 callbacks.onStartShopping()
             },
-        )
-        Text(
-            text = stringResource(R.string.start_shopping_explanation),
-            modifier = Modifier
-                .padding(
-                    horizontal = dimensionResource(R.dimen.margin_16_32_64),
-                ),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.labelSmall,
         )
     }
 }

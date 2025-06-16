@@ -15,8 +15,7 @@
     <string name="clear_list">Clear List</string>
     <string name="clear_product_list_confirmation">Are you sure you want to remove all products from the list?</string>
     <string name="exit_with_saving">Exit (with saving)</string>
-    <string name="start_shopping">Start Shopping</string>
-    <string name="start_shopping_explanation">Notifications will be created based on the list. They are easier to interact with on the lock screen.</string>
+    <string name="i_am_at_shop">I am at the shop</string>
     <string name="delete">Delete</string>
     <string name="next">Next</string>
     <string name="list_is_empty">The list is empty…</string>
@@ -127,6 +126,14 @@
         <item>Toilet paper</item>
         <item>Roll|Paper towels</item>
         <item>Pads</item>
+    </string-array>
+
+    <string-array name="preparing_for_shopping_steps">
+        <item>Remove unnecessary notifications from other apps</item>
+        <item>Lock the screen</item>
+        <item>Wait two or three second</item>
+        <item>Press the screen lock button again</item>
+        <item>Swipe away notifications as your cart fills up</item>
     </string-array>
 
 </resources>

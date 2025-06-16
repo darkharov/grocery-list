@@ -21,6 +21,7 @@ import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 
 private val IconSize = 24.dp
+private val IconOffset = 16.dp
 
 @Composable
 fun WideAppButton(
@@ -57,6 +58,7 @@ fun AppButton(
             Spacer(
                 // just for symmetry
                 modifier = Modifier
+                    .padding(end = IconOffset)
                     .size(IconSize),
             )
         }
@@ -72,6 +74,7 @@ fun AppButton(
                 painter = painterResource(drawableEndId),
                 contentDescription = null,
                 modifier = Modifier
+                    .padding(start = IconOffset)
                     .width(IconSize),
                 alignment = Alignment.CenterEnd,
             )
@@ -86,6 +89,7 @@ private fun AppButtonPreview() {
         WideAppButton(
             props = AppButtonProps.Custom(
                 text = "Text",
+                drawableEndId = R.drawable.ic_android,
             ),
             onClick = {},
         )
