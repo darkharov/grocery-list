@@ -2,9 +2,11 @@ package commons.android
 
 import android.app.Activity
 import android.app.Application
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
@@ -22,7 +24,12 @@ class ActivityDecorator @Inject constructor(
     private fun Activity.applyEdgeToEdge() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         this as ComponentActivity
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+            navigationBarStyle = SystemBarStyle.auto(
+                Color.TRANSPARENT,
+                Color.TRANSPARENT,
+            ),
+        )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             window.isNavigationBarContrastEnforced = false
         }
