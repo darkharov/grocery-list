@@ -61,7 +61,8 @@ fun AppToolbar(
             if (counterValue != null) {
                 AppCounter(
                     value = counterValue,
-                    modifier = Modifier,
+                    modifier = Modifier
+                        .padding(8.dp),
                 )
             }
         }
