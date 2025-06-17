@@ -49,15 +49,13 @@ import app.grocery.list.commons.compose.elements.AppHorizontalDividerMode
 import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
 import app.grocery.list.commons.compose.elements.app.button.WideAppButton
 import app.grocery.list.commons.compose.theme.GroceryListTheme
-import kotlinx.serialization.Serializable
 
-@Serializable
-data object ProductListPreview
+const val ProductListPreview = "ProductListPreview"
 
 fun NavGraphBuilder.productListPreviewScreen(
     navigation: ProductListPreviewNavigation,
 ) {
-    composable<ProductListPreview> {
+    composable(ProductListPreview) {
         ProductListPreviewScreen(
             navigation = navigation,
         )

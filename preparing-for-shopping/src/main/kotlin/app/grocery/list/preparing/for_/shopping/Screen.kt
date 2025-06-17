@@ -39,13 +39,11 @@ import app.grocery.list.commons.compose.elements.AppHorizontalDivider
 import app.grocery.list.commons.compose.elements.AppHorizontalDividerMode
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import kotlin.math.min
-import kotlinx.serialization.Serializable
 
-@Serializable
-data object PreparingForShopping
+const val PreparingForShopping = "PreparingForShopping"
 
 fun NavGraphBuilder.preparingForShopping() {
-    composable<PreparingForShopping> {
+    composable(PreparingForShopping) {
         PreparingForShopping()
     }
 }

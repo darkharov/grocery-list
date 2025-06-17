@@ -54,7 +54,7 @@ class MainActivity :
 
     private fun observeScreenLock() {
         ScreenLockedReceiver.register(this) {
-            if (currentRoute == PreparingForShopping::class.qualifiedName) {
+            if (currentRoute == PreparingForShopping) {
                 lifecycleScope.launch {
                     val productList = viewModel.productList.filterNotNull().first()
                     notificationPublisher.tryToPost(productList)

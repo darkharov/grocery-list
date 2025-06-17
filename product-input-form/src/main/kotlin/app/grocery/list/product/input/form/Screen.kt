@@ -41,15 +41,13 @@ import app.grocery.list.product.input.form.screen.elements.category.picker.Categ
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
 import app.grocery.list.product.input.form.screen.elements.title.input.ProductTitleField
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.serialization.Serializable
 
-@Serializable
-data object ProductInputForm
+const val ProductInputForm = "ProductInputForm"
 
 fun NavGraphBuilder.productInputFormScreen(
     navigation: ProductInputFormNavigation,
 ) {
-    composable<ProductInputForm> {
+    composable(ProductInputForm) {
         ProductInputFormScreen(
             navigation = navigation,
         )

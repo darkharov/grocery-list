@@ -26,16 +26,14 @@ import app.grocery.list.commons.compose.elements.app.button.WideAppButton
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.values.StringValue
 import app.grocery.list.product.list.actions.ProductListActionsViewModel.Event
-import kotlinx.serialization.Serializable
 
-@Serializable
-data object ProductListActions
+const val ProductListActions = "ProductListActions"
 
 fun NavGraphBuilder.productListActionsScreen(
     navigation: ProductListActionsNavigation,
     delegate: ProductListActionsDelegate,
 ) {
-    composable<ProductListActions> {
+    composable(ProductListActions) {
         ProductListActionsScreen(
             delegate = delegate,
             navigation = navigation,
