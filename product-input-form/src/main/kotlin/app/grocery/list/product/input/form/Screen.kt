@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -20,12 +22,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -33,13 +36,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import app.grocery.list.commons.compose.AppTextField
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.app.button.AppButton
 import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.values.StringValue
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPicker
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
-import app.grocery.list.product.input.form.screen.elements.title.input.ProductTitleField
 import kotlinx.collections.immutable.toImmutableList
 
 const val ProductInputForm = "ProductInputForm"
@@ -135,15 +139,27 @@ private fun Elements(
         modifier = Modifier
             .height(dimensionResource(R.dimen.product_input_form_top_offset))
     )
-    ProductTitleField(
-        title = props.title,
-        callbacks = callbacks,
-        focusRequester = titleFocusRequester,
-        imeAction = if (selectedCategory == null) {
-            ImeAction.Next
-        } else {
-            ImeAction.Done
+    AppTextField(
+        value = props.title,
+        onValueChange = { newValue ->
+            callbacks.onProductTitleChange(newValue)
         },
+        modifier = Modifier
+            .padding(
+                horizontal = horizontalOffset,
+            )
+            .focusRequester(titleFocusRequester)
+            .fillMaxWidth(),
+        label = StringValue.ResId(R.string.product_to_buy_label),
+        placeholder = StringValue.ResId(R.string.broccoli),
+        keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.Sentences,
+            imeAction = if (selectedCategory == null) {
+                ImeAction.Next
+            } else {
+                ImeAction.Done
+            }
+        ),
         keyboardActions = KeyboardActions {
             finalizeInput(
                 props = props,
@@ -154,8 +170,7 @@ private fun Elements(
                 softwareKeyboardController = softwareKeyboardController,
             )
         },
-        modifier = Modifier
-            .padding(horizontal = horizontalOffset),
+        singleLine = true,
     )
     CategoryPicker(
         categories = props.categories,
@@ -191,11 +206,11 @@ private fun finalizeInput(
     callbacks: ProductInputFormCallbacks,
     softwareKeyboardController: SoftwareKeyboardController?,
 ) {
-    if (props.title.text.isNotBlank()) {
+    if (props.title.isNotBlank()) {
         if (selectedCategory != null) {
             titleFocusRequester.requestFocus()
             callbacks.onProductInputComplete(
-                productTitle = props.title.text,
+                productTitle = props.title,
                 categoryId = selectedCategory.id,
             )
         } else {
@@ -225,7 +240,7 @@ private fun Buttons(
         AppButton(
             props = AppButtonProps.Custom(
                 text = stringResource(R.string.add),
-                enabled = props.title.text.isNotBlank(),
+                enabled = props.title.isNotBlank(),
             ),
             onClick = {
                 finalizeInput(
@@ -242,7 +257,7 @@ private fun Buttons(
         )
         AppButton(
             props = AppButtonProps.Next(
-                enabled = props.atLeastOneProductAdded && props.title.text.isBlank(),
+                enabled = props.atLeastOneProductAdded && props.title.isBlank(),
             ),
             onClick = {
                 softwareKeyboardController?.hide()
@@ -277,7 +292,7 @@ private fun ProductInputScreenPreview() {
             val props by remember {
                 mutableStateOf(
                     ProductInputFormProps(
-                        title = TextFieldValue(),
+                        title = "",
                         categories = ProductInputFormMocks.categories.toImmutableList(),
                         selectedCategory = null,
                         atLeastOneProductAdded = false,
@@ -287,7 +302,7 @@ private fun ProductInputScreenPreview() {
             ProductInputFormScreen(
                 props = props,
                 callbacks = object : ProductInputFormCallbacksMock() {
-                    override fun onProductTitleChange(newValue: TextFieldValue) {}
+                    override fun onProductTitleChange(newValue: String) {}
                     override fun onProductInputComplete(productTitle: String, categoryId: Int) {}
                 },
                 modifier = Modifier

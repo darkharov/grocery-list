@@ -1,6 +1,5 @@
 package app.grocery.list.product.input.form
 
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.domain.AppRepository
@@ -28,7 +27,7 @@ internal class ProductInputFormViewModel @Inject constructor(
 ) : ViewModel(),
     ProductInputFormCallbacks {
 
-    private val productTitle = MutableStateFlow(TextFieldValue())
+    private val productTitle = MutableStateFlow("")
     private val explicitlySelectedCategory = MutableStateFlow<CategoryProps?>(null)
 
     private val props: StateFlow<ProductInputFormProps?> = createPropsFlow()
@@ -70,7 +69,7 @@ internal class ProductInputFormViewModel @Inject constructor(
             explicitlySelectedCategory,
             productTitle,
         ) { explicitlySelected, productTitle ->
-            explicitlySelected ?: tryToDefineCategory(productTitle = productTitle.text)
+            explicitlySelected ?: tryToDefineCategory(productTitle = productTitle)
         }
 
     private suspend fun tryToDefineCategory(productTitle: String): CategoryProps? {
@@ -78,7 +77,7 @@ internal class ProductInputFormViewModel @Inject constructor(
         return categoryMapper.transformNullable(defined)
     }
 
-    override fun onProductTitleChange(newValue: TextFieldValue) {
+    override fun onProductTitleChange(newValue: String) {
         productTitle.value = newValue
     }
 
@@ -96,7 +95,7 @@ internal class ProductInputFormViewModel @Inject constructor(
     }
 
     private fun clearInputFields() {
-        productTitle.value = TextFieldValue("")
+        productTitle.value = ""
         explicitlySelectedCategory.value = null
     }
 

@@ -1,13 +1,12 @@
 package app.grocery.list.product.input.form
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.text.input.TextFieldValue
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
 internal data class ProductInputFormProps(
-    val title: TextFieldValue,
+    val title: String,
     val atLeastOneProductAdded: Boolean,
     val categories: ImmutableList<CategoryProps>,
     val selectedCategory: CategoryProps?,

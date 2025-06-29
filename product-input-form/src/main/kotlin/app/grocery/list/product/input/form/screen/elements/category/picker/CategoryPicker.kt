@@ -10,7 +10,6 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,12 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import app.grocery.list.commons.compose.AppTextField
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.values.StringValue
 import app.grocery.list.product.input.form.ProductInputFormMocks
 import app.grocery.list.product.input.form.R
 import kotlinx.collections.immutable.ImmutableList
@@ -50,7 +49,7 @@ internal fun CategoryPicker(
         },
         modifier = modifier,
     ) {
-        TextField(
+        AppTextField(
             value = selection?.title.orEmpty(),
             onValueChange = {},
             modifier = Modifier
@@ -63,12 +62,7 @@ internal fun CategoryPicker(
                     }
                 },
             readOnly = true,
-            singleLine = true,
-            label = {
-                Text(
-                    text = stringResource(R.string.category),
-                )
-            },
+            label = StringValue.ResId(R.string.category),
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(
                     expanded = expanded,
@@ -78,12 +72,7 @@ internal fun CategoryPicker(
                 capitalization = KeyboardCapitalization.Sentences,
                 imeAction = ImeAction.Next,
             ),
-            colors = ExposedDropdownMenuDefaults.textFieldColors(
-                focusedContainerColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent,
-                disabledContainerColor = Color.Transparent,
-                errorContainerColor = Color.Transparent,
-            ),
+            singleLine = true,
         )
         ExposedDropdownMenu(
             expanded = expanded,
