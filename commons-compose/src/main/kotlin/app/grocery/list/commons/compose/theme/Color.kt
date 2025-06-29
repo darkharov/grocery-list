@@ -14,7 +14,7 @@ private val Secondary = Color(0xFF_b48700)
 private val LightPrimary = Color(0xFF_ffcc34)
 private val LightInverseSurface = Color(0xFF_ffd65c)
 private val LightSurface = Color(0xFF_fff4d6)
-private val LightBackground = Color(0XFF_fff9ea)
+private val LightBackground = Color(0XFF_fffdfa)
 
 val PositiveActionColor = Color(0xFF_b8e52e)
 val NegativeActionColor = Color(0xFF_ff855c)
