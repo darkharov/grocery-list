@@ -21,6 +21,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import app.grocery.list.assembly.R
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppToolbar
 import app.grocery.list.commons.compose.theme.GroceryListTheme
@@ -30,7 +31,6 @@ import app.grocery.list.product.input.form.ProductInputForm
 import app.grocery.list.product.input.form.productInputFormScreen
 import app.grocery.list.product.list.actions.productListActionsScreen
 import app.grocery.list.product.list.preview.productListPreviewScreen
-import app.grocery.list.strings.R
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 
