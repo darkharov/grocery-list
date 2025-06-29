@@ -18,8 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import app.grocery.list.assembly.R
 import app.grocery.list.commons.compose.EventConsumer
@@ -37,19 +37,21 @@ import kotlinx.coroutines.channels.ReceiveChannel
 @Composable
 internal fun AppContent(
     numberOfAddedProducts: Int,
-    navController: NavHostController,
     delegates: AppContentDelegate,
     appEvents: ReceiveChannel<AppEvent>,
     modifier: Modifier = Modifier,
 ) {
-    var upAvailable: Boolean by rememberSaveable { mutableStateOf(false) }
+    val navController = rememberNavController()
+    var currentRoute by rememberSaveable { mutableStateOf<String?>(null) }
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestinationId = currentBackStackEntry?.destination?.id
+    val startDestinationId = navController.graph.startDestinationId
+    val upAvailable = (currentDestinationId == startDestinationId)
     LaunchedEffect(navController) {
-        navController.addOnDestinationChangedListener { controller, destination, _ ->
-            upAvailable = controller.currentDestination?.id != controller.graph.startDestinationId
-            val route = destination.route
-            if (route != null) {
-                delegates.onScreenChange(route)
-            }
+        navController.currentBackStackEntryFlow.collect { navBackStackEntry ->
+            val route = navBackStackEntry.destination.route
+            delegates.onScreenChange(route)
+            currentRoute = route
         }
     }
     EventConsumer(
@@ -71,9 +73,9 @@ internal fun AppContent(
                 title = stringResource(R.string.grocery_list),
                 counterValue = numberOfAddedProducts,
                 onUpClick = if (upAvailable) {
-                    { navController.popBackStack() }
-                } else {
                     null
+                } else {
+                    { navController.popBackStack() }
                 },
             )
         },
@@ -105,7 +107,6 @@ private fun AppContentPreview() {
         AppContent(
             numberOfAddedProducts = 42,
             delegates = AppContentDelegateMock,
-            navController = rememberNavController(),
             appEvents = Channel(),
         )
     }

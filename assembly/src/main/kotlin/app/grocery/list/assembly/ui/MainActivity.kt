@@ -67,11 +67,9 @@ class MainActivity :
     private fun setupContent() {
         setContent {
             val numberOfAddedProducts by viewModel.numberOfAddedProducts.collectAsState()
-            val navController = rememberNavController()
             themeUtil.GroceryListTheme {
                 AppContent(
                     numberOfAddedProducts = numberOfAddedProducts,
-                    navController = navController,
                     delegates = this,
                     appEvents = viewModel.appEvents(),
                 )
@@ -91,7 +89,7 @@ class MainActivity :
         }
     }
 
-    override fun onScreenChange(route: String) {
+    override fun onScreenChange(route: String?) {
         currentRoute = route
     }
 }
