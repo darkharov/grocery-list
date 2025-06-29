@@ -1,5 +1,6 @@
 package app.grocery.list.commons.compose
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -60,6 +61,11 @@ fun AppTextField(
         keyboardActions = keyboardActions,
         singleLine = singleLine,
         colors = TextFieldDefaults.colors(
+            focusedLabelColor = if (isSystemInDarkTheme()) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                MaterialTheme.colorScheme.secondary
+            },
             focusedContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent,
             disabledContainerColor = Color.Transparent,
