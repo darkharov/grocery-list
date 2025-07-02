@@ -82,7 +82,7 @@ private fun AppTextFieldPreview() {
             color = MaterialTheme.colorScheme.background,
         ) {
             AppTextField(
-                value = "",
+                value = "Text",
                 onValueChange = {},
                 label = StringValue.StringWrapper("Label"),
                 placeholder = StringValue.StringWrapper("Placeholder"),

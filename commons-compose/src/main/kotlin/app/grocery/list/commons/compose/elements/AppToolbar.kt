@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -50,12 +52,13 @@ import app.grocery.list.commons.compose.theme.GroceryListTheme
 fun AppToolbar(
     title: String,
     modifier: Modifier = Modifier,
+    progress: Boolean = false,
     onUpClick: (() -> Unit)? = null,
     counterValue: Int? = null,
 ) {
     AppToolbarInternal(
         title = title,
-        modifier = modifier,
+        progress = progress,
         onUpClick = onUpClick,
         titleTrailingContent = {
             if (counterValue != null) {
@@ -65,21 +68,23 @@ fun AppToolbar(
                         .padding(8.dp),
                 )
             }
-        }
+        },
+        modifier = modifier,
     )
 }
 
 @Composable
 internal fun AppToolbarInternal(
     title: String,
+    progress: Boolean,
+    onUpClick: (() -> Unit)?,
+    titleTrailingContent: @Composable () -> Unit,
     modifier: Modifier = Modifier,
-    onUpClick: (() -> Unit)? = null,
-    titleTrailingContent: @Composable () -> Unit = {},
 ) {
     val emojiProvider = LocalEmojiProvider.current
     val elementSize = 48.dp
     val screenHorizontalPadding = dimensionResource(R.dimen.margin_16_32_64)
-    Row(
+    Box(
         modifier = modifier
             .background(MaterialTheme.colorScheme.inverseSurface)
             .windowInsetsPadding(
@@ -90,31 +95,45 @@ internal fun AppToolbarInternal(
             )
             .height(84.dp)
             .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
     ) {
-        OptionalUpIcon(
-            size = elementSize,
-            screenHorizontalPadding = screenHorizontalPadding,
-            onClick = onUpClick,
-            modifier = Modifier,
-        )
-        Text(
-            text = decoratedTitle(title, emojiProvider),
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1,
-            style = MaterialTheme.typography.titleMedium,
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .weight(1f),
-        )
-        Box(
-            modifier = Modifier
-                .padding(end = screenHorizontalPadding)
-                .width(elementSize),
-            contentAlignment = Alignment.CenterEnd,
+                .align(Alignment.Center),
         ) {
-            titleTrailingContent()
+            OptionalUpIcon(
+                size = elementSize,
+                screenHorizontalPadding = screenHorizontalPadding,
+                onClick = onUpClick,
+                modifier = Modifier,
+            )
+            Text(
+                text = decoratedTitle(title, emojiProvider),
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier
+                    .weight(1f),
+            )
+            Box(
+                modifier = Modifier
+                    .padding(end = screenHorizontalPadding)
+                    .width(elementSize),
+                contentAlignment = Alignment.CenterEnd,
+            ) {
+                titleTrailingContent()
+            }
+        }
+        if (progress) {
+            LinearProgressIndicator(
+                color = MaterialTheme.colorScheme.inverseOnSurface,
+                trackColor = Color.Transparent,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter),
+            )
         }
     }
 }
@@ -219,6 +238,7 @@ private fun AppToolbarWithLongTitleAndCounterPreview() {
         AppToolbar(
             title = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vel lacus malesuada, tincidunt ligula ac, bibendum metus. ",
             onUpClick = {},
+            progress = true,
             counterValue = counterValue,
             modifier = Modifier
                 .clickable {

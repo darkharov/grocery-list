@@ -1,6 +1,8 @@
 package app.grocery.list.assembly.ui.content
 
 import androidx.navigation.NavHostController
+import app.darkharov.clear.notifications.reminder.ClearNotificationsReminderNavigation
+import app.grocery.list.preparing.for_.shopping.PreparingForShopping
 import app.grocery.list.product.input.form.ProductInputForm
 import app.grocery.list.product.input.form.ProductInputFormNavigation
 import app.grocery.list.product.list.actions.ProductListActions
@@ -12,7 +14,8 @@ internal class AppNavigationFacade(
     private val navController: NavHostController,
 ) : ProductInputFormNavigation,
     ProductListPreviewNavigation,
-    ProductListActionsNavigation {
+    ProductListActionsNavigation,
+    ClearNotificationsReminderNavigation {
 
     override fun exitFromProductInputForm() {
         navController.popBackStack()
@@ -28,5 +31,9 @@ internal class AppNavigationFacade(
 
     override fun returnToStartScreen() {
         navController.popBackStack(startRoute, inclusive = false)
+    }
+
+    override fun goToPreparingForShopping() {
+        navController.navigate(PreparingForShopping)
     }
 }

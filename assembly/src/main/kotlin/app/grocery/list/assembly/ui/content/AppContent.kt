@@ -22,6 +22,8 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import app.darkharov.clear.notifications.reminder.ClearNotificationsReminder
+import app.darkharov.clear.notifications.reminder.clearNotificationsReminder
 import app.grocery.list.assembly.R
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppToolbar
@@ -38,6 +40,7 @@ import kotlinx.coroutines.channels.ReceiveChannel
 @Composable
 internal fun AppContent(
     numberOfAddedProducts: Int?,
+    progress: Boolean,
     delegates: AppContentDelegate,
     appEvents: ReceiveChannel<AppEvent>,
     modifier: Modifier = Modifier,
@@ -60,8 +63,14 @@ internal fun AppContent(
         lifecycleState = Lifecycle.State.RESUMED,
     ) { event ->
         when (event) {
-            AppEvent.PushNotificationsGranted -> {
-                navController.navigate(PreparingForShopping)
+            is AppEvent.PushNotificationsGranted -> {
+                val reminderEnabled = event.clearNotificationsReminderEnabled
+                val route: Any = if (reminderEnabled) {
+                    ClearNotificationsReminder
+                } else {
+                    PreparingForShopping
+                }
+                navController.navigate(route)
             }
         }
     }
@@ -72,6 +81,7 @@ internal fun AppContent(
         topBar = {
             AppToolbar(
                 title = stringResource(R.string.grocery_list),
+                progress = progress,
                 counterValue = numberOfAddedProducts,
                 onUpClick = if (
                     currentDestination?.hasRoute(startRoute::class) == true
@@ -101,6 +111,7 @@ internal fun AppContent(
             productListPreviewScreen(navigation)
             productInputFormScreen(navigation)
             productListActionsScreen(navigation, delegates)
+            clearNotificationsReminder(navigation)
             preparingForShopping()
         }
     }
@@ -114,6 +125,7 @@ private fun AppContentPreview() {
             numberOfAddedProducts = 42,
             delegates = AppContentDelegateMock,
             appEvents = Channel(),
+            progress = false,
         )
     }
 }

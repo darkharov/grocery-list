@@ -68,9 +68,11 @@ class MainActivity :
     private fun setupContent() {
         setContent {
             val numberOfAddedProducts by viewModel.numberOfAddedProducts.collectAsState()
+            val progress by viewModel.progress.collectAsState()
             themeUtil.GroceryListTheme {
                 AppContent(
                     numberOfAddedProducts = numberOfAddedProducts,
+                    progress = progress,
                     delegates = this,
                     appEvents = viewModel.appEvents(),
                 )

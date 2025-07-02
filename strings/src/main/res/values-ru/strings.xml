@@ -20,6 +20,8 @@
     <string name="delete">Удалить</string>
     <string name="next">Далее</string>
     <string name="list_is_empty">Список пуст…</string>
+    <string name="remove_unnecessary_notifications">Удалите ненужные уведомления других приложений</string>
+    <string name="do_not_show_this_screen_again">Больше не показывать этот экран</string>
 
     <string-array name="fruits_and_vegetables">
         <item>Яблоки|Яблоко</item>
@@ -130,7 +132,6 @@
     </string-array>
 
     <string-array name="preparing_for_shopping_steps">
-        <item>Удалите ненужные уведомления других приложений</item>
         <item>Заблокируйте экран</item>
         <item>Подождите две-три секунды</item>
         <item>Нажмите на кнопку блокировки экрана повторно</item>

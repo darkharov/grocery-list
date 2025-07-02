@@ -1,8 +1,11 @@
 package app.grocery.list.domain
 
+import app.grocery.list.storage.value.kotlin.StorageValue
 import kotlinx.coroutines.flow.Flow
 
 interface AppRepository {
+
+    val clearNotificationsReminderEnabled: StorageValue<Boolean>
 
     fun categories(): Flow<List<Product.Category>>
     fun productList(): Flow<List<CategoryAndProducts>>

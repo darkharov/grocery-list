@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
-    id("kotlin-parcelize")
+    id("kotlin-parcelize")  // todo: do we really need this module?
 }
 
 android {

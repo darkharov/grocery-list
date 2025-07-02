@@ -1,13 +1,15 @@
 package app.grocery.list.commons.compose.elements.app.button
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,8 +22,8 @@ import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 
-private val IconSize = 24.dp
-private val IconOffset = 16.dp
+private val TrailingElementSize = 24.dp
+private val TrailingElementOffset = 16.dp
 
 @Composable
 fun WideAppButton(
@@ -49,35 +51,48 @@ fun AppButton(
     Button(
         onClick = onClick,
         modifier = modifier,
+        shape = MaterialTheme.shapes.small,
         enabled = props.enabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = props.background.toColor(),
         ),
     ) {
-        if (props.drawableEndId != null) {
-            Spacer(
-                // just for symmetry
-                modifier = Modifier
-                    .padding(end = IconOffset)
-                    .size(IconSize),
-            )
-        }
-        Text(
-            text = props.title(),
-            textAlign = TextAlign.Center,
+        Box(
             modifier = Modifier
                 .weight(1f),
-        )
-        val drawableEndId = props.drawableEndId
-        if (drawableEndId != null) {
-            Image(
-                painter = painterResource(drawableEndId),
-                contentDescription = null,
+        ) {
+            Text(
+                text = props.title(),
+                textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .padding(start = IconOffset)
-                    .width(IconSize),
-                alignment = Alignment.CenterEnd,
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = if (props.hasTrailingElement) {
+                            TrailingElementOffset + TrailingElementSize
+                        } else {
+                            0.dp
+                        },
+                    )
+                    .align(Alignment.Center),
             )
+            val drawableEndId = props.drawableEndId
+            if (drawableEndId != null) {
+                Image(
+                    painter = painterResource(drawableEndId),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(start = TrailingElementOffset)
+                        .width(TrailingElementSize)
+                        .align(Alignment.CenterEnd),
+                )
+            }
+            if (props.progressBar) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .align(Alignment.CenterEnd),
+                )
+            }
         }
     }
 }
@@ -102,6 +117,20 @@ private fun AppButtonNextPreview() {
     GroceryListTheme {
         WideAppButton(
             props = AppButtonProps.Next(),
+            onClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AppButtonNextDisabledWithProgressBarPreview() {
+    GroceryListTheme {
+        WideAppButton(
+            props = AppButtonProps.Custom(
+                text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
+                state = AppButtonProps.State.DisabledWithProgressBar,
+            ),
             onClick = {},
         )
     }

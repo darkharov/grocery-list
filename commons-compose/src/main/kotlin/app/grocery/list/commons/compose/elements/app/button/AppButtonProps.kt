@@ -22,11 +22,42 @@ sealed class AppButtonProps {
     abstract val background: Background
 
     @get:Stable
-    abstract val enabled: Boolean
+    protected abstract val state: State
 
     @Stable
     @Composable
     abstract fun title(): String
+
+    val enabled @Stable get() = state == State.Enabled
+    val progressBar @Stable get() = state == State.DisabledWithProgressBar
+    val hasTrailingElement @Stable get() = state == State.DisabledWithProgressBar || drawableEndId != null
+
+    @Immutable
+    enum class State {
+        Enabled,
+        Disabled,
+        DisabledWithProgressBar,
+        ;
+
+        companion object {
+
+            @Stable
+            fun enabled(enabled: Boolean) =
+                if (enabled) {
+                    Enabled
+                } else {
+                    Disabled
+                }
+
+            @Stable
+            fun progress(progress: Boolean) =
+                if (progress) {
+                    DisabledWithProgressBar
+                } else {
+                    Enabled
+                }
+        }
+    }
 
     @Immutable
     data class Custom(
@@ -34,7 +65,7 @@ sealed class AppButtonProps {
         override val background: Background = Background.Normal,
         @DrawableRes
         override val drawableEndId: Int? = null,
-        override val enabled: Boolean = true,
+        override val state: State = State.Enabled,
     ) : AppButtonProps() {
 
         @Stable
@@ -45,7 +76,7 @@ sealed class AppButtonProps {
 
     @Immutable
     data class Next(
-        override val enabled: Boolean = true,
+        override val state: State = State.Enabled,
     ) : AppButtonProps() {
 
         override val background = Background.Normal
@@ -58,7 +89,7 @@ sealed class AppButtonProps {
 
     @Immutable
     data class Done(
-        override val enabled: Boolean = true,
+        override val state: State = State.Enabled,
     ) : AppButtonProps() {
 
         override val background = Background.Normal

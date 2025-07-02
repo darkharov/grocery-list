@@ -214,7 +214,6 @@ private fun Buttons(
 ) {
     Row(
         modifier = Modifier
-            //.background(MaterialTheme.colorScheme.inverseSurface.copy(alpha = 0.84f))
             .padding(
                 vertical = 16.dp,
                 horizontal = dimensionResource(R.dimen.margin_16_32_64),
@@ -234,7 +233,9 @@ private fun Buttons(
         )
         AppButton(
             props = AppButtonProps.Next(
-                enabled = props.categories.isNotEmpty(),
+                state = AppButtonProps.State.enabled(
+                    props.categories.isNotEmpty(),
+                ),
             ),
             onClick = {
                 callbacks.onNext()

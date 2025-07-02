@@ -242,7 +242,7 @@ private fun Buttons(
         AppButton(
             props = AppButtonProps.Custom(
                 text = stringResource(R.string.add),
-                enabled = props.title.isNotBlank(),
+                state = AppButtonProps.State.enabled(props.title.isNotBlank()),
             ),
             onClick = {
                 finalizeInput(
@@ -259,7 +259,7 @@ private fun Buttons(
         )
         AppButton(
             props = AppButtonProps.Done(
-                enabled = props.atLeastOneProductAdded && props.title.isBlank(),
+                state = AppButtonProps.State.enabled(props.atLeastOneProductAdded && props.title.isBlank()),
             ),
             onClick = {
                 softwareKeyboardController?.hide()
@@ -294,7 +294,7 @@ private fun ProductInputScreenPreview() {
             val props by remember {
                 mutableStateOf(
                     ProductInputFormProps(
-                        title = "",
+                        title = "Title",
                         categories = ProductInputFormMocks.categories.toImmutableList(),
                         selectedCategory = null,
                         atLeastOneProductAdded = true,

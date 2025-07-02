@@ -82,6 +82,7 @@ dependencies {
     implementation(project(":product-input-form"))
     implementation(project(":product-list-preview"))
     implementation(project(":product-list-actions"))
+    implementation(project(":clear-notifications-reminder"))
     implementation(project(":preparing-for-shopping"))
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

@@ -5,6 +5,7 @@ import app.grocery.list.data.db.ProductEntity
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.CategoryAndProducts
 import app.grocery.list.domain.Product
+import app.grocery.list.storage.value.android.StorageValueDelegates
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
@@ -13,10 +14,13 @@ import kotlinx.coroutines.flow.map
 
 @Singleton
 internal class AppRepositoryImpl @Inject constructor(
+    delegates: StorageValueDelegates,
     private val productDao: ProductDao,
     private val productMapper: ProductEntity.Mapper,
     private val categoryDao: CategoryDao,
 ) : AppRepository {
+
+    override val clearNotificationsReminderEnabled by delegates.boolean(defaultValue = true)
 
     override fun categories(): Flow<List<Product.Category>> =
         categoryDao.all()
