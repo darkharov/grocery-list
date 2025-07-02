@@ -16,20 +16,16 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 internal class ProductListPreviewViewModel @Inject constructor(
+    private val mapper: ProductListMapper,
     private val repository: AppRepository,
-    private val productListMapper: ProductListMapper,
 ) : ViewModel(),
     ProductListPreviewCallbacks {
 
     val props: StateFlow<ProductListPreviewProps?> =
         repository
-            .getProductList()
-            .map(productListMapper::transform)
-            .stateIn(
-                viewModelScope,
-                SharingStarted.WhileSubscribed(5_000),
-                null,
-            )
+            .productList()
+            .map(mapper::transform)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     private val events = Channel<Event>(Channel.UNLIMITED)
 
@@ -43,10 +39,15 @@ internal class ProductListPreviewViewModel @Inject constructor(
         events.trySend(Event.OnGoToActions)
     }
 
+    override fun onAddProduct() {
+        events.trySend(Event.OnAddProduct)
+    }
+
     fun events(): ReceiveChannel<Event> =
         events
 
     enum class Event {
+        OnAddProduct,
         OnGoToActions,
     }
 }

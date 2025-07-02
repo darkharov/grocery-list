@@ -11,15 +11,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import app.grocery.list.assembly.R
 import app.grocery.list.commons.compose.EventConsumer
@@ -27,33 +28,32 @@ import app.grocery.list.commons.compose.elements.AppToolbar
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.preparing.for_.shopping.PreparingForShopping
 import app.grocery.list.preparing.for_.shopping.preparingForShopping
-import app.grocery.list.product.input.form.ProductInputForm
 import app.grocery.list.product.input.form.productInputFormScreen
 import app.grocery.list.product.list.actions.productListActionsScreen
+import app.grocery.list.product.list.preview.ProductListPreview
 import app.grocery.list.product.list.preview.productListPreviewScreen
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 
 @Composable
 internal fun AppContent(
-    numberOfAddedProducts: Int,
+    numberOfAddedProducts: Int?,
     delegates: AppContentDelegate,
     appEvents: ReceiveChannel<AppEvent>,
     modifier: Modifier = Modifier,
 ) {
+    val startRoute = ProductListPreview
     val navController = rememberNavController()
-    var currentRoute by rememberSaveable { mutableStateOf<String?>(null) }
-    val currentBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestinationId = currentBackStackEntry?.destination?.id
-    val startDestinationId = navController.graph.startDestinationId
-    val upAvailable = (currentDestinationId == startDestinationId)
+    var currentDestination by remember { mutableStateOf<NavDestination?>(null) }
+
     LaunchedEffect(navController) {
         navController.currentBackStackEntryFlow.collect { navBackStackEntry ->
-            val route = navBackStackEntry.destination.route
-            delegates.onScreenChange(route)
-            currentRoute = route
+            val destination = navBackStackEntry.destination
+            currentDestination = destination
+            delegates.onCurrentDestinationChange(destination)
         }
     }
+
     EventConsumer(
         key = appEvents,
         events = appEvents,
@@ -65,6 +65,7 @@ internal fun AppContent(
             }
         }
     }
+
     Scaffold(
         modifier = modifier,
         contentWindowInsets = WindowInsets(0.dp),
@@ -72,7 +73,9 @@ internal fun AppContent(
             AppToolbar(
                 title = stringResource(R.string.grocery_list),
                 counterValue = numberOfAddedProducts,
-                onUpClick = if (upAvailable) {
+                onUpClick = if (
+                    currentDestination?.hasRoute(startRoute::class) == true
+                ) {
                     null
                 } else {
                     { navController.popBackStack() }
@@ -82,7 +85,7 @@ internal fun AppContent(
     ) { padding ->
         NavHost(
             navController = navController,
-            startDestination = ProductInputForm,
+            startDestination = startRoute,
             modifier = Modifier
                 .windowInsetsPadding(
                     WindowInsets
@@ -91,9 +94,12 @@ internal fun AppContent(
                 )
                 .padding(padding)
         ) {
-            val navigation = AppNavigationFacade(navController)
-            productInputFormScreen(navigation)
+            val navigation = AppNavigationFacade(
+                startRoute = startRoute,
+                navController = navController,
+            )
             productListPreviewScreen(navigation)
+            productInputFormScreen(navigation)
             productListActionsScreen(navigation, delegates)
             preparingForShopping()
         }

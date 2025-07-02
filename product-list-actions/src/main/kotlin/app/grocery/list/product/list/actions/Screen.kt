@@ -26,14 +26,16 @@ import app.grocery.list.commons.compose.elements.app.button.WideAppButton
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.values.StringValue
 import app.grocery.list.product.list.actions.ProductListActionsViewModel.Event
+import kotlinx.serialization.Serializable
 
-const val ProductListActions = "ProductListActions"
+@Serializable
+data object ProductListActions
 
 fun NavGraphBuilder.productListActionsScreen(
     navigation: ProductListActionsNavigation,
     delegate: ProductListActionsDelegate,
 ) {
-    composable(ProductListActions) {
+    composable<ProductListActions> {
         ProductListActionsScreen(
             delegate = delegate,
             navigation = navigation,
@@ -54,7 +56,7 @@ internal fun ProductListActionsScreen(
     ) { event ->
         when (event) {
             Event.OnListCleared -> {
-                navigation.onReturnToInitialScreen()
+                navigation.returnToStartScreen()
             }
             Event.OnExitFromApp -> {
                 delegate.onExitFromApp()
@@ -158,8 +160,8 @@ private fun Dialog(
     }
 }
 
-@PreviewLightDark
 @Composable
+@PreviewLightDark
 private fun ProductListActionsScreenWithDialogPreview(
     @PreviewParameter(
         provider = ProductListActionsDialogMocks::class,

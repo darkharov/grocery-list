@@ -8,6 +8,7 @@ import app.grocery.list.domain.Product
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 @Singleton
@@ -17,7 +18,7 @@ internal class AppRepositoryImpl @Inject constructor(
     private val categoryDao: CategoryDao,
 ) : AppRepository {
 
-    override suspend fun categories(): List<Product.Category> =
+    override fun categories(): Flow<List<Product.Category>> =
         categoryDao.all()
 
     override suspend fun findCategory(search: String): Product.Category? =
@@ -36,21 +37,18 @@ internal class AppRepositoryImpl @Inject constructor(
         productDao.insertOrReplace(entity)
     }
 
-    override fun getProductList(): Flow<List<CategoryAndProducts>> =
+    override fun productList(): Flow<List<CategoryAndProducts>> =
         productDao
             .select()
             .map { categorizedProducts ->
                 categorizedProducts.map { (categoryId, products) ->
                     CategoryAndProducts(
-                        category = categoryDao.all().first { it.id == categoryId },
+                        category = categories().first().first { it.id == categoryId },
                         products = productMapper.toDomainModels(products),
                     )
                 }
             }
 
-    override fun getNumberOfAddedProducts(): Flow<Int> =
+    override fun numberOfAddedProducts(): Flow<Int> =
         productDao.count()
-
-    override fun atLeastOneProductAdded(): Flow<Boolean> =
-        productDao.count().map { it > 0 }
 }

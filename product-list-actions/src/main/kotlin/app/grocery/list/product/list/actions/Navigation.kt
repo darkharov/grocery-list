@@ -1,5 +1,5 @@
 package app.grocery.list.product.list.actions
 
 interface ProductListActionsNavigation {
-    fun onReturnToInitialScreen()
+    fun returnToStartScreen()
 }

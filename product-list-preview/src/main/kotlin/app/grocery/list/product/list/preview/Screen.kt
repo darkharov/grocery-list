@@ -46,16 +46,18 @@ import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppHorizontalDivider
 import app.grocery.list.commons.compose.elements.AppHorizontalDividerMode
+import app.grocery.list.commons.compose.elements.app.button.AppButton
 import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
-import app.grocery.list.commons.compose.elements.app.button.WideAppButton
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import kotlinx.serialization.Serializable
 
-const val ProductListPreview = "ProductListPreview"
+@Serializable
+data object ProductListPreview
 
 fun NavGraphBuilder.productListPreviewScreen(
     navigation: ProductListPreviewNavigation,
 ) {
-    composable(ProductListPreview) {
+    composable<ProductListPreview> {
         ProductListPreviewScreen(
             navigation = navigation,
         )
@@ -64,9 +66,9 @@ fun NavGraphBuilder.productListPreviewScreen(
 
 @Composable
 internal fun ProductListPreviewScreen(
-    viewModel: ProductListPreviewViewModel = hiltViewModel(),
     navigation: ProductListPreviewNavigation,
 ) {
+    val viewModel = hiltViewModel<ProductListPreviewViewModel>()
     val props by viewModel.props.collectAsState()
     EventConsumer(
         key = viewModel,
@@ -75,7 +77,10 @@ internal fun ProductListPreviewScreen(
     ) { event ->
         when (event) {
             ProductListPreviewViewModel.Event.OnGoToActions -> {
-                navigation.onGoToActions()
+                navigation.goToActions()
+            }
+            ProductListPreviewViewModel.Event.OnAddProduct -> {
+                navigation.goToProductInputForm()
             }
         }
     }
@@ -91,65 +96,54 @@ internal fun ProductListPreviewScreen(
     callbacks: ProductListPreviewCallbacks,
     modifier: Modifier = Modifier,
 ) {
-    when {
-        (props == null) -> {
-            Preloader(modifier)
-        }
-        props.categories.isEmpty() -> {
-            NoItemsMessage(modifier)
-        }
-        else -> {
-            Items(modifier, props, callbacks)
-        }
-    }
-}
-
-@Composable
-private fun NoItemsMessage(modifier: Modifier) {
-    Box(
-        modifier = modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = stringResource(R.string.list_is_empty),
+    if (props == null) {
+        Preloader(
+            modifier = modifier,
         )
-    }
-}
-
-@Composable
-private fun Items(
-    modifier: Modifier,
-    props: ProductListPreviewProps,
-    callbacks: ProductListPreviewCallbacks,
-) {
-    Column(
-        modifier = modifier
-            .windowInsetsPadding(
-                WindowInsets.navigationBars,
-            ),
-    ) {
-        ListWithDividers(
+    } else {
+        Content(
             props = props,
             callbacks = callbacks,
-            modifier = Modifier
-                .weight(1f),
-        )
-        WideAppButton(
-            props = AppButtonProps.Next(
-                enabled = props.categories.isNotEmpty(),
-            ),
-            onClick = {
-                callbacks.onNext()
-            },
-            modifier = Modifier
-                .padding(vertical = 16.dp),
+            modifier = modifier,
         )
     }
 }
 
 @Composable
-private fun Preloader(modifier: Modifier) {
+private fun Content(
+    props: ProductListPreviewProps,
+    callbacks: ProductListPreviewCallbacks,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .windowInsetsPadding(WindowInsets.navigationBars),
+    ) {
+        if (props.categories.isEmpty()) {
+            NoItemsMessage(
+                modifier = Modifier
+                    .weight(1f),
+            )
+        } else {
+            ListWithDividers(
+                props = props,
+                callbacks = callbacks,
+                modifier = Modifier
+                    .weight(1f),
+            )
+        }
+        Buttons(
+            props = props,
+            callbacks = callbacks,
+        )
+    }
+}
+
+@Composable
+private fun Preloader(
+    modifier: Modifier = Modifier,
+) {
     Box(
         modifier = modifier
             .fillMaxSize(),
@@ -160,10 +154,24 @@ private fun Preloader(modifier: Modifier) {
 }
 
 @Composable
+private fun NoItemsMessage(
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = stringResource(R.string.list_is_empty),
+        )
+    }
+}
+
+@Composable
 private fun ListWithDividers(
     props: ProductListPreviewProps,
     callbacks: ProductListPreviewCallbacks,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
     Box(
@@ -196,6 +204,44 @@ private fun ListWithDividers(
                     .align(Alignment.BottomCenter),
             )
         }
+    }
+}
+
+@Composable
+private fun Buttons(
+    props: ProductListPreviewProps,
+    callbacks: ProductListPreviewCallbacks,
+) {
+    Row(
+        modifier = Modifier
+            //.background(MaterialTheme.colorScheme.inverseSurface.copy(alpha = 0.84f))
+            .padding(
+                vertical = 16.dp,
+                horizontal = dimensionResource(R.dimen.margin_16_32_64),
+            ),
+        horizontalArrangement = Arrangement
+            .spacedBy(16.dp)
+    ) {
+        AppButton(
+            props = AppButtonProps.Custom(
+                text = "+ ${stringResource(R.string.add)}",
+            ),
+            onClick = {
+                callbacks.onAddProduct()
+            },
+            modifier = Modifier
+                .weight(1f),
+        )
+        AppButton(
+            props = AppButtonProps.Next(
+                enabled = props.categories.isNotEmpty(),
+            ),
+            onClick = {
+                callbacks.onNext()
+            },
+            modifier = Modifier
+                .weight(1f),
+        )
     }
 }
 

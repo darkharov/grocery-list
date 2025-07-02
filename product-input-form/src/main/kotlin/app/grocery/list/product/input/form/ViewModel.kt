@@ -3,6 +3,7 @@ package app.grocery.list.product.input.form
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.domain.AppRepository
+import app.grocery.list.domain.AtLeastOneProductJustAddedUseCase
 import app.grocery.list.domain.Product
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,13 +17,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 internal class ProductInputFormViewModel @Inject constructor(
     private val repository: AppRepository,
+    private val atLeastOneProductJustAdded: AtLeastOneProductJustAddedUseCase,
     private val categoryMapper: ProductCategoryMapper,
 ) : ViewModel(),
     ProductInputFormCallbacks {
@@ -38,7 +40,7 @@ internal class ProductInputFormViewModel @Inject constructor(
             productTitle,
             categories(),
             selectedCategory(),
-            repository.atLeastOneProductAdded(),
+            atLeastOneProductJustAdded.execute(),
         ) {
                 productTitle,
                 categories,
@@ -58,11 +60,9 @@ internal class ProductInputFormViewModel @Inject constructor(
         )
 
     private fun categories(): Flow<ImmutableList<CategoryProps>> =
-        flow {
-            val categories = repository.categories()
-            val mapped = categoryMapper.transformList(categories)
-            emit(mapped)
-        }
+        repository
+            .categories()
+            .map(categoryMapper::transformList)
 
     private fun selectedCategory(): Flow<CategoryProps?> =
         combine(
@@ -103,8 +103,8 @@ internal class ProductInputFormViewModel @Inject constructor(
         explicitlySelectedCategory.value = category
     }
 
-    override fun onReadyToGoToPreview() {
-        events.trySend(Event.OnGoToPreview)
+    override fun onComplete() {
+        events.trySend(Event.OnDone)
     }
 
     fun props(): StateFlow<ProductInputFormProps?> =
@@ -114,6 +114,6 @@ internal class ProductInputFormViewModel @Inject constructor(
         events
 
     enum class Event {
-        OnGoToPreview,
+        OnDone,
     }
 }

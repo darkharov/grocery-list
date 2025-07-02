@@ -5,24 +5,28 @@ import app.grocery.list.product.input.form.ProductInputForm
 import app.grocery.list.product.input.form.ProductInputFormNavigation
 import app.grocery.list.product.list.actions.ProductListActions
 import app.grocery.list.product.list.actions.ProductListActionsNavigation
-import app.grocery.list.product.list.preview.ProductListPreview
 import app.grocery.list.product.list.preview.ProductListPreviewNavigation
 
 internal class AppNavigationFacade(
+    private val startRoute: Any,
     private val navController: NavHostController,
 ) : ProductInputFormNavigation,
     ProductListPreviewNavigation,
     ProductListActionsNavigation {
 
-    override fun onGoToPreview() {
-        navController.navigate(ProductListPreview)
+    override fun exitFromProductInputForm() {
+        navController.popBackStack()
     }
 
-    override fun onGoToActions() {
+    override fun goToActions() {
         navController.navigate(ProductListActions)
     }
 
-    override fun onReturnToInitialScreen() {
-        navController.popBackStack(ProductInputForm, false)
+    override fun goToProductInputForm() {
+        navController.navigate(ProductInputForm)
+    }
+
+    override fun returnToStartScreen() {
+        navController.popBackStack(startRoute, inclusive = false)
     }
 }

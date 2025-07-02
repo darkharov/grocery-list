@@ -20,12 +20,12 @@ class MainViewModel @Inject constructor(
 
     val numberOfAddedProducts =
         repository
-            .getNumberOfAddedProducts()
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
+            .numberOfAddedProducts()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     val productList =
         repository
-            .getProductList()
+            .productList()
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     fun appEvents(): ReceiveChannel<AppEvent> =

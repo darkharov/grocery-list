@@ -9,11 +9,10 @@ import kotlinx.collections.immutable.toImmutableList
 
 @Singleton
 internal class ProductListMapper @Inject constructor() {
-
     fun transform(productList: List<CategoryAndProducts>): ProductListPreviewProps =
         ProductListPreviewProps(
             categories = productList.map(::transform).toImmutableList(),
-            payload = productList,
+            payload = productList
         )
 
     private fun transform(categoryAndProducts: CategoryAndProducts): ProductListPreviewProps.Category =

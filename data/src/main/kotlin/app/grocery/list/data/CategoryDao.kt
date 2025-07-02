@@ -5,6 +5,8 @@ import app.grocery.list.domain.Product
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 @Singleton
 internal class CategoryDao @Inject constructor(
@@ -32,8 +34,8 @@ internal class CategoryDao @Inject constructor(
                 )
             }
 
-    fun all(): List<Product.Category> =
-        categories
+    fun all(): Flow<List<Product.Category>> =
+        flowOf(categories)
 
     fun find(search: String): Product.Category? {
         val (category, keyword) = categories.associateWith {

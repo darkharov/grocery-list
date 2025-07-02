@@ -3,12 +3,13 @@ package app.grocery.list.domain
 import kotlinx.coroutines.flow.Flow
 
 interface AppRepository {
-    suspend fun categories(): List<Product.Category>
+
+    fun categories(): Flow<List<Product.Category>>
+    fun productList(): Flow<List<CategoryAndProducts>>
+    fun numberOfAddedProducts(): Flow<Int>
+
     suspend fun findCategory(search: String): Product.Category?
     suspend fun clearProducts()
     suspend fun deleteProduct(productId: Int)
     suspend fun putProduct(product: Product)
-    fun getProductList(): Flow<List<CategoryAndProducts>>
-    fun getNumberOfAddedProducts(): Flow<Int>
-    fun atLeastOneProductAdded(): Flow<Boolean>
 }

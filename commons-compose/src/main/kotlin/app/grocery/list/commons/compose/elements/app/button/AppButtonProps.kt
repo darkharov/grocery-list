@@ -34,7 +34,7 @@ sealed class AppButtonProps {
         override val background: Background = Background.Normal,
         @DrawableRes
         override val drawableEndId: Int? = null,
-        override val enabled: Boolean = Defaults.ENABLED,
+        override val enabled: Boolean = true,
     ) : AppButtonProps() {
 
         @Stable
@@ -45,7 +45,7 @@ sealed class AppButtonProps {
 
     @Immutable
     data class Next(
-        override val enabled: Boolean = Defaults.ENABLED,
+        override val enabled: Boolean = true,
     ) : AppButtonProps() {
 
         override val background = Background.Normal
@@ -54,6 +54,19 @@ sealed class AppButtonProps {
         @Composable
         override fun title() =
             "${stringResource(R.string.next)} >>"
+    }
+
+    @Immutable
+    data class Done(
+        override val enabled: Boolean = true,
+    ) : AppButtonProps() {
+
+        override val background = Background.Normal
+        override val drawableEndId = null
+
+        @Composable
+        override fun title() =
+            "✓ ${stringResource(R.string.done)}"
     }
 
     enum class Background {
@@ -77,9 +90,5 @@ sealed class AppButtonProps {
         @Stable
         @Composable
         abstract fun toColor(): Color
-    }
-
-    private object Defaults {
-        const val ENABLED = true
     }
 }

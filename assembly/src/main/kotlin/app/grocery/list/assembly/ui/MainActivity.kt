@@ -10,7 +10,8 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hasRoute
 import app.grocery.list.assembly.ui.content.AppContent
 import app.grocery.list.assembly.ui.content.AppContentDelegate
 import app.grocery.list.commons.compose.theme.ThemeUtil
@@ -37,7 +38,7 @@ class MainActivity :
 
     private val viewModel by viewModels<MainViewModel>()
     private val postNotifications = postNotificationLauncher()
-    private var currentRoute: String? = null
+    private var currentDestination: NavDestination? = null
 
     private fun postNotificationLauncher() =
         registerForActivityResult(RequestPermission()) { granted ->
@@ -54,7 +55,7 @@ class MainActivity :
 
     private fun observeScreenLock() {
         ScreenLockedReceiver.register(this) {
-            if (currentRoute == PreparingForShopping) {
+            if (currentDestination?.hasRoute(PreparingForShopping::class) == true) {
                 lifecycleScope.launch {
                     val productList = viewModel.productList.filterNotNull().first()
                     notificationPublisher.tryToPost(productList)
@@ -89,7 +90,7 @@ class MainActivity :
         }
     }
 
-    override fun onScreenChange(route: String?) {
-        currentRoute = route
+    override fun onCurrentDestinationChange(newValue: NavDestination) {
+        currentDestination = newValue
     }
 }

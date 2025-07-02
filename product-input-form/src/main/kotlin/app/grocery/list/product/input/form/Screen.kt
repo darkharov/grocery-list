@@ -45,13 +45,15 @@ import app.grocery.list.commons.compose.theme.values.StringValue
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPicker
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.serialization.Serializable
 
-const val ProductInputForm = "ProductInputForm"
+@Serializable
+data object ProductInputForm
 
 fun NavGraphBuilder.productInputFormScreen(
     navigation: ProductInputFormNavigation,
 ) {
-    composable(ProductInputForm) {
+    composable<ProductInputForm> {
         ProductInputFormScreen(
             navigation = navigation,
         )
@@ -70,8 +72,8 @@ internal fun ProductInputFormScreen(
         events = viewModel.events(),
     ) { event ->
         when (event) {
-            ProductInputFormViewModel.Event.OnGoToPreview -> {
-                navigation.onGoToPreview()
+            ProductInputFormViewModel.Event.OnDone -> {
+                navigation.exitFromProductInputForm()
             }
         }
     }
@@ -218,7 +220,7 @@ private fun finalizeInput(
         }
     } else if (props.atLeastOneProductAdded) {
         softwareKeyboardController?.hide()
-        callbacks.onReadyToGoToPreview()
+        callbacks.onComplete()
     }
 }
 
@@ -256,12 +258,12 @@ private fun Buttons(
                 .weight(1f),
         )
         AppButton(
-            props = AppButtonProps.Next(
+            props = AppButtonProps.Done(
                 enabled = props.atLeastOneProductAdded && props.title.isBlank(),
             ),
             onClick = {
                 softwareKeyboardController?.hide()
-                callbacks.onReadyToGoToPreview()
+                callbacks.onComplete()
             },
             modifier = Modifier
                 .weight(1f),
@@ -295,7 +297,7 @@ private fun ProductInputScreenPreview() {
                         title = "",
                         categories = ProductInputFormMocks.categories.toImmutableList(),
                         selectedCategory = null,
-                        atLeastOneProductAdded = false,
+                        atLeastOneProductAdded = true,
                     )
                 )
             }
