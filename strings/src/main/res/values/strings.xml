@@ -133,7 +133,7 @@
 
     <string-array name="preparing_for_shopping_steps">
         <item>Lock the screen</item>
-        <item>Wait two or three second</item>
+        <item>Wait about three second</item>
         <item>Press the screen lock button again</item>
         <item>Swipe away notifications as your cart fills up</item>
     </string-array>

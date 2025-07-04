@@ -133,7 +133,7 @@
 
     <string-array name="preparing_for_shopping_steps">
         <item>Заблокируйте экран</item>
-        <item>Подождите две-три секунды</item>
+        <item>Подождите примерно три секунды</item>
         <item>Нажмите на кнопку блокировки экрана повторно</item>
         <item>Смахивайте уведомления по мере наполнения корзины</item>
     </string-array>
