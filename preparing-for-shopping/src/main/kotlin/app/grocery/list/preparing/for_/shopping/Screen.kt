@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -67,6 +68,15 @@ private fun StepsToTake() {
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
+            Text(
+                text = stringResource(R.string.final_steps),
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(
+                        vertical = 4.dp,
+                    )
+            )
             val items = stringArrayResource(R.array.preparing_for_shopping_steps)
             for (item in items) {
                 Row {
