@@ -89,7 +89,6 @@ private fun StepsToTake() {
                     Text(
                         text = item,
                         fontSize = 16.sp,
-                        letterSpacing = 0.5.sp,
                     )
                 }
             }
