@@ -54,6 +54,7 @@ fun AppToolbar(
     modifier: Modifier = Modifier,
     progress: Boolean = false,
     onUpClick: (() -> Unit)? = null,
+    onCounterClick: (() -> Unit)? = null,
     counterValue: Int? = null,
 ) {
     AppToolbarInternal(
@@ -65,6 +66,18 @@ fun AppToolbar(
                 AppCounter(
                     value = counterValue,
                     modifier = Modifier
+                        .then(
+                            if (onCounterClick != null) {
+                                Modifier
+                                    .clickable(
+                                        onClick = onCounterClick,
+                                        interactionSource = null,
+                                        indication = null,
+                                    )
+                            } else {
+                                Modifier
+                            }
+                        )
                         .padding(8.dp),
                 )
             }

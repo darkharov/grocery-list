@@ -90,6 +90,9 @@ internal fun AppContent(
                 } else {
                     { navController.popBackStack() }
                 },
+                onCounterClick = {
+                    navController.popBackStack(ProductListPreview, inclusive = false)
+                },
             )
         },
     ) { padding ->
