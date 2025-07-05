@@ -1,7 +1,9 @@
 package app.grocery.list.final_.steps
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -12,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -46,12 +49,19 @@ private fun FinalSteps(
 private fun Content() {
     val items = stringArrayResource(R.array.final_steps)
     for (item in items) {
-        Row {
+        Row(
+            modifier = Modifier
+                .padding(vertical = 4.dp),
+        ) {
             Text(
-                text = "\u2022 ",
+                text = "\u2022",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary,
+            )
+            Spacer(
+                modifier = Modifier
+                    .width(8.dp),
             )
             Text(
                 text = item,
