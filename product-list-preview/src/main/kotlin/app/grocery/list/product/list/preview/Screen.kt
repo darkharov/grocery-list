@@ -309,7 +309,7 @@ private fun Product(
                 .weight(1f),
         )
         Icon(
-            painter = painterResource(R.drawable.ic_delete),
+            painter = painterResource(R.drawable.ic_bin_outline),
             contentDescription = stringResource(R.string.delete),
             paddingEnd = horizontalPadding,
             onClick = {

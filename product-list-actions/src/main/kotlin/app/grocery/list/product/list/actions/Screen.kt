@@ -98,7 +98,7 @@ private fun Content(callbacks: ProductListActionsCallbacks, modifier: Modifier) 
             props = AppButtonProps.Custom(
                 text = stringResource(R.string.clear_list),
                 background = AppButtonProps.Background.Negative,
-                drawableEndId = R.drawable.ic_delete,
+                drawableEndId = R.drawable.ic_bin_outline,
             ),
             onClick = {
                 callbacks.onGoToClearListConfirmation()
