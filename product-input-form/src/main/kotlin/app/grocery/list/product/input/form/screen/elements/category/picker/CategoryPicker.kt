@@ -23,7 +23,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import app.grocery.list.commons.compose.AppTextField
+import app.grocery.list.commons.compose.elements.AppTextField
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.values.StringValue
 import app.grocery.list.product.input.form.ProductInputFormMocks

@@ -36,8 +36,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import app.grocery.list.commons.compose.AppTextField
 import app.grocery.list.commons.compose.EventConsumer
+import app.grocery.list.commons.compose.elements.AppTextField
 import app.grocery.list.commons.compose.elements.app.button.AppButton
 import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme

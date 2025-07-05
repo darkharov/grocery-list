@@ -1,4 +1,4 @@
-package app.grocery.list.commons.compose
+package app.grocery.list.commons.compose.elements
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
