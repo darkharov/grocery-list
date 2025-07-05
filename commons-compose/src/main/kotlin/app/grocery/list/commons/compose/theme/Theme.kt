@@ -1,6 +1,7 @@
 package app.grocery.list.commons.compose.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -20,7 +21,11 @@ fun GroceryListTheme(
     }
     MaterialTheme(
         colorScheme = colorScheme,
-        content = content,
+        content = {
+            CompositionLocalProvider(LocalTextStyle provides LocalAppTypography.current.plainText) {
+                content()
+            }
+        },
     )
 }
 

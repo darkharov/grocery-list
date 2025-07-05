@@ -142,7 +142,7 @@ private fun Dialog(
     when (dialog) {
         ProductListActionsDialog.ConfirmClearList -> {
             AppDialogScreen(
-                icon = painterResource(R.drawable.ic_delete),
+                icon = painterResource(R.drawable.ic_bin_outline),
                 text = StringValue.ResId(
                     R.string.clear_product_list_confirmation,
                 ),

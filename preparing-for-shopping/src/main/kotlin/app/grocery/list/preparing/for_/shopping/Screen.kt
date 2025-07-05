@@ -27,6 +27,7 @@ import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.elements.AppExplanationImage
 import app.grocery.list.commons.compose.elements.AppSimpleLayout
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppTypography
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -70,8 +71,7 @@ private fun StepsToTake() {
         ) {
             Text(
                 text = stringResource(R.string.final_steps),
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
+                style = LocalAppTypography.current.title,
                 modifier = Modifier
                     .padding(
                         vertical = 4.dp,
@@ -82,7 +82,7 @@ private fun StepsToTake() {
                 Row {
                     Text(
                         text = "\u2022 ",
-                        fontSize = 20.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary,
                     )

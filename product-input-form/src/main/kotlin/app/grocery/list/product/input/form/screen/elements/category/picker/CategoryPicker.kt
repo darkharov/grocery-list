@@ -87,7 +87,6 @@ internal fun CategoryPicker(
                     text = {
                         Text(
                             text = category.title,
-                            style = MaterialTheme.typography.bodyLarge,
                         )
                     },
                     onClick = {

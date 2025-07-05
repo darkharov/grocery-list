@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppTypography
 
 private val TrailingElementSize = 24.dp
 private val TrailingElementOffset = 16.dp
@@ -64,6 +65,7 @@ fun AppButton(
             Text(
                 text = props.title(),
                 textAlign = TextAlign.Center,
+                style = LocalAppTypography.current.button,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(

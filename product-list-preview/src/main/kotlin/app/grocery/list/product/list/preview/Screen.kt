@@ -34,7 +34,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
@@ -49,6 +48,7 @@ import app.grocery.list.commons.compose.elements.AppHorizontalDividerMode
 import app.grocery.list.commons.compose.elements.app.button.AppButton
 import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppTypography
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -255,17 +255,18 @@ private fun LazyListScope.items(
             key = category.key,
             contentType = "Category",
         ) {
-            Category(
-                category = category,
+            Text(
+                text = category.title,
                 modifier = Modifier
                     .padding(
                         horizontal = dimensionResource(R.dimen.margin_16_32_64),
                     )
                     .padding(
-                        top = 12.dp,
+                        top = 20.dp,
                         bottom = 4.dp,
                     )
                     .animateItem(),
+                style = LocalAppTypography.current.title,
             )
         }
         items(
@@ -281,19 +282,6 @@ private fun LazyListScope.items(
             )
         }
     }
-}
-
-@Composable
-private fun Category(
-    category: ProductListPreviewProps.Category,
-    modifier: Modifier = Modifier,
-) {
-    Text(
-        text = category.title,
-        modifier = modifier,
-        style = MaterialTheme.typography.titleLarge
-            .copy(fontWeight = FontWeight.Medium),
-    )
 }
 
 @Composable
@@ -319,8 +307,6 @@ private fun Product(
                     start = horizontalPadding,
                 )
                 .weight(1f),
-            style = MaterialTheme.typography.titleMedium
-                .copy(fontWeight = FontWeight.Normal),
         )
         Icon(
             painter = painterResource(R.drawable.ic_delete),

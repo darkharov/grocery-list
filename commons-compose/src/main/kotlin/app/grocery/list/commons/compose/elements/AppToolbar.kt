@@ -47,6 +47,7 @@ import app.grocery.list.commons.compose.EmojiProvider
 import app.grocery.list.commons.compose.LocalEmojiProvider
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppTypography
 
 @Composable
 fun AppToolbar(
@@ -126,7 +127,7 @@ internal fun AppToolbarInternal(
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                style = MaterialTheme.typography.titleMedium,
+                style = LocalAppTypography.current.toolbarTitle,
                 modifier = Modifier
                     .weight(1f),
             )
