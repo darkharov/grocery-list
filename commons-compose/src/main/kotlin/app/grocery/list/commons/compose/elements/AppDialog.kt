@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.theme.GroceryListTheme
-import app.grocery.list.commons.compose.theme.values.StringValue
+import app.grocery.list.commons.compose.values.StringValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -1,4 +1,4 @@
-package app.grocery.list.commons.compose.theme.values
+package app.grocery.list.commons.compose.values
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable

@@ -24,7 +24,7 @@ import app.grocery.list.commons.compose.elements.AppDialogScreen
 import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
 import app.grocery.list.commons.compose.elements.app.button.WideAppButton
 import app.grocery.list.commons.compose.theme.GroceryListTheme
-import app.grocery.list.commons.compose.theme.values.StringValue
+import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.product.list.actions.ProductListActionsViewModel.Event
 import kotlinx.serialization.Serializable
 
