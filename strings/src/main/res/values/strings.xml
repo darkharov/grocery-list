@@ -20,6 +20,7 @@
     <string name="delete">Delete</string>
     <string name="next">Next</string>
     <string name="list_is_empty">The list is empty…</string>
+    <string name="advice">Advice</string>
     <string name="remove_unnecessary_notifications">Remove unnecessary notifications from other apps</string>
     <string name="do_not_show_this_screen_again">Do not show this screen again</string>
     <string name="final_steps">Final Steps</string>

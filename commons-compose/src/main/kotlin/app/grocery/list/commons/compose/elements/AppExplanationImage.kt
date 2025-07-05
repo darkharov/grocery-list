@@ -1,5 +1,6 @@
 package app.grocery.list.commons.compose.elements
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -8,7 +9,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
@@ -20,7 +20,8 @@ import kotlin.math.min
 
 @Composable
 fun AppExplanationImage(
-    painter: Painter,
+    @DrawableRes
+    imageId: Int,
     modifier: Modifier = Modifier,
 ) {
     val width = with(LocalDensity.current) {
@@ -29,7 +30,7 @@ fun AppExplanationImage(
         }
     }
     Image(
-        painter = painter,
+        painter = painterResource(imageId),
         contentDescription = null,
         colorFilter = ColorFilter.tint(
             MaterialTheme.colorScheme.primary,
@@ -46,7 +47,7 @@ private fun AppBottomExplanationImagePreview() {
     GroceryListTheme {
         Scaffold { padding ->
             AppExplanationImage(
-                painter = painterResource(R.drawable.ic_android_200),
+                imageId = R.drawable.ic_android_200,
                 modifier = Modifier
                     .padding(padding)
             )

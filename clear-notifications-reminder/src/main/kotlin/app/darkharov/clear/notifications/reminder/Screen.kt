@@ -5,8 +5,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -17,7 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -30,8 +33,7 @@ import androidx.navigation.compose.composable
 import app.darkharov.clear.notifications.reminder.ClearNotificationsReminderViewModel.Event
 import app.grocery.list.clear.notifications.reminder.R
 import app.grocery.list.commons.compose.EventConsumer
-import app.grocery.list.commons.compose.elements.AppExplanationImage
-import app.grocery.list.commons.compose.elements.AppSimpleLayout
+import app.grocery.list.commons.compose.elements.AppContentToRead
 import app.grocery.list.commons.compose.elements.app.button.AppButton
 import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
@@ -79,27 +81,22 @@ private fun ClearNotificationsReminderScreen(
     callbacks: ClearNotificationsReminderCallbacks,
     modifier: Modifier = Modifier,
 ) {
-    AppSimpleLayout(
+    AppContentToRead(
         modifier = modifier,
-        scrollableContent = {
-            Spacer(
-                modifier = Modifier
-                    .height(40.dp),
-            )
+        title = stringResource(R.string.advice),
+        content = {
             Text(
                 text = stringResource(R.string.remove_unnecessary_notifications),
                 fontSize = 16.sp,
             )
-            AppExplanationImage(
-                painter = painterResource(R.drawable.clear_notifications),
-                modifier = Modifier
-                    .padding(
-                        vertical = 32.dp,
-                    ),
-            )
         },
+        imageId = R.drawable.clear_notifications,
         footer = {
-            Column {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = dimensionResource(R.dimen.margin_16_32_64))
+                    .windowInsetsPadding(WindowInsets.navigationBars)
+            ) {
                 DoNotShowAgain(
                     props = props,
                     callbacks = callbacks,
