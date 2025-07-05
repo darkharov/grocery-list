@@ -134,7 +134,7 @@
         <item>Pads</item>
     </string-array>
 
-    <string-array name="preparing_for_shopping_steps">
+    <string-array name="final_steps">
         <item>Lock the screen</item>
         <item>Wait about three second</item>
         <item>Press the screen lock button again</item>

@@ -134,7 +134,7 @@
         <item>Прокладки</item>
     </string-array>
 
-    <string-array name="preparing_for_shopping_steps">
+    <string-array name="final_steps">
         <item>Заблокируйте экран</item>
         <item>Подождите примерно три секунды</item>
         <item>Нажмите на кнопку блокировки экрана повторно</item>

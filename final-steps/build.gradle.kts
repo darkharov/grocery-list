@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "${Configs.APPLICATION_ID}.preparing.for_.shopping"
+    namespace = "${Configs.APPLICATION_ID}.final_.steps"
     compileSdk = Configs.Sdk.COMPILE
 
     defaultConfig {

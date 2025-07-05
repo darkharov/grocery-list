@@ -64,7 +64,7 @@ private fun ClearNotificationsReminderScreen(
     ) { event ->
         when (event) {
             Event.Next -> {
-                navigation.goToPreparingForShopping()
+                navigation.goToFinalSteps()
             }
         }
     }

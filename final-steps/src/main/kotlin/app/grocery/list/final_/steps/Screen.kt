@@ -1,4 +1,4 @@
-package app.grocery.list.preparing.for_.shopping
+package app.grocery.list.final_.steps
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -20,31 +20,31 @@ import app.grocery.list.commons.compose.theme.GroceryListTheme
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object PreparingForShopping
+data object FinalSteps
 
-fun NavGraphBuilder.preparingForShopping() {
-    composable<PreparingForShopping> {
-        PreparingForShopping()
+fun NavGraphBuilder.finalSteps() {
+    composable<FinalSteps> {
+        FinalSteps()
     }
 }
 
 @Composable
-private fun PreparingForShopping(
+private fun FinalSteps(
     modifier: Modifier = Modifier,
 ) {
     AppContentToRead(
         modifier = modifier,
         title = stringResource(R.string.final_steps),
         content = {
-            StepsToTake()
+            Content()
         },
         imageId = R.drawable.lock_the_screen,
     )
 }
 
 @Composable
-private fun StepsToTake() {
-    val items = stringArrayResource(R.array.preparing_for_shopping_steps)
+private fun Content() {
+    val items = stringArrayResource(R.array.final_steps)
     for (item in items) {
         Row {
             Text(
@@ -64,10 +64,10 @@ private fun StepsToTake() {
 @PreviewLightDark
 @Preview(device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait")
 @Composable
-private fun PreparingForShoppingPreview() {
+private fun FinalStepsPreview() {
     GroceryListTheme {
         Scaffold { padding ->
-            PreparingForShopping(
+            FinalSteps(
                 modifier = Modifier
                     .padding(padding),
             )

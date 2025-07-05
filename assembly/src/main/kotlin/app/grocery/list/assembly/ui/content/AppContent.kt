@@ -28,8 +28,8 @@ import app.grocery.list.assembly.R
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppToolbar
 import app.grocery.list.commons.compose.theme.GroceryListTheme
-import app.grocery.list.preparing.for_.shopping.PreparingForShopping
-import app.grocery.list.preparing.for_.shopping.preparingForShopping
+import app.grocery.list.final_.steps.FinalSteps
+import app.grocery.list.final_.steps.finalSteps
 import app.grocery.list.product.input.form.productInputFormScreen
 import app.grocery.list.product.list.actions.productListActionsScreen
 import app.grocery.list.product.list.preview.ProductListPreview
@@ -68,7 +68,7 @@ internal fun AppContent(
                 val route: Any = if (reminderEnabled) {
                     ClearNotificationsReminder
                 } else {
-                    PreparingForShopping
+                    FinalSteps
                 }
                 navController.navigate(route)
             }
@@ -115,7 +115,7 @@ internal fun AppContent(
             productInputFormScreen(navigation)
             productListActionsScreen(navigation, delegates)
             clearNotificationsReminder(navigation)
-            preparingForShopping()
+            finalSteps()
         }
     }
 }

@@ -15,8 +15,8 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import app.grocery.list.assembly.ui.content.AppContent
 import app.grocery.list.assembly.ui.content.AppContentDelegate
 import app.grocery.list.commons.compose.theme.ThemeUtil
+import app.grocery.list.final_.steps.FinalSteps
 import app.grocery.list.notifications.NotificationPublisher
-import app.grocery.list.preparing.for_.shopping.PreparingForShopping
 import commons.android.ApplicationActivityMarker
 import commons.android.ScreenLockedReceiver
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,7 +55,7 @@ class MainActivity :
 
     private fun observeScreenLock() {
         ScreenLockedReceiver.register(this) {
-            if (currentDestination?.hasRoute(PreparingForShopping::class) == true) {
+            if (currentDestination?.hasRoute(FinalSteps::class) == true) {
                 lifecycleScope.launch {
                     val productList = viewModel.productList.filterNotNull().first()
                     notificationPublisher.tryToPost(productList)
