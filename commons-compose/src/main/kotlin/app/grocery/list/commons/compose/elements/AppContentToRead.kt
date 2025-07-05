@@ -67,7 +67,9 @@ private fun Content(
     imageId: Int,
     footer: @Composable (() -> Unit)?,
 ) {
-    Column {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         Main(
             title = title,
             content = content,
@@ -130,7 +132,7 @@ private fun Main(
 }
 
 @PreviewLightDark
-@Preview(device = "spec:width=1280dp,height=800dp,dpi=240,orientation=portrait")
+@Preview(device = "spec:width=1280dp,height=800dp,dpi=240")
 @Composable
 private fun AppContentToReadPreview(
     @PreviewParameter(
