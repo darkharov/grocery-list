@@ -51,7 +51,7 @@ private fun Content() {
     for (item in items) {
         Row(
             modifier = Modifier
-                .padding(vertical = 4.dp),
+                .padding(bottom = 8.dp),
         ) {
             Text(
                 text = "\u2022",
