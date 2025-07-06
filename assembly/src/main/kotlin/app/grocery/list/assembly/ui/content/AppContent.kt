@@ -1,5 +1,7 @@
 package app.grocery.list.assembly.ui.content
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.navigationBars
@@ -105,7 +107,12 @@ internal fun AppContent(
                         .navigationBars
                         .only(WindowInsetsSides.Horizontal),
                 )
-                .padding(padding)
+                .padding(padding),
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None },
+            sizeTransform = null,
         ) {
             val navigation = AppNavigationFacade(
                 startRoute = startRoute,
