@@ -52,6 +52,7 @@ class NotificationPublisher @Inject internal constructor(
                 .Builder(context, DEFAULT_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_stat_logo)
                 .setContentTitle(chunk.reversed().joinToString { it.title })
+                .setGroup(chunk.first().id.toString())
                 .build()
             notificationManager.notify(TYPE_PRODUCT, chunk.first().id, notification)
         }
