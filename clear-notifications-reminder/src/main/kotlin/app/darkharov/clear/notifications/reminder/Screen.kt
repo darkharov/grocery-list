@@ -150,7 +150,7 @@ private fun DoNotShowAgain(
     ) {
         Text(
             text = stringResource(R.string.do_not_show_this_screen_again),
-            fontSize = 12.sp,
+            fontSize = 14.sp,
             modifier = Modifier
                 .weight(1f),
         )
