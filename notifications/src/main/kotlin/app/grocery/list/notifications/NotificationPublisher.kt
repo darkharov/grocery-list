@@ -7,11 +7,9 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import app.grocery.list.domain.CategoryAndProducts
-import app.grocery.list.domain.Product
-import app.grocery.list.notifications.internal.mapping.CategoryNotificationMapper
-import app.grocery.list.notifications.internal.mapping.ProductNotificationMapper
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -21,12 +19,7 @@ class NotificationPublisher @Inject internal constructor(
     @ApplicationContext
     private val context: Context,
     private val notificationManager: NotificationManagerCompat,
-    categoryNotificationMapperFactory: CategoryNotificationMapper.Factory,
-    productNotificationMapperFactory: ProductNotificationMapper.Factory,
 ) {
-    private val productMapper = productNotificationMapperFactory.create(channelId = DEFAULT_CHANNEL_ID)
-    private val categoryMapper = categoryNotificationMapperFactory.create(channelId = DEFAULT_CHANNEL_ID)
-
     init {
         val defaultChannel = NotificationChannel(
             DEFAULT_CHANNEL_ID,
@@ -50,42 +43,25 @@ class NotificationPublisher @Inject internal constructor(
 
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     private fun post(productList: List<CategoryAndProducts>) {
-        val allProducts = productList.flatMap { it.products }
-        if (allProducts.size <= MAX_VISIBLE_AT_THE_SAME_TIME) {
-            postProducts(allProducts)
-        } else {
-            postGroupsAndProducts(productList)
-        }
-    }
 
-    private fun postGroupsAndProducts(productList: List<CategoryAndProducts>) {
-        for ((category, products) in productList.reversed()) {
-            notificationManager.notify(
-                TYPE_CATEGORY,
-                category.id,
-                categoryMapper.transform(category),
-            )
-            postProducts(products)
-        }
-    }
+        val allProducts = productList.reversed().flatMap { it.products }
+        val chunkSize = 1 + (allProducts.size - 1) / MAX_VISIBLE_AT_THE_SAME_TIME
 
-    private fun postProducts(products: List<Product>) {
-        for (product in products.reversed()) {
-            notificationManager.notify(
-                TYPE_PRODUCT,
-                product.id,
-                productMapper.transform(product),
-            )
+        for (chunk in allProducts.chunked(chunkSize)) {
+            val notification = NotificationCompat
+                .Builder(context, DEFAULT_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_stat_logo)
+                .setContentTitle(chunk.reversed().joinToString { it.title })
+                .build()
+            notificationManager.notify(TYPE_PRODUCT, chunk.first().id, notification)
         }
     }
 
     private companion object {
-        private const val DEFAULT_CHANNEL_ID = "app.wifeslist.notifications.DEFAULT_CHANNEL_ID"
-        private const val TYPE_CATEGORY = "app.wifeslist.notifications.TYPE_CATEGORY"
-        private const val TYPE_PRODUCT = "app.wifeslist.notifications.TYPE_PRODUCT"
+        private const val DEFAULT_CHANNEL_ID = "app.grocery.list.notifications.DEFAULT_CHANNEL_ID"
+        private const val TYPE_PRODUCT = "app.grocery.list.notifications.TYPE_PRODUCT"
 
-        // Pure Android, determined experimentally
-        // TODO: move this constant to resources. It may have different value in different versions of Android.
+        // determined experimentally
         private const val MAX_VISIBLE_AT_THE_SAME_TIME = 8
     }
 }
