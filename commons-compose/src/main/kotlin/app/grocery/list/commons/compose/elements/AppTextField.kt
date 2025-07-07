@@ -10,12 +10,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
 
 @Composable
@@ -51,6 +56,7 @@ fun AppTextField(
             {
                 Text(
                     text = placeholder.value(),
+                    style = LocalAppTypography.current.plainText,
                     modifier = Modifier
                         .alpha(0.2f),
                 )
@@ -84,6 +90,28 @@ private fun AppTextFieldPreview() {
             AppTextField(
                 value = "Text",
                 onValueChange = {},
+                label = StringValue.StringWrapper("Label"),
+                placeholder = StringValue.StringWrapper("Placeholder"),
+                modifier = Modifier
+                    .padding(12.dp),
+            )
+        }
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun EmptyAppTextFieldPreview() {
+    GroceryListTheme {
+        Surface(
+            color = MaterialTheme.colorScheme.background,
+        ) {
+            var text by remember { mutableStateOf("") }
+            AppTextField(
+                value = text,
+                onValueChange = {
+                    text = it
+                },
                 label = StringValue.StringWrapper("Label"),
                 placeholder = StringValue.StringWrapper("Placeholder"),
                 modifier = Modifier
