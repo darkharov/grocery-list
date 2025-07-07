@@ -26,7 +26,6 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -43,7 +42,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import app.grocery.list.commons.compose.EmojiProvider
 import app.grocery.list.commons.compose.LocalEmojiProvider
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.theme.GroceryListTheme
@@ -95,7 +93,6 @@ internal fun AppToolbarInternal(
     titleTrailingContent: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val emojiProvider = LocalEmojiProvider.current
     val elementSize = 48.dp
     val screenHorizontalPadding = dimensionResource(R.dimen.margin_16_32_64)
     Box(
@@ -121,8 +118,13 @@ internal fun AppToolbarInternal(
                 onClick = onUpClick,
                 modifier = Modifier,
             )
+            val emojiProvider = LocalEmojiProvider.current
+            val decoratedTitle = rememberSaveable(title) {
+                val emoji = emojiProvider.get(1)
+                "$emoji $title"
+            }
             Text(
-                text = decoratedTitle(title, emojiProvider),
+                text = decoratedTitle,
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Ellipsis,
@@ -188,34 +190,6 @@ private fun OptionalUpIcon(
         }
     }
 }
-
-@Composable
-private fun decoratedTitle(title: String, emojiProvider: EmojiProvider) =
-    if (title.isNotBlank()) {
-        val emoji = rememberSaveable { emojiProvider.obtain() }
-        DisposableEffect(Unit) {
-            onDispose {
-                emojiProvider.release(emoji)
-            }
-        }
-        "$emoji $title"
-    } else {
-        val list = remember {
-            listOf(
-                emojiProvider.obtain(),
-                emojiProvider.obtain(),
-                emojiProvider.obtain(),
-            )
-        }
-        DisposableEffect(Unit) {
-            onDispose {
-                for (emoji in list) {
-                    emojiProvider.release(emoji)
-                }
-            }
-        }
-        list.joinToString(separator = " ") { it }
-    }
 
 @PreviewLightDark
 @Composable

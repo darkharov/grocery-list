@@ -11,13 +11,11 @@ val LocalEmojiProvider = staticCompositionLocalOf<EmojiProvider> {
 }
 
 interface EmojiProvider {
-    fun obtain(): String
-    fun release(emoji: String)
+    fun get(number: Int): String
 }
 
 private object EmojiProviderMock : EmojiProvider {
-    override fun obtain() = "🍋"
-    override fun release(emoji: String) {}
+    override fun get(number: Int) = "🍋".repeat(number)
 }
 
 @Singleton
@@ -26,29 +24,20 @@ class EmojiProviderImpl @Inject internal constructor(
     private val context: Context,
 ) : EmojiProvider {
 
-    private val allEmojis = context.resources.getStringArray(R.array.emojis)
-    private val list = mutableSetOf(*(allEmojis))
-
-    private var initialObtain = true
+    private val emojis = context.resources.getStringArray(R.array.emojis)
 
     init {
-        list.remove(LIME)   // lime is not displayed well immediately after launch
+        emojis.shuffle()
+        if (emojis[0] == LIME) {    // lime is not displayed well
+            emojis[0] = emojis[1]   // immediately after app launch
+            emojis[1] = LIME
+        }
     }
 
-    override fun obtain(): String {
-        val item = list.randomOrNull() ?: ""
-        list -= item
-        if (initialObtain) {
-            initialObtain = false
-            list.add(LIME)
-        }
-        return item
-    }
-
-    override fun release(emoji: String) {
-        if (emoji in allEmojis) {
-            list.add(emoji)
-        }
+    override fun get(number: Int): String {
+        val result = emojis.take(number).joinToString(separator = " ")
+        emojis.shuffle()
+        return result
     }
 
     companion object {
