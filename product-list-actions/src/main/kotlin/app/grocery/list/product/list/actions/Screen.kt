@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -91,9 +90,12 @@ private fun Content(callbacks: ProductListActionsCallbacks, modifier: Modifier) 
         modifier = modifier
             .padding(12.dp)
             .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        val gap = 8.dp
+        Spacer(
+            modifier = Modifier
+                .weight(1f),
+        )
         WideAppButton(
             props = AppButtonProps.Custom(
                 text = stringResource(R.string.clear_list),
@@ -104,10 +106,6 @@ private fun Content(callbacks: ProductListActionsCallbacks, modifier: Modifier) 
                 callbacks.onGoToClearListConfirmation()
             },
         )
-        Spacer(
-            modifier = Modifier
-                .height(gap),
-        )
         WideAppButton(
             props = AppButtonProps.Custom(
                 text = stringResource(R.string.exit_with_saving),
@@ -116,10 +114,6 @@ private fun Content(callbacks: ProductListActionsCallbacks, modifier: Modifier) 
             onClick = {
                 callbacks.onExitFromApp()
             },
-        )
-        Spacer(
-            modifier = Modifier
-                .height(gap),
         )
         WideAppButton(
             props = AppButtonProps.Custom(
@@ -130,6 +124,10 @@ private fun Content(callbacks: ProductListActionsCallbacks, modifier: Modifier) 
             onClick = {
                 callbacks.onStartShopping()
             },
+        )
+        Spacer(
+            modifier = Modifier
+                .weight(1f),
         )
     }
 }
