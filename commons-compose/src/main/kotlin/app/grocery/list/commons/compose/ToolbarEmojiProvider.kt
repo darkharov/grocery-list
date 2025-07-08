@@ -6,25 +6,25 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
-val LocalEmojiProvider = staticCompositionLocalOf<EmojiProvider> {
-    EmojiProviderMock
+val LocalToolbarEmojiProvider = staticCompositionLocalOf<ToolbarEmojiProvider> {
+    ToolbarEmojiProviderMock
 }
 
-interface EmojiProvider {
+interface ToolbarEmojiProvider {
     fun get(number: Int): String
 }
 
-private object EmojiProviderMock : EmojiProvider {
+private object ToolbarEmojiProviderMock : ToolbarEmojiProvider {
     override fun get(number: Int) = "🍋".repeat(number)
 }
 
 @Singleton
-class EmojiProviderImpl @Inject internal constructor(
+class ToolbarEmojiProviderImpl @Inject internal constructor(
     @ApplicationContext
     private val context: Context,
-) : EmojiProvider {
+) : ToolbarEmojiProvider {
 
-    private val emojis = context.resources.getStringArray(R.array.emojis)
+    private val emojis = context.resources.getStringArray(R.array.toolbar_emojis)
 
     init {
         emojis.shuffle()

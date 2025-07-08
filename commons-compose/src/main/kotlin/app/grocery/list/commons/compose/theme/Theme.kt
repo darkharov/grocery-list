@@ -5,9 +5,9 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import app.grocery.list.commons.compose.EmojiProvider
-import app.grocery.list.commons.compose.EmojiProviderImpl
-import app.grocery.list.commons.compose.LocalEmojiProvider
+import app.grocery.list.commons.compose.LocalToolbarEmojiProvider
+import app.grocery.list.commons.compose.ToolbarEmojiProvider
+import app.grocery.list.commons.compose.ToolbarEmojiProviderImpl
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -31,11 +31,11 @@ fun GroceryListTheme(
 
 @Composable
 private fun GroceryListTheme(
-    emojiProvider: EmojiProvider,
+    toolbarEmojiProvider: ToolbarEmojiProvider,
     content: @Composable () -> Unit
 ) {
     CompositionLocalProvider(
-        LocalEmojiProvider provides emojiProvider,
+        LocalToolbarEmojiProvider provides toolbarEmojiProvider,
     ) {
         GroceryListTheme(content)
     }
@@ -43,14 +43,14 @@ private fun GroceryListTheme(
 
 @Singleton
 class ThemeUtil @Inject constructor(
-    private val emojiProvider: EmojiProviderImpl,
+    private val emojiProvider: ToolbarEmojiProviderImpl,
 ) {
     @Composable
     fun GroceryListTheme(
         content: @Composable () -> Unit
     ) {
         GroceryListTheme(
-            emojiProvider = emojiProvider,
+            toolbarEmojiProvider = emojiProvider,
             content = content,
         )
     }

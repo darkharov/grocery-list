@@ -42,7 +42,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import app.grocery.list.commons.compose.LocalEmojiProvider
+import app.grocery.list.commons.compose.LocalToolbarEmojiProvider
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
@@ -118,7 +118,7 @@ internal fun AppToolbarInternal(
                 onClick = onUpClick,
                 modifier = Modifier,
             )
-            val emojiProvider = LocalEmojiProvider.current
+            val emojiProvider = LocalToolbarEmojiProvider.current
             val decoratedTitle = rememberSaveable(title) {
                 val emoji = emojiProvider.get(1)
                 "$emoji $title"
