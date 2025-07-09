@@ -45,7 +45,7 @@ class AppTypography {
 
     val title = TextStyle(
         fontFamily = RobotoCondenced,
-        fontSize = 24.sp,
+        fontSize = 28.sp,
         letterSpacing = (-0.5).sp,
         fontWeight = FontWeight.Bold,
     )

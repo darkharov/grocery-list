@@ -264,8 +264,8 @@ private fun LazyListScope.items(
                         horizontal = dimensionResource(R.dimen.margin_16_32_64),
                     )
                     .padding(
-                        top = 20.dp,
-                        bottom = 4.dp,
+                        top = 28.dp,
+                        bottom = 6.dp,
                     )
                     .animateItem(),
                 style = LocalAppTypography.current.title,
