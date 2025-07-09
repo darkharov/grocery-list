@@ -43,7 +43,6 @@ import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPicker
-import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.Serializable
 
@@ -211,7 +210,6 @@ private fun Elements(
     Buttons(
         horizontalOffset = horizontalOffset,
         props = props,
-        selectedCategory = selectedCategory,
         categoryFocusRequester = categoryFocusRequester,
         titleFocusRequester = titleFocusRequester,
         callbacks = callbacks,
@@ -248,7 +246,6 @@ private fun finalizeInput(
 private fun Buttons(
     horizontalOffset: Dp,
     props: ProductInputFormProps,
-    selectedCategory: CategoryProps?,
     categoryFocusRequester: FocusRequester,
     titleFocusRequester: FocusRequester,
     callbacks: ProductInputFormCallbacks,
