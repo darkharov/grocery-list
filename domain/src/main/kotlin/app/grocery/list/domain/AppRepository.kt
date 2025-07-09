@@ -12,6 +12,7 @@ interface AppRepository {
     fun numberOfAddedProducts(): Flow<Int>
 
     suspend fun findCategory(search: String): Product.Category?
+    suspend fun findEmoji(search: String): String?
     suspend fun clearProducts()
     suspend fun deleteProduct(productId: Int)
     suspend fun putProduct(product: Product)

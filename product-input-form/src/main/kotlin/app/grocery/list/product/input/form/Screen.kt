@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
@@ -141,39 +141,56 @@ private fun Elements(
         modifier = Modifier
             .height(dimensionResource(R.dimen.product_input_form_top_offset))
     )
-    AppTextField(
-        value = props.title,
-        onValueChange = { newValue ->
-            callbacks.onProductTitleChange(newValue)
-        },
+    Row(
         modifier = Modifier
             .padding(
                 horizontal = horizontalOffset,
-            )
-            .focusRequester(titleFocusRequester)
-            .fillMaxWidth(),
-        label = StringValue.ResId(R.string.product_to_buy_label),
-        placeholder = StringValue.ResId(R.string.broccoli),
-        keyboardOptions = KeyboardOptions(
-            capitalization = KeyboardCapitalization.Sentences,
-            imeAction = if (selectedCategory == null) {
-                ImeAction.Next
-            } else {
-                ImeAction.Done
-            }
-        ),
-        keyboardActions = KeyboardActions {
-            finalizeInput(
-                props = props,
-                selectedCategory = selectedCategory,
-                categoryFocusRequester = categoryFocusRequester,
-                titleFocusRequester = titleFocusRequester,
-                callbacks = callbacks,
-                softwareKeyboardController = softwareKeyboardController,
-            )
-        },
-        singleLine = true,
-    )
+            ),
+        verticalAlignment = Alignment.Bottom,
+    ) {
+        AppTextField(
+            value = props.title,
+            onValueChange = { newValue ->
+                callbacks.onProductTitleChange(newValue)
+            },
+            modifier = Modifier
+                .weight(5f)
+                .focusRequester(titleFocusRequester),
+            label = StringValue.ResId(R.string.product_to_buy_label),
+            placeholder = StringValue.ResId(R.string.broccoli),
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences,
+                imeAction = if (selectedCategory == null) {
+                    ImeAction.Next
+                } else {
+                    ImeAction.Done
+                }
+            ),
+            keyboardActions = KeyboardActions {
+                finalizeInput(
+                    props = props,
+                    categoryFocusRequester = categoryFocusRequester,
+                    titleFocusRequester = titleFocusRequester,
+                    callbacks = callbacks,
+                    softwareKeyboardController = softwareKeyboardController,
+                )
+            },
+            singleLine = true,
+        )
+        Spacer(
+            modifier = Modifier
+                .width(16.dp),
+        )
+        AppTextField(
+            value = props.emoji ?: " ",
+            onValueChange = {},
+            modifier = Modifier
+                .weight(2f),
+            label = StringValue.ResId(R.string.emoji),
+            readOnly = true,
+            singleLine = true,
+        )
+    }
     CategoryPicker(
         categories = props.categories,
         selection = selectedCategory,
@@ -183,7 +200,9 @@ private fun Elements(
             titleFocusRequester.requestFocus()
         },
         modifier = Modifier
-            .padding(horizontal = horizontalOffset),
+            .padding(
+                horizontal = horizontalOffset,
+            ),
     )
     Spacer(
         modifier = Modifier
@@ -202,17 +221,18 @@ private fun Elements(
 
 private fun finalizeInput(
     props: ProductInputFormProps,
-    selectedCategory: CategoryProps?,
     categoryFocusRequester: FocusRequester,
     titleFocusRequester: FocusRequester,
     callbacks: ProductInputFormCallbacks,
     softwareKeyboardController: SoftwareKeyboardController?,
 ) {
+    val selectedCategory = props.selectedCategory
     if (props.title.isNotBlank()) {
         if (selectedCategory != null) {
             titleFocusRequester.requestFocus()
             callbacks.onProductInputComplete(
                 productTitle = props.title,
+                emoji = props.emoji,
                 categoryId = selectedCategory.id,
             )
         } else {
@@ -247,7 +267,6 @@ private fun Buttons(
             onClick = {
                 finalizeInput(
                     props = props,
-                    selectedCategory = selectedCategory,
                     categoryFocusRequester = categoryFocusRequester,
                     titleFocusRequester = titleFocusRequester,
                     callbacks = callbacks,
@@ -294,10 +313,11 @@ private fun ProductInputScreenPreview() {
             val props by remember {
                 mutableStateOf(
                     ProductInputFormProps(
-                        title = "Title",
+                        title = "Lemon",
+                        emoji = "\uD83C\uDF4B",
                         categories = ProductInputFormMocks.categories.toImmutableList(),
                         selectedCategory = null,
-                        atLeastOneProductAdded = true,
+                        atLeastOneProductAdded = true
                     )
                 )
             }
@@ -305,7 +325,7 @@ private fun ProductInputScreenPreview() {
                 props = props,
                 callbacks = object : ProductInputFormCallbacksMock() {
                     override fun onProductTitleChange(newValue: String) {}
-                    override fun onProductInputComplete(productTitle: String, categoryId: Int) {}
+                    override fun onProductInputComplete(productTitle: String, emoji: String?, categoryId: Int) {}
                 },
                 modifier = Modifier
                     .padding(padding),

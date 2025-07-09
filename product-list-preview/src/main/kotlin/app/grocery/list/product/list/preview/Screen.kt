@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
@@ -49,6 +50,7 @@ import app.grocery.list.commons.compose.elements.app.button.AppButton
 import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
+import app.grocery.list.product.list.preview.ProductListPreviewProps.Product
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -286,7 +288,7 @@ private fun LazyListScope.items(
 
 @Composable
 private fun Product(
-    product: ProductListPreviewProps.Product,
+    product: Product,
     callbacks: ProductListPreviewCallbacks,
     modifier: Modifier = Modifier,
 ) {
@@ -295,18 +297,20 @@ private fun Product(
         modifier = modifier
             .padding(
                 vertical = 2.dp,
+            )
+            .padding(
+                start = horizontalPadding,
             ),
-        horizontalArrangement = Arrangement
-            .spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = product.title,
             modifier = Modifier
-                .padding(
-                    start = horizontalPadding,
-                )
                 .weight(1f),
+        )
+        Spacer(
+            modifier = Modifier
+                .padding(8.dp),
         )
         Icon(
             painter = painterResource(R.drawable.ic_bin_outline),

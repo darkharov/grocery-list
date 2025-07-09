@@ -23,10 +23,13 @@ internal class AppRepositoryImpl @Inject constructor(
     override val clearNotificationsReminderEnabled by delegates.boolean(defaultValue = true)
 
     override fun categories(): Flow<List<Product.Category>> =
-        categoryDao.all()
+        categoryDao.categories()
 
     override suspend fun findCategory(search: String): Product.Category? =
-        categoryDao.find(search = search)
+        categoryDao.category(search = search)
+
+    override suspend fun findEmoji(search: String): String? =
+        categoryDao.emoji(search = search)
 
     override suspend fun clearProducts() {
         productDao.deleteAll()

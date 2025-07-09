@@ -52,11 +52,11 @@ internal class ProductListPreviewMocks : PreviewParameterProvider<ProductListPre
                     products = persistentListOf(
                         ProductListPreviewProps.Product(
                             id = productIds.next(),
-                            title = "Tomato",
+                            title = "🍅 Tomato",
                         ),
                         ProductListPreviewProps.Product(
                             id = productIds.next(),
-                            title = "Potato",
+                            title = "🥔 Potato",
                         ),
                     ),
                 ),
@@ -66,7 +66,7 @@ internal class ProductListPreviewMocks : PreviewParameterProvider<ProductListPre
                     products = persistentListOf(
                         ProductListPreviewProps.Product(
                             id = productIds.next(),
-                            title = "Milk 2L",
+                            title = "🥛Milk 2L",
                         ),
                         ProductListPreviewProps.Product(
                             id = productIds.next(),
@@ -88,11 +88,11 @@ internal class ProductListPreviewMocks : PreviewParameterProvider<ProductListPre
                     products = persistentListOf(
                         ProductListPreviewProps.Product(
                             id = productIds.next(),
-                            title = "Candies",
+                            title = "🍬 Candies",
                         ),
                         ProductListPreviewProps.Product(
                             id = productIds.next(),
-                            title = "Ice Cream",
+                            title ="🍦 Ice Cream",
                         ),
                         ProductListPreviewProps.Product(
                             id = productIds.next(),

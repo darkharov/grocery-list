@@ -32,23 +32,26 @@ internal class ProductInputFormViewModel @Inject constructor(
     private val productTitle = MutableStateFlow("")
     private val explicitlySelectedCategory = MutableStateFlow<CategoryProps?>(null)
 
-    private val props: StateFlow<ProductInputFormProps?> = createPropsFlow()
+    private val props = createPropsFlow()
     private val events = Channel<Event>(Channel.UNLIMITED)
 
     private fun createPropsFlow(): StateFlow<ProductInputFormProps?> =
         combine(
             productTitle,
+            emoji(),
             categories(),
             selectedCategory(),
             atLeastOneProductJustAdded.execute(),
         ) {
                 productTitle,
+                emoji,
                 categories,
                 selectedCategory,
                 atLeastOneProductAdded,
             ->
             ProductInputFormProps(
                 title = productTitle,
+                emoji = emoji,
                 categories = categories,
                 selectedCategory = selectedCategory,
                 atLeastOneProductAdded = atLeastOneProductAdded,
@@ -58,6 +61,11 @@ internal class ProductInputFormViewModel @Inject constructor(
             SharingStarted.WhileSubscribed(5_000),
             null,
         )
+
+    private fun emoji(): Flow<String?> =
+        productTitle.map {
+            repository.findEmoji(search = it)
+        }
 
     private fun categories(): Flow<ImmutableList<CategoryProps>> =
         repository
@@ -69,10 +77,10 @@ internal class ProductInputFormViewModel @Inject constructor(
             explicitlySelectedCategory,
             productTitle,
         ) { explicitlySelected, productTitle ->
-            explicitlySelected ?: tryToDefineCategory(productTitle = productTitle)
+            explicitlySelected ?: findCategory(productTitle = productTitle)
         }
 
-    private suspend fun tryToDefineCategory(productTitle: String): CategoryProps? {
+    private suspend fun findCategory(productTitle: String): CategoryProps? {
         val defined = repository.findCategory(search = productTitle)
         return categoryMapper.transformNullable(defined)
     }
@@ -81,14 +89,14 @@ internal class ProductInputFormViewModel @Inject constructor(
         productTitle.value = newValue
     }
 
-    override fun onProductInputComplete(productTitle: String, categoryId: Int) {
+    override fun onProductInputComplete(productTitle: String, emoji: String?, categoryId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val product =
-                Product(
-                    id = 0,
-                    title = productTitle,
-                    categoryId = categoryId,
-                )
+            val product = Product(
+                id = 0,
+                title = productTitle.replaceFirstChar { it.uppercaseChar() },
+                emoji = emoji,
+                categoryId = categoryId,
+            )
             repository.putProduct(product)
         }
         clearInputFields()

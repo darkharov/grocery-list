@@ -18,13 +18,14 @@ internal class DbModule {
     @Provides
     @Singleton
     fun provideDatabase(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): AppDatabase =
         Room.databaseBuilder(
             context.applicationContext,
             AppDatabase::class.java,
             "app_database"
-        ).build()
+        ).fallbackToDestructiveMigration(dropAllTables = false)
+            .build()
 
     @Provides
     @Singleton

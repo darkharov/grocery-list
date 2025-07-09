@@ -51,7 +51,13 @@ class NotificationPublisher @Inject internal constructor(
             val notification = NotificationCompat
                 .Builder(context, DEFAULT_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_stat_logo)
-                .setContentTitle(chunk.reversed().joinToString { it.title })
+                .setContentTitle(
+                    chunk
+                        .reversed()
+                        .joinToString {
+                            "${it.emoji.orEmpty()} ${it.title}".trim()
+                        }
+                )
                 .setGroup(chunk.first().id.toString())
                 .build()
             notificationManager.notify(TYPE_PRODUCT, chunk.first().id, notification)

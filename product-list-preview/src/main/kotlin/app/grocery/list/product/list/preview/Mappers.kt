@@ -28,6 +28,6 @@ internal class ProductListMapper @Inject constructor() {
     private fun transform(product: Product): ProductListPreviewProps.Product =
         ProductListPreviewProps.Product(
             id = product.id,
-            title = product.title,
+            title = "${product.emoji.orEmpty()} ${product.title}".trim(),
         )
 }

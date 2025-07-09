@@ -19,6 +19,9 @@ class ProductEntity(
     @ColumnInfo(Table.Columns.TITLE)
     val title: String,
 
+    @ColumnInfo(Table.Columns.EMOJI)
+    val emoji: String?,
+
     @ColumnInfo(Table.Columns.NON_FK_CATEGORY_ID)
     val nonFkCategoryId: Int,
 ) {
@@ -30,6 +33,7 @@ class ProductEntity(
         object Columns {
             const val ID = NAME + SqlAffixes._ID
             const val TITLE = "title"
+            const val EMOJI = "emoji"
             const val NON_FK_CATEGORY_ID = "non_fk_category_id" // categories are not stored in db
         }
     }
@@ -37,13 +41,11 @@ class ProductEntity(
     @Singleton
     class Mapper @Inject constructor() {
 
-        fun toDataEntities(products: List<Product>): List<ProductEntity> =
-            products.map(this::toDataEntity)
-
         fun toDataEntity(product: Product): ProductEntity =
             ProductEntity(
                 id = product.id.takeIf { it != 0 },
                 title = product.title,
+                emoji = product.emoji,
                 nonFkCategoryId = product.categoryId,
             )
 
@@ -51,6 +53,7 @@ class ProductEntity(
             Product(
                 id = entity.id ?: throw IllegalStateException("ProductEntity must be queried from DB"),
                 title = entity.title,
+                emoji = entity.emoji,
                 categoryId = entity.nonFkCategoryId,
             )
 

@@ -7,6 +7,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Immutable
 internal data class ProductInputFormProps(
     val title: String,
+    val emoji: String?,
     val atLeastOneProductAdded: Boolean,
     val categories: ImmutableList<CategoryProps>,
     val selectedCategory: CategoryProps?,
