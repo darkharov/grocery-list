@@ -15,7 +15,7 @@
     <string name="list_preview">Предпросмотр списка</string>
     <string name="clear_list">Очистить список</string>
     <string name="clear_product_list_confirmation">Вы действительно хотите удалить все элементы из списка?</string>
-    <string name="exit_with_saving">Выйти (с сохранением)</string>
+    <string name="save_and_exit">Сохранить и выйти</string>
     <string name="i_am_at_shop">Я в магазине</string>
     <string name="delete">Удалить</string>
     <string name="next">Далее</string>

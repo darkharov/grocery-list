@@ -108,7 +108,7 @@ private fun Content(callbacks: ProductListActionsCallbacks, modifier: Modifier) 
         )
         WideAppButton(
             props = AppButtonProps.Custom(
-                text = stringResource(R.string.exit_with_saving),
+                text = stringResource(R.string.save_and_exit),
                 drawableEndId = R.drawable.ic_exit,
             ),
             onClick = {

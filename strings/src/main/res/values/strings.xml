@@ -13,9 +13,9 @@
     <string name="add">Add</string>
     <string name="done">Done</string>
     <string name="list_preview">List Preview</string>
-    <string name="clear_list">Clear List</string>
+    <string name="clear_list">Clear list</string>
     <string name="clear_product_list_confirmation">Are you sure you want to remove all products from the list?</string>
-    <string name="exit_with_saving">Exit (with saving)</string>
+    <string name="save_and_exit">Save and exit</string>
     <string name="i_am_at_shop">I am at the shop</string>
     <string name="delete">Delete</string>
     <string name="next">Next</string>
