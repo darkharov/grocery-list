@@ -108,21 +108,21 @@ private fun Content(callbacks: ProductListActionsCallbacks, modifier: Modifier) 
         )
         WideAppButton(
             props = AppButtonProps.Custom(
-                text = stringResource(R.string.save_and_exit),
-                drawableEndId = R.drawable.ic_exit,
-            ),
-            onClick = {
-                callbacks.onExitFromApp()
-            },
-        )
-        WideAppButton(
-            props = AppButtonProps.Custom(
                 text = stringResource(R.string.i_am_at_shop),
                 background = AppButtonProps.Background.Positive,
                 drawableEndId = R.drawable.ic_cart,
             ),
             onClick = {
                 callbacks.onStartShopping()
+            },
+        )
+        WideAppButton(
+            props = AppButtonProps.Custom(
+                text = stringResource(R.string.save_and_exit),
+                drawableEndId = R.drawable.ic_exit,
+            ),
+            onClick = {
+                callbacks.onExitFromApp()
             },
         )
         Spacer(
