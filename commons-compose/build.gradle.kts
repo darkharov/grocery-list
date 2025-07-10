@@ -37,7 +37,6 @@ android {
 
 dependencies {
     implementation(project(":strings"))
-    api(libs.androidx.activity.compose)
     api(platform(libs.androidx.compose.bom))
     api(libs.androidx.ui)
     api(libs.androidx.ui.graphics)
