@@ -8,7 +8,7 @@
     <string name="category_fruits_vegetables_berries">Fruits / Vegetables / Berries</string>
     <string name="category_meat_fish_shrimp">Meat / Fish / Seafood</string>
     <string name="category_dairy_products">Dairy Products</string>
-    <string name="category_flour_products_and_sweets">Flour products / Sweets</string>
+    <string name="category_flour_products_and_sweets">Flour Products / Sweets</string>
     <string name="category_other">Other</string>
     <string name="add">Add</string>
     <string name="done">Done</string>
@@ -59,6 +59,7 @@
         <item>{🫐}Blueberry|Blueberries</item>
         <item>{🫛}Pea</item>
         <item>{🥝}Kiwi</item>
+        <item>{🥜}Peanuts</item>
         <item>Apricot</item>
         <item>Grapefruit</item>
         <item>Orange</item>
@@ -103,6 +104,10 @@
         <item>{🍝}Spaghetti</item>
         <item>{🧇}Waffles</item>
         <item>{🍬}Candy|Candies</item>
+        <item>{🍯}Honey</item>
+        <item>{🎂}Cupcake</item>
+        <item>{🍫}Chocolate</item>
+        <item>{🍪}Cookie</item>
         <item>Toast</item>
         <item>Buns</item>
         <item>Jam</item>
