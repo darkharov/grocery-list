@@ -6,7 +6,7 @@ object Configs {
 
     object Sdk {
         const val MIN = 26
-        const val COMPILE = 35
+        const val COMPILE = 36
         const val TARGET = COMPILE
     }
 
