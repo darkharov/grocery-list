@@ -29,7 +29,5 @@ android {
 }
 
 dependencies {
-    implementation(libs.material)
-    implementation(libs.javax.inject)
-    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.activity.ktx)
 }
