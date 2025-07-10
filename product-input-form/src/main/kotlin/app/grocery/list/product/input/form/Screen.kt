@@ -232,6 +232,7 @@ private fun finalizeInput(
             )
         } else {
             categoryFocusRequester.requestFocus()
+            callbacks.onCategoryPickerExpandChange(true)
         }
     } else if (props.atLeastOneProductAdded) {
         softwareKeyboardController?.hide()
