@@ -44,6 +44,7 @@ import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPicker
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPickerProps
+import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.Serializable
 
@@ -111,38 +112,72 @@ private fun Preloader(modifier: Modifier) {
 private fun Form(
     props: ProductInputFormProps,
     callbacks: ProductInputFormCallbacks,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier,
     ) {
-        Elements(
+        val horizontalOffset = dimensionResource(R.dimen.margin_16_32_64)
+        val titleFocusRequester = remember { FocusRequester() }
+        val categoryFocusRequester = remember { FocusRequester() }
+        val selectedCategory = props.categoryPicker.selectedCategory
+        val softwareKeyboardController = LocalSoftwareKeyboardController.current
+        LaunchedEffect(Unit) {
+            titleFocusRequester.requestFocus()
+        }
+        val topOffset = dimensionResource(R.dimen.product_input_form_top_offset)
+        Spacer(
+            modifier = Modifier
+                .height(topOffset)
+        )
+        TitleAndEmoji(
+            horizontalOffset = horizontalOffset,
             props = props,
             callbacks = callbacks,
+            titleFocusRequester = titleFocusRequester,
+            selectedCategory = selectedCategory,
+            categoryFocusRequester = categoryFocusRequester,
+            softwareKeyboardController = softwareKeyboardController,
+            modifier = Modifier,
+        )
+        CategoryPicker(
+            props = props.categoryPicker,
+            callbacks = callbacks,
+            focusRequester = categoryFocusRequester,
+            modifier = Modifier
+                .padding(
+                    horizontal = horizontalOffset,
+                ),
+        )
+        Spacer(
+            modifier = Modifier
+                .height(32.dp),
+        )
+        Buttons(
+            horizontalOffset = horizontalOffset,
+            props = props,
+            categoryFocusRequester = categoryFocusRequester,
+            titleFocusRequester = titleFocusRequester,
+            callbacks = callbacks,
+            softwareKeyboardController = softwareKeyboardController,
+            modifier = Modifier,
         )
     }
 }
 
 @Composable
-private fun Elements(
+private fun TitleAndEmoji(
+    horizontalOffset: Dp,
     props: ProductInputFormProps,
     callbacks: ProductInputFormCallbacks,
+    titleFocusRequester: FocusRequester,
+    selectedCategory: CategoryProps?,
+    categoryFocusRequester: FocusRequester,
+    softwareKeyboardController: SoftwareKeyboardController?,
+    modifier: Modifier = Modifier,
 ) {
-    val horizontalOffset = dimensionResource(R.dimen.margin_16_32_64)
-    val titleFocusRequester = remember { FocusRequester() }
-    val categoryFocusRequester = remember { FocusRequester() }
-    val selectedCategory = props.categoryPicker.selectedCategory
-    val softwareKeyboardController = LocalSoftwareKeyboardController.current
-    LaunchedEffect(Unit) {
-        titleFocusRequester.requestFocus()
-    }
-    Spacer(
-        modifier = Modifier
-            .height(dimensionResource(R.dimen.product_input_form_top_offset))
-    )
     Row(
-        modifier = Modifier
+        modifier = modifier
             .padding(
                 horizontal = horizontalOffset,
             ),
@@ -191,27 +226,6 @@ private fun Elements(
             singleLine = true,
         )
     }
-    CategoryPicker(
-        props = props.categoryPicker,
-        callbacks = callbacks,
-        focusRequester = categoryFocusRequester,
-        modifier = Modifier
-            .padding(
-                horizontal = horizontalOffset,
-            ),
-    )
-    Spacer(
-        modifier = Modifier
-            .height(32.dp),
-    )
-    Buttons(
-        horizontalOffset = horizontalOffset,
-        props = props,
-        categoryFocusRequester = categoryFocusRequester,
-        titleFocusRequester = titleFocusRequester,
-        callbacks = callbacks,
-        softwareKeyboardController = softwareKeyboardController,
-    )
 }
 
 private fun finalizeInput(
@@ -248,6 +262,7 @@ private fun Buttons(
     titleFocusRequester: FocusRequester,
     callbacks: ProductInputFormCallbacks,
     softwareKeyboardController: SoftwareKeyboardController?,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = Modifier
