@@ -43,6 +43,7 @@ import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPicker
+import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPickerProps
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.Serializable
 
@@ -129,10 +130,10 @@ private fun Elements(
     callbacks: ProductInputFormCallbacks,
 ) {
     val horizontalOffset = dimensionResource(R.dimen.margin_16_32_64)
-    val categoryFocusRequester = remember { FocusRequester() }
-    val selectedCategory = props.selectedCategory
-    val softwareKeyboardController = LocalSoftwareKeyboardController.current
     val titleFocusRequester = remember { FocusRequester() }
+    val categoryFocusRequester = remember { FocusRequester() }
+    val selectedCategory = props.categoryPicker.selectedCategory
+    val softwareKeyboardController = LocalSoftwareKeyboardController.current
     LaunchedEffect(Unit) {
         titleFocusRequester.requestFocus()
     }
@@ -191,13 +192,9 @@ private fun Elements(
         )
     }
     CategoryPicker(
-        categories = props.categories,
-        selection = selectedCategory,
+        props = props.categoryPicker,
         callbacks = callbacks,
         focusRequester = categoryFocusRequester,
-        onSelectionComplete = {
-            titleFocusRequester.requestFocus()
-        },
         modifier = Modifier
             .padding(
                 horizontal = horizontalOffset,
@@ -224,7 +221,7 @@ private fun finalizeInput(
     callbacks: ProductInputFormCallbacks,
     softwareKeyboardController: SoftwareKeyboardController?,
 ) {
-    val selectedCategory = props.selectedCategory
+    val selectedCategory = props.categoryPicker.selectedCategory
     if (props.title.isNotBlank()) {
         if (selectedCategory != null) {
             titleFocusRequester.requestFocus()
@@ -275,7 +272,9 @@ private fun Buttons(
         )
         AppButton(
             props = AppButtonProps.Done(
-                state = AppButtonProps.State.enabled(props.atLeastOneProductAdded && props.title.isBlank()),
+                state = AppButtonProps.State.enabled(
+                    enabled = props.atLeastOneProductAdded && props.title.isBlank(),
+                ),
             ),
             onClick = {
                 softwareKeyboardController?.hide()
@@ -312,8 +311,11 @@ private fun ProductInputScreenPreview() {
                     ProductInputFormProps(
                         title = "Lemon",
                         emoji = "\uD83C\uDF4B",
-                        categories = ProductInputFormMocks.categories.toImmutableList(),
-                        selectedCategory = null,
+                        categoryPicker = CategoryPickerProps(
+                            categories = ProductInputFormMocks.categories.toImmutableList(),
+                            selectedCategory = null,
+                            expanded = false,
+                        ),
                         atLeastOneProductAdded = true
                     )
                 )
@@ -323,6 +325,7 @@ private fun ProductInputScreenPreview() {
                 callbacks = object : ProductInputFormCallbacksMock() {
                     override fun onProductTitleChange(newValue: String) {}
                     override fun onProductInputComplete(productTitle: String, emoji: String?, categoryId: Int) {}
+                    override fun onCategoryPickerExpandChange(expanded: Boolean) {}
                 },
                 modifier = Modifier
                     .padding(padding),

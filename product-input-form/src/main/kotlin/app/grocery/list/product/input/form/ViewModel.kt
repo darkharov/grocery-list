@@ -2,9 +2,11 @@ package app.grocery.list.product.input.form
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.grocery.list.commons.kotlin.customCombine
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.AtLeastOneProductJustAddedUseCase
 import app.grocery.list.domain.Product
+import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPickerProps
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -31,29 +33,35 @@ internal class ProductInputFormViewModel @Inject constructor(
 
     private val productTitle = MutableStateFlow("")
     private val explicitlySelectedCategory = MutableStateFlow<CategoryProps?>(null)
+    private val categoryExpanded = MutableStateFlow(false)
 
     private val props = createPropsFlow()
     private val events = Channel<Event>(Channel.UNLIMITED)
 
     private fun createPropsFlow(): StateFlow<ProductInputFormProps?> =
-        combine(
+        customCombine(
             productTitle,
             emoji(),
             categories(),
             selectedCategory(),
+            categoryExpanded,
             atLeastOneProductJustAdded.execute(),
         ) {
                 productTitle,
                 emoji,
                 categories,
                 selectedCategory,
+                categoryExpanded,
                 atLeastOneProductAdded,
             ->
             ProductInputFormProps(
                 title = productTitle,
                 emoji = emoji,
-                categories = categories,
-                selectedCategory = selectedCategory,
+                categoryPicker = CategoryPickerProps(
+                    categories = categories,
+                    selectedCategory = selectedCategory,
+                    expanded = categoryExpanded,
+                ),
                 atLeastOneProductAdded = atLeastOneProductAdded,
             )
         }.stateIn(
@@ -107,8 +115,13 @@ internal class ProductInputFormViewModel @Inject constructor(
         explicitlySelectedCategory.value = null
     }
 
+    override fun onCategoryPickerExpandChange(expanded: Boolean) {
+        categoryExpanded.value = expanded
+    }
+
     override fun onCategorySelected(category: CategoryProps) {
         explicitlySelectedCategory.value = category
+        categoryExpanded.value = false
     }
 
     override fun onComplete() {

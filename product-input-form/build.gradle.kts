@@ -39,6 +39,7 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":commons-compose"))
+    implementation(project(":commons-kotlin"))
     implementation(project(":strings"))
     implementation(project(":commons-android"))
     implementation(libs.kotlinx.collections.immutable)

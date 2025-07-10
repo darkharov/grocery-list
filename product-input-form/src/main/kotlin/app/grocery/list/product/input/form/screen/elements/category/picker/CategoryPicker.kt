@@ -23,34 +23,29 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import app.grocery.list.commons.compose.elements.AppTextField
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
-import app.grocery.list.product.input.form.ProductInputFormMocks
 import app.grocery.list.product.input.form.R
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun CategoryPicker(
-    selection: CategoryProps?,
-    categories: ImmutableList<CategoryProps>,
-    callbacks: CategoryPickerCallbacks,
-    onSelectionComplete: () -> Unit,
+    props: CategoryPickerProps,
     focusRequester: FocusRequester,
+    callbacks: CategoryPickerCallbacks,
     modifier: Modifier = Modifier,
 ) {
-    var expanded by rememberSaveable { mutableStateOf(false) }
     ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = {
-            expanded = it
+        expanded = props.expanded,
+        onExpandedChange = { expanded ->
+            callbacks.onCategoryPickerExpandChange(expanded = expanded)
         },
         modifier = modifier,
     ) {
         AppTextField(
-            value = selection?.title.orEmpty(),
+            value = props.selectedCategory?.title.orEmpty(),
             onValueChange = {},
             modifier = Modifier
                 .menuAnchor(MenuAnchorType.PrimaryNotEditable)
@@ -58,14 +53,16 @@ internal fun CategoryPicker(
                 .focusRequester(focusRequester)
                 .onFocusChanged {
                     if (it.isFocused) {
-                        expanded = true
+                        callbacks.onCategoryPickerExpandChange(
+                            expanded = true,
+                        )
                     }
                 },
             readOnly = true,
             label = StringValue.ResId(R.string.category),
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(
-                    expanded = expanded,
+                    expanded = props.expanded,
                 )
             },
             keyboardOptions = KeyboardOptions(
@@ -75,14 +72,16 @@ internal fun CategoryPicker(
             singleLine = true,
         )
         ExposedDropdownMenu(
-            expanded = expanded,
+            expanded = props.expanded,
             onDismissRequest = {
-                expanded = false
+                callbacks.onCategoryPickerExpandChange(
+                    expanded = false,
+                )
             },
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background),
         ) {
-            for (category in categories) {
+            for (category in props.categories) {
                 DropdownMenuItem(
                     text = {
                         Text(
@@ -90,11 +89,9 @@ internal fun CategoryPicker(
                         )
                     },
                     onClick = {
-                        expanded = false
                         callbacks.onCategorySelected(
                             category = category,
                         )
-                        onSelectionComplete()
                     },
                     contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                 )
@@ -105,13 +102,26 @@ internal fun CategoryPicker(
 
 @Composable
 @PreviewLightDark
-private fun CategoryPickerPreview() {
+private fun CategoryPickerPreview(
+    @PreviewParameter(
+        provider = CategoryPickerMocks::class,
+    )
+    initial: CategoryPickerProps,
+) {
     GroceryListTheme {
+        var props by rememberSaveable { mutableStateOf(initial) }
         CategoryPicker(
-            selection = null,
-            categories = ProductInputFormMocks.categories.toImmutableList(),
-            callbacks = CategoryPickerCallbacksMock,
-            onSelectionComplete = {},
+            props = props,
+            callbacks = object : CategoryPickerCallbacks {
+
+                override fun onCategoryPickerExpandChange(expanded: Boolean) {
+                    props = props.copy(expanded = expanded)
+                }
+
+                override fun onCategorySelected(category: CategoryProps) {
+                    props = props.copy(selectedCategory = category)
+                }
+            },
             focusRequester = remember { FocusRequester() },
         )
     }
