@@ -217,7 +217,10 @@ private fun Buttons(
     Row(
         modifier = Modifier
             .padding(
-                vertical = 16.dp,
+                top = 16.dp,
+                bottom = 4.dp,
+            )
+            .padding(
                 horizontal = dimensionResource(R.dimen.margin_16_32_64),
             ),
         horizontalArrangement = Arrangement
