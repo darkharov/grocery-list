@@ -60,6 +60,9 @@
         <item>{🫛}Pea</item>
         <item>{🥝}Kiwi</item>
         <item>{🥜}Peanuts</item>
+        <item>{🫚}Ginger</item>
+        <item>{🫜}Root Vegetable</item>
+        <item>{🥬}Leafy Green</item>
         <item>Apricot</item>
         <item>Grapefruit</item>
         <item>Orange</item>
@@ -86,6 +89,7 @@
         <item>{🐮}Beef</item>
         <item>{🐔}Chicken</item>
         <item>{🦐}Shrimp</item>
+        <item>{🦑}Squid</item>
         <item>{🥓}Bacon</item>
         <item>Salmon</item>
         <item>Tune</item>
@@ -126,10 +130,10 @@
         <item>{🥚}Egg</item>
         <item>Water</item>
         <item>{☕}Coffee</item>
-        <item>Tea</item>
+        <item>{🫖}Tea</item>
         <item>Cocoa</item>
         <item>Juice</item>
-        <item>Rice</item>
+        <item>{🍚}Rice</item>
         <item>Buckwheat</item>
         <item>Couscous</item>
         <item>Oatmeal</item>
@@ -141,12 +145,14 @@
         <item>{🧻}Toilet paper</item>
         <item>Roll|Paper towels</item>
         <item>Pads</item>
+        <item>{🍄‍🟫}Mushroom|Champignon</item>
         <item>{🍕}Pizza</item>
         <item>{🍷}Wine|Red wine</item>
         <item>{🥂}White wine|Wine (white)</item>
         <item>{🍾}Champagne</item>
         <item>{🍺}Beer</item>
         <item>{🥃}Whiskey|Whisky|Wiski</item>
+        <item>{🧃}Juice</item>
     </string-array>
 
     <string-array name="final_steps">
