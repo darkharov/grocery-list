@@ -60,6 +60,7 @@
         <item>{🧅}Onion</item>
         <item>{🍑}Peach</item>
         <item>{🥔}Potato</item>
+        <item>{🍟}Fries</item>
         <item>{🍅}Tomato</item>
         <item>{🍒}Cherry|Cherries</item>
         <item>{🍉}Watermelon</item>
@@ -154,6 +155,8 @@
         <item>{🧻}Toilet paper</item>
         <item>Roll|Paper towels</item>
         <item>Pads</item>
+        <item>Garbage bags</item>
+        <item>Coal</item>
         <item>{🍄‍🟫}Mushroom|Champignon</item>
         <item>{🍕}Pizza</item>
         <item>{🍷}Wine|Red wine</item>
@@ -162,6 +165,7 @@
         <item>{🍺}Beer</item>
         <item>{🥃}Whiskey|Whisky|Wiski</item>
         <item>{🧃}Juice</item>
+        <item>{🪵}Wood</item>
     </string-array>
 
     <string-array name="final_steps">
