@@ -49,6 +49,9 @@ class ProductEntity(
                 nonFkCategoryId = product.categoryId,
             )
 
+        fun toDataEntities(products: List<Product>): List<ProductEntity> =
+            products.map { toDataEntity(it) }
+
         fun toDomainModel(entity: ProductEntity) =
             Product(
                 id = entity.id ?: throw IllegalStateException("ProductEntity must be queried from DB"),

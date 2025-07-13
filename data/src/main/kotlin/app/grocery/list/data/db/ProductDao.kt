@@ -3,6 +3,7 @@ package app.grocery.list.data.db
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.MapColumn
+import androidx.room.OnConflictStrategy.Companion.ABORT
 import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
@@ -12,6 +13,9 @@ internal interface ProductDao {
 
     @Insert(onConflict = REPLACE)
     suspend fun insertOrReplace(entity: ProductEntity)
+
+    @Insert(onConflict = ABORT)
+    suspend fun insertOrReplace(entities: List<ProductEntity>)
 
     @Query("DELETE FROM product WHERE product_id = :productId")
     suspend fun delete(productId: Int)
@@ -31,6 +35,9 @@ internal interface ProductDao {
         """
     )
     fun select(): Flow<Map<@MapColumn("non_fk_category_id") Int, List<ProductEntity>>>
+
+    @Query("SELECT * FROM product")
+    fun selectProducts(): Flow<List<ProductEntity>>
 
     @Query("SELECT COUNT(*) FROM product")
     fun count(): Flow<Int>

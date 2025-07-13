@@ -1,6 +1,5 @@
 package app.grocery.list.commons.compose.elements.app.button
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.R
@@ -24,7 +25,7 @@ import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 
 private val TrailingElementSize = 24.dp
-private val TrailingElementOffset = 16.dp
+private val TrailingElementOffset = 8.dp
 
 @Composable
 fun WideAppButton(
@@ -64,8 +65,6 @@ fun AppButton(
         ) {
             Text(
                 text = props.title(),
-                textAlign = TextAlign.Center,
-                style = LocalAppTypography.current.button,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -76,22 +75,25 @@ fun AppButton(
                         },
                     )
                     .align(Alignment.Center),
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                style = LocalAppTypography.current.button,
             )
             val drawableEndId = props.drawableEndId
-            if (drawableEndId != null) {
-                Image(
+            if (props.progressBar) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .align(Alignment.CenterEnd),
+                )
+            } else if (drawableEndId != null) {
+                Icon(
                     painter = painterResource(drawableEndId),
                     contentDescription = null,
                     modifier = Modifier
                         .padding(start = TrailingElementOffset)
                         .width(TrailingElementSize)
-                        .align(Alignment.CenterEnd),
-                )
-            }
-            if (props.progressBar) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .size(24.dp)
                         .align(Alignment.CenterEnd),
                 )
             }
@@ -130,6 +132,7 @@ private fun AppButtonNextDisabledWithProgressBarPreview() {
     GroceryListTheme {
         WideAppButton(
             props = AppButtonProps.Custom(
+                drawableEndId = R.drawable.ic_android,
                 text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
                 state = AppButtonProps.State.DisabledWithProgressBar,
             ),

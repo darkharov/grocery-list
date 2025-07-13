@@ -84,6 +84,7 @@ dependencies {
     implementation(project(":product-list-actions"))
     implementation(project(":clear-notifications-reminder"))
     implementation(project(":final-steps"))
+    implementation(project(":sharing"))
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.core.ktx)

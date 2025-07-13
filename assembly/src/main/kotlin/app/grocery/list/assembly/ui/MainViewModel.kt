@@ -29,7 +29,7 @@ class MainViewModel @Inject constructor(
 
     val productList =
         repository
-            .productList()
+            .categorizedProducts()
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     val progress = MutableStateFlow(false)

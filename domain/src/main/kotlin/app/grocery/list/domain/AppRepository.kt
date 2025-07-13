@@ -8,7 +8,8 @@ interface AppRepository {
     val clearNotificationsReminderEnabled: StorageValue<Boolean>
 
     fun categories(): Flow<List<Product.Category>>
-    fun productList(): Flow<List<CategoryAndProducts>>
+    fun products(): Flow<List<Product>>
+    fun categorizedProducts(): Flow<List<CategoryAndProducts>>
     fun numberOfAddedProducts(): Flow<Int>
 
     suspend fun findCategory(search: String): Product.Category?
@@ -16,4 +17,5 @@ interface AppRepository {
     suspend fun clearProducts()
     suspend fun deleteProduct(productId: Int)
     suspend fun putProduct(product: Product)
+    suspend fun putProducts(products: List<Product>)
 }

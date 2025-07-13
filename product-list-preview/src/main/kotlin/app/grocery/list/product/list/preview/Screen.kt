@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -46,6 +45,7 @@ import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppHorizontalDivider
 import app.grocery.list.commons.compose.elements.AppHorizontalDividerMode
+import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.app.button.AppButton
 import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
@@ -99,7 +99,7 @@ internal fun ProductListPreviewScreen(
     modifier: Modifier = Modifier,
 ) {
     if (props == null) {
-        Preloader(
+        AppPreloader(
             modifier = modifier,
         )
     } else {
@@ -139,19 +139,6 @@ private fun Content(
             props = props,
             callbacks = callbacks,
         )
-    }
-}
-
-@Composable
-private fun Preloader(
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier = modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        CircularProgressIndicator()
     }
 }
 
@@ -238,9 +225,7 @@ private fun Buttons(
         )
         AppButton(
             props = AppButtonProps.Next(
-                state = AppButtonProps.State.enabled(
-                    props.categories.isNotEmpty(),
-                ),
+                titleId = R.string.actions,
             ),
             onClick = {
                 callbacks.onNext()

@@ -1,6 +1,7 @@
 package app.grocery.list.commons.compose.elements.app.button
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -77,6 +78,8 @@ sealed class AppButtonProps {
     @Immutable
     data class Next(
         override val state: State = State.Enabled,
+        @StringRes
+        private val titleId: Int = R.string.next,
     ) : AppButtonProps() {
 
         override val background = Background.Normal
@@ -84,7 +87,7 @@ sealed class AppButtonProps {
 
         @Composable
         override fun title() =
-            "${stringResource(R.string.next)} >>"
+            "${stringResource(titleId)} >>"
     }
 
     @Immutable

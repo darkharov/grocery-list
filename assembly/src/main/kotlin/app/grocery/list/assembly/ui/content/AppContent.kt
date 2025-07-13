@@ -115,12 +115,11 @@ internal fun AppContent(
             sizeTransform = null,
         ) {
             val navigation = AppNavigationFacade(
-                startRoute = startRoute,
                 navController = navController,
             )
             productListPreviewScreen(navigation)
             productInputFormScreen(navigation)
-            productListActionsScreen(navigation, delegates)
+            productListActionsScreen(delegates)
             clearNotificationsReminder(navigation)
             finalSteps()
         }

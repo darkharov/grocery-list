@@ -20,8 +20,10 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import app.grocery.list.assembly.ui.content.AppContent
 import app.grocery.list.assembly.ui.content.AppContentDelegate
 import app.grocery.list.commons.compose.theme.ThemeUtil
+import app.grocery.list.domain.Product
 import app.grocery.list.final_.steps.FinalSteps
 import app.grocery.list.notifications.NotificationPublisher
+import app.grocery.list.sharing.ShareProductList
 import commons.android.ScreenLockedReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -36,6 +38,7 @@ class MainActivity :
 
     @Inject lateinit var themeUtil: ThemeUtil
     @Inject lateinit var notificationPublisher: NotificationPublisher
+    @Inject lateinit var shareProductList: ShareProductList
 
     private val viewModel by viewModels<MainViewModel>()
     private val postNotifications = postNotificationLauncher()
@@ -110,5 +113,9 @@ class MainActivity :
 
     override fun onCurrentDestinationChange(newValue: NavDestination) {
         currentDestination = newValue
+    }
+
+    override fun share(products: List<Product>) {
+        shareProductList.execute(products)
     }
 }

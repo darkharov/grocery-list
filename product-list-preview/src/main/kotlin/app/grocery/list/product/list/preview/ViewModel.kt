@@ -23,7 +23,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
 
     val props: StateFlow<ProductListPreviewProps?> =
         repository
-            .productList()
+            .categorizedProducts()
             .map(mapper::transform)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 

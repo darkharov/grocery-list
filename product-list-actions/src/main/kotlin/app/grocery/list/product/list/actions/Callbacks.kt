@@ -1,17 +1,27 @@
 package app.grocery.list.product.list.actions
 
+import app.grocery.list.domain.Product
+
 internal interface ProductListActionsCallbacks {
     fun onGoToClearListConfirmation()
     fun onClearListConfirmed()
-    fun onClearListDenied()
+    fun onDialogDismiss()
     fun onExitFromApp()
     fun onStartShopping()
+    fun onShare()
+    fun onPaste(text: String)
+    fun onReplaceProductsBy(productList: List<Product>)
+    fun onAddProducts(productList: List<Product>)
 }
 
 internal object ProductListActionsCallbacksMock : ProductListActionsCallbacks {
     override fun onGoToClearListConfirmation() {}
     override fun onClearListConfirmed() {}
-    override fun onClearListDenied() {}
+    override fun onDialogDismiss() {}
     override fun onExitFromApp() {}
     override fun onStartShopping() {}
+    override fun onShare() {}
+    override fun onPaste(text: String) {}
+    override fun onReplaceProductsBy(productList: List<Product>) {}
+    override fun onAddProducts(productList: List<Product>) {}
 }
