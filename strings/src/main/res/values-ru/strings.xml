@@ -43,7 +43,7 @@
     </string-array>
 
     <plurals name="products_successfully_added">
-        <item quantity="one">Добавлено %d продукт</item>
+        <item quantity="one">Добавлен %d продукт</item>
         <item quantity="few">Добавлено %d продукта</item>
         <item quantity="many">Добавлено %d продуктов</item>
     </plurals>
