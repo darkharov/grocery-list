@@ -72,7 +72,8 @@
         <item>{🥜}Peanuts</item>
         <item>{🫚}Ginger</item>
         <item>{🫜}Root Vegetable</item>
-        <item>{🥬}Leafy Green</item>
+        <item>{🥬}Leafy Green|Chinese cabbage|Cabbage (Chinese)</item>
+        <item>Cabbage</item>
         <item>Apricot</item>
         <item>Grapefruit</item>
         <item>Orange</item>
@@ -98,6 +99,7 @@
         <item>{🐷}Pork</item>
         <item>{🐮}Beef</item>
         <item>{🐔}Chicken</item>
+        <item>{🦃}Turkey</item>
         <item>{🦐}Shrimp</item>
         <item>{🦑}Squid</item>
         <item>{🥓}Bacon</item>
@@ -122,6 +124,9 @@
         <item>{🎂}Cupcake</item>
         <item>{🍫}Chocolate</item>
         <item>{🍪}Cookie</item>
+        <item>{🍩}Doughnut</item>
+        <item>{🧇}Belgian waffle</item>
+        <item>Waffle</item>
         <item>Toast</item>
         <item>Buns</item>
         <item>Jam</item>
@@ -166,6 +171,7 @@
         <item>{🥃}Whiskey|Whisky|Wiski</item>
         <item>{🧃}Juice</item>
         <item>{🪵}Wood</item>
+        <item>{💐}Flower|Bouquet</item>
     </string-array>
 
     <string-array name="final_steps">
