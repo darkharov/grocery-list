@@ -9,6 +9,7 @@ internal sealed class ProductListActionsDialog {
 
     data object ConfirmClearList : ProductListActionsDialog()
     data object CopiedProductListNotFound : ProductListActionsDialog()
+    data class ProductSuccessfullyAdded(val count: Int) : ProductListActionsDialog()
 
     data class HowToPutPastedProducts(
         val productList: List<Product>,

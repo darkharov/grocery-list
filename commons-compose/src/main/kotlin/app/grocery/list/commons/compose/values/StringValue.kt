@@ -1,8 +1,10 @@
 package app.grocery.list.commons.compose.values
 
+import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 
 @Immutable
@@ -37,5 +39,21 @@ sealed class StringValue {
         @Composable
         override fun value(): String =
             stringResource(resId)
+    }
+
+    @Immutable
+    data class PluralResId(
+        @PluralsRes
+        val resId: Int,
+        val count: Int,
+        val useCountAsArgument: Boolean = false,
+    ) : StringValue() {
+        @Composable
+        override fun value(): String =
+            if (useCountAsArgument) {
+                pluralStringResource(resId, count, count)
+            } else {
+                pluralStringResource(resId, count)
+            }
     }
 }

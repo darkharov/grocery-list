@@ -103,14 +103,18 @@ internal class ProductListActionsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             repository.clearProducts()
             repository.putProducts(productList)
-            dialog.value = null
+            dialog.value = ProductListActionsDialog.ProductSuccessfullyAdded(
+                count = productList.size,
+            )
         }
     }
 
     override fun onAddProducts(productList: List<Product>) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.putProducts(productList)
-            dialog.value = null
+            dialog.value = ProductListActionsDialog.ProductSuccessfullyAdded(
+                count = productList.size,
+            )
         }
     }
 

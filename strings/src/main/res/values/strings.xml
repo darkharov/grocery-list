@@ -42,4 +42,9 @@
         <item>Swipe away notifications as your cart fills up</item>
     </string-array>
 
+    <plurals name="products_successfully_added">
+        <item quantity="one">%d product added</item>
+        <item quantity="other">%d products added</item>
+    </plurals>
+
 </resources>

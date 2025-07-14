@@ -234,6 +234,9 @@ private fun Dialog(
                 text = StringValue.ResId(
                     R.string.copied_product_list_not_found,
                 ),
+                onConfirm = {
+                    callbacks.onDialogDismiss()
+                },
                 onDismiss = {
                     callbacks.onDialogDismiss()
                 },
@@ -256,6 +259,22 @@ private fun Dialog(
                     callbacks.onAddProducts(dialog.productList)
                 },
                 isFirstOptionSensitive = true,
+            )
+        }
+        is ProductListActionsDialog.ProductSuccessfullyAdded -> {
+            AppSimpleDialog(
+                icon = painterResource(R.drawable.ic_done),
+                text = StringValue.PluralResId(
+                    R.plurals.products_successfully_added,
+                    dialog.count,
+                    useCountAsArgument = true,
+                ),
+                onConfirm = {
+                    callbacks.onDialogDismiss()
+                },
+                onDismiss = {
+                    callbacks.onDialogDismiss()
+                },
             )
         }
     }
