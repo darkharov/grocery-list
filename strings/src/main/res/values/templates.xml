@@ -38,6 +38,9 @@
         <item>{🥜}Peanuts</item>
         <item>{🫚}Ginger</item>
         <item>{🫜}Root Vegetable</item>
+        <item>{🎃}Pumpkin</item>
+        <item>{🍄‍🟫}Mushroom|Champignon</item>
+        <item>{🫘}Bean</item>
         <item>{🥬}Leafy Green|Chinese cabbage|Cabbage (Chinese)</item>
         <item>Cabbage</item>
         <item>Apricot</item>
@@ -69,6 +72,12 @@
         <item>{🦐}Shrimp</item>
         <item>{🦑}Squid</item>
         <item>{🥓}Bacon</item>
+        <item>{🦀}Crab</item>
+        <item>{🦞}Crayfish</item>
+        <item>{🐙}Octopus</item>
+        <item>{🦆}Duck</item>
+        <item>{🪿}Goose</item>
+        <item>Sausage</item>
         <item>Salmon</item>
         <item>Tune</item>
         <item>Sprat</item>
@@ -128,16 +137,18 @@
         <item>Pads</item>
         <item>Garbage bags</item>
         <item>Coal</item>
-        <item>{🍄‍🟫}Mushroom|Champignon</item>
         <item>{🍕}Pizza</item>
         <item>{🍷}Wine|Red wine</item>
         <item>{🥂}White wine|Wine (white)</item>
+        <item>{🍸}Martini</item>
         <item>{🍾}Champagne</item>
         <item>{🍺}Beer</item>
         <item>{🥃}Whiskey|Whisky|Wiski</item>
         <item>{🧃}Juice</item>
         <item>{🪵}Wood</item>
         <item>{💐}Flower|Bouquet</item>
+        <item>{🌭}Hot dog</item>
+        <item>{🪳}Cockroach</item>
     </string-array>
 
 </resources>
