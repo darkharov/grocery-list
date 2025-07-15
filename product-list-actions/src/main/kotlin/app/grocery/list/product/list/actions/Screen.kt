@@ -173,10 +173,8 @@ private fun Content(
                 clipboardScope.launch(Dispatchers.IO) {
                     val clipEntry = clipboard.getClipEntry()
                     withContext(Dispatchers.Main) {
-                        val text = clipEntry?.clipData?.getItemAt(0)?.text
-                        if (!(text.isNullOrBlank())) {
-                            callbacks.onPaste(text.toString())
-                        }
+                        val text = clipEntry?.clipData?.getItemAt(0)?.text?.toString().orEmpty()
+                        callbacks.onPaste(text = text)
                     }
                 }
             },
