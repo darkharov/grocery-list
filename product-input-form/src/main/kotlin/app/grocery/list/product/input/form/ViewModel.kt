@@ -2,7 +2,6 @@ package app.grocery.list.product.input.form
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.grocery.list.commons.kotlin.customCombine
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.AtLeastOneProductJustAddedUseCase
 import app.grocery.list.domain.Product
@@ -39,15 +38,13 @@ internal class ProductInputFormViewModel @Inject constructor(
     private val events = Channel<Event>(Channel.UNLIMITED)
 
     private fun createPropsFlow(): StateFlow<ProductInputFormProps?> =
-        customCombine(
-            productTitle,
+        combine(
             emoji(),
             categories(),
             selectedCategory(),
             categoryExpanded,
             atLeastOneProductJustAdded.execute(),
         ) {
-                productTitle,
                 emoji,
                 categories,
                 selectedCategory,
@@ -55,7 +52,6 @@ internal class ProductInputFormViewModel @Inject constructor(
                 atLeastOneProductAdded,
             ->
             ProductInputFormProps(
-                title = productTitle,
                 emoji = emoji,
                 categoryPicker = CategoryPickerProps(
                     categories = categories,
@@ -107,11 +103,6 @@ internal class ProductInputFormViewModel @Inject constructor(
             )
             repository.putProduct(product)
         }
-        clearInputFields()
-    }
-
-    private fun clearInputFields() {
-        productTitle.value = ""
         explicitlySelectedCategory.value = null
     }
 
