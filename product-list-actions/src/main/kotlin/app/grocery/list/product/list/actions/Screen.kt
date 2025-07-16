@@ -50,7 +50,25 @@ fun NavGraphBuilder.productListActionsScreen(
 
 @Composable
 internal fun ProductListActionsScreen(
-    viewModel: ProductListActionsViewModel = hiltViewModel(),
+    delegate: ProductListActionsDelegate,
+) {
+    val viewModel: ProductListActionsViewModel = hiltViewModel()
+    val dialog by viewModel.dialog().collectAsState()
+    val props by viewModel.props.collectAsState()
+    EventsConsumer(
+        viewModel = viewModel,
+        delegate = delegate,
+    )
+    ProductListActionsScreen(
+        props = props,
+        dialog = dialog,
+        callbacks = viewModel,
+    )
+}
+
+@Composable
+private fun EventsConsumer(
+    viewModel: ProductListActionsViewModel,
     delegate: ProductListActionsDelegate,
 ) {
     EventConsumer(
@@ -70,13 +88,6 @@ internal fun ProductListActionsScreen(
             }
         }
     }
-    val dialog by viewModel.dialog().collectAsState()
-    val props by viewModel.props.collectAsState()
-    ProductListActionsScreen(
-        props = props,
-        dialog = dialog,
-        callbacks = viewModel,
-    )
 }
 
 @Composable
