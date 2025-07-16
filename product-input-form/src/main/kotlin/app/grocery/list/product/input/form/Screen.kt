@@ -252,7 +252,7 @@ private fun Buttons(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = horizontalOffset),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
