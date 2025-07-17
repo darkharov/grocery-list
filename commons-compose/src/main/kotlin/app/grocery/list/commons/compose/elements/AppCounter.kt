@@ -8,9 +8,10 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,59 +37,65 @@ internal fun AppCounter(
     value: Int,
     modifier: Modifier = Modifier,
 ) {
-    AnimatedContent(
-        targetState = value,
-        transitionSpec = {
-            if (value > 0) {
-                scaleIn(
-                    initialScale = 0f,
-                    animationSpec = tween(
-                        durationMillis = COUNTER_ANIMATION_DURATION,
-                        delayMillis = COUNTER_ANIMATION_DURATION,
-                    ),
-                )
-            } else {
-                EnterTransition.None
-            }.togetherWith(
-                scaleOut(
-                    animationSpec = tween(
-                        durationMillis = COUNTER_ANIMATION_DURATION,
-                    ),
-                )
-            )
-        },
-        modifier = modifier,
-    ) { targetValue ->
-        Box(
-            modifier = Modifier
-                .drawBehind {
-                    if (targetValue > 0) {
-                        val delta = (if (targetValue < 10) 4 else 0).dp.toPx()
-                        val radius = (size.maxDimension - delta) / 2
-                        drawCircle(
-                            color = Color.Red,
-                            radius = radius,
-                        )
-                    }
-                }
-                .wrapContentHeight()
-                .aspectRatio(1f),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = if (targetValue > 0) {
-                    targetValue.toString()
+    if (value != 0) {
+        AnimatedContent(
+            targetState = value,
+            transitionSpec = {
+                if (value > 0) {
+                    scaleIn(
+                        initialScale = 0f,
+                        animationSpec = tween(
+                            durationMillis = COUNTER_ANIMATION_DURATION,
+                            delayMillis = COUNTER_ANIMATION_DURATION,
+                        ),
+                    )
                 } else {
-                    ""
-                },
-                color = Color.White,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.ExtraBold,
-                letterSpacing = 0.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier,
-            )
+                    EnterTransition.None
+                }.togetherWith(
+                    scaleOut(
+                        animationSpec = tween(
+                            durationMillis = COUNTER_ANIMATION_DURATION,
+                        ),
+                    )
+                )
+            },
+            modifier = modifier,
+        ) { targetValue ->
+            Box(
+                modifier = Modifier
+                    .drawBehind {
+                        if (targetValue > 0) {
+                            val delta = (if (targetValue < 10) 4 else 0).dp.toPx()
+                            val radius = (size.maxDimension - delta) / 2
+                            drawCircle(
+                                color = Color.Red,
+                                radius = radius,
+                            )
+                        }
+                    }
+                    .wrapContentHeight()
+                    .aspectRatio(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = if (targetValue > 0) {
+                        targetValue.toString()
+                    } else {
+                        ""
+                    },
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    letterSpacing = 0.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier,
+                )
+            }
         }
+    } else {
+        Spacer(
+            modifier = modifier,
+        )
     }
 }
 
@@ -107,7 +114,7 @@ private fun AppCounterPreview() {
                 value = value,
                 modifier = Modifier
                     .padding(4.dp)
-                    .height(40.dp),
+                    .size(40.dp),
             )
         }
     }
@@ -121,7 +128,7 @@ private fun AppCounterWithoutAnimationOnStartPreview() {
             value = 2,
             modifier = Modifier
                 .padding(4.dp)
-                .height(40.dp),
+                .size(32.dp),
         )
     }
 }

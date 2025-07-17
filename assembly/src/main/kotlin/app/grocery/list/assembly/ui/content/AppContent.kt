@@ -16,7 +16,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -26,7 +25,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import app.darkharov.clear.notifications.reminder.ClearNotificationsReminder
 import app.darkharov.clear.notifications.reminder.clearNotificationsReminder
-import app.grocery.list.assembly.R
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppToolbar
 import app.grocery.list.commons.compose.theme.GroceryListTheme
@@ -82,18 +80,14 @@ internal fun AppContent(
         contentWindowInsets = WindowInsets(0.dp),
         topBar = {
             AppToolbar(
-                title = stringResource(R.string.grocery_list),
                 progress = progress,
-                counterValue = numberOfAddedProducts,
+                numberOfAddedProducts = numberOfAddedProducts ?: 0,
                 onUpClick = if (
                     currentDestination?.hasRoute(startRoute::class) == true
                 ) {
                     null
                 } else {
                     { navController.popBackStack() }
-                },
-                onCounterClick = {
-                    navController.popBackStack(ProductListPreview, inclusive = false)
                 },
             )
         },
