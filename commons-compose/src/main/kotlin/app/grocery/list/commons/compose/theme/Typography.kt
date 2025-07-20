@@ -43,7 +43,7 @@ class AppTypography {
         fontWeight = FontWeight.SemiBold,
     )
 
-    val title = TextStyle(
+    val header = TextStyle(
         fontFamily = RobotoCondenced,
         fontSize = 28.sp,
         letterSpacing = (-0.5).sp,

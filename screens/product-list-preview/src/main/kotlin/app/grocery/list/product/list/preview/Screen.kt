@@ -254,7 +254,7 @@ private fun LazyListScope.items(
                         bottom = 6.dp,
                     )
                     .animateItem(),
-                style = LocalAppTypography.current.title,
+                style = LocalAppTypography.current.header,
             )
         }
         items(

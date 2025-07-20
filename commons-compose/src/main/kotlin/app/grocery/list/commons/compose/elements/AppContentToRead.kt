@@ -114,7 +114,7 @@ private fun Main(
             )
             Text(
                 text = title,
-                style = LocalAppTypography.current.title,
+                style = LocalAppTypography.current.header,
                 modifier = Modifier,
             )
             Spacer(
