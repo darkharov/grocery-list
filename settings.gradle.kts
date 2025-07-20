@@ -20,18 +20,22 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Notes"
+
 include(":assembly")
+
+include(":notifications")
+include(":sharing")
+
 include(":commons-android")
 include(":commons-compose")
-include(":data")
-include(":domain")
-include(":notifications")
-include(":product-input-form")
-include(":strings")
-include(":product-list-preview")
-include(":product-list-actions")
-include(":final-steps")
-include(":clear-notifications-reminder")
 include(":storage-value-kotlin")
 include(":storage-value-android")
-include(":sharing")
+
+include(":data")
+include(":domain")
+include(":strings")
+include(":screens:product-list-preview")
+include(":screens:product-input-form")
+include(":screens:product-list-actions")
+include(":screens:final-steps")
+include(":screens:clear-notifications-reminder")
