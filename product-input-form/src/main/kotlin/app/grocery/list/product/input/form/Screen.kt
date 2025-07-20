@@ -16,6 +16,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -105,6 +107,7 @@ private fun Form(
         modifier = modifier,
     ) {
         val horizontalOffset = dimensionResource(R.dimen.margin_16_32_64)
+        var title by rememberSaveable { mutableStateOf("") }
         val titleFocusRequester = remember { FocusRequester() }
         val categoryFocusRequester = remember { FocusRequester() }
         val selectedCategory = props.categoryPicker.selectedCategory
@@ -119,6 +122,10 @@ private fun Form(
         )
         TitleAndEmoji(
             horizontalOffset = horizontalOffset,
+            title = title,
+            onTitleChange = { newValue ->
+                title = newValue
+            },
             props = props,
             callbacks = callbacks,
             titleFocusRequester = titleFocusRequester,
@@ -142,6 +149,10 @@ private fun Form(
         )
         Buttons(
             horizontalOffset = horizontalOffset,
+            title = title,
+            onTitleChange = { newValue ->
+                title = newValue
+            },
             props = props,
             categoryFocusRequester = categoryFocusRequester,
             titleFocusRequester = titleFocusRequester,
@@ -162,6 +173,8 @@ private fun TitleAndEmoji(
     categoryFocusRequester: FocusRequester,
     softwareKeyboardController: SoftwareKeyboardController?,
     modifier: Modifier = Modifier,
+    title: String,
+    onTitleChange: (String) -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -171,8 +184,9 @@ private fun TitleAndEmoji(
         verticalAlignment = Alignment.Bottom,
     ) {
         AppTextField(
-            value = props.title,
+            value = title,
             onValueChange = { newValue ->
+                onTitleChange(newValue)
                 callbacks.onProductTitleChange(newValue)
             },
             modifier = Modifier
@@ -190,6 +204,8 @@ private fun TitleAndEmoji(
             ),
             keyboardActions = KeyboardActions {
                 finalizeInput(
+                    title = title,
+                    onTitleChange = onTitleChange,
                     props = props,
                     categoryFocusRequester = categoryFocusRequester,
                     titleFocusRequester = titleFocusRequester,
@@ -216,6 +232,8 @@ private fun TitleAndEmoji(
 }
 
 private fun finalizeInput(
+    title: String,
+    onTitleChange: (String) -> Unit,
     props: ProductInputFormProps,
     categoryFocusRequester: FocusRequester,
     titleFocusRequester: FocusRequester,
@@ -223,14 +241,16 @@ private fun finalizeInput(
     softwareKeyboardController: SoftwareKeyboardController?,
 ) {
     val selectedCategory = props.categoryPicker.selectedCategory
-    if (props.title.isNotBlank()) {
+    if (title.isNotBlank()) {
         if (selectedCategory != null) {
             titleFocusRequester.requestFocus()
             callbacks.onProductInputComplete(
-                productTitle = props.title,
+                productTitle = title,
                 emoji = props.emoji,
                 categoryId = selectedCategory.id,
             )
+            onTitleChange("")
+            callbacks.onProductTitleChange("")
         } else {
             categoryFocusRequester.requestFocus()
             callbacks.onCategoryPickerExpandChange(true)
@@ -244,6 +264,8 @@ private fun finalizeInput(
 @Composable
 private fun Buttons(
     horizontalOffset: Dp,
+    title: String,
+    onTitleChange: (String) -> Unit,
     props: ProductInputFormProps,
     categoryFocusRequester: FocusRequester,
     titleFocusRequester: FocusRequester,
@@ -259,10 +281,12 @@ private fun Buttons(
         AppButton(
             props = AppButtonProps.Custom(
                 text = stringResource(R.string.add),
-                state = AppButtonProps.State.enabled(props.title.isNotBlank()),
+                state = AppButtonProps.State.enabled(title.isNotBlank()),
             ),
             onClick = {
                 finalizeInput(
+                    title = title,
+                    onTitleChange = onTitleChange,
                     props = props,
                     categoryFocusRequester = categoryFocusRequester,
                     titleFocusRequester = titleFocusRequester,
@@ -276,7 +300,7 @@ private fun Buttons(
         AppButton(
             props = AppButtonProps.Done(
                 state = AppButtonProps.State.enabled(
-                    enabled = props.atLeastOneProductAdded && props.title.isBlank(),
+                    enabled = props.atLeastOneProductAdded && title.isBlank(),
                 ),
             ),
             onClick = {
@@ -312,7 +336,6 @@ private fun ProductInputScreenPreview() {
             val props by remember {
                 mutableStateOf(
                     ProductInputFormProps(
-                        title = "Lemon",
                         emoji = "\uD83C\uDF4B",
                         categoryPicker = CategoryPickerProps(
                             categories = ProductInputFormMocks.categories.toImmutableList(),

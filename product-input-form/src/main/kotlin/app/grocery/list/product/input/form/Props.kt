@@ -6,7 +6,6 @@ import app.grocery.list.product.input.form.screen.elements.category.picker.Categ
 
 @Immutable
 internal data class ProductInputFormProps(
-    val title: String,
     val emoji: String?,
     val atLeastOneProductAdded: Boolean,
     val categoryPicker: CategoryPickerProps,
