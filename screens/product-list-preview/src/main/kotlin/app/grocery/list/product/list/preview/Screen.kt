@@ -136,7 +136,6 @@ private fun Content(
             )
         }
         Buttons(
-            props = props,
             callbacks = callbacks,
         )
     }
@@ -198,7 +197,6 @@ private fun ListWithDividers(
 
 @Composable
 private fun Buttons(
-    props: ProductListPreviewProps,
     callbacks: ProductListPreviewCallbacks,
 ) {
     Row(
