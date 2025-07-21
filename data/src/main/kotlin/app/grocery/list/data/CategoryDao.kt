@@ -84,7 +84,7 @@ internal class CategoryDao @Inject constructor(
     private fun findLinkedValues(search: String) =
         keywordsLinkedValues
             .filterKeys { keyword -> search.contains(keyword, ignoreCase = true) }
-            .maxByOrNull { it.key }
+            .maxByOrNull { it.key.length }
 
     fun emoji(search: String): String? =
         findLinkedValues(search)
