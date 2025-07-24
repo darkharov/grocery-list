@@ -53,7 +53,7 @@ class NotificationPublisher @Inject internal constructor(
                 .setSmallIcon(R.drawable.ic_stat_logo)
                 .setContentTitle(
                     chunk
-                        .reversed()
+                        .sortedBy { it.emoji != null }
                         .joinToString {
                             "${it.emoji.orEmpty()} ${it.title}".trim()
                         }
