@@ -26,7 +26,6 @@
         <item>{🧅}Onion</item>
         <item>{🍑}Peach</item>
         <item>{🥔}Potato</item>
-        <item>{🍟}Fries</item>
         <item>{🍅}Tomato</item>
         <item>{🍒}Cherry|Cherries</item>
         <item>{🍉}Watermelon</item>
@@ -148,6 +147,7 @@
         <item>{💐}Flower|Bouquet</item>
         <item>{🌭}Hot dog</item>
         <item>{🪳}Cockroach</item>
+        <item>{🍟}Fries</item>
     </string-array>
 
 </resources>
