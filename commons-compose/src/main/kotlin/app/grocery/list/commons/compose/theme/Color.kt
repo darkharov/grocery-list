@@ -1,8 +1,11 @@
 package app.grocery.list.commons.compose.theme
 
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 
 private val BrandColor10 = Color(0xFF_191300)
 private val BrandColor20 = Color(0xFF_332600)
@@ -22,6 +25,17 @@ val Disabled2Dark = Color(0xFF424242)
 
 val PositiveActionColor = Color(0xFF_b8e52e)
 val NegativeActionColor = Color(0xFF_ff855c)
+
+val ColorScheme.blackOrWhite
+    @Composable get() =
+        if (isLight()) {
+            Color.Black
+        } else {
+            Color.White
+        }
+
+@Composable
+fun ColorScheme.isLight() = this.background.luminance() > 0.5
 
 internal val DarkColorScheme = darkColorScheme(
     background = BrandColor10,

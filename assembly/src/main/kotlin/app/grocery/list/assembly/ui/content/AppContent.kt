@@ -26,7 +26,8 @@ import androidx.navigation.compose.rememberNavController
 import app.darkharov.clear.notifications.reminder.ClearNotificationsReminder
 import app.darkharov.clear.notifications.reminder.clearNotificationsReminder
 import app.grocery.list.commons.compose.EventConsumer
-import app.grocery.list.commons.compose.elements.AppToolbar
+import app.grocery.list.commons.compose.elements.toolbar.AppToolbar
+import app.grocery.list.commons.compose.elements.toolbar.AppToolbarProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.final_.steps.FinalSteps
 import app.grocery.list.final_.steps.finalSteps
@@ -80,14 +81,17 @@ internal fun AppContent(
         contentWindowInsets = WindowInsets(0.dp),
         topBar = {
             AppToolbar(
-                progress = progress,
-                numberOfAddedProducts = numberOfAddedProducts ?: 0,
-                onUpClick = if (
-                    currentDestination?.hasRoute(startRoute::class) == true
-                ) {
-                    null
-                } else {
-                    { navController.popBackStack() }
+                props =
+                    AppToolbarProps.Default(
+                        counter = numberOfAddedProducts,
+                        progress = progress,
+                        isOnStart = currentDestination?.hasRoute(ProductListPreview::class) == false
+                    ),
+                onUpClick = {
+                    navController.popBackStack()
+                },
+                onTrailingIconClick = {
+                    // navController.navigate(Settings)
                 },
             )
         },

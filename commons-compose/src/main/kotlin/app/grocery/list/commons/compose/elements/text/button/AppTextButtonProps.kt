@@ -1,0 +1,73 @@
+package app.grocery.list.commons.compose.elements.text.button
+
+import androidx.annotation.DrawableRes
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import app.grocery.list.commons.compose.R
+import app.grocery.list.commons.compose.theme.blackOrWhite
+import app.grocery.list.commons.compose.values.StringValue
+
+@Immutable
+sealed class AppTextButtonProps {
+
+    internal abstract val text: StringValue
+
+    @get:Composable
+    internal abstract val textColor: Color
+
+    @get:DrawableRes
+    internal abstract val leadingIconId: Int?
+
+    @get:DrawableRes
+    internal abstract val trailingIconId: Int?
+
+    @Immutable
+    data class TextOnly(
+        override val text: StringValue,
+        val color: Color = Color.Unspecified,
+    ) : AppTextButtonProps() {
+        override val leadingIconId = null
+        override val trailingIconId = null
+
+        override val textColor: Color
+            @Composable
+            get() =
+                if (color != Color.Unspecified) {
+                    color
+                } else {
+                    MaterialTheme.colorScheme.secondary
+                }
+    }
+
+    @Immutable
+    data class SettingsCategory(
+        override val text: StringValue,
+        @DrawableRes
+        override val leadingIconId: Int,
+    ) : AppTextButtonProps() {
+
+        override val trailingIconId = R.drawable.ic_forward
+
+        override val textColor: Color
+            @Composable
+            get() =
+                MaterialTheme.colorScheme.blackOrWhite
+                    .copy(alpha = 0.88f)
+    }
+}
+
+
+internal class AppTextButtonMocks : PreviewParameterProvider<AppTextButtonProps> {
+    override val values = sequenceOf(
+        AppTextButtonProps.TextOnly(
+            text = StringValue.StringWrapper("Text"),
+        ),
+        AppTextButtonProps.SettingsCategory(
+            text = StringValue.StringWrapper("Text"),
+            leadingIconId = R.drawable.ic_android,
+        )
+    )
+}

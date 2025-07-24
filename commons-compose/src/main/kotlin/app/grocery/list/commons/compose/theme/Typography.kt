@@ -37,6 +37,12 @@ class AppTypography {
         fontWeight = FontWeight.SemiBold,
     )
 
+    val textButton = TextStyle(
+        fontFamily = Inter,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Medium,
+    )
+
     val toolbarTitle = TextStyle(
         fontFamily = Inter,
         fontSize = 16.sp,

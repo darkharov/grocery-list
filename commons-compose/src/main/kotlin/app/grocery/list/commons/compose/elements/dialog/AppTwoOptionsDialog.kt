@@ -10,7 +10,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.R
-import app.grocery.list.commons.compose.elements.AppTextButton
+import app.grocery.list.commons.compose.elements.text.button.AppTextButton
+import app.grocery.list.commons.compose.elements.text.button.AppTextButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
 
@@ -31,12 +32,14 @@ fun AppTwoOptionsDialog(
         onDismiss = onDismiss,
     ) {
         AppTextButton(
-            text = firstOption,
-            color = if (isFirstOptionSensitive) {
-                Color.Red
-            } else {
-                Color.Unspecified
-            },
+            props = AppTextButtonProps.TextOnly(
+                text = firstOption,
+                color = if (isFirstOptionSensitive) {
+                    Color.Red
+                } else {
+                    Color.Unspecified
+                }
+            ),
             onClick = onFirstOption,
         )
         Spacer(
@@ -44,7 +47,9 @@ fun AppTwoOptionsDialog(
                 .width(8.dp)
         )
         AppTextButton(
-            text = secondOption,
+            props = AppTextButtonProps.TextOnly(
+                text = secondOption,
+            ),
             onClick = onSecondOption,
         )
     }

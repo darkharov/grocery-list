@@ -15,12 +15,14 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.elements.AppHorizontalDividerMode.Shadow.Downward
 import app.grocery.list.commons.compose.elements.AppHorizontalDividerMode.Shadow.Upward
+import app.grocery.list.commons.compose.theme.GroceryListTheme
 
 private val colors = listOf(
     Color.Transparent,
@@ -31,7 +33,9 @@ private val colors = listOf(
 sealed class AppHorizontalDividerMode {
 
     @Immutable
-    data object DividerOnly : AppHorizontalDividerMode()
+    data class DividerOnly(
+        val useScreenOffset: Boolean = false,
+    ) : AppHorizontalDividerMode()
 
     @Immutable
     sealed class Shadow(
@@ -54,13 +58,22 @@ sealed class AppHorizontalDividerMode {
 
 @Composable
 fun AppHorizontalDivider(
-    mode: AppHorizontalDividerMode,
     modifier: Modifier = Modifier,
+    mode: AppHorizontalDividerMode = AppHorizontalDividerMode.DividerOnly(),
 ) {
     when (mode) {
         is AppHorizontalDividerMode.DividerOnly -> {
             NativeDivider(
-                modifier = modifier,
+                modifier = modifier
+                    .then(
+                        if (mode.useScreenOffset) {
+                            Modifier.padding(
+                                horizontal = dimensionResource(R.dimen.margin_16_32_64),
+                            )
+                        } else {
+                            Modifier
+                        },
+                    ),
             )
         }
         is AppHorizontalDividerMode.Shadow -> {
@@ -97,6 +110,15 @@ fun AppHorizontalDivider(
 }
 
 @Composable
+fun AppHorizontalDividerWithOffset() {
+    AppHorizontalDivider(
+        mode = AppHorizontalDividerMode.DividerOnly(
+            useScreenOffset = true,
+        ),
+    )
+}
+
+@Composable
 private fun NativeDivider(modifier: Modifier) {
     HorizontalDivider(
         modifier = modifier,
@@ -117,7 +139,7 @@ private fun HorizontalShadowPreview() {
             listOf(
                 Upward,
                 Downward,
-                AppHorizontalDividerMode.DividerOnly,
+                AppHorizontalDividerMode.DividerOnly(),
             ).forEach { mode ->
                 AppHorizontalDivider(
                     mode = mode,
