@@ -4,7 +4,9 @@ import app.grocery.list.data.db.ProductDao
 import app.grocery.list.data.db.ProductEntity
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.CategoryAndProducts
+import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
+import app.grocery.list.domain.settings.Settings
 import app.grocery.list.storage.value.android.StorageValueDelegates
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -18,7 +20,25 @@ internal class AppRepositoryImpl @Inject constructor(
     private val productDao: ProductDao,
     private val productMapper: ProductEntity.Mapper,
     private val categoryDao: CategoryDao,
-) : AppRepository {
+) : AppRepository() {
+
+    override val settings by delegates.custom<Settings>(
+        write = { settings ->
+            int(
+                ITEM_IN_NOTIFICATION_MODE,
+                settings.itemInNotificationMode.ordinal,
+            )
+        },
+        read = {
+            val defaultValue = Settings.ItemInNotificationMode.EmojiAndFullText.ordinal
+            val ordinal = int(ITEM_IN_NOTIFICATION_MODE, defaultValue = defaultValue)
+            Settings(
+                itemInNotificationMode = Settings
+                    .ItemInNotificationMode
+                    .entries[ordinal],
+            )
+        },
+    )
 
     override val clearNotificationsReminderEnabled by delegates.boolean(defaultValue = true)
 
@@ -28,7 +48,7 @@ internal class AppRepositoryImpl @Inject constructor(
     override suspend fun findCategory(search: String): Product.Category? =
         categoryDao.category(search = search)
 
-    override suspend fun findEmoji(search: String): String? =
+    override suspend fun findEmoji(search: String): EmojiSearchResult? =
         categoryDao.emoji(search = search)
 
     override suspend fun clearProducts() {
@@ -66,4 +86,8 @@ internal class AppRepositoryImpl @Inject constructor(
 
     override fun numberOfAddedProducts(): Flow<Int> =
         productDao.count()
+
+    companion object {
+        private const val ITEM_IN_NOTIFICATION_MODE = "ITEM_IN_NOTIFICATION_MODE"
+    }
 }

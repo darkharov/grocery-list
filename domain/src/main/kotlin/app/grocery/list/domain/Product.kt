@@ -3,7 +3,7 @@ package app.grocery.list.domain
 data class Product(
     val id: Int,
     val title: String,
-    val emoji: String?,
+    val emojiSearchResult: EmojiSearchResult?,
     val categoryId: Int,
 ) {
 

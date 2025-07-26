@@ -9,13 +9,13 @@ internal interface ProductInputFormCallbacks :
     CategoryPickerCallbacks {
     fun onComplete()
     fun onProductTitleChange(newValue: String)
-    fun onProductInputComplete(productTitle: String, emoji: String?, categoryId: Int)
+    fun onProductInputComplete(productTitle: String, categoryId: Int, payload: Any?)
 }
 
 
-internal open class ProductInputFormCallbacksMock : ProductInputFormCallbacks,
+internal object ProductInputFormCallbacksMock : ProductInputFormCallbacks,
     CategoryPickerCallbacks by CategoryPickerCallbacksMock {
     override fun onComplete() {}
     override fun onProductTitleChange(newValue: String) {}
-    override fun onProductInputComplete(productTitle: String, emoji: String?, categoryId: Int) {}
+    override fun onProductInputComplete(productTitle: String, categoryId: Int, payload: Any?) {}
 }

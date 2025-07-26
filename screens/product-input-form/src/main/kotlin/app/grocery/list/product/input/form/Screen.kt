@@ -115,7 +115,7 @@ private fun Form(
         LaunchedEffect(Unit) {
             titleFocusRequester.requestFocus()
         }
-        val topOffset = dimensionResource(R.dimen.product_input_form_top_offset)
+        val topOffset = dimensionResource(R.dimen.margin_80_land_0)
         Spacer(
             modifier = Modifier
                 .height(topOffset)
@@ -246,8 +246,8 @@ private fun finalizeInput(
             titleFocusRequester.requestFocus()
             callbacks.onProductInputComplete(
                 productTitle = title,
-                emoji = props.emoji,
                 categoryId = selectedCategory.id,
+                payload = props.payload,
             )
             onTitleChange("")
             callbacks.onProductTitleChange("")
@@ -320,7 +320,7 @@ private fun ProductInputScreenInitialStatePreview() {
         Scaffold { padding ->
             ProductInputFormScreen(
                 props = null,
-                callbacks = ProductInputFormCallbacksMock(),
+                callbacks = ProductInputFormCallbacksMock,
                 modifier = Modifier
                     .padding(padding),
             )
@@ -336,7 +336,7 @@ private fun ProductInputScreenPreview() {
             val props by remember {
                 mutableStateOf(
                     ProductInputFormProps(
-                        emoji = "\uD83C\uDF4B",
+                        emoji = "🍋",
                         categoryPicker = CategoryPickerProps(
                             categories = ProductInputFormMocks.categories.toImmutableList(),
                             selectedCategory = null,
@@ -348,11 +348,7 @@ private fun ProductInputScreenPreview() {
             }
             ProductInputFormScreen(
                 props = props,
-                callbacks = object : ProductInputFormCallbacksMock() {
-                    override fun onProductTitleChange(newValue: String) {}
-                    override fun onProductInputComplete(productTitle: String, emoji: String?, categoryId: Int) {}
-                    override fun onCategoryPickerExpandChange(expanded: Boolean) {}
-                },
+                callbacks = ProductInputFormCallbacksMock,
                 modifier = Modifier
                     .padding(padding),
             )

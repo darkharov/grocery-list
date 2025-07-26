@@ -5,10 +5,11 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 
 @Immutable
-internal data class OptionalIconProps(
+data class OptionalIconProps(
     val type: Type,
     val content: Content?,
 ) {
+    @Immutable
     data class Content(
 
         @get:DrawableRes

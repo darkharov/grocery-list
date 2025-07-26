@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.AtLeastOneProductJustAddedUseCase
+import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPickerProps
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
@@ -45,20 +46,21 @@ internal class ProductInputFormViewModel @Inject constructor(
             categoryExpanded,
             atLeastOneProductJustAdded.execute(),
         ) {
-                emoji,
+                emojiSearchResult,
                 categories,
                 selectedCategory,
                 categoryExpanded,
                 atLeastOneProductAdded,
             ->
             ProductInputFormProps(
-                emoji = emoji,
+                emoji = emojiSearchResult?.emoji,
                 categoryPicker = CategoryPickerProps(
                     categories = categories,
                     selectedCategory = selectedCategory,
                     expanded = categoryExpanded,
                 ),
                 atLeastOneProductAdded = atLeastOneProductAdded,
+                payload = emojiSearchResult,
             )
         }.stateIn(
             viewModelScope,
@@ -66,7 +68,7 @@ internal class ProductInputFormViewModel @Inject constructor(
             null,
         )
 
-    private fun emoji(): Flow<String?> =
+    private fun emoji(): Flow<EmojiSearchResult?> =
         productTitle.map {
             repository.findEmoji(search = it)
         }
@@ -93,12 +95,12 @@ internal class ProductInputFormViewModel @Inject constructor(
         productTitle.value = newValue
     }
 
-    override fun onProductInputComplete(productTitle: String, emoji: String?, categoryId: Int) {
+    override fun onProductInputComplete(productTitle: String, categoryId: Int, payload: Any?) {
         viewModelScope.launch(Dispatchers.IO) {
             val product = Product(
                 id = 0,
                 title = productTitle.replaceFirstChar { it.uppercaseChar() },
-                emoji = emoji,
+                emojiSearchResult = payload as EmojiSearchResult?,
                 categoryId = categoryId,
             )
             repository.putProduct(product)

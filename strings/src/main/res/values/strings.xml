@@ -35,6 +35,11 @@
     <string name="do_not_show_this_screen_again">Do not show this screen again</string>
     <string name="final_steps">Final Steps</string>
     <string name="emoji">Emoji</string>
+    <string name="notifications">Notifications</string>
+    <string name="shopping_list_item_in_notification">Shopping list item in notification</string>
+    <string name="without_emoji">Without emoji</string>
+    <string name="emoji_and_full_text">Emoji + full text</string>
+    <string name="emoji_and_additional_detail">Emoji + additional details</string>
 
     <string-array name="final_steps">
         <item>Lock the screen</item>

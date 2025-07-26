@@ -2,6 +2,7 @@ package app.grocery.list.data
 
 import android.content.Context
 import androidx.annotation.ArrayRes
+import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -16,9 +17,10 @@ internal class CategoryDao @Inject constructor(
 ) {
     private val categoriesKeywordFamilyArrayIds = categoriesAndKeywordFamiliesIds()
     private val categories = categoriesKeywordFamilyArrayIds.keys.toList()
-    private val keywordsLinkedValues = keywordsLinkedValues()
+    private val keywordAndCategoryWithOptionalEmojiMap = keywordAndCategoryWithOptionalEmojiMap()
 
     private fun categoriesAndKeywordFamiliesIds() =
+        // DO NOT REORDER!
         mapOf(
             R.string.category_fruits_vegetables_berries to R.array.fruits_and_vegetables,
             R.string.category_meat_fish_shrimp to R.array.meat_fish_shrimp,
@@ -34,7 +36,7 @@ internal class CategoryDao @Inject constructor(
             }
             .toMap()
 
-    private fun keywordsLinkedValues(): Map<String, EmojiAndCategory> =
+    private fun keywordAndCategoryWithOptionalEmojiMap(): Map<String, CategoryWithOptionalEmoji> =
         categoriesKeywordFamilyArrayIds
             .toList()
             .flatMap { (category, keywordsFamilyArrayId) ->
@@ -42,7 +44,7 @@ internal class CategoryDao @Inject constructor(
                     familyArrayId = keywordsFamilyArrayId,
                 )
                 keywordsAndEmojis.map { keywordAndEmoji ->
-                    keywordAndEmoji.keyword to EmojiAndCategory(
+                    keywordAndEmoji.keyword to CategoryWithOptionalEmoji(
                         category = category,
                         emoji = keywordAndEmoji.emoji,
                     )
@@ -77,19 +79,28 @@ internal class CategoryDao @Inject constructor(
         flowOf(categories)
 
     fun category(search: String): Product.Category? =
-        findLinkedValues(search)
+        findKeywordAndCategoryWithOptionalEmoji(search)
             ?.value
             ?.category
 
-    private fun findLinkedValues(search: String) =
-        keywordsLinkedValues
+    private fun findKeywordAndCategoryWithOptionalEmoji(search: String): Map.Entry<String, CategoryWithOptionalEmoji>? =
+        keywordAndCategoryWithOptionalEmojiMap
             .filterKeys { keyword -> search.contains(keyword, ignoreCase = true) }
             .maxByOrNull { it.key.length }
 
-    fun emoji(search: String): String? =
-        findLinkedValues(search)
-            ?.value
-            ?.emoji
+    fun emoji(search: String): EmojiSearchResult? {
+        val entry = findKeywordAndCategoryWithOptionalEmoji(search)
+        if (entry != null) {
+            val emoji = entry.value.emoji
+            if (!(emoji.isNullOrBlank())) {
+                return EmojiSearchResult(
+                    emoji = emoji,
+                    keyword = entry.key,
+                )
+            }
+        }
+        return null
+    }
 
     private data class KeywordAndEmoji(
         val keyword: String,
@@ -97,8 +108,8 @@ internal class CategoryDao @Inject constructor(
     )
 
 
-    private data class EmojiAndCategory(
+    private data class CategoryWithOptionalEmoji(
+        val category: Product.Category,
         val emoji: String?,
-        val category: Product.Category?,
     )
 }

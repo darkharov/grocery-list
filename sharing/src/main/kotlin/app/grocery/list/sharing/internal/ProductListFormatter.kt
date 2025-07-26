@@ -1,5 +1,6 @@
 package app.grocery.list.sharing.internal
 
+import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -35,9 +36,12 @@ internal class ProductListFormatter @Inject constructor() {
             append(FIELDS_SEPARATOR)
             append(categoryId)
 
-            if (!(emoji.isNullOrBlank())) {
+            val emoji = emojiSearchResult
+            if (emoji != null) {
                 append(FIELDS_SEPARATOR)
-                append(emoji)
+                append(emoji.emoji)
+                append(FIELDS_SEPARATOR)
+                append(emoji.keyword)
             }
         }
 
@@ -63,8 +67,11 @@ internal class ProductListFormatter @Inject constructor() {
             id = 0,
             title = parts.next(),
             categoryId = parts.next().toInt(),
-            emoji = if (parts.hasNext()) {
-                parts.next()
+            emojiSearchResult = if (parts.hasNext()) {
+                EmojiSearchResult(
+                    emoji = parts.next(),
+                    keyword = parts.next(),
+                )
             } else {
                 null
             },

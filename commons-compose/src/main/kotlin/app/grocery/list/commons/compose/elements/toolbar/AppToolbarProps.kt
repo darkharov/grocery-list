@@ -6,79 +6,88 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import app.grocery.list.commons.compose.R
 
 @Immutable
-sealed class AppToolbarProps {
+data class AppToolbarProps(
+    internal val content: Content,
+    internal val progress: Boolean,
+) {
+    internal val titleId get() = content.titleId
+    internal val counter get() = content.counter
+    internal val hasEmoji get() = content.hasEmoji
+    internal val leadingIcon get() = content.leadingIcon
+    internal val trailingIcon get() = content.trailingIcon
 
-    @get:StringRes
-    internal abstract val titleId: Int
-    internal abstract val counter: Int?
-    internal abstract val progress: Boolean
-    internal open val hasEmoji: Boolean = false
+    @Immutable
+    abstract class Content {
 
-    internal abstract val isUpIconAvailable: Boolean
-    internal abstract val trailingIconContent: OptionalIconProps.Content?
+        @get:StringRes
+        internal abstract val titleId: Int
+        internal abstract val counter: Int?
+        internal open val hasEmoji: Boolean = false
 
-    internal val leadingIcon: OptionalIconProps by lazy {
-        OptionalIconProps(
-            type = OptionalIconProps.Type.Leading,
-            content = if (isUpIconAvailable) {
-                OptionalIconProps.Content(
-                    iconId = R.drawable.ic_back,
-                    descriptionId = null,
-                )
-            } else {
-                null
-            },
-        )
-    }
+        protected abstract val upIconAvailable: Boolean
+        internal abstract val trailingIconContent: OptionalIconProps.Content?
 
-    internal val trailingIcon: OptionalIconProps by lazy {
-        OptionalIconProps(
-            type = OptionalIconProps.Type.Trailing,
-            content = trailingIconContent,
-        )
-    }
-
-    data class Default(
-        override val counter: Int?,
-        override val progress: Boolean,
-        val isOnStart: Boolean,
-    ) : AppToolbarProps() {
-
-        override val hasEmoji = true
-        override val titleId = R.string.grocery_list
-        override val isUpIconAvailable = isOnStart
-        override val trailingIconContent: OptionalIconProps.Content by lazy {
-            OptionalIconProps.Content(
-                iconId = R.drawable.ic_settings,
-                descriptionId = R.string.settings,
+        internal val leadingIcon: OptionalIconProps by lazy {
+            OptionalIconProps(
+                type = OptionalIconProps.Type.Leading,
+                content = if (upIconAvailable) {
+                    OptionalIconProps.Content(
+                        iconId = R.drawable.ic_back,
+                        descriptionId = null,
+                    )
+                } else {
+                    null
+                },
             )
+        }
+
+        internal val trailingIcon: OptionalIconProps by lazy {
+            OptionalIconProps(
+                type = OptionalIconProps.Type.Trailing,
+                content = trailingIconContent,
+            )
+        }
+
+        @Immutable
+        data class Default(
+            override val counter: Int?,
+            private val onStart: Boolean,
+        ) : Content() {
+
+            override val upIconAvailable: Boolean = !(onStart)
+            override val hasEmoji = true
+            override val titleId = R.string.grocery_list
+            override val trailingIconContent: OptionalIconProps.Content? by lazy {
+                if (onStart) {
+                    OptionalIconProps.Content(
+                        iconId = R.drawable.ic_settings,
+                        descriptionId = R.string.settings,
+                    )
+                } else {
+                    null
+                }
+            }
         }
     }
 
-    data class Settings(
-        override val progress: Boolean,
-    ) : AppToolbarProps() {
-        override val titleId = R.string.settings
+    @Immutable
+    data class Title(override val titleId: Int) : Content() {
         override val counter = null
         override val trailingIconContent = null
-        override val isUpIconAvailable = true
+        override val upIconAvailable = true
     }
 }
 
-internal class AppToolbarMocks : PreviewParameterProvider<AppToolbarProps> {
+internal class AppToolbarMocks : PreviewParameterProvider<AppToolbarProps.Content> {
     override val values = sequenceOf(
-        AppToolbarProps.Default(
+        AppToolbarProps.Content.Default(
             counter = 0,
-            isOnStart = true,
-            progress = false,
+            onStart = true,
         ),
-        AppToolbarProps.Default(
+        AppToolbarProps.Content.Default(
             counter = 11,
-            isOnStart = true,
-            progress = true,
+            onStart = false,
         ),
-        AppToolbarProps.Settings(
-            progress = false,
-        )
+        AppToolbarProps.Title(R.string.settings),
     )
 }

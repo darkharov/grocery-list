@@ -3,6 +3,7 @@ package app.grocery.list.data.db
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,6 +23,9 @@ class ProductEntity(
     @ColumnInfo(Table.Columns.EMOJI)
     val emoji: String?,
 
+    @ColumnInfo(Table.Columns.KEYWORD)
+    val keyword: String?,
+
     @ColumnInfo(Table.Columns.NON_FK_CATEGORY_ID)
     val nonFkCategoryId: Int,
 ) {
@@ -34,6 +38,7 @@ class ProductEntity(
             const val ID = NAME + SqlAffixes._ID
             const val TITLE = "title"
             const val EMOJI = "emoji"
+            const val KEYWORD = "keyword"
             const val NON_FK_CATEGORY_ID = "non_fk_category_id" // categories are not stored in db
         }
     }
@@ -45,20 +50,34 @@ class ProductEntity(
             ProductEntity(
                 id = product.id.takeIf { it != 0 },
                 title = product.title,
-                emoji = product.emoji,
+                emoji = product.emojiSearchResult?.emoji,
+                keyword = product.emojiSearchResult?.keyword,
                 nonFkCategoryId = product.categoryId,
             )
 
         fun toDataEntities(products: List<Product>): List<ProductEntity> =
             products.map { toDataEntity(it) }
 
-        fun toDomainModel(entity: ProductEntity) =
-            Product(
+        fun toDomainModel(entity: ProductEntity): Product {
+            val emoji = entity.emoji
+            val keyword = entity.keyword
+            return Product(
                 id = entity.id ?: throw IllegalStateException("ProductEntity must be queried from DB"),
                 title = entity.title,
-                emoji = entity.emoji,
+                emojiSearchResult = if (
+                    !(emoji.isNullOrBlank()) &&
+                    !(keyword.isNullOrBlank())
+                ) {
+                    EmojiSearchResult(
+                        emoji = emoji,
+                        keyword = keyword
+                    )
+                } else {
+                    null
+                },
                 categoryId = entity.nonFkCategoryId,
             )
+        }
 
         fun toDomainModels(entities: List<ProductEntity>) =
             entities.map(::toDomainModel)

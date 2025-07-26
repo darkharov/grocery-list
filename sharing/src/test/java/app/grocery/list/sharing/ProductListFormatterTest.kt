@@ -1,5 +1,6 @@
 package app.grocery.list.sharing
 
+import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
 import app.grocery.list.sharing.internal.ProductListFormatter
 import org.junit.Test
@@ -9,14 +10,17 @@ internal class ProductListFormatterTest {
     private val prototype = Product(
         id = 0,
         title = "Apple",
-        emoji = "🍎",
+        emojiSearchResult = EmojiSearchResult(
+            emoji = "🍎",
+            keyword = "Tomato",
+        ),
         categoryId = 42,
     )
 
     @Test
     fun `product with no emoji is correct`() {
         `one product formatted and parsed correctly`(
-            prototype = prototype.copy(emoji = null),
+            prototype = prototype.copy(emojiSearchResult = null),
             expectedFormat = "Apple|42",
         )
     }
@@ -25,7 +29,7 @@ internal class ProductListFormatterTest {
     fun `product with emoji is correct`() {
         `one product formatted and parsed correctly`(
             prototype = prototype,
-            expectedFormat = "Apple|42|🍎",
+            expectedFormat = "Apple|42|🍎|Tomato",
         )
     }
 

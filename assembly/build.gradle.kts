@@ -84,6 +84,7 @@ dependencies {
     implementation(project(":screens:product-list-actions"))
     implementation(project(":screens:clear-notifications-reminder"))
     implementation(project(":screens:final-steps"))
+    implementation(project(":screens:settings"))
     implementation(project(":sharing"))
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
@@ -100,4 +101,5 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.kotlinx.collections.immutable)
 }

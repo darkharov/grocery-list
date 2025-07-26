@@ -77,7 +77,8 @@ class MainActivity :
             if (currentDestination?.hasRoute(FinalSteps::class) == true) {
                 lifecycleScope.launch {
                     val productList = viewModel.productList.filterNotNull().first()
-                    notificationPublisher.tryToPost(productList)
+                    val itemInNotificationMode = viewModel.itemInNotificationMode.filterNotNull().first()
+                    notificationPublisher.tryToPost(productList, itemInNotificationMode)
                     finish()
                 }
             }

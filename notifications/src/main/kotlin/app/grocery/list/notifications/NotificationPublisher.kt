@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import app.grocery.list.domain.CategoryAndProducts
+import app.grocery.list.domain.settings.Settings
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,20 +30,26 @@ class NotificationPublisher @Inject internal constructor(
         notificationManager.createNotificationChannel(defaultChannel)
     }
 
-    fun tryToPost(productsList: List<CategoryAndProducts>): Boolean =
+    fun tryToPost(
+        productsList: List<CategoryAndProducts>,
+        itemInNotificationMode: Settings.ItemInNotificationMode,
+    ): Boolean =
         if (
             ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) ==
             PackageManager.PERMISSION_GRANTED
         ) {
             notificationManager.cancelAll()
-            post(productsList)
+            post(productsList, itemInNotificationMode)
             true
         } else {
             false
         }
 
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-    private fun post(productList: List<CategoryAndProducts>) {
+    private fun post(
+        productList: List<CategoryAndProducts>,
+        itemInNotificationMode: Settings.ItemInNotificationMode,
+    ) {
 
         val allProducts = productList.reversed().flatMap { it.products }
         val chunkSize = 1 + (allProducts.size - 1) / MAX_VISIBLE_AT_THE_SAME_TIME
@@ -53,9 +60,9 @@ class NotificationPublisher @Inject internal constructor(
                 .setSmallIcon(R.drawable.ic_stat_logo)
                 .setContentTitle(
                     chunk
-                        .sortedBy { it.emoji != null }
-                        .joinToString {
-                            "${it.emoji.orEmpty()} ${it.title}".trim()
+                        .sortedBy { it.emojiSearchResult != null }
+                        .joinToString { product ->
+                            itemInNotificationMode.textForNotification(product)
                         }
                 )
                 .setGroup(chunk.first().id.toString())

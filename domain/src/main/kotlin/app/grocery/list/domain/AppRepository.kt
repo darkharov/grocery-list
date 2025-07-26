@@ -1,21 +1,41 @@
 package app.grocery.list.domain
 
+import app.grocery.list.domain.settings.Settings
 import app.grocery.list.storage.value.kotlin.StorageValue
+import app.grocery.list.storage.value.kotlin.edit
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
-interface AppRepository {
+abstract class AppRepository {
 
-    val clearNotificationsReminderEnabled: StorageValue<Boolean>
+    protected abstract val settings: StorageValue<Settings>
 
-    fun categories(): Flow<List<Product.Category>>
-    fun products(): Flow<List<Product>>
-    fun categorizedProducts(): Flow<List<CategoryAndProducts>>
-    fun numberOfAddedProducts(): Flow<Int>
+    abstract val clearNotificationsReminderEnabled: StorageValue<Boolean>
 
-    suspend fun findCategory(search: String): Product.Category?
-    suspend fun findEmoji(search: String): String?
-    suspend fun clearProducts()
-    suspend fun deleteProduct(productId: Int)
-    suspend fun putProduct(product: Product)
-    suspend fun putProducts(products: List<Product>)
+    abstract fun categories(): Flow<List<Product.Category>>
+    abstract fun products(): Flow<List<Product>>
+    abstract fun categorizedProducts(): Flow<List<CategoryAndProducts>>
+    abstract fun numberOfAddedProducts(): Flow<Int>
+
+    abstract suspend fun findCategory(search: String): Product.Category?
+    abstract suspend fun findEmoji(search: String): EmojiSearchResult?
+    abstract suspend fun clearProducts()
+    abstract suspend fun deleteProduct(productId: Int)
+    abstract suspend fun putProduct(product: Product)
+    abstract suspend fun putProducts(products: List<Product>)
+
+    fun itemInNotificationMode(): Flow<Settings.ItemInNotificationMode> =
+        settings
+            .observe()
+            .map {
+                it.itemInNotificationMode
+            }
+
+    suspend fun setItemInNotificationMode(mode: Settings.ItemInNotificationMode) {
+        settings.edit { settings ->
+            settings.copy(
+                itemInNotificationMode = mode,
+            )
+        }
+    }
 }

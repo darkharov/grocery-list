@@ -2,12 +2,13 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
 }
 
 android {
-    namespace = "${Configs.APPLICATION_ID}.commons.compose"
+    namespace = "${Configs.APPLICATION_ID}.settings"
     compileSdk = Configs.Sdk.COMPILE
 
     defaultConfig {
@@ -36,16 +37,15 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
     implementation(project(":strings"))
-    api(project(":commons-android"))
-    api(platform(libs.androidx.compose.bom))
-    api(libs.androidx.ui)
-    api(libs.androidx.ui.graphics)
-    api(libs.androidx.ui.tooling.preview)
-    api(libs.androidx.material3)
-    debugApi(libs.androidx.ui.tooling)
-    debugApi(libs.androidx.ui.test.manifest)
+    implementation(project(":commons-compose"))
+    implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.androidx.core.ktx)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     ksp(libs.kotlinx.metadata.jvm)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
 }

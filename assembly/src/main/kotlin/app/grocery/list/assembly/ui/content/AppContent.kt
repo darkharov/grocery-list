@@ -12,16 +12,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import app.darkharov.clear.notifications.reminder.ClearNotificationsReminder
 import app.darkharov.clear.notifications.reminder.clearNotificationsReminder
@@ -35,6 +32,8 @@ import app.grocery.list.product.input.form.productInputFormScreen
 import app.grocery.list.product.list.actions.productListActionsScreen
 import app.grocery.list.product.list.preview.ProductListPreview
 import app.grocery.list.product.list.preview.productListPreviewScreen
+import app.grocery.list.settings.Settings
+import app.grocery.list.settings.settingsAndChildScreens
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 
@@ -48,12 +47,11 @@ internal fun AppContent(
 ) {
     val startRoute = ProductListPreview
     val navController = rememberNavController()
-    var currentDestination by remember { mutableStateOf<NavDestination?>(null) }
+    val currentDestination by navController.currentBackStackEntryAsState()
 
     LaunchedEffect(navController) {
         navController.currentBackStackEntryFlow.collect { navBackStackEntry ->
             val destination = navBackStackEntry.destination
-            currentDestination = destination
             delegates.onCurrentDestinationChange(destination)
         }
     }
@@ -81,17 +79,24 @@ internal fun AppContent(
         contentWindowInsets = WindowInsets(0.dp),
         topBar = {
             AppToolbar(
-                props =
-                    AppToolbarProps.Default(
-                        counter = numberOfAddedProducts,
-                        progress = progress,
-                        isOnStart = currentDestination?.hasRoute(ProductListPreview::class) == false
-                    ),
+                props = AppToolbarProps(
+                    content = AppToolbarContentCollection
+                        .Instance
+                        .getOrDefault(currentDestination?.destination) {
+                            AppToolbarProps.Content.Default(
+                                counter = numberOfAddedProducts,
+                                onStart = currentDestination
+                                    ?.destination
+                                    ?.hasRoute(startRoute::class) == true,
+                            )
+                        },
+                    progress = progress,
+                ),
                 onUpClick = {
                     navController.popBackStack()
                 },
                 onTrailingIconClick = {
-                    // navController.navigate(Settings)
+                    navController.navigate(Settings)
                 },
             )
         },
@@ -120,6 +125,7 @@ internal fun AppContent(
             productListActionsScreen(delegates)
             clearNotificationsReminder(navigation)
             finalSteps()
+            settingsAndChildScreens(navController)
         }
     }
 }

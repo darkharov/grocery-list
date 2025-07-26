@@ -9,6 +9,7 @@ internal data class ProductInputFormProps(
     val emoji: String?,
     val atLeastOneProductAdded: Boolean,
     val categoryPicker: CategoryPickerProps,
+    val payload: Any? = null,
 )
 
 internal object ProductInputFormMocks {
