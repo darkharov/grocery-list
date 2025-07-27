@@ -1,4 +1,4 @@
-package app.grocery.list.settings.notification
+package app.grocery.list.settings.list.format
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,28 +35,28 @@ import app.grocery.list.settings.R
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object NotificationSettings
+data object ListFormatSettings
 
-internal fun NavGraphBuilder.notificationSettings() {
-    composable<NotificationSettings> {
-        NotificationSettingsScreen()
+internal fun NavGraphBuilder.listFormatSettings() {
+    composable<ListFormatSettings> {
+        ListFormatSettings()
     }
 }
 
 @Composable
-private fun NotificationSettingsScreen() {
-    val viewModel = hiltViewModel<NotificationSettingsViewModel>()
+private fun ListFormatSettings() {
+    val viewModel = hiltViewModel<ListFormatSettingsViewModel>()
     val props by viewModel.props.collectAsState()
-    NotificationSettingsScreen(
+    ListFormatSettings(
         props = props,
         callbacks = viewModel,
     )
 }
 
 @Composable
-private fun NotificationSettingsScreen(
-    props: NotificationSettingsProps?,
-    callbacks: NotificationSettingsCallbacks,
+private fun ListFormatSettings(
+    props: ListFormatSettingsProps?,
+    callbacks: ListFormatSettingsCallbacks,
     modifier: Modifier = Modifier,
 ) {
     if (props == null) {
@@ -74,8 +74,8 @@ private fun NotificationSettingsScreen(
 
 @Composable
 private fun Content(
-    props: NotificationSettingsProps,
-    callbacks: NotificationSettingsCallbacks,
+    props: ListFormatSettingsProps,
+    callbacks: ListFormatSettingsCallbacks,
     modifier: Modifier = Modifier,
 ) {
     val horizontalMargin = dimensionResource(R.dimen.margin_16_32_64)
@@ -85,7 +85,7 @@ private fun Content(
             .fillMaxSize(),
     ) {
         Text(
-            text = stringResource(R.string.shopping_list_item_in_notification),
+            text = stringResource(R.string.grocery_list_item),
             style = LocalAppTypography.current.header,
             modifier = Modifier
                 .padding(
@@ -100,7 +100,7 @@ private fun Content(
             modifier = Modifier
                 .selectableGroup(),
         ) {
-            for (option in NotificationSettingsProps.ItemInNotificationMode.entries) {
+            for (option in ListFormatSettingsProps.ProductItemFormat.entries) {
                 Option(
                     props = props,
                     option = option,
@@ -114,13 +114,13 @@ private fun Content(
 
 @Composable
 private fun Option(
-    props: NotificationSettingsProps,
-    option: NotificationSettingsProps.ItemInNotificationMode,
+    props: ListFormatSettingsProps,
+    option: ListFormatSettingsProps.ProductItemFormat,
     horizontalMargin: Dp,
-    callbacks: NotificationSettingsCallbacks,
+    callbacks: ListFormatSettingsCallbacks,
     modifier: Modifier = Modifier,
 ) {
-    val selected = props.itemInNotificationMode == option
+    val selected = props.productItemFormat == option
     val optionPadding = 8.dp
     val optionHorizontalMargin = horizontalMargin - optionPadding
     Row(
@@ -131,7 +131,7 @@ private fun Option(
             .selectable(
                 selected = selected,
                 onClick = {
-                    callbacks.onItemInNotificationModeSelected(option)
+                    callbacks.onProductListFormatSelected(option)
                 },
                 role = Role.RadioButton,
             )
@@ -155,14 +155,14 @@ private fun Option(
 
 @Preview
 @Composable
-private fun NotificationSettingsScreenPreview() {
+private fun ListFormatSettingsScreenPreview() {
     GroceryListTheme {
         Scaffold { padding ->
-            NotificationSettingsScreen(
-                props = NotificationSettingsProps(
-                    itemInNotificationMode = NotificationSettingsProps.ItemInNotificationMode.EmojiAndAdditionalDetail,
+            ListFormatSettings(
+                props = ListFormatSettingsProps(
+                    productItemFormat = ListFormatSettingsProps.ProductItemFormat.EmojiAndAdditionalDetail,
                 ),
-                callbacks = NotificationSettingsCallbacksMock,
+                callbacks = ListFormatSettingsCallbacksMock,
                 modifier = Modifier
                     .padding(padding),
             )

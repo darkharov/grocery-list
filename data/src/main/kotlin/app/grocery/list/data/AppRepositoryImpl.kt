@@ -6,6 +6,7 @@ import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.CategoryAndProducts
 import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
+import app.grocery.list.domain.settings.ProductItemFormat
 import app.grocery.list.domain.settings.Settings
 import app.grocery.list.storage.value.android.StorageValueDelegates
 import javax.inject.Inject
@@ -19,23 +20,22 @@ internal class AppRepositoryImpl @Inject constructor(
     delegates: StorageValueDelegates,
     private val productDao: ProductDao,
     private val productMapper: ProductEntity.Mapper,
+    private val productItemFormatMapper: ProductItemFormatMapper,
     private val categoryDao: CategoryDao,
 ) : AppRepository() {
 
     override val settings by delegates.custom<Settings>(
         write = { settings ->
             int(
-                ITEM_IN_NOTIFICATION_MODE,
-                settings.itemInNotificationMode.ordinal,
+                PRODUCT_ITEM_FORMAT_ID,
+                productItemFormatMapper.toInt(settings.productItemFormat),
             )
         },
         read = {
-            val defaultValue = Settings.ItemInNotificationMode.EmojiAndFullText.ordinal
-            val ordinal = int(ITEM_IN_NOTIFICATION_MODE, defaultValue = defaultValue)
+            val defaultValue = ProductItemFormat.EmojiAndFullText.ordinal
+            val id = int(PRODUCT_ITEM_FORMAT_ID, defaultValue = defaultValue)
             Settings(
-                itemInNotificationMode = Settings
-                    .ItemInNotificationMode
-                    .entries[ordinal],
+                productItemFormat = productItemFormatMapper.fromInt(id = id),
             )
         },
     )
@@ -88,6 +88,6 @@ internal class AppRepositoryImpl @Inject constructor(
         productDao.count()
 
     companion object {
-        private const val ITEM_IN_NOTIFICATION_MODE = "ITEM_IN_NOTIFICATION_MODE"
+        private const val PRODUCT_ITEM_FORMAT_ID = "PRODUCT_ITEM_FORMAT"
     }
 }

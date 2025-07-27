@@ -1,4 +1,4 @@
-package app.grocery.list.settings.notification
+package app.grocery.list.settings.list.format
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,17 +12,17 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-internal class NotificationSettingsViewModel @Inject constructor(
+internal class ListFormatSettingsViewModel @Inject constructor(
     private val repository: AppRepository,
-    private val itemInNotificationModeMapper: ItemInNotificationModeMapper,
+    private val productItemFormatMapper: ProductItemFormatMapper,
 ) : ViewModel(),
-    NotificationSettingsCallbacks {
+    ListFormatSettingsCallbacks {
 
     val props = repository
-        .itemInNotificationMode()
-        .map { itemInNotificationMode ->
-            NotificationSettingsProps(
-                itemInNotificationMode = itemInNotificationModeMapper.toPresentation(itemInNotificationMode),
+        .productItemFormat()
+        .map { format ->
+            ListFormatSettingsProps(
+                productItemFormat = productItemFormatMapper.toPresentation(format),
             )
         }
         .stateIn(
@@ -31,10 +31,10 @@ internal class NotificationSettingsViewModel @Inject constructor(
             null,
         )
 
-    override fun onItemInNotificationModeSelected(mode: NotificationSettingsProps.ItemInNotificationMode) {
+    override fun onProductListFormatSelected(option: ListFormatSettingsProps.ProductItemFormat) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.setItemInNotificationMode(
-                itemInNotificationModeMapper.toDomain(mode)
+            repository.setProductItemFormat(
+                productItemFormatMapper.toDomain(option)
             )
         }
     }

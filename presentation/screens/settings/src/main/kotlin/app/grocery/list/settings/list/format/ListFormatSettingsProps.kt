@@ -1,15 +1,15 @@
-package app.grocery.list.settings.notification
+package app.grocery.list.settings.list.format
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import app.grocery.list.settings.R
 
 @Immutable
-internal class NotificationSettingsProps(
-    val itemInNotificationMode: ItemInNotificationMode,
+internal class ListFormatSettingsProps(
+    val productItemFormat: ProductItemFormat,
 ) {
     @Immutable
-    enum class ItemInNotificationMode(
+    enum class ProductItemFormat(
         @StringRes
         val titleId: Int,
     ) {

@@ -15,7 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.CategoryAndProducts
 import app.grocery.list.domain.Product
-import app.grocery.list.domain.settings.Settings
+import app.grocery.list.domain.settings.ProductItemFormat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -57,7 +57,7 @@ class NotificationPublisher @Inject internal constructor(
         ProcessLifecycleOwner.get().lifecycleScope.launch {
             post(
                 mode = repository
-                    .itemInNotificationMode()
+                    .productItemFormat()
                     .flowOn(Dispatchers.IO)
                     .first(),
                 categorizedProducts = repository
@@ -70,7 +70,7 @@ class NotificationPublisher @Inject internal constructor(
 
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     private fun post(
-        mode: Settings.ItemInNotificationMode,
+        mode: ProductItemFormat,
         categorizedProducts: List<CategoryAndProducts>,
     ) {
         val allProducts = categorizedProducts.flatMap { it.products }
@@ -85,7 +85,7 @@ class NotificationPublisher @Inject internal constructor(
 
     private fun notification(
         chunk: List<Product>,
-        mode: Settings.ItemInNotificationMode,
+        mode: ProductItemFormat,
         groupKey: Int,
     ): Notification =
         NotificationCompat

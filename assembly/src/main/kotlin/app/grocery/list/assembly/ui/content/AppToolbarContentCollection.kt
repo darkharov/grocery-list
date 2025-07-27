@@ -8,7 +8,7 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.elements.toolbar.AppToolbarProps
 import app.grocery.list.settings.Settings
-import app.grocery.list.settings.notification.NotificationSettings
+import app.grocery.list.settings.list.format.ListFormatSettings
 import kotlin.reflect.KClass
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -77,7 +77,7 @@ internal class AppToolbarContentCollection private constructor(
 
         val Instance = Builder.build {
             title<Settings>(R.string.settings)
-            title<NotificationSettings>(R.string.notifications)
+            title<ListFormatSettings>(R.string.list_format)
         }
     }
 }

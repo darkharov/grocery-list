@@ -17,8 +17,8 @@ import app.grocery.list.commons.compose.elements.button.text.AppTextButton
 import app.grocery.list.commons.compose.elements.button.text.AppTextButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
-import app.grocery.list.settings.notification.NotificationSettings
-import app.grocery.list.settings.notification.notificationSettings
+import app.grocery.list.settings.list.format.ListFormatSettings
+import app.grocery.list.settings.list.format.listFormatSettings
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -28,7 +28,7 @@ fun NavGraphBuilder.settingsAndChildScreens(
     navController: NavHostController,
 ) {
     settings(navController)
-    notificationSettings()
+    listFormatSettings()
 }
 
 private fun NavGraphBuilder.settings(navController: NavHostController) {
@@ -51,12 +51,12 @@ private fun SettingsScreen(
         AppTextButton(
             props = AppTextButtonProps.SettingsCategory(
                 text = StringValue.StringWrapper(
-                    value = stringResource(R.string.notifications),
+                    value = stringResource(R.string.list_format),
                 ),
-                leadingIconId = R.drawable.ic_notification_settings,
+                leadingIconId = R.drawable.ic_list_format,
             ),
             onClick = {
-                navController.navigate(NotificationSettings)
+                navController.navigate(ListFormatSettings)
             },
         )
         AppHorizontalDividerWithOffset()

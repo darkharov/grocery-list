@@ -35,8 +35,8 @@
     <string name="do_not_show_this_screen_again">Больше не показывать этот экран</string>
     <string name="final_steps">Финальные шаги</string>
     <string name="emoji">Эмодзи</string>
-    <string name="notifications">Формат списка</string>
-    <string name="shopping_list_item_in_notification">Пункт списка покупок в уведомлении</string>
+    <string name="list_format">Формат списка</string>
+    <string name="grocery_list_item">Пункт списка продуктов</string>
     <string name="without_emoji">Без эмодзи</string>
     <string name="emoji_and_full_text">Эмодзи + полный текст</string>
     <string name="emoji_and_additional_detail">Эмодзи + доплнительные детали</string>
