@@ -6,9 +6,9 @@ import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.AtLeastOneProductJustAddedUseCase
 import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
-import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryMapper
-import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPickerProps
-import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
+import app.grocery.list.product.input.form.elements.category.picker.CategoryMapper
+import app.grocery.list.product.input.form.elements.category.picker.CategoryPickerProps
+import app.grocery.list.product.input.form.elements.category.picker.CategoryProps
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList

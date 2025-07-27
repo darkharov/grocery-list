@@ -42,9 +42,9 @@ import app.grocery.list.commons.compose.elements.button.AppButton
 import app.grocery.list.commons.compose.elements.button.AppButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
-import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPicker
-import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPickerProps
-import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
+import app.grocery.list.product.input.form.elements.category.picker.CategoryPicker
+import app.grocery.list.product.input.form.elements.category.picker.CategoryPickerProps
+import app.grocery.list.product.input.form.elements.category.picker.CategoryProps
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.serialization.Serializable
 

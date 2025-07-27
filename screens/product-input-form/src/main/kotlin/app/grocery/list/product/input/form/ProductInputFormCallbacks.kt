@@ -1,8 +1,8 @@
 package app.grocery.list.product.input.form
 
 import androidx.compose.runtime.Stable
-import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPickerCallbacks
-import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPickerCallbacksMock
+import app.grocery.list.product.input.form.elements.category.picker.CategoryPickerCallbacks
+import app.grocery.list.product.input.form.elements.category.picker.CategoryPickerCallbacksMock
 
 @Stable
 internal interface ProductInputFormCallbacks :

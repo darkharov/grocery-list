@@ -1,4 +1,4 @@
-package app.grocery.list.product.input.form.screen.elements.category.picker
+package app.grocery.list.product.input.form.elements.category.picker
 
 import app.grocery.list.domain.Product
 import javax.inject.Inject

@@ -1,8 +1,8 @@
 package app.grocery.list.product.input.form
 
 import androidx.compose.runtime.Immutable
-import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPickerProps
-import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
+import app.grocery.list.product.input.form.elements.category.picker.CategoryPickerProps
+import app.grocery.list.product.input.form.elements.category.picker.CategoryProps
 
 @Immutable
 internal data class ProductInputFormProps(
