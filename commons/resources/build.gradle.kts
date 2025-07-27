@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "${Configs.APPLICATION_ID}.strings"
+    namespace = "${Configs.APPLICATION_ID}.resources"
     compileSdk = Configs.Sdk.COMPILE
 
     defaultConfig {
