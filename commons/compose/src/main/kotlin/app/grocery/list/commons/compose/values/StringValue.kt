@@ -4,12 +4,14 @@ import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 
 @Immutable
 sealed class StringValue {
 
+    @Stable
     @Composable
     abstract fun value(): String
 
@@ -26,6 +28,7 @@ sealed class StringValue {
         private val value: String,
     ) : StringValue() {
 
+        @Stable
         @Composable
         override fun value(): String =
             value
@@ -36,6 +39,8 @@ sealed class StringValue {
         @StringRes
         val resId: Int,
     ) : StringValue() {
+
+        @Stable
         @Composable
         override fun value(): String =
             stringResource(resId)
@@ -48,6 +53,8 @@ sealed class StringValue {
         val count: Int,
         val useCountAsArgument: Boolean = false,
     ) : StringValue() {
+
+        @Stable
         @Composable
         override fun value(): String =
             if (useCountAsArgument) {
