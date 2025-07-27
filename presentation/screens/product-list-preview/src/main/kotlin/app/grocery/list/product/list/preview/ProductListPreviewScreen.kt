@@ -50,7 +50,6 @@ import app.grocery.list.commons.compose.elements.button.AppButton
 import app.grocery.list.commons.compose.elements.button.AppButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
-import app.grocery.list.product.list.preview.ProductListPreviewProps.Product
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -274,7 +273,7 @@ private fun LazyListScope.items(
 
 @Composable
 private fun Product(
-    product: Product,
+    product: ProductListPreviewProps.Product,
     callbacks: ProductListPreviewCallbacks,
     modifier: Modifier = Modifier,
 ) {
