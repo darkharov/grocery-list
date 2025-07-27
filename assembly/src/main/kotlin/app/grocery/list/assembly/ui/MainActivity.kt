@@ -14,7 +14,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import app.grocery.list.assembly.ui.content.AppContent
@@ -29,9 +28,6 @@ import commons.android.ScreenLockedReceiver
 import commons.android.share
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity :
@@ -77,12 +73,8 @@ class MainActivity :
     private fun observeScreenLock() {
         ScreenLockedReceiver.register(this) {
             if (currentDestination?.hasRoute(FinalSteps::class) == true) {
-                lifecycleScope.launch {
-                    val productList = viewModel.productList.filterNotNull().first()
-                    val itemInNotificationMode = viewModel.itemInNotificationMode.filterNotNull().first()
-                    notificationPublisher.tryToPost(productList, itemInNotificationMode)
-                    finish()
-                }
+                notificationPublisher.tryToPost()
+                finish()
             }
         }
     }

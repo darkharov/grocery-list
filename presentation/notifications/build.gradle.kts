@@ -35,4 +35,5 @@ dependencies {
     implementation(project(":commons:resources"))
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+    implementation(libs.androidx.lifecycle.process)
 }
