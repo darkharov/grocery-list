@@ -73,10 +73,10 @@ class NotificationPublisher @Inject internal constructor(
         mode: Settings.ItemInNotificationMode,
         categorizedProducts: List<CategoryAndProducts>,
     ) {
-        val allProducts = categorizedProducts.reversed().flatMap { it.products }
+        val allProducts = categorizedProducts.flatMap { it.products }
         val maxItemsPerNotification = 1 + (allProducts.size - 1) / MAX_VISIBLE_AT_THE_SAME_TIME
 
-        for (chunk in allProducts.chunked(maxItemsPerNotification)) {
+        for (chunk in allProducts.chunked(maxItemsPerNotification).reversed()) {
             val groupKey = chunk.first().id
             val notification = notification(chunk, mode, groupKey = groupKey)
             notificationManager.notify(TYPE_PRODUCT, groupKey, notification)
