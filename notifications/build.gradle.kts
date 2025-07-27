@@ -32,7 +32,7 @@ android {
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":strings"))
+    implementation(project(":commons:resources"))
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 }

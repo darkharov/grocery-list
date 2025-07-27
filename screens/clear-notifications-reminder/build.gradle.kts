@@ -38,9 +38,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":commons-compose"))
     implementation(project(":domain"))
-    implementation(project(":strings"))
+    implementation(project(":commons:compose"))
+    implementation(project(":commons:resources"))
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     ksp(libs.kotlinx.metadata.jvm)

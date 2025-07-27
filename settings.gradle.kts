@@ -26,14 +26,15 @@ include(":assembly")
 include(":notifications")
 include(":sharing")
 
-include(":commons-android")
-include(":commons-compose")
+include(":commons:android")
+include(":commons:compose")
+include(":commons:resources")
+
 include(":storage-value-kotlin")
 include(":storage-value-android")
 
 include(":data")
 include(":domain")
-include(":strings")
 include(":screens:product-list-preview")
 include(":screens:product-input-form")
 include(":screens:product-list-actions")

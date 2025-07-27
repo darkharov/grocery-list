@@ -32,7 +32,7 @@ android {
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":strings"))
+    implementation(project(":commons:resources"))
     implementation(project(":storage-value-android"))
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
