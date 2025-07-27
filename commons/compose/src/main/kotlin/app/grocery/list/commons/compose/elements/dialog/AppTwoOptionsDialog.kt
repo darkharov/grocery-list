@@ -10,8 +10,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.R
-import app.grocery.list.commons.compose.elements.text.button.AppTextButton
-import app.grocery.list.commons.compose.elements.text.button.AppTextButtonProps
+import app.grocery.list.commons.compose.elements.button.text.AppTextButton
+import app.grocery.list.commons.compose.elements.button.text.AppTextButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
 

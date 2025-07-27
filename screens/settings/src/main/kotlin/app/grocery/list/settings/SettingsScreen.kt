@@ -13,8 +13,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import app.grocery.list.commons.compose.elements.AppHorizontalDividerWithOffset
-import app.grocery.list.commons.compose.elements.text.button.AppTextButton
-import app.grocery.list.commons.compose.elements.text.button.AppTextButtonProps
+import app.grocery.list.commons.compose.elements.button.text.AppTextButton
+import app.grocery.list.commons.compose.elements.button.text.AppTextButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.settings.notification.NotificationSettings
