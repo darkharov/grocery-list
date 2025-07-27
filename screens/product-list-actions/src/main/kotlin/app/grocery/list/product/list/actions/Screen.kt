@@ -23,8 +23,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppPreloader
-import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
-import app.grocery.list.commons.compose.elements.app.button.WideAppButton
+import app.grocery.list.commons.compose.elements.button.AppButtonProps
+import app.grocery.list.commons.compose.elements.button.WideAppButton
 import app.grocery.list.commons.compose.elements.dialog.AppSimpleDialog
 import app.grocery.list.commons.compose.elements.dialog.AppTwoOptionsDialog
 import app.grocery.list.commons.compose.theme.GroceryListTheme

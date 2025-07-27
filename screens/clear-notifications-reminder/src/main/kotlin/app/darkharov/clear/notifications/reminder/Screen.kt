@@ -34,8 +34,8 @@ import app.darkharov.clear.notifications.reminder.ClearNotificationsReminderView
 import app.grocery.list.clear.notifications.reminder.R
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppContentToRead
-import app.grocery.list.commons.compose.elements.app.button.AppButton
-import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
+import app.grocery.list.commons.compose.elements.button.AppButton
+import app.grocery.list.commons.compose.elements.button.AppButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import kotlinx.serialization.Serializable
 

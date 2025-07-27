@@ -1,4 +1,4 @@
-package app.grocery.list.commons.compose.elements.text.button
+package app.grocery.list.commons.compose.elements.button.text
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row

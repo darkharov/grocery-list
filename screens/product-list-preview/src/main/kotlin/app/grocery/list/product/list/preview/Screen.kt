@@ -46,8 +46,8 @@ import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppHorizontalDivider
 import app.grocery.list.commons.compose.elements.AppHorizontalDividerMode
 import app.grocery.list.commons.compose.elements.AppPreloader
-import app.grocery.list.commons.compose.elements.app.button.AppButton
-import app.grocery.list.commons.compose.elements.app.button.AppButtonProps
+import app.grocery.list.commons.compose.elements.button.AppButton
+import app.grocery.list.commons.compose.elements.button.AppButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.product.list.preview.ProductListPreviewProps.Product
