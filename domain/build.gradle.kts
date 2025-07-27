@@ -19,5 +19,5 @@ kotlin {
 dependencies {
     implementation(libs.javax.inject)
     implementation(libs.kotlinx.coroutines.core)
-    api(project(":storage-value-kotlin"))
+    api(project(":commons:storage-value:kotlin"))
 }

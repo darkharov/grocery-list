@@ -31,7 +31,7 @@ android {
 }
 
 dependencies {
-    api(project(":storage-value-kotlin"))
+    api(project(":commons:storage-value:kotlin"))
     implementation(libs.javax.inject)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.hilt.android)
