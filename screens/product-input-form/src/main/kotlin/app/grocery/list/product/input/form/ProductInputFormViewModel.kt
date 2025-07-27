@@ -6,6 +6,7 @@ import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.AtLeastOneProductJustAddedUseCase
 import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
+import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryMapper
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryPickerProps
 import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +28,7 @@ import kotlinx.coroutines.launch
 internal class ProductInputFormViewModel @Inject constructor(
     private val repository: AppRepository,
     private val atLeastOneProductJustAdded: AtLeastOneProductJustAddedUseCase,
-    private val categoryMapper: ProductCategoryMapper,
+    private val categoryMapper: CategoryMapper,
 ) : ViewModel(),
     ProductInputFormCallbacks {
 

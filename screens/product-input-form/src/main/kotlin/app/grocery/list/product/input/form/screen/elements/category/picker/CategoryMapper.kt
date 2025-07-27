@@ -1,14 +1,13 @@
-package app.grocery.list.product.input.form
+package app.grocery.list.product.input.form.screen.elements.category.picker
 
 import app.grocery.list.domain.Product
-import app.grocery.list.product.input.form.screen.elements.category.picker.CategoryProps
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 @Singleton
-internal class ProductCategoryMapper @Inject constructor() {
+internal class CategoryMapper @Inject constructor() {
 
     fun transformList(categories: List<Product.Category>): ImmutableList<CategoryProps> =
         categories.map(::transform).toImmutableList()
