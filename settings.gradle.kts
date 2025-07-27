@@ -23,21 +23,20 @@ rootProject.name = "Notes"
 
 include(":assembly")
 
-include(":notifications")
-include(":sharing")
-
 include(":commons:android")
 include(":commons:compose")
 include(":commons:resources")
 
-include(":storage-value-kotlin")
-include(":storage-value-android")
-
 include(":data")
 include(":domain")
-include(":screens:product-list-preview")
-include(":screens:product-input-form")
-include(":screens:product-list-actions")
-include(":screens:final-steps")
-include(":screens:clear-notifications-reminder")
-include(":screens:settings")
+include(":presentation:notifications")
+include(":presentation:sharing")
+include(":presentation:screens:product-list-preview")
+include(":presentation:screens:product-input-form")
+include(":presentation:screens:product-list-actions")
+include(":presentation:screens:final-steps")
+include(":presentation:screens:clear-notifications-reminder")
+include(":presentation:screens:settings")
+
+include(":storage-value-kotlin")
+include(":storage-value-android")
