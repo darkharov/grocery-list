@@ -33,7 +33,6 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":commons:resources"))
-    implementation(project(":commons:android"))
     implementation(libs.javax.inject)
     testImplementation(libs.junit)
     implementation(libs.hilt.android)

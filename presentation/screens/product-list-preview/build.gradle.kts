@@ -41,7 +41,6 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":commons:compose"))
     implementation(project(":commons:resources"))
-    implementation(project(":commons:android"))
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.androidx.core.ktx)
     implementation(libs.hilt.android)

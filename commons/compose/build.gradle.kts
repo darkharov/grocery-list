@@ -37,7 +37,6 @@ android {
 
 dependencies {
     implementation(project(":commons:resources"))
-    api(project(":commons:android"))
     api(platform(libs.androidx.compose.bom))
     api(libs.androidx.ui)
     api(libs.androidx.ui.graphics)
