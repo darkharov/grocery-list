@@ -49,7 +49,7 @@ fun NavGraphBuilder.productListActionsScreen(
 }
 
 @Composable
-internal fun ProductListActionsScreen(
+private fun ProductListActionsScreen(
     delegate: ProductListActionsDelegate,
 ) {
     val viewModel: ProductListActionsViewModel = hiltViewModel()
