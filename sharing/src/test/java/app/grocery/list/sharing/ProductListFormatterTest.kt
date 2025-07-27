@@ -2,7 +2,6 @@ package app.grocery.list.sharing
 
 import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
-import app.grocery.list.sharing.internal.ProductListFormatter
 import org.junit.Test
 
 internal class ProductListFormatterTest {

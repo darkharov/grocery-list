@@ -23,8 +23,10 @@ import app.grocery.list.commons.compose.theme.ThemeUtil
 import app.grocery.list.domain.Product
 import app.grocery.list.final_.steps.FinalSteps
 import app.grocery.list.notifications.NotificationPublisher
-import app.grocery.list.sharing.ShareProductList
+import app.grocery.list.sharing.ProductListFormatter
+import app.grocery.list.sharing.R
 import commons.android.ScreenLockedReceiver
+import commons.android.share
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.flow.filterNotNull
@@ -38,7 +40,7 @@ class MainActivity :
 
     @Inject lateinit var themeUtil: ThemeUtil
     @Inject lateinit var notificationPublisher: NotificationPublisher
-    @Inject lateinit var shareProductList: ShareProductList
+    @Inject lateinit var productListFormatter: ProductListFormatter
 
     private val viewModel by viewModels<MainViewModel>()
     private val postNotifications = postNotificationLauncher()
@@ -117,6 +119,12 @@ class MainActivity :
     }
 
     override fun share(products: List<Product>) {
-        shareProductList.execute(products)
+        val suffix = getString(
+            R.string.sharing_message_suffix,
+            getString(R.string.actions),
+            "https://play.google.com/store/apps/details?id=app.grocery.list",
+        )
+        val text = productListFormatter.print(products, suffix = suffix)
+        share(text = text)
     }
 }

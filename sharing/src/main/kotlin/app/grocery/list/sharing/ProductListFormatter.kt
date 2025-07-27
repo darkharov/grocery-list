@@ -1,4 +1,4 @@
-package app.grocery.list.sharing.internal
+package app.grocery.list.sharing
 
 import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
@@ -9,7 +9,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 import org.jetbrains.annotations.VisibleForTesting
 
 @Singleton
-internal class ProductListFormatter @Inject constructor() {
+class ProductListFormatter @Inject internal constructor() {
 
     @OptIn(ExperimentalEncodingApi::class)
     fun print(productList: List<Product>, suffix: String): String {
@@ -20,7 +20,7 @@ internal class ProductListFormatter @Inject constructor() {
     }
 
     @VisibleForTesting
-    fun printWithoutEncoding(productList: List<Product>): String =
+    internal fun printWithoutEncoding(productList: List<Product>): String =
         productList.joinToString(
             separator = LIST_ITEM_SEPARATOR.toString(),
             transform = { it.print() },
@@ -56,7 +56,7 @@ internal class ProductListFormatter @Inject constructor() {
     }
 
     @VisibleForTesting
-    fun parseWithoutDecoding(productList: String): List<Product> =
+    internal fun parseWithoutDecoding(productList: String): List<Product> =
         productList
             .split(LIST_ITEM_SEPARATOR)
             .map(::parseProduct)
@@ -76,6 +76,10 @@ internal class ProductListFormatter @Inject constructor() {
                 null
             },
         )
+    }
+
+    internal interface SharingMessagePrefixFactory {
+        fun sharingMessagePrefix(): String
     }
 
     companion object {

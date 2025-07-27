@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.Product
-import app.grocery.list.sharing.ParseCopiedProductList
+import app.grocery.list.sharing.ProductListFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 internal class ProductListActionsViewModel @Inject constructor(
     private val repository: AppRepository,
-    private val parsePastedProductList: ParseCopiedProductList,
+    private val productListFormatter: ProductListFormatter,
 ) : ViewModel(),
     ProductListActionsCallbacks {
 
@@ -79,7 +79,8 @@ internal class ProductListActionsViewModel @Inject constructor(
     }
 
     override fun onPaste(text: String) {
-        parsePastedProductList.execute(message = text)
+        productListFormatter
+            .parse(message = text)
             .onFailure {
                 dialog.value = ProductListActionsDialog.CopiedProductListNotFound
             }
