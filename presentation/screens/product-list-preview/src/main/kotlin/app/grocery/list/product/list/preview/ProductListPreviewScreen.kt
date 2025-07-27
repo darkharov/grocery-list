@@ -67,7 +67,7 @@ fun NavGraphBuilder.productListPreviewScreen(
 }
 
 @Composable
-internal fun ProductListPreviewScreen(
+private fun ProductListPreviewScreen(
     navigation: ProductListPreviewNavigation,
 ) {
     val viewModel = hiltViewModel<ProductListPreviewViewModel>()
@@ -93,7 +93,7 @@ internal fun ProductListPreviewScreen(
 }
 
 @Composable
-internal fun ProductListPreviewScreen(
+private fun ProductListPreviewScreen(
     props: ProductListPreviewProps?,
     callbacks: ProductListPreviewCallbacks,
     modifier: Modifier = Modifier,
