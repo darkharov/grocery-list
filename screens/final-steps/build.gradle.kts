@@ -37,7 +37,6 @@ dependencies {
     implementation(project(":commons-compose"))
     implementation(project(":strings"))
     implementation(project(":commons-android"))
-    implementation(project(":notifications"))
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.androidx.core.ktx)
     implementation(libs.hilt.android)
