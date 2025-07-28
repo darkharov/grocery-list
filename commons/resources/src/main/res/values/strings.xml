@@ -38,8 +38,8 @@
     <string name="list_format">List Format</string>
     <string name="grocery_list_item">Grocery list item</string>
     <string name="without_emoji">Without emoji</string>
-    <string name="emoji_and_full_text">Emoji + full text</string>
-    <string name="emoji_and_additional_detail">Emoji + additional details</string>
+    <string name="emoji_and_full_text">Emoji + Full text</string>
+    <string name="emoji_and_additional_detail">Emoji + Additional details</string>
 
     <string-array name="final_steps">
         <item>Lock the screen</item>

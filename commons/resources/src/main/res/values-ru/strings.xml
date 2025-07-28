@@ -38,8 +38,8 @@
     <string name="list_format">Формат списка</string>
     <string name="grocery_list_item">Пункт списка продуктов</string>
     <string name="without_emoji">Без эмодзи</string>
-    <string name="emoji_and_full_text">Эмодзи + полный текст</string>
-    <string name="emoji_and_additional_detail">Эмодзи + доплнительные детали</string>
+    <string name="emoji_and_full_text">Эмодзи + Полный текст</string>
+    <string name="emoji_and_additional_detail">Эмодзи + Доплнительные детали</string>
 
     <string-array name="final_steps">
         <item>Заблокируйте экран</item>
