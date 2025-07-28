@@ -16,14 +16,14 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
+import app.grocery.list.assembly.R
 import app.grocery.list.assembly.ui.content.AppContent
 import app.grocery.list.assembly.ui.content.AppContentDelegate
 import app.grocery.list.commons.compose.theme.ThemeUtil
+import app.grocery.list.commons.format.ProductListToSharingStringFormatter
 import app.grocery.list.domain.Product
 import app.grocery.list.final_.steps.FinalSteps
 import app.grocery.list.notifications.NotificationPublisher
-import app.grocery.list.sharing.ProductListToSharingStringFormatter
-import app.grocery.list.sharing.R
 import commons.android.ScreenLockedReceiver
 import commons.android.share
 import dagger.hilt.android.AndroidEntryPoint

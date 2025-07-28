@@ -1,4 +1,4 @@
-package app.grocery.list.sharing
+package app.grocery.list.commons.format
 
 import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product

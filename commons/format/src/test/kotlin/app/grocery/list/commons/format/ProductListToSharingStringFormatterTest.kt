@@ -1,4 +1,4 @@
-package app.grocery.list.sharing
+package app.grocery.list.commons.format
 
 import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
@@ -36,7 +36,7 @@ internal class ProductListToSharingStringFormatterTest {
         prototype: Product,
         expectedFormat: String,
     ) {
-        val formatter = ProductListToSharingStringFormatter()
+        val formatter = app.grocery.list.commons.format.ProductListToSharingStringFormatter()
         val actualFormat = formatter.printWithoutEncoding(listOf(prototype))
         assert(actualFormat == expectedFormat)
 

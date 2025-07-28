@@ -78,7 +78,7 @@ dependencies {
     implementation(project(":commons:resources"))
     implementation(project(":commons:compose"))
     implementation(project(":commons:android"))
-    implementation(project(":presentation:sharing"))
+    implementation(project(":commons:format"))
     implementation(project(":presentation:notifications"))
     implementation(project(":presentation:screens:product-input-form"))
     implementation(project(":presentation:screens:product-list-preview"))
