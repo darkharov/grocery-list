@@ -6,7 +6,7 @@ import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.CategoryAndProducts
 import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
-import app.grocery.list.domain.settings.ProductItemFormat
+import app.grocery.list.domain.settings.ProductTitleFormat
 import app.grocery.list.domain.settings.Settings
 import app.grocery.list.storage.value.android.StorageValueDelegates
 import javax.inject.Inject
@@ -27,15 +27,15 @@ internal class AppRepositoryImpl @Inject constructor(
     override val settings by delegates.custom<Settings>(
         write = { settings ->
             int(
-                PRODUCT_ITEM_FORMAT_ID,
-                productItemFormatMapper.toInt(settings.productItemFormat),
+                PRODUCT_TITLE_FORMAT_ID,
+                productItemFormatMapper.toInt(settings.productTitleFormat),
             )
         },
         read = {
-            val defaultValue = ProductItemFormat.EmojiAndFullText.ordinal
-            val id = int(PRODUCT_ITEM_FORMAT_ID, defaultValue = defaultValue)
+            val defaultValue = ProductTitleFormat.EmojiAndFullText.ordinal
+            val id = int(PRODUCT_TITLE_FORMAT_ID, defaultValue = defaultValue)
             Settings(
-                productItemFormat = productItemFormatMapper.fromInt(id = id),
+                productTitleFormat = productItemFormatMapper.fromInt(id = id),
             )
         },
     )
@@ -88,6 +88,6 @@ internal class AppRepositoryImpl @Inject constructor(
         productDao.count()
 
     companion object {
-        private const val PRODUCT_ITEM_FORMAT_ID = "PRODUCT_ITEM_FORMAT"
+        private const val PRODUCT_TITLE_FORMAT_ID = "PRODUCT_TITLE_FORMAT_ID"
     }
 }

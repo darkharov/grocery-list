@@ -1,14 +1,22 @@
 package app.grocery.list.product.list.preview
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import app.grocery.list.commons.format.ProductTitleFormatter
 import app.grocery.list.domain.CategoryAndProducts
 import app.grocery.list.domain.Product
-import javax.inject.Inject
-import javax.inject.Singleton
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
-@Singleton
-internal class ProductListMapper @Inject constructor() {
+internal class ProductListMapper @AssistedInject constructor(
+    @Assisted
+    private val formatter: ProductTitleFormatter
+) {
     fun transform(productList: List<CategoryAndProducts>): ProductListPreviewProps =
         ProductListPreviewProps(
             categories = productList.map(::transform).toImmutableList(),
@@ -28,6 +36,29 @@ internal class ProductListMapper @Inject constructor() {
     private fun transform(product: Product): ProductListPreviewProps.Product =
         ProductListPreviewProps.Product(
             id = product.id,
-            title = "${product.emojiSearchResult?.emoji.orEmpty()} ${product.title}".trim(),
+            title = formatter.print(product).collectTitle(),
         )
+
+    private fun ProductTitleFormatter.FormattingResult.collectTitle(): AnnotatedString =
+        buildAnnotatedString {
+            if (!(emoji.isNullOrBlank())) {
+                append(emoji)
+                append(' ')
+            }
+            val afterEmoji = length
+            append(title)
+            val additionalDetailsLocation = additionalDetailsLocation
+            if (additionalDetailsLocation != null) {
+                addStyle(
+                    style = SpanStyle(Color.Gray.copy(alpha = 0.5f)),
+                    start = afterEmoji + additionalDetailsLocation.startIndex,
+                    end = afterEmoji + additionalDetailsLocation.endIndex,
+                )
+            }
+        }
+
+    @AssistedFactory
+    fun interface Factory {
+        fun create(formatter: ProductTitleFormatter): ProductListMapper
+    }
 }

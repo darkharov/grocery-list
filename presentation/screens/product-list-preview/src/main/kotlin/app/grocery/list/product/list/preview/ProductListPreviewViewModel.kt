@@ -2,30 +2,45 @@ package app.grocery.list.product.list.preview
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.grocery.list.commons.format.ProductTitleFormatter
 import app.grocery.list.domain.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 internal class ProductListPreviewViewModel @Inject constructor(
-    private val mapper: ProductListMapper,
+    private val mapperFactory: ProductListMapper.Factory,
+    private val productFormatterFactory: ProductTitleFormatter.Factory,
     private val repository: AppRepository,
 ) : ViewModel(),
     ProductListPreviewCallbacks {
 
     val props: StateFlow<ProductListPreviewProps?> =
+        combine(
+            mapper(),
+            repository.categorizedProducts(),
+            ProductListMapper::transform,
+        ).stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            null,
+        )
+
+    private fun mapper(): Flow<ProductListMapper> =
         repository
-            .categorizedProducts()
-            .map(mapper::transform)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+            .productItemFormat()
+            .map(productFormatterFactory::create)
+            .map(mapperFactory::create)
 
     private val events = Channel<Event>(Channel.UNLIMITED)
 

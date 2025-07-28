@@ -2,6 +2,7 @@ package app.grocery.list.product.list.preview
 
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -15,7 +16,7 @@ internal data class ProductListPreviewProps(
     @Immutable
     data class Product(
         val id: Int,
-        val title: String,
+        val title: AnnotatedString,
     ) {
         val key = ProductKey(id = id)
     }
@@ -52,11 +53,11 @@ internal class ProductListPreviewMocks : PreviewParameterProvider<ProductListPre
                     products = persistentListOf(
                         ProductListPreviewProps.Product(
                             id = productIds.next(),
-                            title = "🍅 Tomato",
+                            title = AnnotatedString("🍅 Tomato"),
                         ),
                         ProductListPreviewProps.Product(
                             id = productIds.next(),
-                            title = "🥔 Potato",
+                            title = AnnotatedString("🥔 Potato"),
                         ),
                     ),
                 ),
@@ -66,19 +67,19 @@ internal class ProductListPreviewMocks : PreviewParameterProvider<ProductListPre
                     products = persistentListOf(
                         ProductListPreviewProps.Product(
                             id = productIds.next(),
-                            title = "🥛Milk 2L",
+                            title = AnnotatedString("🥛Milk 2L"),
                         ),
                         ProductListPreviewProps.Product(
                             id = productIds.next(),
-                            title = "Yogurt x8",
+                            title = AnnotatedString("Yogurt x8"),
                         ),
                         ProductListPreviewProps.Product(
                             id = productIds.next(),
-                            title = "Feta",
+                            title = AnnotatedString("Feta"),
                         ),
                         ProductListPreviewProps.Product(
                             id = productIds.next(),
-                            title = "Blue Cheese",
+                            title = AnnotatedString("Blue Cheese"),
                         ),
                     ),
                 ),
@@ -88,15 +89,15 @@ internal class ProductListPreviewMocks : PreviewParameterProvider<ProductListPre
                     products = persistentListOf(
                         ProductListPreviewProps.Product(
                             id = productIds.next(),
-                            title = "🍬 Candies",
+                            title = AnnotatedString("🍬 Candies"),
                         ),
                         ProductListPreviewProps.Product(
                             id = productIds.next(),
-                            title ="🍦 Ice Cream",
+                            title = AnnotatedString("🍦 Ice Cream"),
                         ),
                         ProductListPreviewProps.Product(
                             id = productIds.next(),
-                            title = "Buns",
+                            title = AnnotatedString("Buns"),
                         ),
                     ),
                 ),

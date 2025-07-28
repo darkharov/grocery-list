@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.Product
-import app.grocery.list.sharing.ProductListFormatter
+import app.grocery.list.sharing.ProductListToSharingStringFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 internal class ProductListActionsViewModel @Inject constructor(
     private val repository: AppRepository,
-    private val productListFormatter: ProductListFormatter,
+    private val productListFormatter: ProductListToSharingStringFormatter,
 ) : ViewModel(),
     ProductListActionsCallbacks {
 

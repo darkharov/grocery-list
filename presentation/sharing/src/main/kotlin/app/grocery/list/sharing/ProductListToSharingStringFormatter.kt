@@ -9,7 +9,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 import org.jetbrains.annotations.VisibleForTesting
 
 @Singleton
-class ProductListFormatter @Inject internal constructor() {
+class ProductListToSharingStringFormatter @Inject internal constructor() {
 
     @OptIn(ExperimentalEncodingApi::class)
     fun print(productList: List<Product>, suffix: String): String {
@@ -76,10 +76,6 @@ class ProductListFormatter @Inject internal constructor() {
                 null
             },
         )
-    }
-
-    internal interface SharingMessagePrefixFactory {
-        fun sharingMessagePrefix(): String
     }
 
     companion object {

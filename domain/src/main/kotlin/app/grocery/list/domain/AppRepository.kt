@@ -1,6 +1,6 @@
 package app.grocery.list.domain
 
-import app.grocery.list.domain.settings.ProductItemFormat
+import app.grocery.list.domain.settings.ProductTitleFormat
 import app.grocery.list.domain.settings.Settings
 import app.grocery.list.storage.value.kotlin.StorageValue
 import app.grocery.list.storage.value.kotlin.edit
@@ -25,17 +25,17 @@ abstract class AppRepository {
     abstract suspend fun putProduct(product: Product)
     abstract suspend fun putProducts(products: List<Product>)
 
-    fun productItemFormat(): Flow<ProductItemFormat> =
+    fun productItemFormat(): Flow<ProductTitleFormat> =
         settings
             .observe()
             .map {
-                it.productItemFormat
+                it.productTitleFormat
             }
 
-    suspend fun setProductItemFormat(mode: ProductItemFormat) {
+    suspend fun setProductItemFormat(mode: ProductTitleFormat) {
         settings.edit { settings ->
             settings.copy(
-                productItemFormat = mode,
+                productTitleFormat = mode,
             )
         }
     }

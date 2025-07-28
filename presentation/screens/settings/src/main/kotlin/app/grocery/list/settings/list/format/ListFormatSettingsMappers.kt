@@ -1,21 +1,21 @@
 package app.grocery.list.settings.list.format
 
-import app.grocery.list.domain.settings.ProductItemFormat
+import app.grocery.list.domain.settings.ProductTitleFormat
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 internal class ProductItemFormatMapper @Inject constructor() {
 
-    fun toPresentation(entry: ProductItemFormat) =
+    fun toPresentation(entry: ProductTitleFormat) =
         when (entry) {
-            ProductItemFormat.WithoutEmoji -> {
+            ProductTitleFormat.WithoutEmoji -> {
                 ListFormatSettingsProps.ProductItemFormat.WithoutEmoji
             }
-            ProductItemFormat.EmojiAndFullText -> {
+            ProductTitleFormat.EmojiAndFullText -> {
                 ListFormatSettingsProps.ProductItemFormat.EmojiAndFullText
             }
-            ProductItemFormat.EmojiAndAdditionalDetail -> {
+            ProductTitleFormat.EmojiAndAdditionalDetail -> {
                 ListFormatSettingsProps.ProductItemFormat.EmojiAndAdditionalDetail
             }
         }
@@ -23,13 +23,13 @@ internal class ProductItemFormatMapper @Inject constructor() {
     fun toDomain(entry: ListFormatSettingsProps.ProductItemFormat) =
         when (entry) {
             ListFormatSettingsProps.ProductItemFormat.WithoutEmoji -> {
-                ProductItemFormat.WithoutEmoji
+                ProductTitleFormat.WithoutEmoji
             }
             ListFormatSettingsProps.ProductItemFormat.EmojiAndFullText -> {
-                ProductItemFormat.EmojiAndFullText
+                ProductTitleFormat.EmojiAndFullText
             }
             ListFormatSettingsProps.ProductItemFormat.EmojiAndAdditionalDetail -> {
-                ProductItemFormat.EmojiAndAdditionalDetail
+                ProductTitleFormat.EmojiAndAdditionalDetail
             }
         }
 }

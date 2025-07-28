@@ -1,15 +1,12 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.serialization)
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
-    id("kotlin-parcelize")  // todo: do we really need this module?
 }
 
 android {
-    namespace = "${Configs.APPLICATION_ID}.product.list.preview"
+    namespace = "${Configs.APPLICATION_ID}.commons.format"
     compileSdk = Configs.Sdk.COMPILE
 
     defaultConfig {
@@ -31,22 +28,10 @@ android {
     kotlinOptions {
         jvmTarget = Configs.Java.STRING_VALUE
     }
-
-    buildFeatures {
-        compose = true
-    }
 }
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":commons:compose"))
-    implementation(project(":commons:resources"))
-    implementation(project(":commons:format"))
-    implementation(libs.kotlinx.collections.immutable)
-    implementation(libs.androidx.core.ktx)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
-    ksp(libs.kotlinx.metadata.jvm)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.navigation.compose)
 }

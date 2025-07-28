@@ -12,16 +12,17 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import app.grocery.list.commons.format.ProductTitleFormatter
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.CategoryAndProducts
 import app.grocery.list.domain.Product
-import app.grocery.list.domain.settings.ProductItemFormat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @Singleton
@@ -30,6 +31,7 @@ class NotificationPublisher @Inject internal constructor(
     private val context: Context,
     private val repository: AppRepository,
     private val notificationManager: NotificationManagerCompat,
+    private val productTitleFormatterFactory: ProductTitleFormatter.Factory,
 ) {
     init {
         val defaultChannel = NotificationChannel(
@@ -56,8 +58,9 @@ class NotificationPublisher @Inject internal constructor(
     private fun post() {
         ProcessLifecycleOwner.get().lifecycleScope.launch {
             post(
-                mode = repository
+                formatter = repository
                     .productItemFormat()
+                    .map(productTitleFormatterFactory::create)
                     .flowOn(Dispatchers.IO)
                     .first(),
                 categorizedProducts = repository
@@ -70,7 +73,7 @@ class NotificationPublisher @Inject internal constructor(
 
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     private fun post(
-        mode: ProductItemFormat,
+        formatter: ProductTitleFormatter,
         categorizedProducts: List<CategoryAndProducts>,
     ) {
         val allProducts = categorizedProducts.flatMap { it.products }
@@ -78,14 +81,14 @@ class NotificationPublisher @Inject internal constructor(
 
         for (chunk in allProducts.chunked(maxItemsPerNotification).reversed()) {
             val groupKey = chunk.first().id
-            val notification = notification(chunk, mode, groupKey = groupKey)
+            val notification = notification(chunk, formatter, groupKey = groupKey)
             notificationManager.notify(TYPE_PRODUCT, groupKey, notification)
         }
     }
 
     private fun notification(
         chunk: List<Product>,
-        mode: ProductItemFormat,
+        formatter: ProductTitleFormatter,
         groupKey: Int,
     ): Notification =
         NotificationCompat
@@ -95,11 +98,29 @@ class NotificationPublisher @Inject internal constructor(
                 chunk
                     .sortedBy { it.emojiSearchResult != null }
                     .joinToString { product ->
-                        mode.textForNotification(product)
+                        formatter.print(product).collectTitle()
                     }
             )
             .setGroup(groupKey.toString())
             .build()
+
+    private fun ProductTitleFormatter.FormattingResult.collectTitle(): String =
+        buildString {
+            if (!(emoji.isNullOrBlank())) {
+                append(emoji)
+                append(' ')
+            }
+            val additionalDetailsLocation = additionalDetailsLocation
+            val title = if (additionalDetailsLocation != null) {
+                title.removeRange(
+                    startIndex = additionalDetailsLocation.startIndex,
+                    endIndex = additionalDetailsLocation.endIndex,
+                )
+            } else {
+                title
+            }
+            append(title)
+        }
 
     private companion object {
         private const val DEFAULT_CHANNEL_ID = "app.grocery.list.notifications.DEFAULT_CHANNEL_ID"
