@@ -47,7 +47,7 @@ internal class ProductListMapper @AssistedInject constructor(
             }
             val afterEmoji = length
             append(title)
-            val additionalDetailsLocation = additionalDetailsLocation
+            val additionalDetailsLocation = additionalDetails
             if (additionalDetailsLocation != null) {
                 addStyle(
                     style = SpanStyle(Color.Gray.copy(alpha = 0.5f)),

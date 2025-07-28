@@ -20,51 +20,56 @@ class ProductTitleFormatter @AssistedInject constructor(
                 emojiAndFullText(product)
             }
             ProductTitleFormat.EmojiAndAdditionalDetail -> {
-                val emojiSearchResult = product.emojiSearchResult
-                val title = product.title
-                if (emojiSearchResult == null) {
-                    withoutEmoji(product)
-                } else {
-                    val emoji = emojiSearchResult.emoji
-                    val keyword = emojiSearchResult.keyword
-
-                    val index = title.indexOf(keyword, ignoreCase = true)
-                    if (index == -1) {
-                        errorLogger.log("Unable to extract details from a product ($product)")
-                        emojiAndFullText(product)
-                    } else {
-                        FormattingResult(
-                            emoji = emoji,
-                            title = title,
-                            additionalDetailsLocation = FormattingResult.AdditionalDetailsLocation(
-                                startIndex = index,
-                                length = keyword.length,
-                            ),
-                        )
-                    }
-                }
+                emojiAndAdditionalDetail(product)
             }
         }
+
+    private fun withoutEmoji(product: Product) =
+        FormattingResult(
+            emoji = null,
+            title = product.title,
+            additionalDetails = null,
+        )
 
     private fun emojiAndFullText(product: Product) =
         FormattingResult(
             emoji = product.emojiSearchResult?.emoji,
             title = product.title,
-            additionalDetailsLocation = null,
+            additionalDetails = null,
         )
 
-    private fun withoutEmoji(product: Product) = FormattingResult(
-        emoji = null,
-        title = product.title,
-        additionalDetailsLocation = null,
-    )
+    private fun emojiAndAdditionalDetail(product: Product): FormattingResult {
+        val emojiSearchResult = product.emojiSearchResult
+        val title = product.title
+        return if (emojiSearchResult == null) {
+            withoutEmoji(product)
+        } else {
+            val emoji = emojiSearchResult.emoji
+            val keyword = emojiSearchResult.keyword
+
+            val index = title.indexOf(keyword, ignoreCase = true)
+            if (index == -1) {
+                errorLogger.log("Unable to extract details from a product ($product)")
+                emojiAndFullText(product)
+            } else {
+                FormattingResult(
+                    emoji = emoji,
+                    title = title,
+                    additionalDetails = FormattingResult.AdditionalDetails(
+                        startIndex = index,
+                        length = keyword.length,
+                    ),
+                )
+            }
+        }
+    }
 
     data class FormattingResult(
         val emoji: String?,
         val title: String,
-        val additionalDetailsLocation: AdditionalDetailsLocation?,
+        val additionalDetails: AdditionalDetails?,
     ) {
-        data class AdditionalDetailsLocation(
+        data class AdditionalDetails(
             val startIndex: Int,
             val length: Int,
         ) {

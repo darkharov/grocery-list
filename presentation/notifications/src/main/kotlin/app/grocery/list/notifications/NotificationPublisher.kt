@@ -110,7 +110,7 @@ class NotificationPublisher @Inject internal constructor(
                 append(emoji)
                 append(' ')
             }
-            val additionalDetailsLocation = additionalDetailsLocation
+            val additionalDetailsLocation = additionalDetails
             val title = if (additionalDetailsLocation != null) {
                 title.removeRange(
                     startIndex = additionalDetailsLocation.startIndex,
