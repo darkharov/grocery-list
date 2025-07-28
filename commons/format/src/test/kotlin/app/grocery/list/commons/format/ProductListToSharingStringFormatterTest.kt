@@ -8,10 +8,10 @@ internal class ProductListToSharingStringFormatterTest {
 
     private val prototype = Product(
         id = 0,
-        title = "Apple",
+        title = "Apple 5 pcs",
         emojiSearchResult = EmojiSearchResult(
             emoji = "🍎",
-            keyword = "Tomato",
+            keyword = "Apple",
         ),
         categoryId = 42,
     )
@@ -20,7 +20,7 @@ internal class ProductListToSharingStringFormatterTest {
     fun `product with no emoji is correct`() {
         `one product formatted and parsed correctly`(
             prototype = prototype.copy(emojiSearchResult = null),
-            expectedFormat = "Apple|42",
+            expectedFormat = "Apple 5 pcs|42",
         )
     }
 
@@ -28,7 +28,7 @@ internal class ProductListToSharingStringFormatterTest {
     fun `product with emoji is correct`() {
         `one product formatted and parsed correctly`(
             prototype = prototype,
-            expectedFormat = "Apple|42|🍎|Tomato",
+            expectedFormat = "Apple 5 pcs|42|🍎|Apple",
         )
     }
 
@@ -36,7 +36,7 @@ internal class ProductListToSharingStringFormatterTest {
         prototype: Product,
         expectedFormat: String,
     ) {
-        val formatter = app.grocery.list.commons.format.ProductListToSharingStringFormatter()
+        val formatter = ProductListToSharingStringFormatter()
         val actualFormat = formatter.printWithoutEncoding(listOf(prototype))
         assert(actualFormat == expectedFormat)
 
