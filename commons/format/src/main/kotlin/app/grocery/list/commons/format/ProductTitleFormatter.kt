@@ -9,7 +9,7 @@ import dagger.assisted.AssistedInject
 class ProductTitleFormatter @AssistedInject constructor(
     @Assisted
     private val format: ProductTitleFormat,
-    //private val errorLogger: ErrorLogger,
+    private val errorLogger: ErrorLogger,
 ) {
     fun print(product: Product): FormattingResult =
         when (format) {
@@ -30,7 +30,7 @@ class ProductTitleFormatter @AssistedInject constructor(
 
                     val index = title.indexOf(keyword, ignoreCase = true)
                     if (index == -1) {
-                        //errorLogger.log("Unable to extract details from a product ($product)")
+                        errorLogger.log("Unable to extract details from a product ($product)")
                         emojiAndFullText(product)
                     } else {
                         FormattingResult(
