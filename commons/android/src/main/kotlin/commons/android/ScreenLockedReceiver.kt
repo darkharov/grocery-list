@@ -18,7 +18,6 @@ class ScreenLockedReceiver private constructor(
         }
     }
 
-
     companion object {
         private const val TARGET_ACTION = Intent.ACTION_SCREEN_OFF
         fun register(
