@@ -39,7 +39,7 @@ internal class AppRepositoryImpl @Inject constructor(
             )
         },
         read = {
-            val defaultValue = ProductTitleFormat.EmojiAndFullText.ordinal
+            val defaultValue = productItemFormatMapper.toInt(ProductTitleFormat.EmojiAndFullText)
             val id = int(PRODUCT_TITLE_FORMAT_ID, defaultValue = defaultValue)
             Settings(
                 productTitleFormat = productItemFormatMapper.fromInt(id = id),
