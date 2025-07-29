@@ -21,7 +21,7 @@
     <string name="save_and_exit">Save and exit</string>
     <string name="share_this_list_with_counter">Share this list (%d)</string>
     <string name="share_this_list">Share this list</string>
-    <string name="sharing_message_suffix">1) Copy this message\n2) Paste it in \'%s\' section of %s</string>
+    <string name="sharing_message_suffix">1) Copy this message\n2) Press \'%s\' in \'%s\' section of %s</string>
     <string name="paste_copied_list">Paste copied list</string>
     <string name="copied_product_list_not_found">Copied product list not found</string>
     <string name="add_or_replace_copied_products">Do you want to add new elements to the existing ones or completely replace the existing ones with new ones?</string>

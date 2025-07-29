@@ -117,6 +117,7 @@ class MainActivity :
     override fun share(products: List<Product>) {
         val suffix = getString(
             R.string.sharing_message_suffix,
+            getString(R.string.paste_copied_list),
             getString(R.string.actions),
             "https://play.google.com/store/apps/details?id=app.grocery.list",
         )
