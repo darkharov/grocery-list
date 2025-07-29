@@ -36,7 +36,7 @@
     <string name="final_steps">Финальные шаги</string>
     <string name="emoji">Эмодзи</string>
     <string name="list_format">Формат списка</string>
-    <string name="grocery_list_item">Пункт списка продуктов</string>
+    <string name="list_item_in_notification">Пункт списка в уведомлении</string>
     <string name="without_emoji">Без эмодзи</string>
     <string name="emoji_and_full_text">Эмодзи + Полный текст</string>
     <string name="emoji_and_additional_details_only">Эмодзи + Только доплнительные детали</string>

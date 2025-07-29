@@ -110,7 +110,7 @@ private fun Content(
         modifier = modifier,
     ) {
         Text(
-            text = stringResource(R.string.grocery_list_item),
+            text = stringResource(R.string.list_item_in_notification),
             style = LocalAppTypography.current.header,
             modifier = Modifier
                 .padding(
