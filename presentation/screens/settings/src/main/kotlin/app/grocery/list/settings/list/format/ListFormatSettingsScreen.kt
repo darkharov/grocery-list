@@ -114,8 +114,10 @@ private fun Content(
             style = LocalAppTypography.current.header,
             modifier = Modifier
                 .padding(
-                    horizontal = horizontalMargin,
-                    vertical = 20.dp
+                    start = horizontalMargin,
+                    end = horizontalMargin,
+                    top = 32.dp,
+                    bottom = 20.dp,
                 ),
         )
         Column(
