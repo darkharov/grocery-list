@@ -12,7 +12,7 @@ data class AppToolbarProps(
 ) {
     internal val titleId get() = content.titleId
     internal val counter get() = content.counter
-    internal val hasEmoji get() = content.hasEmoji
+    internal val hasEmojiIfEnoughSpace get() = content.hasEmojiIfEnoughSpace
     internal val leadingIcon get() = content.leadingIcon
     internal val trailingIcon get() = content.trailingIcon
 
@@ -22,7 +22,7 @@ data class AppToolbarProps(
         @get:StringRes
         internal abstract val titleId: Int
         internal abstract val counter: Int?
-        internal open val hasEmoji: Boolean = false
+        internal open val hasEmojiIfEnoughSpace: Boolean = false
 
         protected abstract val upIconAvailable: Boolean
         internal abstract val trailingIconContent: OptionalIconProps.Content?
@@ -52,10 +52,10 @@ data class AppToolbarProps(
         data class Default(
             override val counter: Int?,
             private val onStart: Boolean,
+            override val hasEmojiIfEnoughSpace: Boolean,
         ) : Content() {
 
             override val upIconAvailable: Boolean = !(onStart)
-            override val hasEmoji = true
             override val titleId = R.string.grocery_list
             override val trailingIconContent: OptionalIconProps.Content? by lazy {
                 if (onStart) {
@@ -83,10 +83,12 @@ internal class AppToolbarMocks : PreviewParameterProvider<AppToolbarProps.Conten
         AppToolbarProps.Content.Default(
             counter = 0,
             onStart = true,
+            hasEmojiIfEnoughSpace = true,
         ),
         AppToolbarProps.Content.Default(
             counter = 11,
             onStart = false,
+            hasEmojiIfEnoughSpace = true,
         ),
         AppToolbarProps.Title(R.string.settings),
     )

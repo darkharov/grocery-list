@@ -41,6 +41,7 @@ import kotlinx.coroutines.channels.ReceiveChannel
 internal fun AppContent(
     numberOfAddedProducts: Int?,
     progress: Boolean,
+    hasEmojiIfEnoughSpace: Boolean,
     delegates: AppContentDelegate,
     appEvents: ReceiveChannel<AppEvent>,
     modifier: Modifier = Modifier,
@@ -88,6 +89,7 @@ internal fun AppContent(
                                 onStart = currentDestination
                                     ?.destination
                                     ?.hasRoute(startRoute::class) == true,
+                                hasEmojiIfEnoughSpace = hasEmojiIfEnoughSpace,
                             )
                         },
                     progress = progress,
@@ -136,9 +138,10 @@ private fun AppContentPreview() {
     GroceryListTheme {
         AppContent(
             numberOfAddedProducts = 42,
+            progress = false,
+            hasEmojiIfEnoughSpace = true,
             delegates = AppContentDelegateMock,
             appEvents = Channel(),
-            progress = false,
         )
     }
 }

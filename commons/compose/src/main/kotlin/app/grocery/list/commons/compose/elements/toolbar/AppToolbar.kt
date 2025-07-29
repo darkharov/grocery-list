@@ -110,7 +110,7 @@ fun AppToolbar(
                     modifier = Modifier
                         .width(sideItemOffset - emojiWithOffsetWidth),
                 )
-                if (props.hasEmoji && !(shouldEmojiBeSkipped)) {
+                if (props.hasEmojiIfEnoughSpace && !(shouldEmojiBeSkipped)) {
                     Emoji(
                         emoji = emoji,
                     )

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.assembly.ui.content.AppEvent
 import app.grocery.list.domain.AppRepository
+import app.grocery.list.domain.settings.ProductTitleFormat
 import app.grocery.list.storage.value.kotlin.get
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -12,6 +13,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -26,6 +28,20 @@ class MainViewModel @Inject constructor(
         repository
             .numberOfAddedProducts()
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    val hasEmojiIfEnoughSpace =
+        repository
+            .productTitleFormat()
+            .map {
+                when (it) {
+                    ProductTitleFormat.WithoutEmoji ->
+                        false
+                    ProductTitleFormat.EmojiAndFullText,
+                    ProductTitleFormat.EmojiAndAdditionalDetail ->
+                        true
+                }
+            }
+            .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     val progress = MutableStateFlow(false)
 
