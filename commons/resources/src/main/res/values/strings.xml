@@ -43,6 +43,7 @@
     <string name="example_of_notification">Example of notification</string>
     <string name="example_of_notification_warning">Notifications will look something like this. The final appearance depends on the specific device manufacturer.</string>
     <string name="sample_products">Tomato (cherry, 1 container)|0|🍅|Tomato\nCheese 500g|1|🧀|Cheese\nMilk 2l|0|🥛|Milk</string>
+    <string name="contact_support">Contact Support</string>
 
     <string-array name="final_steps">
         <item>Lock the screen</item>

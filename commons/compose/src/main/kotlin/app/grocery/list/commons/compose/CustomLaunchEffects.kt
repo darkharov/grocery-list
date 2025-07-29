@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 fun <E> EventConsumer(
     key: Any,
     events: ReceiveChannel<E>,
-    lifecycleState: Lifecycle.State,
+    lifecycleState: Lifecycle.State = Lifecycle.State.RESUMED,
     onEvent: (E) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current

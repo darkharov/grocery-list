@@ -41,6 +41,7 @@ dependencies {
     implementation(project(":commons:resources"))
     implementation(project(":commons:compose"))
     implementation(project(":commons:format"))
+    implementation(project(":commons:android"))
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.androidx.core.ktx)
     implementation(libs.hilt.android)

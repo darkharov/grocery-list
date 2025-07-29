@@ -16,6 +16,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
+import app.grocery.list.assembly.BuildConfig
 import app.grocery.list.assembly.R
 import app.grocery.list.assembly.ui.content.AppContent
 import app.grocery.list.assembly.ui.content.AppContentDelegate
@@ -25,6 +26,7 @@ import app.grocery.list.domain.Product
 import app.grocery.list.final_.steps.FinalSteps
 import app.grocery.list.notifications.NotificationPublisher
 import commons.android.ScreenLockedReceiver
+import commons.android.email
 import commons.android.share
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -120,5 +122,20 @@ class MainActivity :
         )
         val text = productListToStringFormatter.print(products, suffix = suffix)
         share(text = text)
+    }
+
+    override fun contactSupport() {
+        email(
+            email = "product.list.supp@gmail.com",
+            subject = "Android, app.grocery.list",
+            text =
+                "\n\n\n\n" +
+                "\nAndroid version: ${Build.VERSION.RELEASE} " +
+                "(API level ${Build.VERSION.SDK_INT})" +
+                "\nVersion Code: ${BuildConfig.VERSION_CODE}" +
+                "\nVersion Name: ${BuildConfig.VERSION_NAME}" +
+                "\nBrand: ${Build.BRAND}" +
+                "\nModel: ${Build.MODEL}",
+        )
     }
 }

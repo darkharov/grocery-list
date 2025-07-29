@@ -24,13 +24,17 @@ sealed class AppTextButtonProps {
     @get:DrawableRes
     internal abstract val trailingIconId: Int?
 
+    internal abstract val hasDivider: Boolean
+
     @Immutable
     data class TextOnly(
         override val text: StringValue,
         val color: Color = Color.Unspecified,
     ) : AppTextButtonProps() {
+
         override val leadingIconId = null
         override val trailingIconId = null
+        override val hasDivider = false
 
         override val textColor: Color
             @Composable
@@ -50,6 +54,7 @@ sealed class AppTextButtonProps {
     ) : AppTextButtonProps() {
 
         override val trailingIconId = R.drawable.ic_forward
+        override val hasDivider = true
 
         override val textColor: Color
             @Composable

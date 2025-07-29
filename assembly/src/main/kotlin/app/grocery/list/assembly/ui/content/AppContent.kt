@@ -127,7 +127,7 @@ internal fun AppContent(
             productListActionsScreen(delegates)
             clearNotificationsReminder(navigation)
             finalSteps()
-            settingsAndChildScreens(navController)
+            settingsAndChildScreens(delegates, navController)
         }
     }
 }
