@@ -1,5 +1,7 @@
 package app.grocery.list.data
 
+import android.content.Context
+import app.grocery.list.commons.format.ProductListToStringFormatter
 import app.grocery.list.data.db.ProductDao
 import app.grocery.list.data.db.ProductEntity
 import app.grocery.list.domain.AppRepository
@@ -9,19 +11,24 @@ import app.grocery.list.domain.Product
 import app.grocery.list.domain.settings.ProductTitleFormat
 import app.grocery.list.domain.settings.Settings
 import app.grocery.list.storage.value.android.StorageValueDelegates
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 @Singleton
 internal class AppRepositoryImpl @Inject constructor(
     delegates: StorageValueDelegates,
+    @ApplicationContext
+    private val context: Context,
     private val productDao: ProductDao,
     private val productMapper: ProductEntity.Mapper,
     private val productItemFormatMapper: ProductItemFormatMapper,
     private val categoryDao: CategoryDao,
+    private val productListFormatter: ProductListToStringFormatter,
 ) : AppRepository() {
 
     override val settings by delegates.custom<Settings>(
@@ -86,6 +93,13 @@ internal class AppRepositoryImpl @Inject constructor(
 
     override fun numberOfAddedProducts(): Flow<Int> =
         productDao.count()
+
+    override fun sampleProducts(): Flow<List<Product>> =
+        flowOf(
+            productListFormatter.parseWithoutDecoding(
+                productList = context.getString(R.string.sample_products),
+            )
+        )
 
     companion object {
         private const val PRODUCT_TITLE_FORMAT_ID = "PRODUCT_TITLE_FORMAT_ID"

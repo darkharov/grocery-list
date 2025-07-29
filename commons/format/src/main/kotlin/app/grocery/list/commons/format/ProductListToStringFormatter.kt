@@ -9,7 +9,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 import org.jetbrains.annotations.VisibleForTesting
 
 @Singleton
-class ProductListToSharingStringFormatter @Inject internal constructor() {
+class ProductListToStringFormatter @Inject internal constructor() {
 
     @OptIn(ExperimentalEncodingApi::class)
     fun print(productList: List<Product>, suffix: String): String {
@@ -55,8 +55,7 @@ class ProductListToSharingStringFormatter @Inject internal constructor() {
         }
     }
 
-    @VisibleForTesting
-    internal fun parseWithoutDecoding(productList: String): List<Product> =
+    fun parseWithoutDecoding(productList: String): List<Product> =
         productList
             .split(LIST_ITEM_SEPARATOR)
             .map(::parseProduct)

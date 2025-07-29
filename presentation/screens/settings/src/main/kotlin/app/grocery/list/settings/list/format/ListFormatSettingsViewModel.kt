@@ -2,27 +2,33 @@ package app.grocery.list.settings.list.format
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.grocery.list.commons.format.GetProductTitleFormatter
 import app.grocery.list.domain.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 internal class ListFormatSettingsViewModel @Inject constructor(
+    getProductTitleFormatter: GetProductTitleFormatter,
     private val repository: AppRepository,
-    private val productItemFormatMapper: ProductItemFormatMapper,
+    private val productTitleFormatMapper: ProductTitleFormatMapper,
 ) : ViewModel(),
     ListFormatSettingsCallbacks {
 
-    val props = repository
-        .productItemFormat()
-        .map { format ->
+    val props =
+        combine(
+            repository.productTitleFormat(),
+            repository.sampleProducts(),
+            getProductTitleFormatter.execute(),
+        ) { format, sampleProducts, formatter ->
             ListFormatSettingsProps(
-                productItemFormat = productItemFormatMapper.toPresentation(format),
+                productTitleFormat = productTitleFormatMapper.toPresentation(format),
+                sampleOfNotificationTitle = formatter.printToString(sampleProducts),
             )
         }
         .stateIn(
@@ -31,10 +37,10 @@ internal class ListFormatSettingsViewModel @Inject constructor(
             null,
         )
 
-    override fun onProductListFormatSelected(option: ListFormatSettingsProps.ProductItemFormat) {
+    override fun onProductListFormatSelected(option: ListFormatSettingsProps.ProductTitleFormat) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.setProductItemFormat(
-                productItemFormatMapper.toDomain(option)
+                productTitleFormatMapper.toDomain(option)
             )
         }
     }

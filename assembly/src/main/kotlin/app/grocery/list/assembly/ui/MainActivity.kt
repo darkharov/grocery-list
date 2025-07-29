@@ -20,7 +20,7 @@ import app.grocery.list.assembly.R
 import app.grocery.list.assembly.ui.content.AppContent
 import app.grocery.list.assembly.ui.content.AppContentDelegate
 import app.grocery.list.commons.compose.theme.ThemeUtil
-import app.grocery.list.commons.format.ProductListToSharingStringFormatter
+import app.grocery.list.commons.format.ProductListToStringFormatter
 import app.grocery.list.domain.Product
 import app.grocery.list.final_.steps.FinalSteps
 import app.grocery.list.notifications.NotificationPublisher
@@ -36,7 +36,7 @@ class MainActivity :
 
     @Inject lateinit var themeUtil: ThemeUtil
     @Inject lateinit var notificationPublisher: NotificationPublisher
-    @Inject lateinit var productListToSharingStringFormatter: ProductListToSharingStringFormatter
+    @Inject lateinit var productListToStringFormatter: ProductListToStringFormatter
 
     private val viewModel by viewModels<MainViewModel>()
     private val postNotifications = postNotificationLauncher()
@@ -116,7 +116,7 @@ class MainActivity :
             getString(R.string.actions),
             "https://play.google.com/store/apps/details?id=app.grocery.list",
         )
-        val text = productListToSharingStringFormatter.print(products, suffix = suffix)
+        val text = productListToStringFormatter.print(products, suffix = suffix)
         share(text = text)
     }
 }

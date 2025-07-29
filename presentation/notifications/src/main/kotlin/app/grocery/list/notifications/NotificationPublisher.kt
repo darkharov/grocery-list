@@ -12,17 +12,16 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import app.grocery.list.commons.format.GetProductTitleFormatter
 import app.grocery.list.commons.format.ProductTitleFormatter
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.CategoryAndProducts
-import app.grocery.list.domain.Product
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @Singleton
@@ -31,7 +30,7 @@ class NotificationPublisher @Inject internal constructor(
     private val context: Context,
     private val repository: AppRepository,
     private val notificationManager: NotificationManagerCompat,
-    private val productTitleFormatterFactory: ProductTitleFormatter.Factory,
+    private val getProductTitleFormatter: GetProductTitleFormatter,
 ) {
     init {
         val defaultChannel = NotificationChannel(
@@ -58,9 +57,8 @@ class NotificationPublisher @Inject internal constructor(
     private fun post() {
         ProcessLifecycleOwner.get().lifecycleScope.launch {
             post(
-                formatter = repository
-                    .productItemFormat()
-                    .map(productTitleFormatterFactory::create)
+                formatter = getProductTitleFormatter
+                    .execute()
                     .flowOn(Dispatchers.IO)
                     .first(),
                 categorizedProducts = repository
@@ -79,48 +77,27 @@ class NotificationPublisher @Inject internal constructor(
         val allProducts = categorizedProducts.flatMap { it.products }
         val maxItemsPerNotification = 1 + (allProducts.size - 1) / MAX_VISIBLE_AT_THE_SAME_TIME
 
-        for (chunk in allProducts.chunked(maxItemsPerNotification).reversed()) {
-            val groupKey = chunk.first().id
-            val notification = notification(chunk, formatter, groupKey = groupKey)
+        for (group in allProducts.chunked(maxItemsPerNotification).reversed()) {
+            val groupKey = group.first().id
+            val sortedGroup = group.sortedBy { it.emojiSearchResult != null }
+            val notification = notification(
+                groupKey = groupKey,
+                contentTitle = formatter.printToString(sortedGroup),
+            )
             notificationManager.notify(TYPE_PRODUCT, groupKey, notification)
         }
     }
 
     private fun notification(
-        chunk: List<Product>,
-        formatter: ProductTitleFormatter,
         groupKey: Int,
+        contentTitle: String,
     ): Notification =
         NotificationCompat
             .Builder(context, DEFAULT_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_stat_logo)
-            .setContentTitle(
-                chunk
-                    .sortedBy { it.emojiSearchResult != null }
-                    .joinToString { product ->
-                        formatter.print(product).collectTitle()
-                    }
-            )
             .setGroup(groupKey.toString())
+            .setContentTitle(contentTitle)
             .build()
-
-    private fun ProductTitleFormatter.FormattingResult.collectTitle(): String =
-        buildString {
-            if (!(emoji.isNullOrBlank())) {
-                append(emoji)
-                append(' ')
-            }
-            val additionalDetailsLocation = additionalDetails
-            val title = if (additionalDetailsLocation != null) {
-                title.removeRange(
-                    startIndex = additionalDetailsLocation.startIndex,
-                    endIndex = additionalDetailsLocation.endIndex,
-                )
-            } else {
-                title
-            }
-            append(title)
-        }
 
     private companion object {
         private const val DEFAULT_CHANNEL_ID = "app.grocery.list.notifications.DEFAULT_CHANNEL_ID"

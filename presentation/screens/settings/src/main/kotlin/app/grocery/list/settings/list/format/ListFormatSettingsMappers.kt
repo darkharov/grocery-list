@@ -5,30 +5,30 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class ProductItemFormatMapper @Inject constructor() {
+internal class ProductTitleFormatMapper @Inject constructor() {
 
     fun toPresentation(entry: ProductTitleFormat) =
         when (entry) {
             ProductTitleFormat.WithoutEmoji -> {
-                ListFormatSettingsProps.ProductItemFormat.WithoutEmoji
+                ListFormatSettingsProps.ProductTitleFormat.WithoutEmoji
             }
             ProductTitleFormat.EmojiAndFullText -> {
-                ListFormatSettingsProps.ProductItemFormat.EmojiAndFullText
+                ListFormatSettingsProps.ProductTitleFormat.EmojiAndFullText
             }
             ProductTitleFormat.EmojiAndAdditionalDetail -> {
-                ListFormatSettingsProps.ProductItemFormat.EmojiAndAdditionalDetail
+                ListFormatSettingsProps.ProductTitleFormat.EmojiAndAdditionalDetail
             }
         }
 
-    fun toDomain(entry: ListFormatSettingsProps.ProductItemFormat) =
+    fun toDomain(entry: ListFormatSettingsProps.ProductTitleFormat) =
         when (entry) {
-            ListFormatSettingsProps.ProductItemFormat.WithoutEmoji -> {
+            ListFormatSettingsProps.ProductTitleFormat.WithoutEmoji -> {
                 ProductTitleFormat.WithoutEmoji
             }
-            ListFormatSettingsProps.ProductItemFormat.EmojiAndFullText -> {
+            ListFormatSettingsProps.ProductTitleFormat.EmojiAndFullText -> {
                 ProductTitleFormat.EmojiAndFullText
             }
-            ListFormatSettingsProps.ProductItemFormat.EmojiAndAdditionalDetail -> {
+            ListFormatSettingsProps.ProductTitleFormat.EmojiAndAdditionalDetail -> {
                 ProductTitleFormat.EmojiAndAdditionalDetail
             }
         }

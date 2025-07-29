@@ -2,7 +2,7 @@ package app.grocery.list.product.list.preview
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.grocery.list.commons.format.ProductTitleFormatter
+import app.grocery.list.commons.format.GetProductTitleFormatter
 import app.grocery.list.domain.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 internal class ProductListPreviewViewModel @Inject constructor(
     private val mapperFactory: ProductListMapper.Factory,
-    private val productFormatterFactory: ProductTitleFormatter.Factory,
+    private val getProductTitleFormatter: GetProductTitleFormatter,
     private val repository: AppRepository,
 ) : ViewModel(),
     ProductListPreviewCallbacks {
@@ -37,9 +37,8 @@ internal class ProductListPreviewViewModel @Inject constructor(
         )
 
     private fun mapper(): Flow<ProductListMapper> =
-        repository
-            .productItemFormat()
-            .map(productFormatterFactory::create)
+        getProductTitleFormatter
+            .execute()
             .map(mapperFactory::create)
 
     private val events = Channel<Event>(Channel.UNLIMITED)

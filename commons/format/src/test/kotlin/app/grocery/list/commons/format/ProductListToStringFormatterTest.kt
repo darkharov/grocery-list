@@ -4,7 +4,7 @@ import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
 import org.junit.Test
 
-internal class ProductListToSharingStringFormatterTest {
+internal class ProductListToStringFormatterTest {
 
     private val prototype = Product(
         id = 0,
@@ -36,7 +36,7 @@ internal class ProductListToSharingStringFormatterTest {
         prototype: Product,
         expectedFormat: String,
     ) {
-        val formatter = ProductListToSharingStringFormatter()
+        val formatter = ProductListToStringFormatter()
         val actualFormat = formatter.printWithoutEncoding(listOf(prototype))
         assert(actualFormat == expectedFormat)
 

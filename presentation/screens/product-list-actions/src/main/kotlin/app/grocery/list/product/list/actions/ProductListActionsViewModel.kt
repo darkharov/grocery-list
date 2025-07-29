@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 internal class ProductListActionsViewModel @Inject constructor(
     private val repository: AppRepository,
-    private val productListFormatter: app.grocery.list.commons.format.ProductListToSharingStringFormatter,
+    private val productListFormatter: app.grocery.list.commons.format.ProductListToStringFormatter,
 ) : ViewModel(),
     ProductListActionsCallbacks {
 

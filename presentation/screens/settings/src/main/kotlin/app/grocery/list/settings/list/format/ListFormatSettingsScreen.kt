@@ -1,15 +1,22 @@
 package app.grocery.list.settings.list.format
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,12 +26,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -81,7 +93,7 @@ private fun Content(
     val horizontalMargin = dimensionResource(R.dimen.margin_16_32_64)
     Column(
         modifier = modifier
-            .padding(vertical = 16.dp)
+            .padding(vertical = dimensionResource(R.dimen.margin_80_land_0))
             .fillMaxSize(),
     ) {
         Text(
@@ -100,7 +112,7 @@ private fun Content(
             modifier = Modifier
                 .selectableGroup(),
         ) {
-            for (option in ListFormatSettingsProps.ProductItemFormat.entries) {
+            for (option in ListFormatSettingsProps.ProductTitleFormat.entries) {
                 Option(
                     props = props,
                     option = option,
@@ -109,18 +121,43 @@ private fun Content(
                 )
             }
         }
+        Text(
+            text = stringResource(R.string.example_of_notification),
+            modifier = Modifier
+                .padding(
+                    horizontal = horizontalMargin,
+                )
+                .padding(
+                    top = 20.dp,
+                    bottom = 8.dp,
+                ),
+            style = LocalAppTypography.current.label,
+        )
+        SampleNotification(
+            title = props.sampleOfNotificationTitle,
+        )
+        Text(
+            text = stringResource(R.string.example_of_notification_warning),
+            modifier = Modifier
+                .padding(
+                    vertical = 8.dp,
+                    horizontal = horizontalMargin + 16.dp,
+                ),
+            textAlign = TextAlign.Center,
+            style = LocalAppTypography.current.explanation,
+        )
     }
 }
 
 @Composable
 private fun Option(
     props: ListFormatSettingsProps,
-    option: ListFormatSettingsProps.ProductItemFormat,
+    option: ListFormatSettingsProps.ProductTitleFormat,
     horizontalMargin: Dp,
     callbacks: ListFormatSettingsCallbacks,
     modifier: Modifier = Modifier,
 ) {
-    val selected = props.productItemFormat == option
+    val selected = props.productTitleFormat == option
     val optionPadding = 8.dp
     val optionHorizontalMargin = horizontalMargin - optionPadding
     Row(
@@ -153,14 +190,62 @@ private fun Option(
     }
 }
 
-@Preview
+@Composable
+private fun SampleNotification(
+    title: String,
+    modifier: Modifier = Modifier,
+) {
+    val borderWidth = 2.dp
+    val color = MaterialTheme.colorScheme.primary
+    val innerPadding = 12.dp
+    Row(
+        modifier = modifier
+            .padding(
+                horizontal = dimensionResource(R.dimen.margin_16_32_64),
+            )
+            .border(
+                width = borderWidth,
+                color = color,
+                shape = RoundedCornerShape(8.dp),
+            )
+            .padding(innerPadding)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(innerPadding),
+    ) {
+        Image(
+            painter = painterResource(R.drawable.ic_launcher_notification_preview),
+            colorFilter = ColorFilter.tint(color),
+            contentScale = ContentScale.Fit,
+            contentDescription = null,
+            modifier = Modifier
+                .border(
+                    width = borderWidth,
+                    color = color,
+                    shape = CircleShape,
+                )
+                .width(28.dp)
+                .padding(5.dp)
+                .aspectRatio(1f),
+        )
+        Text(
+            text = title,
+            minLines = 2,
+            maxLines = 2,
+            fontSize = 14.sp,
+        )
+    }
+}
+
+@PreviewLightDark
 @Composable
 private fun ListFormatSettingsScreenPreview() {
     GroceryListTheme {
         Scaffold { padding ->
             ListFormatSettings(
                 props = ListFormatSettingsProps(
-                    productItemFormat = ListFormatSettingsProps.ProductItemFormat.EmojiAndAdditionalDetail,
+                    productTitleFormat = ListFormatSettingsProps.ProductTitleFormat.EmojiAndFullText,
+                    sampleOfNotificationTitle = "🍅 Tomato (cherry, 1 container), 🧀 Cheese 500g, 🥛  Milk 2l",
                 ),
                 callbacks = ListFormatSettingsCallbacksMock,
                 modifier = Modifier

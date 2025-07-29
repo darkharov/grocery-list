@@ -6,15 +6,16 @@ import app.grocery.list.settings.R
 
 @Immutable
 internal class ListFormatSettingsProps(
-    val productItemFormat: ProductItemFormat,
+    val productTitleFormat: ProductTitleFormat,
+    val sampleOfNotificationTitle: String,
 ) {
     @Immutable
-    enum class ProductItemFormat(
+    enum class ProductTitleFormat(
         @StringRes
         val titleId: Int,
     ) {
         WithoutEmoji(R.string.without_emoji),
         EmojiAndFullText(R.string.emoji_and_full_text),
-        EmojiAndAdditionalDetail(R.string.emoji_and_additional_detail),
+        EmojiAndAdditionalDetail(R.string.emoji_and_additional_details_only),
     }
 }

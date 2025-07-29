@@ -61,4 +61,16 @@ class AppTypography {
         fontSize = 22.sp,
         fontWeight = FontWeight.Bold,
     )
+
+    val label = TextStyle(
+        fontFamily = Inter,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Bold,
+    )
+
+    val explanation = TextStyle(
+        fontFamily = Inter,
+        fontSize = 11.sp,
+        fontWeight = FontWeight.Normal,
+    )
 }

@@ -17,6 +17,7 @@ abstract class AppRepository {
     abstract fun products(): Flow<List<Product>>
     abstract fun categorizedProducts(): Flow<List<CategoryAndProducts>>
     abstract fun numberOfAddedProducts(): Flow<Int>
+    abstract fun sampleProducts(): Flow<List<Product>>
 
     abstract suspend fun findCategory(search: String): Product.Category?
     abstract suspend fun findEmoji(search: String): EmojiSearchResult?
@@ -25,7 +26,7 @@ abstract class AppRepository {
     abstract suspend fun putProduct(product: Product)
     abstract suspend fun putProducts(products: List<Product>)
 
-    fun productItemFormat(): Flow<ProductTitleFormat> =
+    fun productTitleFormat(): Flow<ProductTitleFormat> =
         settings
             .observe()
             .map {
