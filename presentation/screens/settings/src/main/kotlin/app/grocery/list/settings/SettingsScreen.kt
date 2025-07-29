@@ -87,7 +87,7 @@ private fun SettingsScreen(
                 text = StringValue.StringWrapper(
                     value = stringResource(R.string.list_format),
                 ),
-                leadingIconId = R.drawable.ic_list_format,
+                leadingIconId = R.drawable.ic_list_item_format,
             ),
             onClick = {
                 callbacks.onListFormatClick()
