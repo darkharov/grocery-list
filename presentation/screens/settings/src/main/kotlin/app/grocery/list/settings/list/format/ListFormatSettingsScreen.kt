@@ -5,17 +5,20 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
@@ -33,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -41,6 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.elements.AppPreloader
+import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.settings.R
@@ -76,11 +81,21 @@ private fun ListFormatSettings(
             modifier = modifier,
         )
     } else {
-        Content(
-            props = props,
-            callbacks = callbacks,
-            modifier = modifier,
-        )
+        val scrollableState = rememberScrollState()
+        ScrollableContentWithShadows(
+            scrollableState = scrollableState,
+            modifier = modifier
+                .fillMaxSize(),
+        ) {
+            Content(
+                props = props,
+                callbacks = callbacks,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollableState)
+                    .windowInsetsPadding(WindowInsets.navigationBars),
+            )
+        }
     }
 }
 
@@ -92,9 +107,7 @@ private fun Content(
 ) {
     val horizontalMargin = dimensionResource(R.dimen.margin_16_32_64)
     Column(
-        modifier = modifier
-            .padding(vertical = dimensionResource(R.dimen.margin_80_land_0))
-            .fillMaxSize(),
+        modifier = modifier,
     ) {
         Text(
             text = stringResource(R.string.grocery_list_item),
@@ -102,11 +115,8 @@ private fun Content(
             modifier = Modifier
                 .padding(
                     horizontal = horizontalMargin,
+                    vertical = 20.dp
                 ),
-        )
-        Spacer(
-            modifier = Modifier
-                .height(12.dp),
         )
         Column(
             modifier = Modifier
@@ -128,7 +138,7 @@ private fun Content(
                     horizontal = horizontalMargin,
                 )
                 .padding(
-                    top = 20.dp,
+                    top = 28.dp,
                     bottom = 8.dp,
                 ),
             style = LocalAppTypography.current.label,
@@ -173,7 +183,7 @@ private fun Option(
                 role = Role.RadioButton,
             )
             .padding(
-                vertical = 12.dp,
+                vertical = 8.dp,
                 horizontal = optionPadding,
             ),
         verticalAlignment = Alignment.CenterVertically,
@@ -210,7 +220,7 @@ private fun SampleNotification(
             )
             .padding(innerPadding)
             .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.spacedBy(innerPadding),
     ) {
         Image(
@@ -230,9 +240,9 @@ private fun SampleNotification(
         )
         Text(
             text = title,
-            minLines = 2,
-            maxLines = 2,
             fontSize = 14.sp,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier,
         )
     }
 }

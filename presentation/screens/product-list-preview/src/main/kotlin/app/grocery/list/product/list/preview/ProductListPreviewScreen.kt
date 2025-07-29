@@ -43,9 +43,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.EventConsumer
-import app.grocery.list.commons.compose.elements.AppHorizontalDivider
-import app.grocery.list.commons.compose.elements.AppHorizontalDividerMode
 import app.grocery.list.commons.compose.elements.AppPreloader
+import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.elements.button.AppButton
 import app.grocery.list.commons.compose.elements.button.AppButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
@@ -160,14 +159,15 @@ private fun ListWithDividers(
     callbacks: ProductListPreviewCallbacks,
     modifier: Modifier = Modifier,
 ) {
-    val listState = rememberLazyListState()
-    Box(
+    val scrollableState = rememberLazyListState()
+    ScrollableContentWithShadows(
+        scrollableState = scrollableState,
         modifier = modifier,
     ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),
-            state = listState,
+            state = scrollableState,
             contentPadding = PaddingValues(
                 vertical = 16.dp,
             ),
@@ -175,20 +175,6 @@ private fun ListWithDividers(
             items(
                 props = props,
                 callbacks = callbacks,
-            )
-        }
-        if (listState.canScrollBackward) {
-            AppHorizontalDivider(
-                mode = AppHorizontalDividerMode.Shadow.Downward,
-                modifier = Modifier
-                    .align(Alignment.TopCenter),
-            )
-        }
-        if (listState.canScrollForward) {
-            AppHorizontalDivider(
-                mode = AppHorizontalDividerMode.Shadow.Upward,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter),
             )
         }
     }

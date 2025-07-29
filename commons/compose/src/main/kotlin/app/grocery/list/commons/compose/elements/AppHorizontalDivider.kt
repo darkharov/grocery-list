@@ -1,7 +1,9 @@
 package app.grocery.list.commons.compose.elements
 
+import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
@@ -116,6 +119,33 @@ fun AppHorizontalDividerWithOffset() {
             useScreenOffset = true,
         ),
     )
+}
+
+@Composable
+fun ScrollableContentWithShadows(
+    scrollableState: ScrollableState,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    Box(
+        modifier = modifier,
+    ) {
+        content()
+        if (scrollableState.canScrollBackward) {
+            AppHorizontalDivider(
+                mode = Downward,
+                modifier = Modifier
+                    .align(Alignment.TopCenter),
+            )
+        }
+        if (scrollableState.canScrollForward) {
+            AppHorizontalDivider(
+                mode = Upward,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter),
+            )
+        }
+    }
 }
 
 @Composable
