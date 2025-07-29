@@ -78,13 +78,13 @@ private fun EventsConsumer(
     ) { event ->
         when (event) {
             is Event.OnExitFromApp -> {
-                delegate.onExitFromApp()
+                delegate.exitFromApp()
             }
             is Event.OnShare -> {
                 delegate.share(event.products)
             }
             is Event.OnStartShopping -> {
-                delegate.onStartShopping()
+                delegate.startShopping()
             }
         }
     }

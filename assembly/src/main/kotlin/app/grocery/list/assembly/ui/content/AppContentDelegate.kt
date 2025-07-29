@@ -8,13 +8,13 @@ import app.grocery.list.settings.SettingsDelegate
 internal interface AppContentDelegate :
     ProductListActionsDelegate,
     SettingsDelegate {
-    fun onCurrentDestinationChange(newValue: NavDestination)
+    fun handleCurrentDestinationChange(newValue: NavDestination)
 }
 
 internal object AppContentDelegateMock : AppContentDelegate {
-    override fun onExitFromApp() {}
-    override fun onStartShopping() {}
-    override fun onCurrentDestinationChange(newValue: NavDestination) {}
+    override fun exitFromApp() {}
+    override fun startShopping() {}
+    override fun handleCurrentDestinationChange(newValue: NavDestination) {}
     override fun share(products: List<Product>) {}
     override fun contactSupport() {}
 }

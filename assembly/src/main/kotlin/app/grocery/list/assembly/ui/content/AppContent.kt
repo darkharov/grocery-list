@@ -53,7 +53,7 @@ internal fun AppContent(
     LaunchedEffect(navController) {
         navController.currentBackStackEntryFlow.collect { navBackStackEntry ->
             val destination = navBackStackEntry.destination
-            delegates.onCurrentDestinationChange(destination)
+            delegates.handleCurrentDestinationChange(destination)
         }
     }
 

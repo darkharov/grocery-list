@@ -98,11 +98,11 @@ class MainActivity :
         }
     }
 
-    override fun onExitFromApp() {
+    override fun exitFromApp() {
         finish()
     }
 
-    override fun onStartShopping() {
+    override fun startShopping() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             postNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
         } else {
@@ -110,7 +110,7 @@ class MainActivity :
         }
     }
 
-    override fun onCurrentDestinationChange(newValue: NavDestination) {
+    override fun handleCurrentDestinationChange(newValue: NavDestination) {
         currentDestination = newValue
     }
 
