@@ -1,4 +1,4 @@
-package app.darkharov.clear.notifications.reminder
+package app.grocery.list.clear.notifications.reminder
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -30,8 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import app.darkharov.clear.notifications.reminder.ClearNotificationsReminderViewModel.Event
-import app.grocery.list.clear.notifications.reminder.R
+import app.grocery.list.clear.notifications.reminder.ClearNotificationsReminderViewModel.Event
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppContentToRead
 import app.grocery.list.commons.compose.elements.button.AppButton

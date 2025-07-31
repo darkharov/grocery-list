@@ -1,4 +1,4 @@
-package app.darkharov.clear.notifications.reminder
+package app.grocery.list.clear.notifications.reminder
 
 internal interface ClearNotificationsReminderCallbacks {
     fun onDoNotShowAgainCheckedChange(newValue: Boolean)

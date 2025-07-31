@@ -20,8 +20,8 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import app.darkharov.clear.notifications.reminder.ClearNotificationsReminder
-import app.darkharov.clear.notifications.reminder.clearNotificationsReminder
+import app.grocery.list.clear.notifications.reminder.ClearNotificationsReminder
+import app.grocery.list.clear.notifications.reminder.clearNotificationsReminder
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.toolbar.AppToolbar
 import app.grocery.list.commons.compose.elements.toolbar.AppToolbarProps

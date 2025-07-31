@@ -1,4 +1,4 @@
-package app.darkharov.clear.notifications.reminder
+package app.grocery.list.clear.notifications.reminder
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider

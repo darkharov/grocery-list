@@ -1,7 +1,7 @@
 package app.grocery.list.assembly.ui.content
 
 import androidx.navigation.NavHostController
-import app.darkharov.clear.notifications.reminder.ClearNotificationsReminderNavigation
+import app.grocery.list.clear.notifications.reminder.ClearNotificationsReminderNavigation
 import app.grocery.list.final_.steps.FinalSteps
 import app.grocery.list.product.input.form.ProductInputForm
 import app.grocery.list.product.input.form.ProductInputFormNavigation
