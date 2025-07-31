@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,6 +25,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppPreloader
+import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.elements.button.AppButtonProps
 import app.grocery.list.commons.compose.elements.button.WideAppButton
 import app.grocery.list.commons.compose.elements.dialog.AppSimpleDialog
@@ -113,102 +116,106 @@ private fun Content(
     callbacks: ProductListActionsCallbacks,
     modifier: Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .padding(12.dp)
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Spacer(
-            modifier = Modifier
-                .weight(1f),
-        )
-        WideAppButton(
-            props = AppButtonProps.Custom(
-                text = stringResource(R.string.clear_list),
-                background = AppButtonProps.Background.Negative,
-                drawableEndId = R.drawable.ic_bin_outline,
-                state = AppButtonProps.State.enabled(props.numberOfProducts > 0)
-            ),
-            onClick = {
-                callbacks.onGoToClearListConfirmation()
-            },
-        )
-        WideAppButton(
-            props = AppButtonProps.Custom(
-                text = stringResource(R.string.i_am_at_shop),
-                background = AppButtonProps.Background.Positive,
-                drawableEndId = R.drawable.ic_cart,
-                state = AppButtonProps.State.enabled(props.numberOfProducts > 0),
-            ),
-            onClick = {
-                callbacks.onStartShopping()
-            },
-        )
-        WideAppButton(
-            props = AppButtonProps.Custom(
-                text =
-                    if (props.numberOfProducts == 0) {
-                        stringResource(R.string.share_this_list)
-                    } else {
-                        stringResource(
-                            R.string.share_this_list_with_counter,
-                            props.numberOfProducts,
-                        )
-                    },
-                drawableEndId = R.drawable.ic_share,
-                state = when {
-                    props.numberOfProducts == 0 -> {
-                        AppButtonProps.State.Disabled
-                    }
-                    props.loadingListToShare -> {
-                        AppButtonProps.State.DisabledWithProgressBar
-                    }
-                    else -> {
-                        AppButtonProps.State.Enabled
-                    }
-                }
-            ),
-            onClick = {
-                callbacks.onShare()
-            },
-        )
-        val clipboard = LocalClipboard.current
-        val clipboardScope = rememberCoroutineScope()
-        WideAppButton(
-            props = AppButtonProps.Custom(
-                text = stringResource(R.string.paste_copied_list),
-                drawableEndId = R.drawable.ic_paste,
-            ),
-            onClick = {
-                clipboardScope.launch(Dispatchers.IO) {
-                    val clipEntry = clipboard.getClipEntry()
-                    withContext(Dispatchers.Main) {
-                        val text = clipEntry?.clipData?.getItemAt(0)?.text?.toString().orEmpty()
-                        callbacks.onPaste(text = text)
-                    }
-                }
-            },
-        )
-        WideAppButton(
-            props = AppButtonProps.Custom(
-                text = stringResource(
-                    if (props.numberOfProducts > 0) {
-                        R.string.save_and_exit
-                    } else {
-                        R.string.exit
+    val scrollState = rememberScrollState()
+    ScrollableContentWithShadows(scrollState) {
+        Column(
+            modifier = modifier
+                .padding(horizontal = 12.dp)
+                .fillMaxSize()
+                .verticalScroll(scrollState),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Spacer(
+                modifier = Modifier
+                    .weight(1f),
+            )
+            WideAppButton(
+                props = AppButtonProps.Custom(
+                    text = stringResource(R.string.clear_list),
+                    background = AppButtonProps.Background.Negative,
+                    drawableEndId = R.drawable.ic_bin_outline,
+                    state = AppButtonProps.State.enabled(props.numberOfProducts > 0)
+                ),
+                onClick = {
+                    callbacks.onGoToClearListConfirmation()
+                },
+            )
+            WideAppButton(
+                props = AppButtonProps.Custom(
+                    text = stringResource(R.string.i_am_at_shop),
+                    background = AppButtonProps.Background.Positive,
+                    drawableEndId = R.drawable.ic_cart,
+                    state = AppButtonProps.State.enabled(props.numberOfProducts > 0),
+                ),
+                onClick = {
+                    callbacks.onStartShopping()
+                },
+            )
+            WideAppButton(
+                props = AppButtonProps.Custom(
+                    text =
+                        if (props.numberOfProducts == 0) {
+                            stringResource(R.string.share_this_list)
+                        } else {
+                            stringResource(
+                                R.string.share_this_list_with_counter,
+                                props.numberOfProducts,
+                            )
+                        },
+                    drawableEndId = R.drawable.ic_share,
+                    state = when {
+                        props.numberOfProducts == 0 -> {
+                            AppButtonProps.State.Disabled
+                        }
+                        props.loadingListToShare -> {
+                            AppButtonProps.State.DisabledWithProgressBar
+                        }
+                        else -> {
+                            AppButtonProps.State.Enabled
+                        }
                     }
                 ),
-                drawableEndId = R.drawable.ic_exit,
-            ),
-            onClick = {
-                callbacks.onExitFromApp()
-            },
-        )
-        Spacer(
-            modifier = Modifier
-                .weight(1f),
-        )
+                onClick = {
+                    callbacks.onShare()
+                },
+            )
+            val clipboard = LocalClipboard.current
+            val clipboardScope = rememberCoroutineScope()
+            WideAppButton(
+                props = AppButtonProps.Custom(
+                    text = stringResource(R.string.paste_copied_list),
+                    drawableEndId = R.drawable.ic_paste,
+                ),
+                onClick = {
+                    clipboardScope.launch(Dispatchers.IO) {
+                        val clipEntry = clipboard.getClipEntry()
+                        withContext(Dispatchers.Main) {
+                            val text = clipEntry?.clipData?.getItemAt(0)?.text?.toString().orEmpty()
+                            callbacks.onPaste(text = text)
+                        }
+                    }
+                },
+            )
+            WideAppButton(
+                props = AppButtonProps.Custom(
+                    text = stringResource(
+                        if (props.numberOfProducts > 0) {
+                            R.string.save_and_exit
+                        } else {
+                            R.string.exit
+                        }
+                    ),
+                    drawableEndId = R.drawable.ic_exit,
+                ),
+                onClick = {
+                    callbacks.onExitFromApp()
+                },
+            )
+            Spacer(
+                modifier = Modifier
+                    .weight(1f),
+            )
+        }
     }
 }
 

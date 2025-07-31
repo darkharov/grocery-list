@@ -4,9 +4,11 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -110,6 +112,7 @@ internal fun AppContent(
                 .windowInsetsPadding(
                     WindowInsets
                         .navigationBars
+                        .union(WindowInsets.displayCutout)
                         .only(WindowInsetsSides.Horizontal),
                 )
                 .padding(padding),
