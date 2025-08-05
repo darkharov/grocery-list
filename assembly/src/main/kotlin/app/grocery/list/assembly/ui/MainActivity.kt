@@ -1,6 +1,5 @@
 package app.grocery.list.assembly.ui
 
-import android.Manifest
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -8,7 +7,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.viewModels
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -25,6 +23,7 @@ import app.grocery.list.commons.format.ProductListToStringFormatter
 import app.grocery.list.domain.Product
 import app.grocery.list.final_.steps.FinalSteps
 import app.grocery.list.notifications.NotificationPublisher
+import commons.android.PermissionUtil
 import commons.android.ScreenLockedReceiver
 import commons.android.email
 import commons.android.share
@@ -34,22 +33,16 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity :
     ComponentActivity(),
-    AppContentDelegate {
+    AppContentDelegate,
+    PermissionUtil.Contract {
 
     @Inject lateinit var themeUtil: ThemeUtil
     @Inject lateinit var notificationPublisher: NotificationPublisher
     @Inject lateinit var productListToStringFormatter: ProductListToStringFormatter
 
     private val viewModel by viewModels<MainViewModel>()
-    private val postNotifications = postNotificationLauncher()
+    private val permissionUtil = PermissionUtil()
     private var currentDestination: NavDestination? = null
-
-    private fun postNotificationLauncher() =
-        registerForActivityResult(RequestPermission()) { granted ->
-            if (granted) {
-                viewModel.notifyPushNotificationsGranted()
-            }
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -103,11 +96,11 @@ class MainActivity :
     }
 
     override fun startShopping() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            postNotifications.launch(Manifest.permission.POST_NOTIFICATIONS)
-        } else {
-            viewModel.notifyPushNotificationsGranted()
-        }
+        permissionUtil.requestPostNotifications()
+    }
+
+    override fun onPostNotificationsGranted() {
+        viewModel.notifyPushNotificationsGranted()
     }
 
     override fun handleCurrentDestinationChange(newValue: NavDestination) {
