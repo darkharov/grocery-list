@@ -1,42 +1,30 @@
 package app.grocery.list.product.list.preview
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -49,6 +37,7 @@ import app.grocery.list.commons.compose.elements.button.AppButton
 import app.grocery.list.commons.compose.elements.button.AppButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
+import app.grocery.list.product.list.preview.elements.ProductItem
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -247,7 +236,7 @@ private fun LazyListScope.items(
             key = { it.key },
             contentType = { "Product" },
         ) { product ->
-            Product(
+            ProductItem(
                 product = product,
                 callbacks = callbacks,
                 modifier = Modifier
@@ -255,73 +244,6 @@ private fun LazyListScope.items(
             )
         }
     }
-}
-
-@Composable
-private fun Product(
-    product: ProductListPreviewProps.Product,
-    callbacks: ProductListPreviewCallbacks,
-    modifier: Modifier = Modifier,
-) {
-    val horizontalPadding = dimensionResource(R.dimen.margin_16_32_64)
-    Row(
-        modifier = modifier
-            .padding(
-                vertical = 2.dp,
-            )
-            .padding(
-                start = horizontalPadding,
-            ),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = product.title,
-            modifier = Modifier
-                .weight(1f),
-        )
-        Spacer(
-            modifier = Modifier
-                .padding(8.dp),
-        )
-        Icon(
-            painter = painterResource(R.drawable.ic_bin_outline),
-            contentDescription = stringResource(R.string.delete),
-            paddingEnd = horizontalPadding,
-            onClick = {
-                callbacks.onDelete(productId = product.id)
-            },
-        )
-    }
-}
-
-@Composable
-private fun Icon(
-    painter: Painter,
-    contentDescription: String?,
-    paddingEnd: Dp,
-    onClick: () -> Unit,
-) {
-    val innerPadding = 9.dp
-    Image(
-        painter = painter,
-        contentDescription = contentDescription,
-        modifier = Modifier
-            .padding(end = paddingEnd - innerPadding)
-            .clickable(
-                interactionSource = remember {
-                    MutableInteractionSource()
-                },
-                indication = ripple(bounded = false),
-                onClick = {
-                    onClick()
-                }
-            )
-            .size(36.dp)
-            .padding(innerPadding),
-        colorFilter = ColorFilter.tint(
-            color = MaterialTheme.colorScheme.onSurface,
-        ),
-    )
 }
 
 @Composable
