@@ -65,15 +65,6 @@ class MainActivity :
         }
     }
 
-    private fun observeScreenLock() {
-        ScreenLockedReceiver.register(this) {
-            if (currentDestination?.hasRoute(FinalSteps::class) == true) {
-                notificationPublisher.tryToPost()
-                finish()
-            }
-        }
-    }
-
     private fun setupContent() {
         setContent {
             val numberOfAddedProducts by viewModel.numberOfAddedProducts.collectAsState()
@@ -87,6 +78,15 @@ class MainActivity :
                     delegates = this,
                     appEvents = viewModel.appEvents(),
                 )
+            }
+        }
+    }
+
+    private fun observeScreenLock() {
+        ScreenLockedReceiver.register(this) {
+            if (currentDestination?.hasRoute(FinalSteps::class) == true) {
+                notificationPublisher.tryToPost()
+                finish()
             }
         }
     }
