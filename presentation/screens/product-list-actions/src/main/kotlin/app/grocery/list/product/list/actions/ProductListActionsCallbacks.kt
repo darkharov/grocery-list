@@ -9,6 +9,9 @@ internal interface ProductListActionsCallbacks {
     fun onExitFromApp()
     fun onStartShopping()
     fun onShare()
+    fun onShareAll(dialog: ProductListActionsDialog.SublistToSharePicker)
+    fun onShareEnabledOnly(dialog: ProductListActionsDialog.SublistToSharePicker)
+    fun onShareDisabledOnly(dialog: ProductListActionsDialog.SublistToSharePicker)
     fun onPaste(text: String)
     fun onReplaceProductsBy(productList: List<Product>)
     fun onAddProducts(productList: List<Product>)
@@ -21,6 +24,9 @@ internal object ProductListActionsCallbacksMock : ProductListActionsCallbacks {
     override fun onExitFromApp() {}
     override fun onStartShopping() {}
     override fun onShare() {}
+    override fun onShareAll(dialog: ProductListActionsDialog.SublistToSharePicker) {}
+    override fun onShareEnabledOnly(dialog: ProductListActionsDialog.SublistToSharePicker) {}
+    override fun onShareDisabledOnly(dialog: ProductListActionsDialog.SublistToSharePicker) {}
     override fun onPaste(text: String) {}
     override fun onReplaceProductsBy(productList: List<Product>) {}
     override fun onAddProducts(productList: List<Product>) {}

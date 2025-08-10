@@ -3,6 +3,7 @@ package app.grocery.list.product.list.actions
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.domain.AppRepository
+import app.grocery.list.domain.EnabledAndDisabledProducts
 import app.grocery.list.domain.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -70,11 +71,45 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     override fun onShare() {
         loadingListToShare.value = true
+
         viewModelScope.launch {
-            val products = repository.products().flowOn(Dispatchers.IO).first()
+
+            val products = repository
+                .enabledAndDisabledProducts()
+                .flowOn(Dispatchers.IO)
+                .first()
+
             loadingListToShare.value = false
-            events.trySend(Event.OnShare(products))
+
+            val all = products.all
+
+            if (products.mixed) {
+                dialog.value = ProductListActionsDialog.SublistToSharePicker(
+                    productListSize = all.size,
+                    enabledItemsCount = products.enabled.size,
+                    disabledItemsCount = products.disabled.size,
+                    payload = products,
+                )
+            } else {
+                sendShareEvent(products = all)
+            }
         }
+    }
+
+    private fun sendShareEvent(products: List<Product>) {
+        events.trySend(Event.OnShare(products))
+    }
+
+    override fun onShareAll(dialog: ProductListActionsDialog.SublistToSharePicker) {
+        sendShareEvent((dialog.payload as EnabledAndDisabledProducts).all)
+    }
+
+    override fun onShareEnabledOnly(dialog: ProductListActionsDialog.SublistToSharePicker) {
+        sendShareEvent((dialog.payload as EnabledAndDisabledProducts).enabled)
+    }
+
+    override fun onShareDisabledOnly(dialog: ProductListActionsDialog.SublistToSharePicker) {
+        sendShareEvent((dialog.payload as EnabledAndDisabledProducts).disabled)
     }
 
     override fun onPaste(text: String) {

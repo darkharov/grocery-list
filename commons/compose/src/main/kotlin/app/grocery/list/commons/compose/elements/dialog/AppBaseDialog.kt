@@ -2,9 +2,11 @@ package app.grocery.list.commons.compose.elements.dialog
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,13 +28,36 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.values.StringValue
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun AppBaseDialog(
+internal fun AppTextWithButtonsRowDialog(
     icon: Painter? = null,
     text: StringValue,
     onDismiss: () -> Unit,
     buttons: @Composable RowScope.() -> Unit,
+) {
+    AppBaseDialog(
+        icon = icon,
+        onDismiss = onDismiss,
+        text = text,
+        content = {
+            Row(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier
+                    .align(Alignment.End),
+            ) {
+                buttons()
+            }
+        },
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppBaseDialog(
+    icon: Painter? = null,
+    text: StringValue,
+    onDismiss: () -> Unit,
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     BasicAlertDialog(
         onDismissRequest = onDismiss,
@@ -48,10 +73,12 @@ internal fun AppBaseDialog(
             shape = MaterialTheme.shapes.large,
             tonalElevation = AlertDialogDefaults.TonalElevation,
         ) {
-            val commonPadding = 16.dp
+            val padding = 16.dp
             Column(
                 modifier = Modifier
-                    .padding(commonPadding),
+                    .fillMaxWidth()
+                    .padding(padding),
+                horizontalAlignment = Alignment.End,
             ) {
                 if (icon != null) {
                     Icon(
@@ -65,7 +92,7 @@ internal fun AppBaseDialog(
                 }
                 Spacer(
                     modifier = Modifier
-                        .height(commonPadding),
+                        .height(padding),
                 )
                 Text(
                     text = text.value(),
@@ -75,15 +102,9 @@ internal fun AppBaseDialog(
                 )
                 Spacer(
                     modifier = Modifier
-                        .height(commonPadding),
+                        .height(padding),
                 )
-                Row(
-                    horizontalArrangement = Arrangement.End,
-                    modifier = Modifier
-                        .align(Alignment.End),
-                ) {
-                    buttons()
-                }
+                content()
             }
         }
     }

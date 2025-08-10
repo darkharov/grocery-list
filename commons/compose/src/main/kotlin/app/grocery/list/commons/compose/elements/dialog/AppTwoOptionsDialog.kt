@@ -26,7 +26,7 @@ fun AppTwoOptionsDialog(
     onSecondOption: () -> Unit,
     isFirstOptionSensitive: Boolean = false,
 ) {
-    AppBaseDialog(
+    AppTextWithButtonsRowDialog(
         icon = icon,
         text = text,
         onDismiss = onDismiss,

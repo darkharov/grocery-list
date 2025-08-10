@@ -23,7 +23,7 @@ fun AppSimpleDialog(
     confirmButtonText: StringValue = StringValue.ResId(android.R.string.ok),
     onCancel: (() -> Unit)? = null,
 ) {
-    AppBaseDialog(
+    AppTextWithButtonsRowDialog(
         icon = icon,
         text = text,
         onDismiss = onDismiss,

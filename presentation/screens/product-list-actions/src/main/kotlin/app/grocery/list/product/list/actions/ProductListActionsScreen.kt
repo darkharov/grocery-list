@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -28,6 +29,9 @@ import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.elements.button.AppButtonProps
 import app.grocery.list.commons.compose.elements.button.WideAppButton
+import app.grocery.list.commons.compose.elements.button.text.AppTextButton
+import app.grocery.list.commons.compose.elements.button.text.AppTextButtonProps
+import app.grocery.list.commons.compose.elements.dialog.AppBaseDialog
 import app.grocery.list.commons.compose.elements.dialog.AppSimpleDialog
 import app.grocery.list.commons.compose.elements.dialog.AppTwoOptionsDialog
 import app.grocery.list.commons.compose.theme.GroceryListTheme
@@ -292,6 +296,64 @@ private fun Dialog(
                     callbacks.onDialogDismiss()
                 },
             )
+        }
+        is ProductListActionsDialog.SublistToSharePicker -> {
+            AppBaseDialog(
+                icon = painterResource(R.drawable.ic_share),
+                text = StringValue.ResId(
+                    resId = R.string.sublist_to_share_dialog_title,
+                ),
+                onDismiss = {
+                    callbacks.onDialogDismiss()
+                },
+            ) {
+                AppTextButton(
+                    props = AppTextButtonProps.TextOnly(
+                        text = StringValue.StringWrapper(
+                            stringResource(
+                                R.string.pattern_all,
+                                dialog.productListSize,
+                            )
+                        )
+                    ),
+                    onClick = {
+                        callbacks.onShareAll(dialog)
+                    },
+                    modifier = Modifier,
+                )
+                AppTextButton(
+                    props = AppTextButtonProps.TextOnly(
+                        text = StringValue.StringWrapper(
+                            stringResource(
+                                R.string.pattern_enabled,
+                                dialog.enabledItemsCount,
+                            )
+                        )
+                    ),
+                    onClick = {
+                        callbacks.onShareEnabledOnly(dialog)
+                    },
+                    modifier = Modifier,
+                )
+                AppTextButton(
+                    props = AppTextButtonProps.TextOnly(
+                        text = StringValue.StringWrapper(
+                            stringResource(
+                                R.string.pattern_disabled,
+                                dialog.disabledItemsCount,
+                            )
+                        )
+                    ),
+                    onClick = {
+                        callbacks.onShareDisabledOnly(dialog)
+                    },
+                    modifier = Modifier,
+                )
+                Spacer(
+                    modifier = Modifier
+                        .height(8.dp),
+                )
+            }
         }
     }
 }

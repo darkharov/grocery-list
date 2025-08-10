@@ -42,6 +42,16 @@ abstract class AppRepository {
         }
     }
 
+    fun enabledAndDisabledProducts(): Flow<EnabledAndDisabledProducts> =
+        products()
+            .map { products ->
+                EnabledAndDisabledProducts(
+                    all = products,
+                    enabled = products.filter { it.enabled },
+                    disabled = products.filterNot { it.enabled },
+                )
+            }
+
     enum class CategorizedProductsCriteria {
         All,
         EnabledOnly,
