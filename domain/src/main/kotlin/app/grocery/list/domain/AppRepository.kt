@@ -15,7 +15,7 @@ abstract class AppRepository {
 
     abstract fun categories(): Flow<List<Product.Category>>
     abstract fun products(): Flow<List<Product>>
-    abstract fun categorizedProducts(): Flow<List<CategoryAndProducts>>
+    abstract fun categorizedProducts(criteria: CategorizedProductsCriteria): Flow<List<CategoryAndProducts>>
     abstract fun numberOfAddedProducts(): Flow<Int>
     abstract fun sampleProducts(): Flow<List<Product>>
 
@@ -25,6 +25,7 @@ abstract class AppRepository {
     abstract suspend fun deleteProduct(productId: Int)
     abstract suspend fun putProduct(product: Product)
     abstract suspend fun putProducts(products: List<Product>)
+    abstract suspend fun setProductEnabled(productId: Int, enabled: Boolean)
 
     fun productTitleFormat(): Flow<ProductTitleFormat> =
         settings
@@ -39,5 +40,10 @@ abstract class AppRepository {
                 productTitleFormat = mode,
             )
         }
+    }
+
+    enum class CategorizedProductsCriteria {
+        All,
+        EnabledOnly,
     }
 }

@@ -1,19 +1,20 @@
 package app.grocery.list.product.list.preview.elements
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import app.grocery.list.commons.compose.elements.AppSwipeToDismissBox
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.product.list.preview.ProductListPreviewProps
 import app.grocery.list.product.list.preview.R
@@ -35,23 +37,18 @@ internal fun ProductItem(
     callbacks: ProductItemCallbacks,
     modifier: Modifier = Modifier,
 ) {
-    val swipeToDismissBoxState = rememberSwipeToDismissBoxState(
-        confirmValueChange = {
-            if (it == SwipeToDismissBoxValue.EndToStart) {
-                callbacks.onDelete(productId = product.id)
-            }
-            false
-        }
-    )
     val horizontalPadding = dimensionResource(R.dimen.margin_16_32_64)
-    SwipeToDismissBox(
-        state = swipeToDismissBoxState,
+    AppSwipeToDismissBox(
+        key = product.key,
         enableDismissFromStartToEnd = false,
-        backgroundContent = {
+        backgroundContent = { swipeToDismissBoxState ->
             Actions(
                 state = swipeToDismissBoxState,
                 horizontalPadding = horizontalPadding,
             )
+        },
+        onSwipeFromEndToStartFinished = {
+            callbacks.onDelete(productId = product.id)
         },
         modifier = modifier
             .fillMaxWidth(),
@@ -59,6 +56,7 @@ internal fun ProductItem(
         Content(
             product = product,
             horizontalPadding = horizontalPadding,
+            callbacks = callbacks,
         )
     }
 }
@@ -99,14 +97,20 @@ private fun Actions(
 private fun Content(
     product: ProductListPreviewProps.Product,
     horizontalPadding: Dp,
+    callbacks: ProductItemCallbacks,
 ) {
+    val checked = product.enabled
     Row(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
+            .clickable {
+                callbacks.onProductEnabledChange(
+                    productId = product.id,
+                    newValue = !(checked),
+                )
+            }
             .padding(
-                vertical = 12.dp,
-            )
-            .padding(
+                vertical = 6.dp,
                 horizontal = horizontalPadding,
             ),
         verticalAlignment = Alignment.CenterVertically,
@@ -115,6 +119,14 @@ private fun Content(
             text = product.title,
             modifier = Modifier
                 .weight(1f),
+        )
+        Spacer(
+            modifier = Modifier
+                .padding(8.dp),
+        )
+        Switch(
+            checked = checked,
+            onCheckedChange = null,
         )
     }
 }
@@ -128,6 +140,7 @@ private fun ProductItemPreview() {
                 product = ProductListPreviewProps.Product(
                     id = 1,
                     title = AnnotatedString("🍅 Tomato"),
+                    enabled = true,
                 ),
                 callbacks = ProductItemCallbacksMock,
                 modifier = Modifier

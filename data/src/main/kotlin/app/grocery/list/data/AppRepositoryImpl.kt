@@ -75,13 +75,24 @@ internal class AppRepositoryImpl @Inject constructor(
         productDao.insertOrReplace(productMapper.toDataEntities(products))
     }
 
+    override suspend fun setProductEnabled(productId: Int, enabled: Boolean) {
+        productDao.setProductEnabled(productId = productId, enabled = enabled)
+    }
+
     override fun products(): Flow<List<Product>> =
         productDao.selectProducts()
             .map { productMapper.toDomainModels(it) }
 
-    override fun categorizedProducts(): Flow<List<CategoryAndProducts>> =
+    override fun categorizedProducts(
+        criteria: CategorizedProductsCriteria,
+    ): Flow<List<CategoryAndProducts>> =
         productDao
-            .select()
+            .select(
+                enabledOnly = when (criteria) {
+                    CategorizedProductsCriteria.All -> false
+                    CategorizedProductsCriteria.EnabledOnly -> true
+                }
+            )
             .map { categorizedProducts ->
                 categorizedProducts.map { (categoryId, products) ->
                     CategoryAndProducts(

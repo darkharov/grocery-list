@@ -26,6 +26,9 @@ class ProductEntity(
     @ColumnInfo(Table.Columns.KEYWORD)
     val keyword: String?,
 
+    @ColumnInfo(Table.Columns.ENABLED)
+    val enabled: Boolean,
+
     @ColumnInfo(Table.Columns.NON_FK_CATEGORY_ID)
     val nonFkCategoryId: Int,
 ) {
@@ -39,6 +42,7 @@ class ProductEntity(
             const val TITLE = "title"
             const val EMOJI = "emoji"
             const val KEYWORD = "keyword"
+            const val ENABLED = "enabled"
             const val NON_FK_CATEGORY_ID = "non_fk_category_id" // categories are not stored in db
         }
     }
@@ -52,6 +56,7 @@ class ProductEntity(
                 title = product.title,
                 emoji = product.emojiSearchResult?.emoji,
                 keyword = product.emojiSearchResult?.keyword,
+                enabled = product.enabled,
                 nonFkCategoryId = product.categoryId,
             )
 
@@ -75,6 +80,7 @@ class ProductEntity(
                 } else {
                     null
                 },
+                enabled = entity.enabled,
                 categoryId = entity.nonFkCategoryId,
             )
         }

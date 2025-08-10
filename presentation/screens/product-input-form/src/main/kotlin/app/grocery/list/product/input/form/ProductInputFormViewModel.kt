@@ -103,6 +103,7 @@ internal class ProductInputFormViewModel @Inject constructor(
                 title = productTitle.replaceFirstChar { it.uppercaseChar() },
                 emojiSearchResult = payload as EmojiSearchResult?,
                 categoryId = categoryId,
+                enabled = true,
             )
             repository.putProduct(product)
         }

@@ -28,7 +28,9 @@ internal class ProductListPreviewViewModel @Inject constructor(
     val props: StateFlow<ProductListPreviewProps?> =
         combine(
             mapper(),
-            repository.categorizedProducts(),
+            repository.categorizedProducts(
+                criteria = AppRepository.CategorizedProductsCriteria.All,
+            ),
             ProductListMapper::transform,
         ).stateIn(
             viewModelScope,
@@ -55,6 +57,15 @@ internal class ProductListPreviewViewModel @Inject constructor(
 
     override fun onAddProduct() {
         events.trySend(Event.OnAddProduct)
+    }
+
+    override fun onProductEnabledChange(productId: Int, newValue: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.setProductEnabled(
+                productId = productId,
+                enabled = newValue,
+            )
+        }
     }
 
     fun events(): ReceiveChannel<Event> =

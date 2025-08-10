@@ -16,6 +16,7 @@ internal data class ProductListPreviewProps(
     @Immutable
     data class Product(
         val id: Int,
+        val enabled: Boolean = true,
         val title: AnnotatedString,
     ) {
         val key = ProductKey(id = id)

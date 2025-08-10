@@ -14,6 +14,7 @@ internal class ProductListToStringFormatterTest {
             keyword = "Apple",
         ),
         categoryId = 42,
+        enabled = true,
     )
 
     @Test

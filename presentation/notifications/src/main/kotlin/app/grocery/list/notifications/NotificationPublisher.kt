@@ -62,7 +62,9 @@ class NotificationPublisher @Inject internal constructor(
                     .flowOn(Dispatchers.IO)
                     .first(),
                 categorizedProducts = repository
-                    .categorizedProducts()
+                    .categorizedProducts(
+                        criteria = AppRepository.CategorizedProductsCriteria.EnabledOnly,
+                    )
                     .flowOn(Dispatchers.IO)
                     .first(),
             )

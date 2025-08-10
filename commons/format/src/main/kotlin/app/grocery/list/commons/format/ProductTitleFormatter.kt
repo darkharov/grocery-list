@@ -11,14 +11,10 @@ class ProductTitleFormatter @AssistedInject constructor(
     private val format: ProductTitleFormat,
     private val errorLogger: ErrorLogger,
 ) {
-    inline fun <R> print(
-        products: List<Product>,
-        transform: FormattingResult.() -> R,
-    ): List<R> =
-        products.map { transform(print(it)) }
-
     fun printToString(products: List<Product>): String =
-        print(products) { collectStringTitle() }.joinToString()
+        products.joinToString { product ->
+            print(product).collectStringTitle()
+        }
 
     fun print(product: Product): FormattingResult =
         when (format) {
@@ -35,7 +31,6 @@ class ProductTitleFormatter @AssistedInject constructor(
 
     private fun withoutEmoji(product: Product) =
         FormattingResult(
-            productId = product.id,
             emoji = null,
             title = product.title,
             additionalDetails = null,
@@ -43,7 +38,6 @@ class ProductTitleFormatter @AssistedInject constructor(
 
     private fun emojiAndFullText(product: Product) =
         FormattingResult(
-            productId = product.id,
             emoji = product.emojiSearchResult?.emoji,
             title = product.title,
             additionalDetails = null,
@@ -64,7 +58,6 @@ class ProductTitleFormatter @AssistedInject constructor(
                 emojiAndFullText(product)
             } else {
                 FormattingResult(
-                    productId = product.id,
                     emoji = emoji,
                     title = title,
                     additionalDetails = FormattingResult.AdditionalDetails(
@@ -77,7 +70,6 @@ class ProductTitleFormatter @AssistedInject constructor(
     }
 
     data class FormattingResult(
-        val productId: Int,
         val emoji: String?,
         val title: String,
         val additionalDetails: AdditionalDetails?,

@@ -25,21 +25,28 @@ internal interface ProductDao {
 
     @Query(
         """
-   SELECT DISTINCT added_category.non_fk_category_id,
-                   product.*
+            SELECT product.*
               FROM product
-                AS added_category
-         LEFT JOIN product
-                ON product.non_fk_category_id = added_category.non_fk_category_id
-          ORDER BY added_category.non_fk_category_id
+             WHERE :enabledOnly == 0
+                OR enabled == 1
+          ORDER BY non_fk_category_id
         """
     )
-    fun select(): Flow<Map<@MapColumn("non_fk_category_id") Int, List<ProductEntity>>>
+    fun select(enabledOnly: Boolean): Flow<Map<@MapColumn("non_fk_category_id") Int, List<ProductEntity>>>
 
     @Query("SELECT * FROM product")
     fun selectProducts(): Flow<List<ProductEntity>>
 
     @Query("SELECT COUNT(*) FROM product")
     fun count(): Flow<Int>
+
+    @Query(
+        """
+            UPDATE product
+               SET enabled = :enabled
+             WHERE product_id == :productId
+        """
+    )
+    fun setProductEnabled(productId: Int, enabled: Boolean)
 
 }

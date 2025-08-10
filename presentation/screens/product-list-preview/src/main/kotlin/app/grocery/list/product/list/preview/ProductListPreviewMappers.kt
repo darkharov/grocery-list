@@ -31,12 +31,15 @@ internal class ProductListMapper @AssistedInject constructor(
         )
 
     private fun transformList(products: List<Product>): ImmutableList<ProductListPreviewProps.Product> =
-        formatter.print(products) {
-            ProductListPreviewProps.Product(
-                id = productId,
-                title = collectTitle(),
-            )
-        }.toImmutableList()
+        products
+            .map { product ->
+                ProductListPreviewProps.Product(
+                    id = product.id,
+                    title = formatter.print(product).collectTitle(),
+                    enabled = product.enabled,
+                )
+            }
+            .toImmutableList()
 
     private fun ProductTitleFormatter.FormattingResult.collectTitle(): AnnotatedString =
         buildAnnotatedString {

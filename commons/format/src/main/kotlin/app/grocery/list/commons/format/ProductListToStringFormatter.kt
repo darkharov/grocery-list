@@ -74,6 +74,7 @@ class ProductListToStringFormatter @Inject internal constructor() {
             } else {
                 null
             },
+            enabled = true,
         )
     }
 
