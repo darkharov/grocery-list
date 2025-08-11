@@ -2,6 +2,7 @@ package app.grocery.list.product.list.actions
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.grocery.list.commons.format.ProductListToStringFormatter
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.EnabledAndDisabledProducts
 import app.grocery.list.domain.Product
@@ -23,7 +24,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 internal class ProductListActionsViewModel @Inject constructor(
     private val repository: AppRepository,
-    private val productListFormatter: app.grocery.list.commons.format.ProductListToStringFormatter,
+    private val productListFormatter: ProductListToStringFormatter,
 ) : ViewModel(),
     ProductListActionsCallbacks {
 
