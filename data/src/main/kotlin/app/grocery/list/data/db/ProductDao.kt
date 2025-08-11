@@ -49,4 +49,6 @@ internal interface ProductDao {
     )
     fun setProductEnabled(productId: Int, enabled: Boolean)
 
+    @Query("SELECT COUNT(*) == 0 FROM product LIMIT 1")
+    fun productListEmpty(): Flow<Boolean>
 }

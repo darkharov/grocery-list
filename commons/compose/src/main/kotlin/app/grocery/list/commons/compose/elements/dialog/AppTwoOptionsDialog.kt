@@ -21,10 +21,10 @@ fun AppTwoOptionsDialog(
     text: StringValue,
     onDismiss: () -> Unit,
     firstOption: StringValue,
-    onFirstOption: () -> Unit,
-    secondOption: StringValue,
-    onSecondOption: () -> Unit,
     isFirstOptionSensitive: Boolean = false,
+    onFirstOption: () -> Unit,
+    secondOption: StringValue = StringValue.ResId(android.R.string.cancel),
+    onSecondOption: () -> Unit,
 ) {
     AppTextWithButtonsRowDialog(
         icon = icon,

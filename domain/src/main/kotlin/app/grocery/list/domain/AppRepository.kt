@@ -17,6 +17,7 @@ abstract class AppRepository {
     abstract fun products(): Flow<List<Product>>
     abstract fun categorizedProducts(criteria: CategorizedProductsCriteria): Flow<List<CategoryAndProducts>>
     abstract fun numberOfAddedProducts(): Flow<Int>
+    abstract fun productListEmpty(): Flow<Boolean>
     abstract fun sampleProducts(): Flow<List<Product>>
 
     abstract suspend fun findCategory(search: String): Product.Category?

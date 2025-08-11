@@ -31,12 +31,12 @@ internal class ProductListActionsViewModel @Inject constructor(
     private val loadingListToShare = MutableStateFlow(false)
 
     val props = combine(
-        repository.numberOfAddedProducts(),
+        repository.productListEmpty(),
         loadingListToShare,
-    ) { numberOfAddedProducts, loadingListToShare ->
+    ) { productListEmpty, loadingListToShare ->
         ProductListActionsProps(
+            productListEmpty = productListEmpty,
             loadingListToShare = loadingListToShare,
-            numberOfProducts = numberOfAddedProducts,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -92,25 +92,26 @@ internal class ProductListActionsViewModel @Inject constructor(
                     payload = products,
                 )
             } else {
-                sendShareEvent(products = all)
+                events.trySend(Event.OnShare(all))
             }
         }
     }
 
-    private fun sendShareEvent(products: List<Product>) {
+    private fun sendShareEventAndRemoveDialog(products: List<Product>) {
         events.trySend(Event.OnShare(products))
+        dialog.value = null
     }
 
     override fun onShareAll(dialog: ProductListActionsDialog.SublistToSharePicker) {
-        sendShareEvent((dialog.payload as EnabledAndDisabledProducts).all)
+        sendShareEventAndRemoveDialog((dialog.payload as EnabledAndDisabledProducts).all)
     }
 
     override fun onShareEnabledOnly(dialog: ProductListActionsDialog.SublistToSharePicker) {
-        sendShareEvent((dialog.payload as EnabledAndDisabledProducts).enabled)
+        sendShareEventAndRemoveDialog((dialog.payload as EnabledAndDisabledProducts).enabled)
     }
 
     override fun onShareDisabledOnly(dialog: ProductListActionsDialog.SublistToSharePicker) {
-        sendShareEvent((dialog.payload as EnabledAndDisabledProducts).disabled)
+        sendShareEventAndRemoveDialog((dialog.payload as EnabledAndDisabledProducts).disabled)
     }
 
     override fun onPaste(text: String) {

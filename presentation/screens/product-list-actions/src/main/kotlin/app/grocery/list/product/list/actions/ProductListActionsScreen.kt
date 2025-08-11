@@ -138,7 +138,7 @@ private fun Content(
                     text = stringResource(R.string.clear_list),
                     background = AppButtonProps.Background.Negative,
                     drawableEndId = R.drawable.ic_bin_outline,
-                    state = AppButtonProps.State.enabled(props.numberOfProducts > 0)
+                    state = AppButtonProps.State.enabled(!(props.productListEmpty))
                 ),
                 onClick = {
                     callbacks.onGoToClearListConfirmation()
@@ -149,7 +149,7 @@ private fun Content(
                     text = stringResource(R.string.i_am_at_shop),
                     background = AppButtonProps.Background.Positive,
                     drawableEndId = R.drawable.ic_cart,
-                    state = AppButtonProps.State.enabled(props.numberOfProducts > 0),
+                    state = AppButtonProps.State.enabled(!(props.productListEmpty)),
                 ),
                 onClick = {
                     callbacks.onStartShopping()
@@ -157,18 +157,10 @@ private fun Content(
             )
             WideAppButton(
                 props = AppButtonProps.Custom(
-                    text =
-                        if (props.numberOfProducts == 0) {
-                            stringResource(R.string.share_this_list)
-                        } else {
-                            stringResource(
-                                R.string.share_this_list_with_counter,
-                                props.numberOfProducts,
-                            )
-                        },
+                    text = stringResource(R.string.share_collected_list),
                     drawableEndId = R.drawable.ic_share,
                     state = when {
-                        props.numberOfProducts == 0 -> {
+                        props.productListEmpty -> {
                             AppButtonProps.State.Disabled
                         }
                         props.loadingListToShare -> {
@@ -203,10 +195,10 @@ private fun Content(
             WideAppButton(
                 props = AppButtonProps.Custom(
                     text = stringResource(
-                        if (props.numberOfProducts > 0) {
-                            R.string.save_and_exit
-                        } else {
+                        if (props.productListEmpty) {
                             R.string.exit
+                        } else {
+                            R.string.save_and_exit
                         }
                     ),
                     drawableEndId = R.drawable.ic_exit,
@@ -230,27 +222,29 @@ private fun Dialog(
 ) {
     when (dialog) {
         is ProductListActionsDialog.ConfirmClearList -> {
-            AppSimpleDialog(
+            AppTwoOptionsDialog(
                 icon = painterResource(R.drawable.ic_bin_outline),
                 text = StringValue.ResId(
                     R.string.clear_product_list_confirmation,
                 ),
-                confirmButtonText = StringValue.ResId(
+                firstOption = StringValue.ResId(
                     R.string.delete,
                 ),
-                onDismiss = {
-                    callbacks.onDialogDismiss()
-                },
-                onConfirm = {
+                isFirstOptionSensitive = true,
+                onFirstOption = {
                     callbacks.onClearListConfirmed()
                 },
-                onCancel = {
+                onSecondOption = {
+                    callbacks.onDialogDismiss()
+                },
+                onDismiss = {
                     callbacks.onDialogDismiss()
                 },
             )
         }
         is ProductListActionsDialog.CopiedProductListNotFound -> {
             AppSimpleDialog(
+                icon = painterResource(R.drawable.ic_paste),
                 text = StringValue.ResId(
                     R.string.copied_product_list_not_found,
                 ),
@@ -264,6 +258,7 @@ private fun Dialog(
         }
         is ProductListActionsDialog.HowToPutPastedProducts -> {
             AppTwoOptionsDialog(
+                icon = painterResource(R.drawable.ic_paste),
                 text = StringValue.ResId(
                     resId = R.string.add_or_replace_copied_products,
                 ),
@@ -311,13 +306,13 @@ private fun Dialog(
                     props = AppTextButtonProps.TextOnly(
                         text = StringValue.StringWrapper(
                             stringResource(
-                                R.string.pattern_all,
-                                dialog.productListSize,
+                                R.string.pattern_disabled,
+                                dialog.disabledItemsCount,
                             )
                         )
                     ),
                     onClick = {
-                        callbacks.onShareAll(dialog)
+                        callbacks.onShareDisabledOnly(dialog)
                     },
                     modifier = Modifier,
                 )
@@ -339,13 +334,13 @@ private fun Dialog(
                     props = AppTextButtonProps.TextOnly(
                         text = StringValue.StringWrapper(
                             stringResource(
-                                R.string.pattern_disabled,
-                                dialog.disabledItemsCount,
+                                R.string.pattern_all,
+                                dialog.productListSize,
                             )
                         )
                     ),
                     onClick = {
-                        callbacks.onShareDisabledOnly(dialog)
+                        callbacks.onShareAll(dialog)
                     },
                     modifier = Modifier,
                 )
@@ -374,8 +369,8 @@ private fun ProductListActionsScreenWithDialogPreview(
                 modifier = Modifier
                     .padding(padding),
                 props = ProductListActionsProps(
+                    productListEmpty = false,
                     loadingListToShare = false,
-                    numberOfProducts = 0,
                 ),
             )
         }

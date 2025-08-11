@@ -16,10 +16,10 @@ import app.grocery.list.commons.compose.values.StringValue
 
 @Composable
 fun AppSimpleDialog(
+    icon: Painter,
     text: StringValue,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
-    icon: Painter? = null,
     confirmButtonText: StringValue = StringValue.ResId(android.R.string.ok),
     onCancel: (() -> Unit)? = null,
 ) {
@@ -67,6 +67,7 @@ private fun AppSimpleDialogWithIconPreview() {
 private fun AppSimpleDialogOkOnlyPreview() {
     GroceryListTheme {
         AppSimpleDialog(
+            icon = painterResource(R.drawable.ic_android),
             text = StringValue.StringWrapper("Alert text of this dialog"),
             onConfirm = {},
             onDismiss = {},
