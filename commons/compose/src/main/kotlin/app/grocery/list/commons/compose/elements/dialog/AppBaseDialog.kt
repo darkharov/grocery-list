@@ -28,29 +28,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.values.StringValue
 
-@Composable
-internal fun AppTextWithButtonsRowDialog(
-    icon: Painter? = null,
-    text: StringValue,
-    onDismiss: () -> Unit,
-    buttons: @Composable RowScope.() -> Unit,
-) {
-    AppBaseDialog(
-        icon = icon,
-        onDismiss = onDismiss,
-        text = text,
-        content = {
-            Row(
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .align(Alignment.End),
-            ) {
-                buttons()
-            }
-        },
-    )
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBaseDialog(
@@ -108,4 +85,27 @@ fun AppBaseDialog(
             }
         }
     }
+}
+
+@Composable
+internal fun AppTextWithButtonsRowDialog(
+    icon: Painter? = null,
+    text: StringValue,
+    onDismiss: () -> Unit,
+    buttons: @Composable RowScope.() -> Unit,
+) {
+    AppBaseDialog(
+        icon = icon,
+        onDismiss = onDismiss,
+        text = text,
+        content = {
+            Row(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier
+                    .align(Alignment.End),
+            ) {
+                buttons()
+            }
+        },
+    )
 }
