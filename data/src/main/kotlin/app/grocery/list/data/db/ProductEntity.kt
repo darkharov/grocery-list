@@ -11,7 +11,7 @@ import javax.inject.Singleton
 @Entity(
     tableName = ProductEntity.Table.NAME,
 )
-class ProductEntity(
+internal class ProductEntity(
 
     @PrimaryKey
     @ColumnInfo(Table.Columns.ID)
