@@ -29,7 +29,7 @@ internal interface ProductDao {
               FROM product
              WHERE :enabledOnly == 0
                 OR enabled == 1
-          ORDER BY non_fk_category_id
+          ORDER BY title
         """
     )
     fun select(enabledOnly: Boolean): Flow<Map<@MapColumn("non_fk_category_id") Int, List<ProductEntity>>>
