@@ -25,11 +25,14 @@ fun AppSwipeToDismissBox(
             if (it != SwipeToDismissBoxValue.Settled) {
                 if (!(firstInvocationHappen)) {
                     firstInvocationHappen = true
+                    true
                 } else {
                     onSwipeFromEndToStartFinished()
+                    false
                 }
+            } else {
+                true
             }
-            true
         }
     )
     SwipeToDismissBox(
