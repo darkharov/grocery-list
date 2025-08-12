@@ -20,7 +20,6 @@ internal class ProductListMapper @AssistedInject constructor(
     fun transform(productList: List<CategoryAndProducts>): ProductListPreviewProps =
         ProductListPreviewProps(
             categories = productList.map(::transform).toImmutableList(),
-            payload = productList,
         )
 
     private fun transform(categoryAndProducts: CategoryAndProducts): ProductListPreviewProps.Category =

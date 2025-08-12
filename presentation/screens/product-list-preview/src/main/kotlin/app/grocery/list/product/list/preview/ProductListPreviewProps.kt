@@ -11,7 +11,6 @@ import kotlinx.parcelize.Parcelize
 @Immutable
 internal data class ProductListPreviewProps(
     val categories: ImmutableList<Category>,
-    val payload: Any? = null,
 ) {
     @Immutable
     data class Product(
