@@ -23,7 +23,7 @@ abstract class AppRepository {
     abstract suspend fun findCategory(search: String): Product.Category?
     abstract suspend fun findEmoji(search: String): EmojiSearchResult?
     abstract suspend fun clearProducts()
-    abstract suspend fun deleteProduct(productId: Int)
+    abstract suspend fun deleteProduct(productId: Int): Product
     abstract suspend fun putProduct(product: Product)
     abstract suspend fun putProducts(products: List<Product>)
     abstract suspend fun setProductEnabled(productId: Int, enabled: Boolean)

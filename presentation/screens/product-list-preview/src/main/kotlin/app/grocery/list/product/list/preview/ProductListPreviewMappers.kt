@@ -37,6 +37,7 @@ internal class ProductListMapper @AssistedInject constructor(
                     id = product.id,
                     title = formatter.print(product).collectTitle(),
                     enabled = product.enabled,
+                    payload = product,
                 )
             }
             .toImmutableList()

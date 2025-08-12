@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.commons.format.GetProductTitleFormatter
 import app.grocery.list.domain.AppRepository
+import app.grocery.list.domain.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -45,18 +46,11 @@ internal class ProductListPreviewViewModel @Inject constructor(
 
     private val events = Channel<Event>(Channel.UNLIMITED)
 
-    override fun onDelete(productId: Int) {
+    override fun onDelete(product: ProductListPreviewProps.Product) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteProduct(productId = productId)
+            repository.deleteProduct(productId = product.id)
+            events.trySend(Event.OnProductDeleted(product.payload as Product))
         }
-    }
-
-    override fun onNext() {
-        events.trySend(Event.OnGoToActions)
-    }
-
-    override fun onAddProduct() {
-        events.trySend(Event.OnAddProduct)
     }
 
     override fun onProductEnabledChange(productId: Int, newValue: Boolean) {
@@ -71,8 +65,10 @@ internal class ProductListPreviewViewModel @Inject constructor(
     fun events(): ReceiveChannel<Event> =
         events
 
-    enum class Event {
-        OnAddProduct,
-        OnGoToActions,
+    sealed class Event {
+
+        data class OnProductDeleted(
+            val product: Product,
+        ) : Event()
     }
 }

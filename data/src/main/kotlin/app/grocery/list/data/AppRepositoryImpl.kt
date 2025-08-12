@@ -62,9 +62,10 @@ internal class AppRepositoryImpl @Inject constructor(
         productDao.deleteAll()
     }
 
-    override suspend fun deleteProduct(productId: Int) {
-        productDao.delete(productId = productId)
-    }
+    override suspend fun deleteProduct(productId: Int) =
+        productMapper.toDomainModel(
+            productDao.selectAndDelete(productId = productId),
+        )
 
     override suspend fun putProduct(product: Product) {
         val entity = productMapper.toDataEntity(product)

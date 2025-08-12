@@ -77,6 +77,7 @@ class MainActivity :
                     hasEmojiIfEnoughSpace = hasEmojiIfEnoughSpace,
                     delegates = this,
                     appEvents = viewModel.appEvents(),
+                    snackbars = viewModel.snackbars(),
                 )
             }
         }
@@ -131,5 +132,13 @@ class MainActivity :
                 "\nBrand: ${Build.BRAND}" +
                 "\nModel: ${Build.MODEL}",
         )
+    }
+
+    override fun showUndoProductDeletionSnackbar(product: Product) {
+        viewModel.showUndoProductDeletionSnackbar(product)
+    }
+
+    override fun undoProductDeletion(product: Product) {
+        viewModel.undoProductDeletion(product)
     }
 }

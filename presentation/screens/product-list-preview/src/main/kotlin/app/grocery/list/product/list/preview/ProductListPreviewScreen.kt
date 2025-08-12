@@ -1,15 +1,9 @@
 package app.grocery.list.product.list.preview
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
@@ -33,8 +27,6 @@ import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
-import app.grocery.list.commons.compose.elements.button.AppButton
-import app.grocery.list.commons.compose.elements.button.AppButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.product.list.preview.elements.ProductItem
@@ -44,18 +36,18 @@ import kotlinx.serialization.Serializable
 data object ProductListPreview
 
 fun NavGraphBuilder.productListPreviewScreen(
-    navigation: ProductListPreviewNavigation,
+    delegate: ProductListPreviewDelegate,
 ) {
     composable<ProductListPreview> {
         ProductListPreviewScreen(
-            navigation = navigation,
+            delegate = delegate,
         )
     }
 }
 
 @Composable
 private fun ProductListPreviewScreen(
-    navigation: ProductListPreviewNavigation,
+    delegate: ProductListPreviewDelegate,
 ) {
     val viewModel = hiltViewModel<ProductListPreviewViewModel>()
     val props by viewModel.props.collectAsState()
@@ -65,11 +57,10 @@ private fun ProductListPreviewScreen(
         events = viewModel.events(),
     ) { event ->
         when (event) {
-            ProductListPreviewViewModel.Event.OnGoToActions -> {
-                navigation.goToActions()
-            }
-            ProductListPreviewViewModel.Event.OnAddProduct -> {
-                navigation.goToProductInputForm()
+            is ProductListPreviewViewModel.Event.OnProductDeleted -> {
+                delegate.showUndoProductDeletionSnackbar(
+                    product = event.product,
+                )
             }
         }
     }
@@ -93,7 +84,8 @@ private fun ProductListPreviewScreen(
         Content(
             props = props,
             callbacks = callbacks,
-            modifier = modifier,
+            modifier = modifier
+                .fillMaxSize(),
         )
     }
 }
@@ -104,26 +96,15 @@ private fun Content(
     callbacks: ProductListPreviewCallbacks,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-            .windowInsetsPadding(WindowInsets.navigationBars),
-    ) {
-        if (props.categories.isEmpty()) {
-            NoItemsMessage(
-                modifier = Modifier
-                    .weight(1f),
-            )
-        } else {
-            ListWithDividers(
-                props = props,
-                callbacks = callbacks,
-                modifier = Modifier
-                    .weight(1f),
-            )
-        }
-        Buttons(
+    if (props.categories.isEmpty()) {
+        NoItemsMessage(
+            modifier = modifier,
+        )
+    } else {
+        ListWithDividers(
+            props = props,
             callbacks = callbacks,
+            modifier = modifier,
         )
     }
 }
@@ -166,45 +147,6 @@ private fun ListWithDividers(
                 callbacks = callbacks,
             )
         }
-    }
-}
-
-@Composable
-private fun Buttons(
-    callbacks: ProductListPreviewCallbacks,
-) {
-    Row(
-        modifier = Modifier
-            .padding(
-                top = 16.dp,
-                bottom = 4.dp,
-            )
-            .padding(
-                horizontal = dimensionResource(R.dimen.margin_16_32_64),
-            ),
-        horizontalArrangement = Arrangement
-            .spacedBy(16.dp)
-    ) {
-        AppButton(
-            props = AppButtonProps.Custom(
-                text = "+ ${stringResource(R.string.add)}",
-            ),
-            onClick = {
-                callbacks.onAddProduct()
-            },
-            modifier = Modifier
-                .weight(1f),
-        )
-        AppButton(
-            props = AppButtonProps.Next(
-                titleId = R.string.actions,
-            ),
-            onClick = {
-                callbacks.onNext()
-            },
-            modifier = Modifier
-                .weight(1f),
-        )
     }
 }
 

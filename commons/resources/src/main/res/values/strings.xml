@@ -47,6 +47,8 @@
     <string name="pattern_all">All (%d)</string>
     <string name="pattern_enabled">Enabled (%d)</string>
     <string name="pattern_disabled">Disabled (%d)</string>
+    <string name="pattern_product_was_deleted">\'%s\' was deleted</string>
+    <string name="undo">Undo</string>
 
     <string-array name="final_steps">
         <item>Lock the screen</item>

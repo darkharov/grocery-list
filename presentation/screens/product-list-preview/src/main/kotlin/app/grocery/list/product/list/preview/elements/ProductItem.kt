@@ -48,7 +48,9 @@ internal fun ProductItem(
             )
         },
         onSwipeFromEndToStartFinished = {
-            callbacks.onDelete(productId = product.id)
+            callbacks.onDelete(
+                product = product,
+            )
         },
         modifier = modifier
             .fillMaxWidth(),

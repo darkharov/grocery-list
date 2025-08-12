@@ -6,6 +6,7 @@ import androidx.room.MapColumn
 import androidx.room.OnConflictStrategy.Companion.ABORT
 import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
+import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -20,6 +21,13 @@ internal interface ProductDao {
     @Query("DELETE FROM product WHERE product_id = :productId")
     suspend fun delete(productId: Int)
 
+    @Transaction
+    suspend fun selectAndDelete(productId: Int): ProductEntity {
+        val entity = select(productId = productId)
+        delete(productId = productId)
+        return entity
+    }
+
     @Query("DELETE FROM product")
     suspend fun deleteAll()
 
@@ -29,10 +37,14 @@ internal interface ProductDao {
               FROM product
              WHERE :enabledOnly == 0
                 OR enabled == 1
-          ORDER BY title
+          ORDER BY non_fk_category_id,
+                   title
         """
     )
     fun select(enabledOnly: Boolean): Flow<Map<@MapColumn("non_fk_category_id") Int, List<ProductEntity>>>
+
+    @Query("SELECT * FROM product WHERE product_id == :productId")
+    fun select(productId: Int): ProductEntity
 
     @Query("SELECT * FROM product")
     fun selectProducts(): Flow<List<ProductEntity>>

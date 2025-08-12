@@ -109,7 +109,7 @@ class ProductTitleFormatter @AssistedInject constructor(
     }
 
     @AssistedFactory
-    internal fun interface Factory {
+    fun interface Factory {
         fun create(format: ProductTitleFormat): ProductTitleFormatter
     }
 }

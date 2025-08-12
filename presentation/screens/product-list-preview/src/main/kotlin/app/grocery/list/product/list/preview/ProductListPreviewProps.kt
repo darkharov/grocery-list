@@ -18,6 +18,7 @@ internal data class ProductListPreviewProps(
         val id: Int,
         val enabled: Boolean = true,
         val title: AnnotatedString,
+        val payload: Any? = null,
     ) {
         val key = ProductKey(id = id)
     }

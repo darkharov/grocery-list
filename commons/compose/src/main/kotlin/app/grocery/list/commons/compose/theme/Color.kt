@@ -48,6 +48,7 @@ internal val DarkColorScheme = darkColorScheme(
     inverseOnSurface = BrandColor50,
     outline = Disabled2Dark,
     surfaceContainerHighest = DisabledDark,
+    inversePrimary = BrandColor80,
 )
 
 internal val LightColorScheme = lightColorScheme(
@@ -61,4 +62,5 @@ internal val LightColorScheme = lightColorScheme(
     inverseOnSurface = Color.Black,
     outline = Disabled2Light,
     surfaceContainerHighest = DisabledLight,
+    inversePrimary = BrandColor30,
 )

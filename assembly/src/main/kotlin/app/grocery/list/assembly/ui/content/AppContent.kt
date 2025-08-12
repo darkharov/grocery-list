@@ -11,10 +11,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -22,6 +28,8 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import app.grocery.list.assembly.R
+import app.grocery.list.assembly.ui.content.bottom.bar.AppBottomBar
 import app.grocery.list.clear.notifications.reminder.ClearNotificationsReminder
 import app.grocery.list.clear.notifications.reminder.clearNotificationsReminder
 import app.grocery.list.commons.compose.EventConsumer
@@ -46,16 +54,20 @@ internal fun AppContent(
     hasEmojiIfEnoughSpace: Boolean,
     delegates: AppContentDelegate,
     appEvents: ReceiveChannel<AppEvent>,
+    snackbars: ReceiveChannel<AppSnackbar>,
     modifier: Modifier = Modifier,
 ) {
     val startRoute = ProductListPreview
     val navController = rememberNavController()
+    val navigation = AppNavigationFacade(navController)
     val currentDestination by navController.currentBackStackEntryAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(navController) {
         navController.currentBackStackEntryFlow.collect { navBackStackEntry ->
             val destination = navBackStackEntry.destination
             delegates.handleCurrentDestinationChange(destination)
+            snackbarHostState.currentSnackbarData?.dismiss()
         }
     }
 
@@ -73,6 +85,27 @@ internal fun AppContent(
                     FinalSteps
                 }
                 navController.navigate(route)
+            }
+        }
+    }
+
+    val undo = stringResource(R.string.undo)
+    val productWasDeletedPattern = stringResource(R.string.pattern_product_was_deleted)
+
+    LaunchedEffect(Unit) {
+        for (snackbar in snackbars) {
+            when (snackbar) {
+                is AppSnackbar.UndoDeletionProduct -> {
+                    val result = snackbarHostState.showSnackbar(
+                        message = productWasDeletedPattern.format(snackbar.formattedTitle),
+                        actionLabel = undo.uppercase(),
+                        withDismissAction = true,
+                        duration = SnackbarDuration.Short,
+                    )
+                    if (result == SnackbarResult.ActionPerformed) {
+                        delegates.undoProductDeletion(snackbar.product)
+                    }
+                }
             }
         }
     }
@@ -104,6 +137,19 @@ internal fun AppContent(
                 },
             )
         },
+        bottomBar = {
+            if (currentDestination?.destination?.hasRoute<ProductListPreview>() == true) {
+                AppBottomBar(
+                    navigation = navigation,
+                    modifier = Modifier,
+                )
+            }
+        },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+            )
+        },
     ) { padding ->
         NavHost(
             navController = navController,
@@ -122,10 +168,7 @@ internal fun AppContent(
             popExitTransition = { ExitTransition.None },
             sizeTransform = null,
         ) {
-            val navigation = AppNavigationFacade(
-                navController = navController,
-            )
-            productListPreviewScreen(navigation)
+            productListPreviewScreen(delegates)
             productInputFormScreen(navigation)
             productListActionsScreen(delegates)
             clearNotificationsReminder(navigation)
@@ -140,11 +183,12 @@ internal fun AppContent(
 private fun AppContentPreview() {
     GroceryListTheme {
         AppContent(
-            numberOfAddedProducts = 42,
+            numberOfEnabledProducts = 42,
             progress = false,
             hasEmojiIfEnoughSpace = true,
             delegates = AppContentDelegateMock,
             appEvents = Channel(),
+            snackbars = Channel(),
         )
     }
 }

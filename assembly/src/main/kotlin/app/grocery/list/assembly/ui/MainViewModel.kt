@@ -3,7 +3,10 @@ package app.grocery.list.assembly.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.assembly.ui.content.AppEvent
+import app.grocery.list.assembly.ui.content.AppSnackbar
+import app.grocery.list.commons.format.ProductTitleFormatter
 import app.grocery.list.domain.AppRepository
+import app.grocery.list.domain.Product
 import app.grocery.list.domain.settings.ProductTitleFormat
 import app.grocery.list.storage.value.kotlin.get
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,9 +23,11 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: AppRepository,
+    private val productTitleFormatterFactory: ProductTitleFormatter.Factory,
 ) : ViewModel() {
 
     private val appEvents = Channel<AppEvent>(capacity = Channel.UNLIMITED)
+    private val snackbars = Channel<AppSnackbar>(capacity = Channel.UNLIMITED)
 
     val numberOfAddedProducts =
         repository
@@ -48,6 +53,9 @@ class MainViewModel @Inject constructor(
     fun appEvents(): ReceiveChannel<AppEvent> =
         appEvents
 
+    fun snackbars(): ReceiveChannel<AppSnackbar> =
+        snackbars
+
     fun notifyPushNotificationsGranted() {
         viewModelScope.launch(Dispatchers.IO) {
             progress.value = true
@@ -57,6 +65,23 @@ class MainViewModel @Inject constructor(
             )
             appEvents.trySend(event)
             progress.value = false
+        }
+    }
+
+    fun showUndoProductDeletionSnackbar(product: Product) {
+        val event = AppSnackbar.UndoDeletionProduct(
+            product = product,
+            formattedTitle = productTitleFormatterFactory
+                .create(ProductTitleFormat.EmojiAndFullText)
+                .print(product)
+                .collectStringTitle(),
+        )
+        snackbars.trySend(event)
+    }
+
+    fun undoProductDeletion(product: Product) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.putProduct(product)
         }
     }
 }
