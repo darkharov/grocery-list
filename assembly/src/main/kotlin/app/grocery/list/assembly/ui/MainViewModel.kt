@@ -29,9 +29,9 @@ class MainViewModel @Inject constructor(
     private val appEvents = Channel<AppEvent>(capacity = Channel.UNLIMITED)
     private val snackbars = Channel<AppSnackbar>(capacity = Channel.UNLIMITED)
 
-    val numberOfAddedProducts =
+    val numberOfEnabledProducts =
         repository
-            .numberOfAddedProducts()
+            .numberOfEnabledProducts()
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     val hasEmojiIfEnoughSpace =

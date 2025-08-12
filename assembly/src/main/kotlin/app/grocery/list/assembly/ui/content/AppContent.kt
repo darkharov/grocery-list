@@ -49,7 +49,7 @@ import kotlinx.coroutines.channels.ReceiveChannel
 
 @Composable
 internal fun AppContent(
-    numberOfAddedProducts: Int?,
+    numberOfEnabledProducts: Int?,
     progress: Boolean,
     hasEmojiIfEnoughSpace: Boolean,
     delegates: AppContentDelegate,
@@ -120,7 +120,7 @@ internal fun AppContent(
                         .Instance
                         .getOrDefault(currentDestination?.destination) {
                             AppToolbarProps.Content.Default(
-                                counter = numberOfAddedProducts,
+                                counter = numberOfEnabledProducts,
                                 onStart = currentDestination
                                     ?.destination
                                     ?.hasRoute(startRoute::class) == true,

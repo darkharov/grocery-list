@@ -67,12 +67,12 @@ class MainActivity :
 
     private fun setupContent() {
         setContent {
-            val numberOfAddedProducts by viewModel.numberOfAddedProducts.collectAsState()
+            val numberOfEnabledProducts by viewModel.numberOfEnabledProducts.collectAsState()
             val progress by viewModel.progress.collectAsState()
             val hasEmojiIfEnoughSpace by viewModel.hasEmojiIfEnoughSpace.collectAsState()
             themeUtil.GroceryListTheme {
                 AppContent(
-                    numberOfAddedProducts = numberOfAddedProducts,
+                    numberOfEnabledProducts = numberOfEnabledProducts,
                     progress = progress,
                     hasEmojiIfEnoughSpace = hasEmojiIfEnoughSpace,
                     delegates = this,
