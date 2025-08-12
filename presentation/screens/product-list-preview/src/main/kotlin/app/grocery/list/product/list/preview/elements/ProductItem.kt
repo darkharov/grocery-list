@@ -49,7 +49,7 @@ internal fun ProductItem(
         },
         onSwipeFromEndToStartFinished = {
             callbacks.onDelete(
-                product = product,
+                productId = product.id,
             )
         },
         modifier = modifier
