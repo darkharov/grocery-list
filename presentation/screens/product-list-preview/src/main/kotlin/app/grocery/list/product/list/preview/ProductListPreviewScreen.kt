@@ -129,15 +129,15 @@ private fun ListWithDividers(
     callbacks: ProductListPreviewCallbacks,
     modifier: Modifier = Modifier,
 ) {
-    val scrollableState = rememberLazyListState()
+    val listState = rememberLazyListState()
     ScrollableContentWithShadows(
-        scrollableState = scrollableState,
+        scrollableState = listState,
         modifier = modifier,
     ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),
-            state = scrollableState,
+            state = listState,
             contentPadding = PaddingValues(
                 vertical = 16.dp,
             ),
