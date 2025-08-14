@@ -83,9 +83,7 @@ private fun EventConsumer(
     navigation: ProductListPreviewNavigation,
     delegate: ProductListPreviewDelegate,
 ) {
-    EventConsumer(
-        events = viewModel.events(),
-    ) { event ->
+    EventConsumer(viewModel.events()) { event ->
         when (event) {
             is Event.OnAdd -> {
                 navigation.goToProductInputForm()

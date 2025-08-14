@@ -27,7 +27,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import app.grocery.list.clear.notifications.reminder.ClearNotificationsReminderViewModel.Event
@@ -56,10 +55,7 @@ private fun ClearNotificationsReminderScreen(
     val viewModel = hiltViewModel<ClearNotificationsReminderViewModel>()
     val props by viewModel.props.collectAsState()
 
-    EventConsumer(
-        events = viewModel.events(),
-        lifecycleState = Lifecycle.State.RESUMED,
-    ) { event ->
+    EventConsumer(viewModel.events()) { event ->
         when (event) {
             Event.Next -> {
                 navigation.goToFinalSteps()

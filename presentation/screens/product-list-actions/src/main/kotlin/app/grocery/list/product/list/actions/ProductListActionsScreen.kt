@@ -21,7 +21,6 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.EventConsumer
@@ -78,10 +77,7 @@ private fun EventsConsumer(
     viewModel: ProductListActionsViewModel,
     delegate: ProductListActionsDelegate,
 ) {
-    EventConsumer(
-        lifecycleState = Lifecycle.State.RESUMED,
-        events = viewModel.events(),
-    ) { event ->
+    EventConsumer(viewModel.events()) { event ->
         when (event) {
             is Event.OnExitFromApp -> {
                 delegate.exitFromApp()

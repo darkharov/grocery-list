@@ -58,9 +58,7 @@ private fun EventConsumer(
     navController: NavHostController,
     delegate: SettingsDelegate,
 ) {
-    EventConsumer(
-        events = viewModel.events(),
-    ) { event ->
+    EventConsumer(viewModel.events()) { event ->
         when (event) {
             SettingsViewModel.Event.OnContactSupport -> {
                 delegate.contactSupport()

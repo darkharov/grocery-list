@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -69,10 +68,7 @@ internal fun AppContent(
         }
     }
 
-    EventConsumer(
-        events = appEvents,
-        lifecycleState = Lifecycle.State.RESUMED,
-    ) { event ->
+    EventConsumer(appEvents) { event ->
         when (event) {
             is AppEvent.PushNotificationsGranted -> {
                 val reminderEnabled = event.clearNotificationsReminderEnabled
