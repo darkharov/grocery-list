@@ -47,7 +47,7 @@
     <string name="pattern_all">Все (%d)</string>
     <string name="pattern_enabled">Включенные (%d)</string>
     <string name="pattern_disabled">Выключенные (%d)</string>
-    <string name="pattern_product_was_deleted">\'%s\' был удален</string>
+    <string name="pattern_product_was_deleted">Пункт \'%s\' удален</string>
     <string name="undo">Отменить</string>
 
     <string-array name="final_steps">

@@ -10,7 +10,6 @@ import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -26,30 +25,25 @@ internal class ProductListPreviewViewModel @Inject constructor(
 ) : ViewModel(),
     ProductListPreviewCallbacks {
 
-    val props: StateFlow<ProductListPreviewProps?> =
-        combine(
-            mapper(),
-            repository.categorizedProducts(
-                criteria = AppRepository.CategorizedProductsCriteria.All,
-            ),
-            ProductListMapper::transform,
-        ).stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5_000),
-            null,
-        )
-
-    private fun mapper(): Flow<ProductListMapper> =
-        getProductTitleFormatter
-            .execute()
-            .map(mapperFactory::create)
+    val props: StateFlow<ProductListPreviewProps?> = collectProps()
 
     private val events = Channel<Event>(Channel.UNLIMITED)
+
+    private fun collectProps() = combine(
+        getProductTitleFormatter.execute().map(mapperFactory::create),
+        repository.categorizedProducts(),
+        ProductListMapper::transform,
+    ).stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        null,
+    )
 
     override fun onDelete(productId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             val deletedProduct = repository.deleteProduct(productId = productId)
-            events.trySend(Event.OnProductDeleted(deletedProduct))
+            val event = Event.OnProductDeleted(deletedProduct)
+            events.trySend(event)
         }
     }
 
@@ -62,13 +56,20 @@ internal class ProductListPreviewViewModel @Inject constructor(
         }
     }
 
+    override fun onAddClick() {
+        events.trySend(Event.OnAdd)
+    }
+
+    override fun onNextClick() {
+        events.trySend(Event.OnNext)
+    }
+
     fun events(): ReceiveChannel<Event> =
         events
 
     sealed class Event {
-
-        data class OnProductDeleted(
-            val product: Product,
-        ) : Event()
+        data object OnAdd : Event()
+        data object OnNext : Event()
+        data class OnProductDeleted(val product: Product) : Event()
     }
 }

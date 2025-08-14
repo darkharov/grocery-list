@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -29,7 +30,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import app.grocery.list.assembly.R
-import app.grocery.list.assembly.ui.content.bottom.bar.AppBottomBar
 import app.grocery.list.clear.notifications.reminder.ClearNotificationsReminder
 import app.grocery.list.clear.notifications.reminder.clearNotificationsReminder
 import app.grocery.list.commons.compose.EventConsumer
@@ -59,7 +59,6 @@ internal fun AppContent(
 ) {
     val startRoute = ProductListPreview
     val navController = rememberNavController()
-    val navigation = AppNavigationFacade(navController)
     val currentDestination by navController.currentBackStackEntryAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -67,12 +66,10 @@ internal fun AppContent(
         navController.currentBackStackEntryFlow.collect { navBackStackEntry ->
             val destination = navBackStackEntry.destination
             delegates.handleCurrentDestinationChange(destination)
-            snackbarHostState.currentSnackbarData?.dismiss()
         }
     }
 
     EventConsumer(
-        key = appEvents,
         events = appEvents,
         lifecycleState = Lifecycle.State.RESUMED,
     ) { event ->
@@ -137,17 +134,16 @@ internal fun AppContent(
                 },
             )
         },
-        bottomBar = {
-            if (currentDestination?.destination?.hasRoute<ProductListPreview>() == true) {
-                AppBottomBar(
-                    navigation = navigation,
-                    modifier = Modifier,
-                )
-            }
-        },
         snackbarHost = {
             SnackbarHost(
                 hostState = snackbarHostState,
+                snackbar = { snackbarData ->
+                    Snackbar(
+                        snackbarData = snackbarData,
+                        modifier = Modifier
+                            .padding(bottom = 120.dp),
+                    )
+                }
             )
         },
     ) { padding ->
@@ -168,7 +164,8 @@ internal fun AppContent(
             popExitTransition = { ExitTransition.None },
             sizeTransform = null,
         ) {
-            productListPreviewScreen(delegates)
+            val navigation = AppNavigationFacade(navController)
+            productListPreviewScreen(delegates, navigation)
             productInputFormScreen(navigation)
             productListActionsScreen(delegates)
             clearNotificationsReminder(navigation)

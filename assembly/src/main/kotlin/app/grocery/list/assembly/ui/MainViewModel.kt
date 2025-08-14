@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import app.grocery.list.assembly.ui.content.AppEvent
 import app.grocery.list.assembly.ui.content.AppSnackbar
 import app.grocery.list.commons.format.ProductTitleFormatter
+import app.grocery.list.commons.format.ellipsize
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.Product
 import app.grocery.list.domain.settings.ProductTitleFormat
@@ -72,9 +73,10 @@ class MainViewModel @Inject constructor(
         val event = AppSnackbar.UndoDeletionProduct(
             product = product,
             formattedTitle = productTitleFormatterFactory
-                .create(ProductTitleFormat.EmojiAndFullText)
+                .create(ProductTitleFormat.WithoutEmoji)
                 .print(product)
-                .collectStringTitle(),
+                .collectStringTitle()
+                .ellipsize(maxLength = 10),
         )
         snackbars.trySend(event)
     }
