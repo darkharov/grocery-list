@@ -59,7 +59,6 @@ private fun EventConsumer(
     delegate: SettingsDelegate,
 ) {
     EventConsumer(
-        key = viewModel,
         events = viewModel.events(),
     ) { event ->
         when (event) {

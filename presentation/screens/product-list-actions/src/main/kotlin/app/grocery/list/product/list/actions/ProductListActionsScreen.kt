@@ -79,7 +79,6 @@ private fun EventsConsumer(
     delegate: ProductListActionsDelegate,
 ) {
     EventConsumer(
-        key = viewModel,
         lifecycleState = Lifecycle.State.RESUMED,
         events = viewModel.events(),
     ) { event ->

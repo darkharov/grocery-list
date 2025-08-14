@@ -57,7 +57,6 @@ private fun ClearNotificationsReminderScreen(
     val props by viewModel.props.collectAsState()
 
     EventConsumer(
-        key = viewModel,
         events = viewModel.events(),
         lifecycleState = Lifecycle.State.RESUMED,
     ) { event ->

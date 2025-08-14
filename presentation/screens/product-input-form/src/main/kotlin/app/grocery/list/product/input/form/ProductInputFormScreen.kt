@@ -73,7 +73,6 @@ internal fun ProductInputFormScreen(
 ) {
     val props by viewModel.props().collectAsState()
     EventConsumer(
-        key = viewModel,
         lifecycleState = Lifecycle.State.RESUMED,
         events = viewModel.events(),
     ) { event ->
