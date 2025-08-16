@@ -38,7 +38,7 @@
     <string name="list_item_in_notification">Пункт списка в уведомлении</string>
     <string name="without_emoji">Без эмодзи</string>
     <string name="emoji_and_full_text">Эмодзи + Полный текст</string>
-    <string name="emoji_and_additional_details_only">Эмодзи + Только доплнительные детали</string>
+    <string name="emoji_and_additional_details_only">Эмодзи + Только дополнительные детали</string>
     <string name="example_of_notification">Пример уведомления</string>
     <string name="example_of_notification_warning">Уведомления будут выглядеть так приблизительно. Конечный вид зависит от конкретного производителя устройства.</string>
     <string name="sample_products">Помидор (черри, 1 судок)|0|🍅|Помидор\nСыр 500г|1|🧀|Сыр\nМолоко 2л|1|🥛|Молоко</string>
