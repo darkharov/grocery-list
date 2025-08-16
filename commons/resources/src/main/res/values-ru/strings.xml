@@ -21,7 +21,7 @@
     <string name="share_collected_list">Поделиться собранным списком</string>
     <string name="sharing_message_suffix">1) Скопируйте это сообщение\n2) Нажмите \'%s\' в разделе \'%s\' в %s</string>
     <string name="paste_copied_list">Вставить скопированный список</string>
-    <string name="copied_product_list_not_found">Скопированный список продуктов не найден</string>
+    <string name="copied_product_list_not_found">Скопированный список продуктов к сожалению не найден</string>
     <string name="add_or_replace_copied_products">Вы хотите добавить новые элементы к уже имеющимся или полностью заменить имеющиеся новыми?</string>
     <string name="replace">Заменить</string>
     <string name="i_am_at_shop">Я в магазине</string>
