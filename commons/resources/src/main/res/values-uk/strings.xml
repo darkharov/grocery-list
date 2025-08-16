@@ -1,0 +1,65 @@
+<resources>
+
+    <string name="grocery_list">Список продуктів</string>
+    <string name="settings">Налаштування</string>
+    <string name="create_list">Створити список</string>
+    <string name="product_to_buy_label">Продукт, що треба купити</string>
+    <string name="broccoli">Брокколі</string>
+    <string name="category">Категорія</string>
+    <string name="category_fruits_vegetables_berries">Фрукти / Овочі / Ягоди</string>
+    <string name="category_meat_fish_shrimp">М\'ясо / Риба / Морепродукти</string>
+    <string name="category_dairy_products">Молочні продукти</string>
+    <string name="category_flour_products_and_sweets">Борошно / Солодощі</string>
+    <string name="category_other">Інше</string>
+    <string name="add">Додати</string>
+    <string name="done">Готово</string>
+    <string name="actions">Дії</string>
+    <string name="clear_list">Очистити список</string>
+    <string name="clear_product_list_confirmation">Ви дійсно хочете видалити всі елементи зі списку?</string>
+    <string name="exit">Вийти</string>
+    <string name="save_and_exit">Зберегти та вийти</string>
+    <string name="share_collected_list">Поділитись зібраним списком</string>
+    <string name="sharing_message_suffix">1) Скопіюйте це повідомлення\n2) Натисніть \'%s\' у розділі \'%s\' в %s</string>
+    <string name="paste_copied_list">Вставити скопійований список</string>
+    <string name="copied_product_list_not_found">Скопійований список продуктів нажаль не знайдено</string>
+    <string name="add_or_replace_copied_products">Ви хочете додати нові елементи до наявних або повністю замінити наявні новими?</string>
+    <string name="replace">Замінити</string>
+    <string name="i_am_at_shop">Я у магазині</string>
+    <string name="delete">Видалити</string>
+    <string name="next">Далі</string>
+    <string name="list_is_empty">Список порожній…</string>
+    <string name="advice">Порада</string>
+    <string name="remove_unnecessary_notifications">Видаліть непотрібні сповіщення інших програм</string>
+    <string name="do_not_show_this_screen_again">Більше не показувати цей екран</string>
+    <string name="final_steps">Фінальні кроки</string>
+    <string name="emoji">Емодзі</string>
+    <string name="list_format">Формат списку</string>
+    <string name="list_item_in_notification">Пункт списку у повідомленні</string>
+    <string name="without_emoji">Без емодзі</string>
+    <string name="emoji_and_full_text">Эмодзі + Повний текст</string>
+    <string name="emoji_and_additional_details_only">Эмодзі + Тільки додаткові деталі</string>
+    <string name="example_of_notification">Приклад повідомлення</string>
+    <string name="example_of_notification_warning">Повідомлення будуть виглядати так приблизно. Кінцевий вигляд залежить від конкретного виробника.</string>
+    <string name="sample_products">Помідор (чері, 1 контейнер)|0|🍅|Помідор\nСир 500г|1|🧀|Сир\nМолоко 2л|1|🥛|Молоко</string>
+    <string name="contact_support">Зв\'язатися з підтримкою</string>
+    <string name="sublist_to_share_dialog_title">Якими саме пунктами списку ви хотіли б поділитись?</string>
+    <string name="pattern_all">Усі (%d)</string>
+    <string name="pattern_enabled">Включені (%d)</string>
+    <string name="pattern_disabled">Виключені (%d)</string>
+    <string name="pattern_product_was_deleted">Пункт \'%s\' видал.</string>
+    <string name="undo">Відмінити</string>
+
+    <string-array name="final_steps">
+        <item>Заблокуйте екран</item>
+        <item>Зачекайте приблизно три секунди</item>
+        <item>Натисніть кнопку блокування екрана повторно</item>
+        <item>Змахуйте повідомлення у міру заповнення кошика</item>
+    </string-array>
+
+    <plurals name="products_successfully_added">
+        <item quantity="one">Додано %d продукт</item>
+        <item quantity="few">Додано %d продукта</item>
+        <item quantity="many">Додано %d продуктів</item>
+    </plurals>
+
+</resources>
