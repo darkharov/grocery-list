@@ -13,7 +13,6 @@
     <string name="category_other">Другое</string>
     <string name="add">Добавить</string>
     <string name="done">Готово</string>
-    <string name="list_preview">Предпросмотр списка</string>
     <string name="actions">Действия</string>
     <string name="clear_list">Очистить список</string>
     <string name="clear_product_list_confirmation">Вы действительно хотите удалить все элементы из списка?</string>
