@@ -16,6 +16,7 @@ internal interface AppContentDelegate :
 }
 
 internal object AppContentDelegateMock : AppContentDelegate {
+    override val appVersionName: String = ""
     override fun exitFromApp() {}
     override fun startShopping() {}
     override fun handleCurrentDestinationChange(newValue: NavDestination) {}

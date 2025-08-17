@@ -1,13 +1,24 @@
 package app.grocery.list.settings
 
 import androidx.lifecycle.ViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.flow.MutableStateFlow
 
-@HiltViewModel
-internal class SettingsViewModel @Inject constructor() : ViewModel(), SettingsCallbacks {
+@HiltViewModel(
+    assistedFactory = SettingsViewModel.Factory::class,
+)
+internal class SettingsViewModel @AssistedInject constructor(
+    @Assisted
+    appVersionName: String,
+) : ViewModel(),
+    SettingsCallbacks {
+
+    val props = MutableStateFlow(SettingsProps(appVersionName = appVersionName))
 
     private val events = Channel<Event>(Channel.UNLIMITED)
 
@@ -25,5 +36,10 @@ internal class SettingsViewModel @Inject constructor() : ViewModel(), SettingsCa
     sealed class Event {
         data object OnGoToListFormatSettings: Event()
         data object OnContactSupport: Event()
+    }
+
+    @AssistedFactory
+    fun interface Factory {
+        fun create(appVersionName: String): SettingsViewModel
     }
 }

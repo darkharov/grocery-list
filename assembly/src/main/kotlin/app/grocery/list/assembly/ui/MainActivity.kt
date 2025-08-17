@@ -44,6 +44,8 @@ class MainActivity :
     private val permissionUtil = PermissionUtil()
     private var currentDestination: NavDestination? = null
 
+    override val appVersionName: String = BuildConfig.VERSION_NAME
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)

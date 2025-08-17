@@ -1,13 +1,27 @@
 package app.grocery.list.settings
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -40,13 +54,21 @@ private fun NavGraphBuilder.settings(
     navController: NavHostController,
 ) {
     composable<Settings> {
-        val viewModel = hiltViewModel<SettingsViewModel>()
+        val viewModel = hiltViewModel<SettingsViewModel, SettingsViewModel.Factory>(
+            creationCallback = { factory ->
+                factory.create(
+                    appVersionName = delegate.appVersionName,
+                )
+            }
+        )
+        val props by viewModel.props.collectAsState()
         EventConsumer(
             viewModel = viewModel,
             navController = navController,
             delegate = delegate,
         )
         SettingsScreen(
+            props = props,
             callbacks = viewModel,
         )
     }
@@ -72,12 +94,14 @@ private fun EventConsumer(
 
 @Composable
 private fun SettingsScreen(
+    props: SettingsProps,
     callbacks: SettingsCallbacks,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
             .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AppTextButton(
             props = AppTextButtonProps.SettingsCategory(
@@ -101,6 +125,23 @@ private fun SettingsScreen(
                 callbacks.onContactSupportClick()
             },
         )
+        Spacer(
+            modifier = Modifier
+                .weight(1f),
+        )
+        Text(
+            text = props.appVersionName,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .windowInsetsPadding(
+                    WindowInsets
+                        .systemBars
+                        .only(WindowInsetsSides.Bottom),
+                )
+                .padding(bottom = 12.dp)
+                .alpha(0.8f),
+        )
     }
 }
 
@@ -110,6 +151,7 @@ private fun SettingsScreenPreview() {
     GroceryListTheme {
         Scaffold { padding ->
             SettingsScreen(
+                props = SettingsProps(appVersionName = "1.0.0"),
                 callbacks = SettingsCallbacksMock,
                 modifier = Modifier
                     .padding(padding),
