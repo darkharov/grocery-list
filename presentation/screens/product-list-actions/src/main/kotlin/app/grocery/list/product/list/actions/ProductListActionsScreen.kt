@@ -152,7 +152,7 @@ private fun Content(
             )
             WideAppButton(
                 props = AppButtonProps.Custom(
-                    text = stringResource(R.string.share_collected_list),
+                    text = stringResource(R.string.share_current_list),
                     drawableEndId = R.drawable.ic_share,
                     state = when {
                         props.productListEmpty -> {

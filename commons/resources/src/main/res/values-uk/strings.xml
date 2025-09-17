@@ -18,7 +18,7 @@
     <string name="clear_product_list_confirmation">Ви дійсно хочете видалити всі елементи зі списку?</string>
     <string name="exit">Вийти</string>
     <string name="save_and_exit">Зберегти та вийти</string>
-    <string name="share_collected_list">Поділитись зібраним списком</string>
+    <string name="share_current_list">Поділитись поточним списком</string>
     <string name="sharing_message_suffix">1) Скопіюйте це повідомлення\n2) Натисніть \'%s\' у розділі \'%s\' в %s</string>
     <string name="paste_copied_list">Вставити скопійований список</string>
     <string name="copied_product_list_not_found">Скопійований список продуктів нажаль не знайдено</string>
