@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.theme.GroceryListTheme
@@ -54,31 +55,82 @@ fun AppTextField(
             null
         } else {
             {
-                Text(
-                    text = placeholder.value(),
-                    style = LocalAppTypography.current.plainText,
-                    modifier = Modifier
-                        .alpha(0.2f),
-                )
+                AppPlaceholder(placeholder)
             }
         },
         trailingIcon = trailingIcon,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         singleLine = singleLine,
-        colors = TextFieldDefaults.colors(
-            focusedLabelColor = if (isSystemInDarkTheme()) {
-                MaterialTheme.colorScheme.primary
-            } else {
-                MaterialTheme.colorScheme.secondary
-            },
-            focusedContainerColor = Color.Transparent,
-            unfocusedContainerColor = Color.Transparent,
-            disabledContainerColor = Color.Transparent,
-            errorContainerColor = Color.Transparent,
-        ),
+        colors = appTextFieldColors(),
     )
 }
+
+@Composable
+fun AppTextField(
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+    readOnly: Boolean = false,
+    label: StringValue? = null,
+    placeholder: StringValue? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    singleLine: Boolean = false,
+) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier,
+        readOnly = readOnly,
+        label = if (label == null) {
+            null
+        } else {
+            {
+                Text(
+                    text = label.value(),
+                )
+            }
+        },
+        placeholder = if (placeholder == null) {
+            null
+        } else {
+            {
+                AppPlaceholder(placeholder)
+            }
+        },
+        trailingIcon = trailingIcon,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        singleLine = singleLine,
+        colors = appTextFieldColors(),
+    )
+}
+
+@Composable
+private fun AppPlaceholder(placeholder: StringValue) {
+    Text(
+        text = placeholder.value(),
+        style = LocalAppTypography.current.plainText,
+        modifier = Modifier
+            .alpha(0.2f),
+    )
+}
+
+@Composable
+private fun appTextFieldColors() =
+    TextFieldDefaults.colors(
+        focusedLabelColor = if (isSystemInDarkTheme()) {
+            MaterialTheme.colorScheme.primary
+        } else {
+            MaterialTheme.colorScheme.secondary
+        },
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+        disabledContainerColor = Color.Transparent,
+        errorContainerColor = Color.Transparent,
+    )
 
 @PreviewLightDark
 @Composable

@@ -94,6 +94,11 @@ private fun EventConsumer(
             is Event.OnProductDeleted -> {
                 delegate.showUndoProductDeletionSnackbar(event.product)
             }
+            is Event.OnEditProduct -> {
+                navigation.goToProductInputForm(
+                    productId = event.productId,
+                )
+            }
         }
     }
 }

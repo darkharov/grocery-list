@@ -52,6 +52,9 @@ internal class AppRepositoryImpl @Inject constructor(
     override fun categories(): Flow<List<Product.Category>> =
         categoryDao.categories()
 
+    override suspend fun productTitle(productId: Int): String =
+        productDao.selectTitle(productId)
+
     override suspend fun findCategory(search: String): Product.Category? =
         categoryDao.category(search = search)
 

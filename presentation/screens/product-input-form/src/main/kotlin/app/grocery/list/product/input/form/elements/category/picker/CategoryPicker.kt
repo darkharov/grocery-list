@@ -33,8 +33,8 @@ import app.grocery.list.product.input.form.R
 @Composable
 internal fun CategoryPicker(
     props: CategoryPickerProps,
-    focusRequester: FocusRequester,
     callbacks: CategoryPickerCallbacks,
+    focusRequester: FocusRequester,
     modifier: Modifier = Modifier,
 ) {
     ExposedDropdownMenuBox(

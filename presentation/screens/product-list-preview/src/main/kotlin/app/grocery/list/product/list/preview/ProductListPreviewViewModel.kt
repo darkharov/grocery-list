@@ -64,6 +64,10 @@ internal class ProductListPreviewViewModel @Inject constructor(
         events.trySend(Event.OnNext)
     }
 
+    override fun onEditProduct(productId: Int) {
+        events.trySend(Event.OnEditProduct(productId = productId))
+    }
+
     fun events(): ReceiveChannel<Event> =
         events
 
@@ -71,5 +75,6 @@ internal class ProductListPreviewViewModel @Inject constructor(
         data object OnAdd : Event()
         data object OnNext : Event()
         data class OnProductDeleted(val product: Product) : Event()
+        data class OnEditProduct(val productId: Int) : Event()
     }
 }

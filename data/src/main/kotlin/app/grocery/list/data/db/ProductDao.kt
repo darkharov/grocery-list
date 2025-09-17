@@ -46,6 +46,9 @@ internal interface ProductDao {
     @Query("SELECT * FROM product WHERE product_id == :productId")
     fun select(productId: Int): ProductEntity
 
+    @Query("SELECT title FROM product WHERE product_id == :productId")
+    fun selectTitle(productId: Int): String
+
     @Query("SELECT * FROM product")
     fun selectProducts(): Flow<List<ProductEntity>>
 

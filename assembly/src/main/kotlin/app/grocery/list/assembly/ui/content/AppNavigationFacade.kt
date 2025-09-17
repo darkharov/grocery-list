@@ -22,8 +22,8 @@ internal class AppNavigationFacade(
         navController.navigate(ProductListActions)
     }
 
-    override fun goToProductInputForm() {
-        navController.navigate(ProductInputForm)
+    override fun goToProductInputForm(productId: Int?) {
+        navController.navigate(ProductInputForm(productId = productId))
     }
 
     override fun goToFinalSteps() {

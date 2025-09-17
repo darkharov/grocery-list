@@ -1,7 +1,7 @@
 package app.grocery.list.product.list.preview.elements
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -53,6 +53,19 @@ internal fun ProductItem(
             )
         },
         modifier = modifier
+            .combinedClickable(
+                onClick = {
+                    callbacks.onProductEnabledChange(
+                        productId = product.id,
+                        newValue = !(product.enabled),
+                    )
+                },
+                onLongClick = {
+                    callbacks.onEditProduct(
+                        productId = product.id,
+                    )
+                },
+            )
             .fillMaxWidth(),
     ) {
         Content(
@@ -105,12 +118,6 @@ private fun Content(
     Row(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
-            .clickable {
-                callbacks.onProductEnabledChange(
-                    productId = product.id,
-                    newValue = !(checked),
-                )
-            }
             .padding(
                 vertical = 6.dp,
                 horizontal = horizontalPadding,
@@ -128,7 +135,12 @@ private fun Content(
         )
         Switch(
             checked = checked,
-            onCheckedChange = null,
+            onCheckedChange = { newValue ->
+                callbacks.onProductEnabledChange(
+                    productId = product.id,
+                    newValue = newValue,
+                )
+            },
         )
     }
 }

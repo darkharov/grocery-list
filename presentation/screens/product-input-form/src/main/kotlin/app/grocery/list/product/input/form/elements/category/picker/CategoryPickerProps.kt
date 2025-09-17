@@ -7,9 +7,9 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 internal data class CategoryPickerProps(
-    val expanded: Boolean,
-    val categories: ImmutableList<CategoryProps>,
-    val selectedCategory: CategoryProps?,
+    val expanded: Boolean = false,
+    val categories: ImmutableList<CategoryProps> = persistentListOf(),
+    val selectedCategory: CategoryProps? = null,
 )
 
 internal class CategoryPickerMocks : PreviewParameterProvider<CategoryPickerProps> {

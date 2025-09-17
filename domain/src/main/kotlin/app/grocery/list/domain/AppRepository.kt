@@ -21,6 +21,7 @@ abstract class AppRepository {
     abstract fun productListEmpty(): Flow<Boolean>
     abstract fun sampleProducts(): Flow<List<Product>>
 
+    abstract suspend fun productTitle(productId: Int): String
     abstract suspend fun findCategory(search: String): Product.Category?
     abstract suspend fun findEmoji(search: String): EmojiSearchResult?
     abstract suspend fun clearProducts()

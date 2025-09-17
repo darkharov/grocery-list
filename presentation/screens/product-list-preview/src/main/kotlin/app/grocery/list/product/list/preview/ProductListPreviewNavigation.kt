@@ -1,6 +1,6 @@
 package app.grocery.list.product.list.preview
 
 interface ProductListPreviewNavigation {
-    fun goToProductInputForm()
+    fun goToProductInputForm(productId: Int? = null)
     fun goToActions()
 }
