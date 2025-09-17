@@ -3,12 +3,12 @@
 
     <string-array name="fruits_and_vegetables">
         <item>{🍎}Apple</item>
-        <item>{🍏}Green Apple|Apple Green|Apple (Green)</item>
+        <item>{🍏}Green Apple|Apple Green</item>
         <item>{🍌}Banana</item>
         <item>{🥦}Broccoli</item>
         <item>{🥕}Carrot</item>
-        <item>{🌶️}Chili Pepper</item>
-        <item>{🫑}Bell Pepper|Sweet Pepper|Capsicum</item>
+        <item>{🌶️}Chili|Red pepper</item>
+        <item>{🫑}Pepper|Capsicum</item>
         <item>{🥒}Cucumber</item>
         <item>{🍆}Eggplant|Aubergine</item>
         <item>{🧄}Garlic</item>
@@ -40,7 +40,7 @@
         <item>{🎃}Pumpkin</item>
         <item>{🍄‍🟫}Mushroom|Champignon</item>
         <item>{🫘}Bean</item>
-        <item>{🥬}Leafy Green|Chinese cabbage|Cabbage (Chinese)</item>
+        <item>{🥬}Leafy Green|Chinese cabbage</item>
         <item>Cabbage</item>
         <item>Apricot</item>
         <item>Grapefruit</item>
@@ -82,6 +82,7 @@
         <item>Sprat</item>
         <item>Herring</item>
         <item>Mackerel</item>
+        <item>Hake</item>
         <item>Mussel</item>
         <item>Caviar</item>
     </string-array>
@@ -139,9 +140,12 @@
         <item>Mayonnaise</item>
         <item>Mustard</item>
         <item>Sauce</item>
+        <item>Pelmeni</item>
+        <item>Khinkali</item>
+        <item>Dumplings</item>
         <item>{🍕}Pizza</item>
-        <item>{🍷}Wine|Red wine</item>
-        <item>{🥂}White wine|Wine (white)</item>
+        <item>{🍷}Wine</item>
+        <item>{🥂}White wine</item>
         <item>{🍸}Martini</item>
         <item>{🍾}Champagne</item>
         <item>{🍺}Beer</item>
