@@ -34,7 +34,8 @@
         <item>{🫐}Blueberry|Blueberries</item>
         <item>{🫛}Pea</item>
         <item>{🥝}Kiwi</item>
-        <item>{🥜}Peanuts</item>
+        <item>{🥜}Peanut</item>
+        <item>{🌰}Chestnut</item>
         <item>{🫚}Ginger</item>
         <item>{🫜}Root Vegetable</item>
         <item>{🎃}Pumpkin</item>
@@ -53,6 +54,17 @@
         <item>Pomegranate</item>
         <item>Pomelo</item>
         <item>Nectarine</item>
+        <item>Persimmon</item>
+        <item>Prune</item>
+        <item>Dried apricot</item>
+        <item>Raisin</item>
+        <item>Nut</item>
+        <item>Almond</item>
+        <item>Walnuts</item>
+        <item>Hazelnuts</item>
+        <item>Hazelnuts</item>
+        <item>Cashews</item>
+        <item>Pistachio</item>
     </string-array>
 
     <string-array name="dairy_products">
@@ -117,6 +129,7 @@
         <item>Noodle</item>
         <item>Sugar</item>
         <item>Cola</item>
+        <item>Lemonade</item>
     </string-array>
 
     <string-array name="other">
@@ -136,6 +149,7 @@
         <item>Ground Pepper</item>
         <item>Powder</item>
         <item>Sponge</item>
+        <item>Salad bowl</item>
         <item>{🧻}Toilet paper</item>
         <item>Roll|Paper towels</item>
         <item>Pads</item>
