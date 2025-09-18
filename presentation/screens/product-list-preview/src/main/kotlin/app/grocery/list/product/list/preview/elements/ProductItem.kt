@@ -119,7 +119,7 @@ private fun Content(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
             .padding(
-                vertical = 6.dp,
+                vertical = 2.dp,
                 horizontal = horizontalPadding,
             ),
         verticalAlignment = Alignment.CenterVertically,
