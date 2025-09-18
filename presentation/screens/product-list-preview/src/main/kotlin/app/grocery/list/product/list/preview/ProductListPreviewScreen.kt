@@ -151,52 +151,6 @@ private fun Content(
 }
 
 @Composable
-private fun Buttons(
-    callbacks: ProductListPreviewCallbacks,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier
-            .padding(
-                top = 16.dp,
-                bottom = 4.dp,
-            )
-            .padding(
-                horizontal = dimensionResource(R.dimen.margin_16_32_64),
-            )
-            .windowInsetsPadding(
-                WindowInsets
-                    .systemBars
-                    .union(WindowInsets.displayCutout)
-                    .only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal)
-            ),
-        horizontalArrangement = Arrangement
-            .spacedBy(16.dp)
-    ) {
-        AppButton(
-            props = AppButtonProps.Custom(
-                text = "+ ${stringResource(R.string.add)}",
-            ),
-            onClick = {
-                callbacks.onAddClick()
-            },
-            modifier = Modifier
-                .weight(1f),
-        )
-        AppButton(
-            props = AppButtonProps.Next(
-                titleId = R.string.actions,
-            ),
-            onClick = {
-                callbacks.onNextClick()
-            },
-            modifier = Modifier
-                .weight(1f),
-        )
-    }
-}
-
-@Composable
 private fun NoItemsMessage(
     modifier: Modifier = Modifier,
 ) {
@@ -273,6 +227,52 @@ private fun LazyListScope.items(
                     .animateItem(),
             )
         }
+    }
+}
+
+@Composable
+private fun Buttons(
+    callbacks: ProductListPreviewCallbacks,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .padding(
+                top = 16.dp,
+                bottom = 4.dp,
+            )
+            .padding(
+                horizontal = dimensionResource(R.dimen.margin_16_32_64),
+            )
+            .windowInsetsPadding(
+                WindowInsets
+                    .systemBars
+                    .union(WindowInsets.displayCutout)
+                    .only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal)
+            ),
+        horizontalArrangement = Arrangement
+            .spacedBy(16.dp)
+    ) {
+        AppButton(
+            props = AppButtonProps.Custom(
+                text = "+ ${stringResource(R.string.add)}",
+            ),
+            onClick = {
+                callbacks.onAddClick()
+            },
+            modifier = Modifier
+                .weight(1f),
+        )
+        AppButton(
+            props = AppButtonProps.Next(
+                titleId = R.string.actions,
+            ),
+            onClick = {
+                callbacks.onNextClick()
+            },
+            modifier = Modifier
+                .weight(1f),
+        )
     }
 }
 
