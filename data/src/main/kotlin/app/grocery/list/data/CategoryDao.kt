@@ -79,14 +79,16 @@ internal class CategoryDao @Inject constructor(
         flowOf(categories)
 
     fun category(search: String): Product.Category? =
-        findKeywordAndCategoryWithOptionalEmoji(search)
+        findKeywordAndCategoryWithOptionalEmoji(rawSearch = search)
             ?.value
             ?.category
 
-    private fun findKeywordAndCategoryWithOptionalEmoji(search: String): Map.Entry<String, CategoryWithOptionalEmoji>? =
-        keywordAndCategoryWithOptionalEmojiMap
-            .filterKeys { keyword -> search.contains(keyword, ignoreCase = true) }
+    private fun findKeywordAndCategoryWithOptionalEmoji(rawSearch: String): Map.Entry<String, CategoryWithOptionalEmoji>? {
+        val normalizedSearch = rawSearch.filter { it.isLetter() || it.isWhitespace() }
+        return keywordAndCategoryWithOptionalEmojiMap
+            .filterKeys { keyword -> normalizedSearch.contains(keyword, ignoreCase = true) }
             .maxByOrNull { it.key.length }
+    }
 
     fun emoji(search: String): EmojiSearchResult? {
         val entry = findKeywordAndCategoryWithOptionalEmoji(search)
