@@ -49,6 +49,10 @@
         <item>Raspberry|Raspberries</item>
         <item>Spinach</item>
         <item>Plum</item>
+        <item>Cowberry</item>
+        <item>Pomegranate</item>
+        <item>Pomelo</item>
+        <item>Nectarine</item>
     </string-array>
 
     <string-array name="dairy_products">
@@ -89,6 +93,7 @@
 
     <string-array name="flour_products_and_sweets">
         <item>{🍞}Bread</item>
+        <item>{🫓}Flatbread</item>
         <item>{🥖}Baguette</item>
         <item>{🥐}Croissant</item>
         <item>{🍦}Ice Cream</item>
@@ -156,6 +161,7 @@
         <item>{🌭}Hot dog</item>
         <item>{🪳}Cockroach</item>
         <item>{🍟}Fries</item>
+        <item>{🕯️}Candles</item>
     </string-array>
 
 </resources>

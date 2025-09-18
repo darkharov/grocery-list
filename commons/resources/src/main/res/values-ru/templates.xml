@@ -49,6 +49,10 @@
         <item>Малина|Малинка</item>
         <item>Шпинат</item>
         <item>Слива|Сливы</item>
+        <item>Брусника</item>
+        <item>Гранат</item>
+        <item>Помело</item>
+        <item>Нектарин</item>
     </string-array>
 
     <string-array name="dairy_products">
@@ -89,6 +93,7 @@
 
     <string-array name="flour_products_and_sweets">
         <item>{🍞}Хлеб</item>
+        <item>{🫓}Лаваш|Лепешка|Лепёшка</item>
         <item>{🥖}Багет</item>
         <item>{🥐}Круассан</item>
         <item>{🍦}Мороженое</item>
@@ -156,6 +161,7 @@
         <item>{🌭}Хот-дог|Хот дог|Хотдог</item>
         <item>{🪳}Таракан</item>
         <item>{🍟}Картошка фри</item>
+        <item>{🕯️}Свечи|Свечки</item>
     </string-array>
 
 </resources>
