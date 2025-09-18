@@ -302,6 +302,10 @@ private fun Buttons(
                     softwareKeyboardController = softwareKeyboardController,
                 )
             },
+            modifier = Modifier
+                .padding(
+                    horizontal = horizontalOffset,
+                ),
         )
     } else {
         Row(
