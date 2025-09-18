@@ -7,7 +7,7 @@
         <item>{🍌}Banana</item>
         <item>{🥦}Broccoli</item>
         <item>{🥕}Carrot</item>
-        <item>{🌶️}Chili|Pepper chilli|Red pepper</item>
+        <item>{🌶️}Chili|Red pepper|Pepper red|Pepper chili|Chili pepper</item>
         <item>{🫑}Pepper|Capsicum</item>
         <item>{🥒}Cucumber</item>
         <item>{🍆}Eggplant|Aubergine</item>
@@ -41,7 +41,7 @@
         <item>{🎃}Pumpkin</item>
         <item>{🍄‍🟫}Mushroom|Champignon</item>
         <item>{🫘}Bean</item>
-        <item>{🥬}Leafy Green|Chinese cabbage</item>
+        <item>{🥬}Leafy Green|Chinese cabbage|Cabbage chinese</item>
         <item>Cabbage</item>
         <item>Apricot</item>
         <item>Grapefruit</item>
@@ -56,7 +56,7 @@
         <item>Nectarine</item>
         <item>Persimmon</item>
         <item>Prune</item>
-        <item>Dried apricot</item>
+        <item>Dried apricot|Apricot dried </item>
         <item>Raisin</item>
         <item>Nut</item>
         <item>Almond</item>
@@ -71,11 +71,11 @@
         <item>{🥛}Milk</item>
         <item>{🧀}Cheese</item>
         <item>{🧈}Butter</item>
-        <item>Cottage Cheese</item>
+        <item>Cottage cheese|Cheese cottage</item>
         <item>Yogurt</item>
         <item>Kefir</item>
         <item>Mascarpone</item>
-        <item>Feta Cheese</item>
+        <item>Feta Cheese|Cheese Feta</item>
         <item>Sour cream</item>
     </string-array>
 
@@ -116,7 +116,7 @@
         <item>{🍫}Chocolate</item>
         <item>{🍪}Cookie</item>
         <item>{🍩}Doughnut</item>
-        <item>{🧇}Belgian waffle</item>
+        <item>{🧇}Belgian waffle|Waffle belgian</item>
         <item>Waffle</item>
         <item>Toast</item>
         <item>Buns</item>
@@ -133,7 +133,7 @@
     </string-array>
 
     <string-array name="other">
-        <item>Olive oil</item>
+        <item>Olive oil|Oil olive </item>
         <item>{🥚}Egg</item>
         <item>Water</item>
         <item>{☕}Coffee</item>
@@ -146,7 +146,7 @@
         <item>Oatmeal</item>
         <item>Diapers</item>
         <item>{🧂}Salt</item>
-        <item>Ground Pepper</item>
+        <item>Ground Pepper|Pepper Ground</item>
         <item>Powder</item>
         <item>Sponge</item>
         <item>Salad bowl</item>
@@ -164,7 +164,7 @@
         <item>Dumplings</item>
         <item>{🍕}Pizza</item>
         <item>{🍷}Wine</item>
-        <item>{🥂}White wine</item>
+        <item>{🥂}White wine|Wine white</item>
         <item>{🍸}Martini</item>
         <item>{🍾}Champagne</item>
         <item>{🍺}Beer</item>
