@@ -121,23 +121,62 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
         title.value = newValue
     }
 
-    override fun onProductInputComplete(
+    override fun onAttemptToCompleteProductInput(
+        productTitle: String,
+        categoryId: Int?,
+        emoji: EmojiProps?,
+        atLeastOneProductJustAdded: Boolean,
+    ) {
+        if (productTitle.isNotBlank()) {
+            if (categoryId != null) {
+                putProduct(
+                    productTitle = productTitle,
+                    categoryId = categoryId,
+                    emojiSearchResult = emoji?.payload as EmojiSearchResult?,
+                )
+                finalizeInput()
+            } else {
+                handleCategoryNotSpecified()
+            }
+        } else {
+            if (categoryId != null) {
+                events.trySend(Event.TitleNotSpecified)
+            } else if (atLeastOneProductJustAdded) {
+                events.trySend(Event.Completed)
+            } // else form is completely empty, so there's nothing to do
+        }
+    }
+
+    private fun putProduct(
         productTitle: String,
         categoryId: Int,
-        emoji: EmojiProps?,
+        emojiSearchResult: EmojiSearchResult?,
     ) {
         val product = Product(
             id = productId ?: 0,
             title = productTitle.replaceFirstChar { it.uppercaseChar() },
-            emojiSearchResult = emoji?.payload as EmojiSearchResult?,
+            emojiSearchResult = emojiSearchResult,
             categoryId = categoryId,
             enabled = true,
         )
         viewModelScope.launch(Dispatchers.IO) {
             repository.putProduct(product)
         }
-        title.value = TextFieldValue()
-        explicitlySelectedCategory.value = null
+    }
+
+    private fun finalizeInput() {
+        if (productId == null) {
+            title.value = TextFieldValue()
+            explicitlySelectedCategory.value = null
+            events.trySend(Event.ProductAdded)
+        } else {
+            events.trySend(Event.Completed)
+        }
+    }
+
+    private fun handleCategoryNotSpecified() {
+        categoryPickerExpanded.value = true
+        events.trySend(Event.CategoryNotSpecified)
     }
 
     override fun onCategoryPickerExpandChange(expanded: Boolean) {
@@ -150,7 +189,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
     }
 
     override fun onComplete() {
-        events.trySend(Event.OnDone)
+        events.trySend(Event.Completed)
     }
 
     fun title(): StateFlow<TextFieldValue> =
@@ -160,7 +199,10 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
         events
 
     enum class Event {
-        OnDone,
+        Completed,
+        ProductAdded,
+        CategoryNotSpecified,
+        TitleNotSpecified,
     }
 
     @AssistedFactory

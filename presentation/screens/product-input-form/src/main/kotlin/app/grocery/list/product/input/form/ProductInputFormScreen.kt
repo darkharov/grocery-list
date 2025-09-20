@@ -16,7 +16,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -39,6 +38,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import app.grocery.list.commons.compose.EventConsumer
+import app.grocery.list.commons.compose.KeyboardOnComposition
 import app.grocery.list.commons.compose.elements.AppTextField
 import app.grocery.list.commons.compose.elements.button.AppButton
 import app.grocery.list.commons.compose.elements.button.AppButtonProps
@@ -80,21 +80,57 @@ internal fun ProductInputFormScreen(
     val emoji by viewModel.emoji.collectAsStateWithLifecycle()
     val categoryPicker by viewModel.categoryPicker.collectAsStateWithLifecycle()
     val atLeastOneProductJustAdded by viewModel.atLeastOneProductJustAdded.collectAsStateWithLifecycle()
-    EventConsumer(viewModel.events()) { event ->
-        when (event) {
-            ProductInputFormViewModel.Event.OnDone -> {
-                navigation.exitFromProductInputForm()
-            }
-        }
-    }
+    val titleFocusRequester = remember { FocusRequester() }
+    val categoryFocusRequester = remember { FocusRequester() }
+    val softwareKeyboardController = LocalSoftwareKeyboardController.current
+    KeyboardOnComposition(
+        focusRequester = titleFocusRequester,
+    )
+    EventConsumer(
+        viewModel = viewModel,
+        navigation = navigation,
+        titleFocusRequester = titleFocusRequester,
+        softwareKeyboardController = softwareKeyboardController,
+        categoryFocusRequester = categoryFocusRequester
+    )
     ProductInputFormScreen(
         title = title,
         emoji = emoji,
         categoryPicker = categoryPicker,
         atLeastOneProductJustAdded = atLeastOneProductJustAdded,
         editingMode = (productId != null),
+        titleFocusRequester = titleFocusRequester,
+        categoryFocusRequester = categoryFocusRequester,
         callbacks = viewModel,
     )
+}
+
+@Composable
+private fun EventConsumer(
+    viewModel: ProductInputFormViewModel,
+    navigation: ProductInputFormNavigation,
+    titleFocusRequester: FocusRequester,
+    softwareKeyboardController: SoftwareKeyboardController?,
+    categoryFocusRequester: FocusRequester,
+) {
+    EventConsumer(viewModel.events()) { event ->
+        when (event) {
+            ProductInputFormViewModel.Event.Completed -> {
+                navigation.exitFromProductInputForm()
+            }
+            ProductInputFormViewModel.Event.ProductAdded -> {
+                titleFocusRequester.requestFocus()
+                softwareKeyboardController?.show()
+            }
+            ProductInputFormViewModel.Event.CategoryNotSpecified -> {
+                categoryFocusRequester.requestFocus()
+            }
+            ProductInputFormViewModel.Event.TitleNotSpecified -> {
+                titleFocusRequester.requestFocus()
+                softwareKeyboardController?.show()
+            }
+        }
+    }
 }
 
 @Composable
@@ -105,6 +141,8 @@ internal fun ProductInputFormScreen(
     atLeastOneProductJustAdded: Boolean,
     editingMode: Boolean,
     callbacks: ProductInputFormCallbacks,
+    categoryFocusRequester: FocusRequester,
+    titleFocusRequester: FocusRequester,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -116,13 +154,7 @@ internal fun ProductInputFormScreen(
             ),
     ) {
         val horizontalOffset = dimensionResource(R.dimen.margin_16_32_64)
-        val titleFocusRequester = remember { FocusRequester() }
-        val categoryFocusRequester = remember { FocusRequester() }
         val selectedCategory = categoryPicker.selectedCategory
-        val softwareKeyboardController = LocalSoftwareKeyboardController.current
-        LaunchedEffect(Unit) {
-            titleFocusRequester.requestFocus()
-        }
         val topOffset = dimensionResource(R.dimen.margin_80_land_0)
         Spacer(
             modifier = Modifier
@@ -134,11 +166,8 @@ internal fun ProductInputFormScreen(
             selectedCategory = selectedCategory,
             atLeastOneProductJustAdded = atLeastOneProductJustAdded,
             callbacks = callbacks,
-            categoryFocusRequester = categoryFocusRequester,
             titleFocusRequester = titleFocusRequester,
             horizontalOffset = horizontalOffset,
-            softwareKeyboardController = softwareKeyboardController,
-            editingMode = editingMode,
             modifier = Modifier,
         )
         CategoryPicker(
@@ -162,9 +191,6 @@ internal fun ProductInputFormScreen(
             selectedCategory = selectedCategory,
             atLeastOneProductJustAdded = atLeastOneProductJustAdded,
             callbacks = callbacks,
-            categoryFocusRequester = categoryFocusRequester,
-            titleFocusRequester = titleFocusRequester,
-            softwareKeyboardController = softwareKeyboardController,
             modifier = Modifier,
         )
     }
@@ -179,9 +205,6 @@ private fun TitleAndEmoji(
     callbacks: ProductInputFormCallbacks,
     horizontalOffset: Dp,
     titleFocusRequester: FocusRequester,
-    categoryFocusRequester: FocusRequester,
-    softwareKeyboardController: SoftwareKeyboardController?,
-    editingMode: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -203,23 +226,25 @@ private fun TitleAndEmoji(
             placeholder = StringValue.ResId(R.string.broccoli),
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
-                imeAction = if (selectedCategory == null) {
+                imeAction = if (
+                    (title.text.isNotBlank() && selectedCategory != null) ||
+                    (title.text.isBlank() && selectedCategory == null && atLeastOneProductJustAdded)
+                ) {
+                    ImeAction.Done
+                } else if (
+                    title.text.isNotBlank() && selectedCategory == null
+                ) {
                     ImeAction.Next
                 } else {
-                    ImeAction.Done
+                    ImeAction.None
                 }
             ),
             keyboardActions = KeyboardActions {
-                finalizeInput(
-                    title = title.text,
-                    selectedCategory = selectedCategory,
+                callbacks.onAttemptToCompleteProductInput(
+                    productTitle = title.text,
+                    categoryId = selectedCategory?.id,
                     emoji = emoji,
-                    atLeastOneProductAdded = atLeastOneProductJustAdded,
-                    categoryFocusRequester = categoryFocusRequester,
-                    titleFocusRequester = titleFocusRequester,
-                    editingMode = editingMode,
-                    callbacks = callbacks,
-                    softwareKeyboardController = softwareKeyboardController,
+                    atLeastOneProductJustAdded = atLeastOneProductJustAdded,
                 )
             },
             singleLine = true,
@@ -240,38 +265,6 @@ private fun TitleAndEmoji(
     }
 }
 
-private fun finalizeInput(
-    title: String,
-    selectedCategory: CategoryProps?,
-    emoji: EmojiProps?,
-    atLeastOneProductAdded: Boolean,
-    categoryFocusRequester: FocusRequester,
-    titleFocusRequester: FocusRequester,
-    editingMode: Boolean,
-    callbacks: ProductInputFormCallbacks,
-    softwareKeyboardController: SoftwareKeyboardController?,
-) {
-    if (title.isNotBlank()) {
-        if (selectedCategory != null) {
-            titleFocusRequester.requestFocus()
-            callbacks.onProductInputComplete(
-                productTitle = title,
-                categoryId = selectedCategory.id,
-                emoji = emoji,
-            )
-            if (editingMode) {
-                callbacks.onComplete()
-            }
-        } else {
-            categoryFocusRequester.requestFocus()
-            callbacks.onCategoryPickerExpandChange(true)
-        }
-    } else if (atLeastOneProductAdded) {
-        softwareKeyboardController?.hide()
-        callbacks.onComplete()
-    }
-}
-
 @Composable
 private fun Buttons(
     horizontalOffset: Dp,
@@ -281,25 +274,17 @@ private fun Buttons(
     selectedCategory: CategoryProps?,
     atLeastOneProductJustAdded: Boolean,
     callbacks: ProductInputFormCallbacks,
-    categoryFocusRequester: FocusRequester,
-    titleFocusRequester: FocusRequester,
-    softwareKeyboardController: SoftwareKeyboardController?,
     modifier: Modifier = Modifier,
 ) {
     if (editingMode) {
         AppButton(
             props = AppButtonProps.Done(),
             onClick = {
-                finalizeInput(
-                    title = title,
-                    categoryFocusRequester = categoryFocusRequester,
-                    selectedCategory = selectedCategory,
+                callbacks.onAttemptToCompleteProductInput(
+                    productTitle = title,
+                    categoryId = selectedCategory?.id,
                     emoji = emoji,
-                    atLeastOneProductAdded = atLeastOneProductJustAdded,
-                    titleFocusRequester = titleFocusRequester,
-                    callbacks = callbacks,
-                    editingMode = editingMode,
-                    softwareKeyboardController = softwareKeyboardController,
+                    atLeastOneProductJustAdded = atLeastOneProductJustAdded,
                 )
             },
             modifier = Modifier
@@ -319,16 +304,11 @@ private fun Buttons(
                     state = AppButtonProps.State.enabled(title.isNotBlank()),
                 ),
                 onClick = {
-                    finalizeInput(
-                        title = title,
-                        categoryFocusRequester = categoryFocusRequester,
-                        selectedCategory = selectedCategory,
+                    callbacks.onAttemptToCompleteProductInput(
+                        productTitle = title,
+                        categoryId = selectedCategory?.id,
                         emoji = emoji,
-                        atLeastOneProductAdded = atLeastOneProductJustAdded,
-                        titleFocusRequester = titleFocusRequester,
-                        editingMode = editingMode,
-                        callbacks = callbacks,
-                        softwareKeyboardController = softwareKeyboardController,
+                        atLeastOneProductJustAdded = atLeastOneProductJustAdded,
                     )
                 },
                 modifier = Modifier
@@ -341,7 +321,6 @@ private fun Buttons(
                     ),
                 ),
                 onClick = {
-                    softwareKeyboardController?.hide()
                     callbacks.onComplete()
                 },
                 modifier = Modifier
@@ -365,6 +344,8 @@ private fun ProductInputScreenInitialStatePreview() {
                 atLeastOneProductJustAdded = false,
                 editingMode = false,
                 callbacks = ProductInputFormCallbacksMock,
+                titleFocusRequester = remember { FocusRequester() },
+                categoryFocusRequester = remember { FocusRequester() },
                 modifier = Modifier
                     .padding(padding),
             )
@@ -386,6 +367,8 @@ private fun ProductInputScreenPreview() {
                 atLeastOneProductJustAdded = false,
                 editingMode = false,
                 callbacks = ProductInputFormCallbacksMock,
+                titleFocusRequester = remember { FocusRequester() },
+                categoryFocusRequester = remember { FocusRequester() },
                 modifier = Modifier
                     .padding(padding),
             )

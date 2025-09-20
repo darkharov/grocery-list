@@ -8,15 +8,25 @@ import app.grocery.list.product.input.form.elements.category.picker.CategoryPick
 @Stable
 internal interface ProductInputFormCallbacks :
     CategoryPickerCallbacks {
-    fun onComplete()
     fun onProductTitleChange(newValue: TextFieldValue)
-    fun onProductInputComplete(productTitle: String, categoryId: Int, emoji: EmojiProps?)
+    fun onAttemptToCompleteProductInput(
+        productTitle: String,
+        categoryId: Int?,
+        emoji: EmojiProps?,
+        atLeastOneProductJustAdded: Boolean,
+    )
+    fun onComplete()
 }
 
 
 internal object ProductInputFormCallbacksMock : ProductInputFormCallbacks,
     CategoryPickerCallbacks by CategoryPickerCallbacksMock {
-    override fun onComplete() {}
     override fun onProductTitleChange(newValue: TextFieldValue) {}
-    override fun onProductInputComplete(productTitle: String, categoryId: Int, emoji: EmojiProps?) {}
+    override fun onAttemptToCompleteProductInput(
+        productTitle: String,
+        categoryId: Int?,
+        emoji: EmojiProps?,
+        atLeastOneProductJustAdded: Boolean,
+    ) {}
+    override fun onComplete() {}
 }
