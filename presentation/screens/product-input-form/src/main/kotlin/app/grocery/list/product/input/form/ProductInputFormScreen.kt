@@ -226,18 +226,7 @@ private fun TitleAndEmoji(
             placeholder = StringValue.ResId(R.string.broccoli),
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
-                imeAction = if (
-                    (title.text.isNotBlank() && selectedCategory != null) ||
-                    (title.text.isBlank() && selectedCategory == null && atLeastOneProductJustAdded)
-                ) {
-                    ImeAction.Done
-                } else if (
-                    title.text.isNotBlank() && selectedCategory == null
-                ) {
-                    ImeAction.Next
-                } else {
-                    ImeAction.None
-                }
+                imeAction = ImeAction.Done,
             ),
             keyboardActions = KeyboardActions {
                 callbacks.onAttemptToCompleteProductInput(
