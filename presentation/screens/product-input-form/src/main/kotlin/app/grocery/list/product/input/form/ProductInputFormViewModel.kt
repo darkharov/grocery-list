@@ -49,10 +49,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
     private val categoryPickerExpanded = MutableStateFlow(false)
 
     val emoji = emoji().stateIn(this)
-
-    val categoryPicker =
-        categoryPicker()
-            .stateIn(this, defaultValue = CategoryPickerProps())
+    val categoryPicker = categoryPicker().stateIn(this, CategoryPickerProps())
 
     val atLeastOneProductJustAdded =
         atLeastOneProductJustAdded
