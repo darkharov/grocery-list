@@ -23,6 +23,5 @@ internal class CategoryMapper @Inject constructor() {
         CategoryProps(
             id = category.id,
             title = category.title,
-            payload = category,
         )
 }
