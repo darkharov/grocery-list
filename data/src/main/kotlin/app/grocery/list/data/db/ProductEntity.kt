@@ -88,4 +88,13 @@ internal class ProductEntity(
         fun toDomainModels(entities: List<ProductEntity>) =
             entities.map(::toDomainModel)
     }
+
+    data class TitleAndCategoryId(
+
+        @ColumnInfo(Table.Columns.TITLE)
+        val title: String,
+
+        @ColumnInfo(Table.Columns.NON_FK_CATEGORY_ID)
+        val nonFkCategoryId: Int,
+    )
 }

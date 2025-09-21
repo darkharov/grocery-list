@@ -11,7 +11,7 @@ internal interface ProductInputFormCallbacks :
     fun onProductTitleChange(newValue: TextFieldValue)
     fun onAttemptToCompleteProductInput(
         productTitle: String,
-        categoryId: Int?,
+        selectedCategoryId: Int?,
         emoji: EmojiProps?,
         atLeastOneProductJustAdded: Boolean,
     )
@@ -24,7 +24,7 @@ internal object ProductInputFormCallbacksMock : ProductInputFormCallbacks,
     override fun onProductTitleChange(newValue: TextFieldValue) {}
     override fun onAttemptToCompleteProductInput(
         productTitle: String,
-        categoryId: Int?,
+        selectedCategoryId: Int?,
         emoji: EmojiProps?,
         atLeastOneProductJustAdded: Boolean,
     ) {}

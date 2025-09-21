@@ -115,17 +115,21 @@ private fun EventConsumer(
 ) {
     EventConsumer(viewModel.events()) { event ->
         when (event) {
+            ProductInputFormViewModel.Event.ProductAdded -> {
+                titleFocusRequester.requestFocus()
+                softwareKeyboardController?.show()
+            }
             ProductInputFormViewModel.Event.Completed -> {
                 navigation.exitFromProductInputForm()
             }
-            ProductInputFormViewModel.Event.ProductAdded -> {
+            ProductInputFormViewModel.Event.TitleNotSpecified -> {
                 titleFocusRequester.requestFocus()
                 softwareKeyboardController?.show()
             }
             ProductInputFormViewModel.Event.CategoryNotSpecified -> {
                 categoryFocusRequester.requestFocus()
             }
-            ProductInputFormViewModel.Event.TitleNotSpecified -> {
+            ProductInputFormViewModel.Event.CategoryExplicitlySelected -> {
                 titleFocusRequester.requestFocus()
                 softwareKeyboardController?.show()
             }
@@ -231,7 +235,7 @@ private fun TitleAndEmoji(
             keyboardActions = KeyboardActions {
                 callbacks.onAttemptToCompleteProductInput(
                     productTitle = title.text,
-                    categoryId = selectedCategory?.id,
+                    selectedCategoryId = selectedCategory?.id,
                     emoji = emoji,
                     atLeastOneProductJustAdded = atLeastOneProductJustAdded,
                 )
@@ -271,7 +275,7 @@ private fun Buttons(
             onClick = {
                 callbacks.onAttemptToCompleteProductInput(
                     productTitle = title,
-                    categoryId = selectedCategory?.id,
+                    selectedCategoryId = selectedCategory?.id,
                     emoji = emoji,
                     atLeastOneProductJustAdded = atLeastOneProductJustAdded,
                 )
@@ -295,7 +299,7 @@ private fun Buttons(
                 onClick = {
                     callbacks.onAttemptToCompleteProductInput(
                         productTitle = title,
-                        categoryId = selectedCategory?.id,
+                        selectedCategoryId = selectedCategory?.id,
                         emoji = emoji,
                         atLeastOneProductJustAdded = atLeastOneProductJustAdded,
                     )

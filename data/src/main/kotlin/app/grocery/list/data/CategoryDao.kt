@@ -104,6 +104,9 @@ internal class CategoryDao @Inject constructor(
         return null
     }
 
+    fun get(id: Int): Product.Category =
+        categories.first { it.id == id }
+
     private data class KeywordAndEmoji(
         val keyword: String,
         val emoji: String?,

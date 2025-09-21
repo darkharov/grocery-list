@@ -20,9 +20,10 @@ abstract class AppRepository {
     abstract fun numberOfEnabledProducts(): Flow<Int>
     abstract fun productListEmpty(): Flow<Boolean>
     abstract fun sampleProducts(): Flow<List<Product>>
+    abstract suspend fun productTitleAndCategory(productId: Int): Product.TitleAndCategory
 
-    abstract suspend fun productTitle(productId: Int): String
     abstract suspend fun findCategory(search: String): Product.Category?
+    abstract suspend fun category(id: Int): Product.Category
     abstract suspend fun findEmoji(search: String): EmojiSearchResult?
     abstract suspend fun clearProducts()
     abstract suspend fun deleteProduct(productId: Int): Product

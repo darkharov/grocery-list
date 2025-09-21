@@ -37,6 +37,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
     private val productId: Int?,
     private val repository: AppRepository,
     private val categoryMapper: CategoryMapper,
+    private val emojiSearchResultMapper: EmojiSearchResultMapper,
     atLeastOneProductJustAdded: AtLeastOneProductJustAddedUseCase,
 ) : ViewModel(),
     ProductInputFormCallbacks {
@@ -48,19 +49,31 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
     private val categoryPickerExpanded = MutableStateFlow(false)
 
     val emoji = emoji().stateIn(this)
-    val categoryPicker = categoryPicker().stateIn(this, CategoryPickerProps())
-    val atLeastOneProductJustAdded = atLeastOneProductJustAdded.execute().stateIn(this, defaultValue = false)
+
+    val categoryPicker =
+        categoryPicker()
+            .stateIn(this, defaultValue = CategoryPickerProps())
+
+    val atLeastOneProductJustAdded =
+        atLeastOneProductJustAdded
+            .execute()
+            .stateIn(this, defaultValue = false)
 
     init {
         if (productId != null) {
             viewModelScope.launch(Dispatchers.IO) {
-                val titleString = repository.productTitle(productId = productId)
+
+                val (productTitle, category) = repository
+                    .productTitleAndCategory(productId = productId)
+
                 title.value = TextFieldValue(
-                    text = titleString,
+                    text = productTitle,
                     selection = TextRange(
-                        titleString.length,
+                        index = productTitle.length,
                     ),
                 )
+
+                explicitlySelectedCategory.value = categoryMapper.transform(category)
             }
         }
     }
@@ -72,14 +85,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
                 repository.findEmoji(search = title.text)
             }
             .map { result ->
-                if (result == null) {
-                    null
-                } else {
-                    EmojiProps(
-                        value = result.emoji,
-                        payload = result,
-                    )
-                }
+                emojiSearchResultMapper.transformNullable(result)
             }
 
     private fun categoryPicker(): Flow<CategoryPickerProps> =
@@ -123,23 +129,24 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
 
     override fun onAttemptToCompleteProductInput(
         productTitle: String,
-        categoryId: Int?,
+        selectedCategoryId: Int?,
         emoji: EmojiProps?,
         atLeastOneProductJustAdded: Boolean,
     ) {
         if (productTitle.isNotBlank()) {
-            if (categoryId != null) {
+            if (selectedCategoryId != null) {
                 putProduct(
                     productTitle = productTitle,
-                    categoryId = categoryId,
+                    categoryId = selectedCategoryId,
                     emojiSearchResult = emoji?.payload as EmojiSearchResult?,
                 )
                 finalizeInput()
             } else {
-                handleCategoryNotSpecified()
+                categoryPickerExpanded.value = true
+                events.trySend(Event.CategoryNotSpecified)
             }
         } else {
-            if (categoryId != null) {
+            if (selectedCategoryId != null) {
                 events.trySend(Event.TitleNotSpecified)
             } else if (atLeastOneProductJustAdded) {
                 events.trySend(Event.Completed)
@@ -174,11 +181,6 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleCategoryNotSpecified() {
-        categoryPickerExpanded.value = true
-        events.trySend(Event.CategoryNotSpecified)
-    }
-
     override fun onCategoryPickerExpandChange(expanded: Boolean) {
         categoryPickerExpanded.value = expanded
     }
@@ -186,6 +188,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
     override fun onCategorySelected(category: CategoryProps) {
         explicitlySelectedCategory.value = category
         categoryPickerExpanded.value = false
+        events.trySend(Event.CategoryExplicitlySelected)
     }
 
     override fun onComplete() {
@@ -203,6 +206,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
         ProductAdded,
         CategoryNotSpecified,
         TitleNotSpecified,
+        CategoryExplicitlySelected,
     }
 
     @AssistedFactory

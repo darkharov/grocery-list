@@ -12,4 +12,9 @@ data class Product(
         val id: Int,
         val title: String,
     )
+
+    data class TitleAndCategory(
+        val productTitle: String,
+        val category: Category,
+    )
 }

@@ -52,11 +52,21 @@ internal class AppRepositoryImpl @Inject constructor(
     override fun categories(): Flow<List<Product.Category>> =
         categoryDao.categories()
 
-    override suspend fun productTitle(productId: Int): String =
-        productDao.selectTitle(productId)
+    override suspend fun productTitleAndCategory(productId: Int): Product.TitleAndCategory {
+        val (title, categoryId) = productDao.selectTitleAndCategoryId(productId = productId)
+        return Product.TitleAndCategory(
+            productTitle = title,
+            category = categoryDao.get(
+                id = categoryId,
+            ),
+        )
+    }
 
     override suspend fun findCategory(search: String): Product.Category? =
         categoryDao.category(search = search)
+
+    override suspend fun category(id: Int): Product.Category =
+        categoryDao.get(id = id)
 
     override suspend fun findEmoji(search: String): EmojiSearchResult? =
         categoryDao.emoji(search = search)
