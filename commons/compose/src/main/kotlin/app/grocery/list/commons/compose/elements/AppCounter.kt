@@ -34,10 +34,10 @@ private const val COUNTER_ANIMATION_DURATION = 250
 
 @Composable
 internal fun AppCounter(
-    value: Int,
+    value: Int?,
     modifier: Modifier = Modifier,
 ) {
-    if (value != 0) {
+    if (value != null) {
         AnimatedContent(
             targetState = value,
             transitionSpec = {
@@ -61,34 +61,40 @@ internal fun AppCounter(
             },
             modifier = modifier,
         ) { targetValue ->
-            Box(
-                modifier = Modifier
-                    .drawBehind {
-                        if (targetValue > 0) {
-                            val delta = (if (targetValue < 10) 4 else 0).dp.toPx()
-                            val radius = (size.maxDimension - delta) / 2
-                            drawCircle(
-                                color = Color.Red,
-                                radius = radius,
-                            )
+            if (targetValue != 0) {
+                Box(
+                    modifier = Modifier
+                        .drawBehind {
+                            if (targetValue > 0) {
+                                val delta = (if (targetValue < 10) 4 else 0).dp.toPx()
+                                val radius = (size.maxDimension - delta) / 2
+                                drawCircle(
+                                    color = Color.Red,
+                                    radius = radius,
+                                )
+                            }
                         }
-                    }
-                    .wrapContentHeight()
-                    .aspectRatio(1f),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = if (targetValue > 0) {
-                        targetValue.toString()
-                    } else {
-                        ""
-                    },
-                    color = Color.White,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    letterSpacing = 0.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier,
+                        .wrapContentHeight()
+                        .aspectRatio(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = if (targetValue > 0) {
+                            targetValue.toString()
+                        } else {
+                            ""
+                        },
+                        color = Color.White,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        letterSpacing = 0.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier,
+                    )
+                }
+            } else {
+                Spacer(
+                    modifier = modifier,
                 )
             }
         }

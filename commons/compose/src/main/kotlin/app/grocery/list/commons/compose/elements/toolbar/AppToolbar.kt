@@ -142,7 +142,7 @@ fun AppToolbar(
                     style = LocalAppTypography.current.toolbarTitle,
                 )
                 AppCounter(
-                    value = props.counter ?: 0,
+                    value = props.counter,
                     modifier = Modifier
                         .padding(counterPadding)
                         .size(counterSize)
