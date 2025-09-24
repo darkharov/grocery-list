@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
@@ -24,6 +25,8 @@ import app.grocery.list.commons.compose.elements.AppHorizontalDividerWithOffset
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.theme.blackOrWhite
+
+val AppTextButtonHorizontalOffset = 16.dp
 
 @Composable
 fun AppTextButton(
@@ -43,15 +46,22 @@ fun AppTextButton(
                     }
                 },
             )
-            .clickable {
-                onClick()
-            },
+            .then(
+                if (props.enabled) {
+                    Modifier.clickable {
+                        onClick()
+                    }
+                } else {
+                    Modifier
+                        .alpha(0.33f)
+                }
+            ),
     ) {
         Row(
             modifier = Modifier
                 .padding(
                     vertical = 12.dp,
-                    horizontal = 16.dp,
+                    horizontal = AppTextButtonHorizontalOffset,
                 ),
             verticalAlignment = Alignment.CenterVertically,
         ) {

@@ -30,6 +30,8 @@ abstract class AppRepository {
     abstract suspend fun putProduct(product: Product)
     abstract suspend fun putProducts(products: List<Product>)
     abstract suspend fun setProductEnabled(productId: Int, enabled: Boolean)
+    abstract suspend fun enableAll()
+    abstract suspend fun disableAll()
 
     fun productTitleFormat(): Flow<ProductTitleFormat> =
         settings

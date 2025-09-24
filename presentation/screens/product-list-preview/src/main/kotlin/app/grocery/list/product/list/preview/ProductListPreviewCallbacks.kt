@@ -7,6 +7,8 @@ internal interface ProductListPreviewCallbacks :
     ProductItemCallbacks {
     fun onAddClick()
     fun onNextClick()
+    fun onEnableAll()
+    fun onDisableEnableAll()
 }
 
 internal object ProductListPreviewCallbacksMock :
@@ -14,4 +16,6 @@ internal object ProductListPreviewCallbacksMock :
     ProductItemCallbacks by ProductItemCallbacksMock {
     override fun onAddClick() {}
     override fun onNextClick() {}
+    override fun onEnableAll() {}
+    override fun onDisableEnableAll() {}
 }

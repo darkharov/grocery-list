@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import app.grocery.list.commons.compose.R
@@ -26,9 +27,12 @@ sealed class AppTextButtonProps {
 
     internal abstract val hasDivider: Boolean
 
+    internal abstract val enabled: Boolean
+
     @Immutable
-    data class TextOnly(
+    class TextOnly(
         override val text: StringValue,
+        override val enabled: Boolean = true,
         val color: Color = Color.Unspecified,
     ) : AppTextButtonProps() {
 
@@ -38,11 +42,11 @@ sealed class AppTextButtonProps {
 
         override val textColor: Color
             @Composable
+            @ReadOnlyComposable
             get() =
-                if (color != Color.Unspecified) {
-                    color
-                } else {
-                    MaterialTheme.colorScheme.secondary
+                when {
+                    color != Color.Unspecified -> color
+                    else -> MaterialTheme.colorScheme.secondary
                 }
     }
 
@@ -55,6 +59,7 @@ sealed class AppTextButtonProps {
 
         override val trailingIconId = R.drawable.ic_forward
         override val hasDivider = true
+        override val enabled = true
 
         override val textColor: Color
             @Composable

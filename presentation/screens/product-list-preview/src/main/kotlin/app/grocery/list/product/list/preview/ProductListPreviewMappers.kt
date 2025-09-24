@@ -15,12 +15,16 @@ import kotlinx.collections.immutable.toImmutableList
 
 internal class ProductListMapper @AssistedInject constructor(
     @Assisted
-    private val formatter: ProductTitleFormatter
+    private val formatter: ProductTitleFormatter,
 ) {
-    fun transform(productList: List<CategoryAndProducts>): ProductListPreviewProps =
-        ProductListPreviewProps(
-            categories = productList.map(::transform).toImmutableList(),
+    fun transform(productList: List<CategoryAndProducts>): ProductListPreviewProps {
+        val mapped = productList.map(::transform).toImmutableList()
+        val products = mapped.flatMap { it.products }
+        return ProductListPreviewProps(
+            enableAndDisableAll = enableAndDisableAllState(products),
+            categories = mapped,
         )
+    }
 
     private fun transform(categoryAndProducts: CategoryAndProducts): ProductListPreviewProps.Category =
         ProductListPreviewProps.Category(
@@ -54,6 +58,19 @@ internal class ProductListMapper @AssistedInject constructor(
                     style = SpanStyle(Color.Gray.copy(alpha = 0.5f)),
                     start = afterEmoji + additionalDetailsLocation.startIndex,
                     end = afterEmoji + additionalDetailsLocation.endIndex,
+                )
+            }
+        }
+
+    private fun enableAndDisableAllState(products: List<ProductListPreviewProps.Product>) =
+        when {
+            products.none() -> {
+                null
+            }
+            else -> {
+                ProductListPreviewProps.EnableAndDisableAllState(
+                    enableAllAvailable = products.any { !(it.enabled) },
+                    disableAllAvailable = products.any { it.enabled },
                 )
             }
         }

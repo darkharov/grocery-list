@@ -5,10 +5,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
@@ -38,8 +40,12 @@ import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.elements.button.AppButton
 import app.grocery.list.commons.compose.elements.button.AppButtonProps
+import app.grocery.list.commons.compose.elements.button.text.AppTextButton
+import app.grocery.list.commons.compose.elements.button.text.AppTextButtonHorizontalOffset
+import app.grocery.list.commons.compose.elements.button.text.AppTextButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
+import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.product.list.preview.ProductListPreviewViewModel.Event
 import app.grocery.list.product.list.preview.elements.ProductItem
 import kotlinx.serialization.Serializable
@@ -181,7 +187,8 @@ private fun ListWithDividers(
                 .fillMaxSize(),
             state = listState,
             contentPadding = PaddingValues(
-                vertical = 16.dp,
+                top = 8.dp,
+                bottom = 16.dp,
             ),
         ) {
             items(
@@ -196,7 +203,26 @@ private fun LazyListScope.items(
     props: ProductListPreviewProps,
     callbacks: ProductListPreviewCallbacks,
 ) {
-    for (category in props.categories) {
+    val enableAndDisableAll = props.enableAndDisableAll
+    if (enableAndDisableAll != null) {
+        enableAndDisableAll(
+            enableAndDisableAll = enableAndDisableAll,
+            callbacks = callbacks,
+        )
+    }
+    for ((index, category) in props.categories.withIndex()) {
+        if (index > 0) {
+            // I am afraid of dynamic paddings in lazy columns
+            item(
+                key = category.topOffsetKey,
+                contentType = { "Category top offset" },
+            ) {
+                Spacer(
+                    modifier = Modifier
+                        .height(26.dp),
+                )
+            }
+        }
         item(
             key = category.key,
             contentType = "Category",
@@ -208,7 +234,7 @@ private fun LazyListScope.items(
                         horizontal = dimensionResource(R.dimen.margin_16_32_64),
                     )
                     .padding(
-                        top = 28.dp,
+                        top = 6.dp,
                         bottom = 6.dp,
                     )
                     .animateItem(),
@@ -223,6 +249,47 @@ private fun LazyListScope.items(
             ProductItem(
                 product = product,
                 callbacks = callbacks,
+                modifier = Modifier
+                    .animateItem(),
+            )
+        }
+    }
+}
+
+private fun LazyListScope.enableAndDisableAll(
+    enableAndDisableAll: ProductListPreviewProps.EnableAndDisableAllState,
+    callbacks: ProductListPreviewCallbacks,
+) {
+    item {
+        val desiredHorizontalOffset = dimensionResource(R.dimen.margin_16_32_64)
+        val finalHorizontalOffset = desiredHorizontalOffset - AppTextButtonHorizontalOffset
+        Row(
+            modifier = Modifier
+                .fillParentMaxWidth()
+                .padding(
+                    horizontal = finalHorizontalOffset,
+                ),
+            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+        ) {
+            AppTextButton(
+                props = AppTextButtonProps.TextOnly(
+                    text = StringValue.ResId(R.string.disable_all),
+                    enabled = enableAndDisableAll.disableAllAvailable
+                ),
+                onClick = {
+                    callbacks.onDisableEnableAll()
+                },
+                modifier = Modifier
+                    .animateItem(),
+            )
+            AppTextButton(
+                props = AppTextButtonProps.TextOnly(
+                    text = StringValue.ResId(R.string.enable_all),
+                    enabled = enableAndDisableAll.enableAllAvailable
+                ),
+                onClick = {
+                    callbacks.onEnableAll()
+                },
                 modifier = Modifier
                     .animateItem(),
             )

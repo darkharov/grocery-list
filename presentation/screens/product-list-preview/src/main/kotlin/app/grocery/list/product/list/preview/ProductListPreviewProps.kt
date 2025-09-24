@@ -11,7 +11,14 @@ import kotlinx.parcelize.Parcelize
 @Immutable
 internal data class ProductListPreviewProps(
     val categories: ImmutableList<Category>,
+    val enableAndDisableAll: EnableAndDisableAllState?,
 ) {
+    @Immutable
+    data class EnableAndDisableAllState(
+        val enableAllAvailable: Boolean,
+        val disableAllAvailable: Boolean,
+    )
+
     @Immutable
     data class Product(
         val id: Int,
@@ -28,6 +35,7 @@ internal data class ProductListPreviewProps(
         val products: ImmutableList<Product>,
     ) {
         val key = CategoryKey(id = id)
+        val topOffsetKey = CategoryTopOffsetKey(id = id)
     }
 
     @Immutable
@@ -37,6 +45,10 @@ internal data class ProductListPreviewProps(
     @Immutable
     @Parcelize
     data class CategoryKey(val id: Int) : Parcelable
+
+    @Immutable
+    @Parcelize
+    data class CategoryTopOffsetKey(val id: Int) : Parcelable
 }
 
 
@@ -46,68 +58,73 @@ internal class ProductListPreviewMocks : PreviewParameterProvider<ProductListPre
     private val categoryIds = generateSequence(1) { it + 1 }.iterator()
 
     private val prototype = ProductListPreviewProps(
-            persistentListOf(
-                ProductListPreviewProps.Category(
-                    id = categoryIds.next(),
-                    title = "Veggies",
-                    products = persistentListOf(
-                        ProductListPreviewProps.Product(
-                            id = productIds.next(),
-                            title = AnnotatedString("🍅 Tomato"),
-                        ),
-                        ProductListPreviewProps.Product(
-                            id = productIds.next(),
-                            title = AnnotatedString("🥔 Potato"),
-                        ),
+        enableAndDisableAll = ProductListPreviewProps.EnableAndDisableAllState(
+            enableAllAvailable = true,
+            disableAllAvailable = false,
+        ),
+        categories = persistentListOf(
+            ProductListPreviewProps.Category(
+                id = categoryIds.next(),
+                title = "Veggies",
+                products = persistentListOf(
+                    ProductListPreviewProps.Product(
+                        id = productIds.next(),
+                        title = AnnotatedString("🍅 Tomato"),
                     ),
-                ),
-                ProductListPreviewProps.Category(
-                    id = categoryIds.next(),
-                    title = "Dairy Products",
-                    products = persistentListOf(
-                        ProductListPreviewProps.Product(
-                            id = productIds.next(),
-                            title = AnnotatedString("🥛Milk 2L"),
-                        ),
-                        ProductListPreviewProps.Product(
-                            id = productIds.next(),
-                            title = AnnotatedString("Yogurt x8"),
-                        ),
-                        ProductListPreviewProps.Product(
-                            id = productIds.next(),
-                            title = AnnotatedString("Feta"),
-                        ),
-                        ProductListPreviewProps.Product(
-                            id = productIds.next(),
-                            title = AnnotatedString("Blue Cheese"),
-                        ),
-                    ),
-                ),
-                ProductListPreviewProps.Category(
-                    id = categoryIds.next(),
-                    title = "Sweets",
-                    products = persistentListOf(
-                        ProductListPreviewProps.Product(
-                            id = productIds.next(),
-                            title = AnnotatedString("🍬 Candies"),
-                        ),
-                        ProductListPreviewProps.Product(
-                            id = productIds.next(),
-                            title = AnnotatedString("🍦 Ice Cream"),
-                        ),
-                        ProductListPreviewProps.Product(
-                            id = productIds.next(),
-                            title = AnnotatedString("Buns"),
-                        ),
+                    ProductListPreviewProps.Product(
+                        id = productIds.next(),
+                        title = AnnotatedString("🥔 Potato"),
                     ),
                 ),
             ),
-        )
+            ProductListPreviewProps.Category(
+                id = categoryIds.next(),
+                title = "Dairy Products",
+                products = persistentListOf(
+                    ProductListPreviewProps.Product(
+                        id = productIds.next(),
+                        title = AnnotatedString("🥛Milk 2L"),
+                    ),
+                    ProductListPreviewProps.Product(
+                        id = productIds.next(),
+                        title = AnnotatedString("Yogurt x8"),
+                    ),
+                    ProductListPreviewProps.Product(
+                        id = productIds.next(),
+                        title = AnnotatedString("Feta"),
+                    ),
+                    ProductListPreviewProps.Product(
+                        id = productIds.next(),
+                        title = AnnotatedString("Blue Cheese"),
+                    ),
+                ),
+            ),
+            ProductListPreviewProps.Category(
+                id = categoryIds.next(),
+                title = "Sweets",
+                products = persistentListOf(
+                    ProductListPreviewProps.Product(
+                        id = productIds.next(),
+                        title = AnnotatedString("🍬 Candies"),
+                    ),
+                    ProductListPreviewProps.Product(
+                        id = productIds.next(),
+                        title = AnnotatedString("🍦 Ice Cream"),
+                    ),
+                    ProductListPreviewProps.Product(
+                        id = productIds.next(),
+                        title = AnnotatedString("Buns"),
+                    ),
+                ),
+            ),
+        ),
+    )
 
     override val values: Sequence<ProductListPreviewProps?> =
         sequenceOf(
             null,
             ProductListPreviewProps(
+                enableAndDisableAll = null,
                 categories = persistentListOf(),
             ),
             prototype,

@@ -76,4 +76,7 @@ internal interface ProductDao {
 
     @Query("SELECT COUNT(*) == 0 FROM product LIMIT 1")
     fun productListEmpty(): Flow<Boolean>
+
+    @Query("UPDATE product SET enabled = :enabled")
+    suspend fun setEnabledFlagForAll(enabled: Boolean)
 }

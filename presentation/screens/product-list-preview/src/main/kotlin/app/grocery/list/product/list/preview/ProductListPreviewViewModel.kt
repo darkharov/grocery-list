@@ -68,6 +68,18 @@ internal class ProductListPreviewViewModel @Inject constructor(
         events.trySend(Event.OnEditProduct(productId = productId))
     }
 
+    override fun onEnableAll() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.enableAll()
+        }
+    }
+
+    override fun onDisableEnableAll() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.disableAll()
+        }
+    }
+
     fun events(): ReceiveChannel<Event> =
         events
 

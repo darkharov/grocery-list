@@ -48,6 +48,8 @@
     <string name="pattern_disabled">Выключенные (%d)</string>
     <string name="pattern_product_was_deleted">Пункт \'%s\' удален</string>
     <string name="undo">Отменить</string>
+    <string name="enable_all">Включить все</string>
+    <string name="disable_all">Отключить все</string>
 
     <string-array name="final_steps">
         <item>Заблокируйте экран</item>

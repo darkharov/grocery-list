@@ -132,6 +132,14 @@ internal class AppRepositoryImpl @Inject constructor(
             )
         )
 
+    override suspend fun enableAll() {
+        productDao.setEnabledFlagForAll(enabled = true)
+    }
+
+    override suspend fun disableAll() {
+        productDao.setEnabledFlagForAll(enabled = false)
+    }
+
     companion object {
         private const val PRODUCT_TITLE_FORMAT_ID = "PRODUCT_TITLE_FORMAT_ID"
     }
