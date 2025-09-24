@@ -44,8 +44,8 @@
     <string name="contact_support">Contact Support</string>
     <string name="sublist_to_share_dialog_title">Which specific list items would you like to share?</string>
     <string name="pattern_all">All (%d)</string>
-    <string name="pattern_enabled">Enabled (%d)</string>
-    <string name="pattern_disabled">Disabled (%d)</string>
+    <string name="pattern_enabled_to_send">Enabled (%d)</string>
+    <string name="pattern_disabled_to_send">Disabled (%d)</string>
     <string name="pattern_product_was_deleted">\'%s\' was deleted</string>
     <string name="undo">Undo</string>
     <string name="enable_all">Enable all</string>

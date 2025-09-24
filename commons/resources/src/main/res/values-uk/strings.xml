@@ -44,8 +44,8 @@
     <string name="contact_support">Зв\'язатися з підтримкою</string>
     <string name="sublist_to_share_dialog_title">Якими саме пунктами списку ви хотіли б поділитись?</string>
     <string name="pattern_all">Усі (%d)</string>
-    <string name="pattern_enabled">Включені (%d)</string>
-    <string name="pattern_disabled">Виключені (%d)</string>
+    <string name="pattern_enabled_to_send">Включеними (%d)</string>
+    <string name="pattern_disabled_to_send">Виключеними (%d)</string>
     <string name="pattern_product_was_deleted">Пункт \'%s\' видал.</string>
     <string name="undo">Відмінити</string>
     <string name="enable_all">Включити усі</string>

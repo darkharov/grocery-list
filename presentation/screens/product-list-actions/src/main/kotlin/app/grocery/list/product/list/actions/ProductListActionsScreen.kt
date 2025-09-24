@@ -301,7 +301,7 @@ private fun Dialog(
                     props = AppTextButtonProps.TextOnly(
                         text = StringValue.StringWrapper(
                             stringResource(
-                                R.string.pattern_disabled,
+                                R.string.pattern_disabled_to_send,
                                 dialog.disabledItemsCount,
                             )
                         )
@@ -315,7 +315,7 @@ private fun Dialog(
                     props = AppTextButtonProps.TextOnly(
                         text = StringValue.StringWrapper(
                             stringResource(
-                                R.string.pattern_enabled,
+                                R.string.pattern_enabled_to_send,
                                 dialog.enabledItemsCount,
                             )
                         )
