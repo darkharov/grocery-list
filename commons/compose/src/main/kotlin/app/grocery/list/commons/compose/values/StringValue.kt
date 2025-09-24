@@ -38,12 +38,17 @@ sealed class StringValue {
     data class ResId(
         @StringRes
         val resId: Int,
+        private val arguments: List<Any>? = null,
     ) : StringValue() {
 
         @Stable
         @Composable
         override fun value(): String =
-            stringResource(resId)
+            if (arguments == null) {
+                stringResource(resId)
+            } else {
+                stringResource(resId, *arguments.toTypedArray())
+            }
     }
 
     @Immutable

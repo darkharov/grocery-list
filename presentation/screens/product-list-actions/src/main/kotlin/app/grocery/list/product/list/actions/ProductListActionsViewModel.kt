@@ -30,19 +30,26 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     private val loadingListToShare = MutableStateFlow(false)
 
-    val props = combine(
-        repository.productListEmpty(),
-        loadingListToShare,
-    ) { productListEmpty, loadingListToShare ->
-        ProductListActionsProps(
-            productListEmpty = productListEmpty,
-            loadingListToShare = loadingListToShare,
+    val props =
+        combine(
+            repository.productListCount(),
+            repository.atLeastOneProductEnabled(),
+            loadingListToShare,
+        ) {
+                productListCount,
+                atLeastOneProductEnabled,
+                loadingListToShare,
+            ->
+            ProductListActionsProps(
+                productListCount = productListCount,
+                atLeastOneProductEnabled = atLeastOneProductEnabled,
+                loadingListToShare = loadingListToShare,
+            )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = null,
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = null,
-    )
 
     private val dialog = MutableStateFlow<ProductListActionsDialog?>(null)
     private val events = Channel<Event>(Channel.UNLIMITED)
@@ -68,6 +75,21 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     override fun onStartShopping() {
         events.trySend(Event.OnStartShopping)
+    }
+
+    override fun onNoEnabledProductsToStartShopping(productCount: Int) {
+        dialog.value =
+            ProductListActionsDialog.NoEnabledProductsToStartShopping(
+                allProductCount = productCount,
+            )
+    }
+
+    override fun onEnableAllAndStartShopping() {
+        dialog.value = null
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.enableAll()
+            events.trySend(Event.OnStartShopping)
+        }
     }
 
     override fun onShare() {

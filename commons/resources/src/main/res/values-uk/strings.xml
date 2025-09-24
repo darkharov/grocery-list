@@ -50,6 +50,8 @@
     <string name="undo">Відмінити</string>
     <string name="enable_all">Включити усі</string>
     <string name="disable_all">Виключити усі</string>
+    <string name="error_no_enabled_products_to_start_shopping">Усі елементи списку (%d) вимкнені. Хочете включити їх усіх та почати покупки?</string>
+    <string name="enable_all_and_start">Включити усі та почати</string>
 
     <string-array name="final_steps">
         <item>Заблокуйте екран</item>

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 internal data class ProductListActionsProps(
-    val productListEmpty: Boolean,
+    val productListCount: Int,
+    val atLeastOneProductEnabled: Boolean,
     val loadingListToShare: Boolean,
 )

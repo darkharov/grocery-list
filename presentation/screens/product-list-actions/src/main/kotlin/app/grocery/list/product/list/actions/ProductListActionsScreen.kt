@@ -133,7 +133,7 @@ private fun Content(
                     text = stringResource(R.string.clear_list),
                     background = AppButtonProps.Background.Negative,
                     drawableEndId = R.drawable.ic_bin_outline,
-                    state = AppButtonProps.State.enabled(!(props.productListEmpty))
+                    state = AppButtonProps.State.enabled(props.productListCount > 0)
                 ),
                 onClick = {
                     callbacks.onGoToClearListConfirmation()
@@ -144,10 +144,16 @@ private fun Content(
                     text = stringResource(R.string.i_am_at_shop),
                     background = AppButtonProps.Background.Positive,
                     drawableEndId = R.drawable.ic_cart,
-                    state = AppButtonProps.State.enabled(!(props.productListEmpty)),
+                    state = AppButtonProps.State.enabled(props.productListCount > 0),
                 ),
                 onClick = {
-                    callbacks.onStartShopping()
+                    if (props.atLeastOneProductEnabled) {
+                        callbacks.onStartShopping()
+                    } else {
+                        callbacks.onNoEnabledProductsToStartShopping(
+                            productCount = props.productListCount,
+                        )
+                    }
                 },
             )
             WideAppButton(
@@ -155,7 +161,7 @@ private fun Content(
                     text = stringResource(R.string.share_current_list),
                     drawableEndId = R.drawable.ic_share,
                     state = when {
-                        props.productListEmpty -> {
+                        (props.productListCount == 0) -> {
                             AppButtonProps.State.Disabled
                         }
                         props.loadingListToShare -> {
@@ -190,7 +196,7 @@ private fun Content(
             WideAppButton(
                 props = AppButtonProps.Custom(
                     text = stringResource(
-                        if (props.productListEmpty) {
+                        if (props.productListCount == 0) {
                             R.string.exit
                         } else {
                             R.string.save_and_exit
@@ -345,6 +351,25 @@ private fun Dialog(
                 )
             }
         }
+        is ProductListActionsDialog.NoEnabledProductsToStartShopping -> {
+            AppSimpleDialog(
+                icon = painterResource(R.drawable.ic_toggle_off),
+                text = StringValue.ResId(
+                    resId = R.string.error_no_enabled_products_to_start_shopping,
+                    arguments = listOf(dialog.allProductCount),
+                ),
+                onDismiss = {
+                    callbacks.onDialogDismiss()
+                },
+                confirmButtonText = StringValue.ResId(R.string.enable_all_and_start),
+                onConfirm = {
+                    callbacks.onEnableAllAndStartShopping()
+                },
+                onCancel = {
+                    callbacks.onDialogDismiss()
+                },
+            )
+        }
     }
 }
 
@@ -364,7 +389,8 @@ private fun ProductListActionsScreenWithDialogPreview(
                 modifier = Modifier
                     .padding(padding),
                 props = ProductListActionsProps(
-                    productListEmpty = false,
+                    productListCount = 0,
+                    atLeastOneProductEnabled = false,
                     loadingListToShare = false,
                 ),
             )

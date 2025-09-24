@@ -50,6 +50,8 @@
     <string name="undo">Undo</string>
     <string name="enable_all">Enable all</string>
     <string name="disable_all">Disable all</string>
+    <string name="error_no_enabled_products_to_start_shopping">All list items (%d) are disabled. Do you want to enable them all and start shopping?</string>
+    <string name="enable_all_and_start">Enable all and start</string>
 
     <string-array name="final_steps">
         <item>Lock the screen</item>

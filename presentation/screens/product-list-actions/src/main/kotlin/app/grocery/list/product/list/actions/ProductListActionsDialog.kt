@@ -23,6 +23,11 @@ internal sealed class ProductListActionsDialog {
     data class HowToPutPastedProducts(
         val productList: List<Product>,
     ) : ProductListActionsDialog()
+
+    @Immutable
+    data class NoEnabledProductsToStartShopping(
+        val allProductCount: Int,
+    ) : ProductListActionsDialog()
 }
 
 internal class ProductListActionsDialogMocks :

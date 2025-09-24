@@ -122,8 +122,11 @@ internal class AppRepositoryImpl @Inject constructor(
     override fun numberOfEnabledProducts(): Flow<Int> =
         productDao.countOfEnabled()
 
-    override fun productListEmpty(): Flow<Boolean> =
-        productDao.productListEmpty()
+    override fun productListCount(): Flow<Int> =
+        productDao.productListCount()
+
+    override fun atLeastOneProductEnabled(): Flow<Boolean> =
+        productDao.atLeastOneProductEnabled()
 
     override fun sampleProducts(): Flow<List<Product>> =
         flowOf(
