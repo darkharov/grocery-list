@@ -13,7 +13,8 @@ class GetProductTitleFormatter @Inject internal constructor(
 ) {
     fun execute(): Flow<ProductTitleFormatter> =
         repository
-            .productTitleFormat()
+            .productTitleFormat
+            .observe()
             .map { format ->
                 factory.create(format)
             }

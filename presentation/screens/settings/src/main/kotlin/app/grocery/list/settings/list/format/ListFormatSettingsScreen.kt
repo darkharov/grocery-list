@@ -180,7 +180,7 @@ private fun Option(
             .selectable(
                 selected = selected,
                 onClick = {
-                    callbacks.onProductListFormatSelected(option)
+                    callbacks.onProductTitleFormatSelected(option)
                 },
                 role = Role.RadioButton,
             )

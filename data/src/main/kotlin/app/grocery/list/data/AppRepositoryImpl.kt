@@ -5,11 +5,12 @@ import app.grocery.list.commons.format.ProductListToStringFormatter
 import app.grocery.list.data.db.ProductDao
 import app.grocery.list.data.db.ProductEntity
 import app.grocery.list.domain.AppRepository
+import app.grocery.list.domain.AppRepository.CategorizedProductsCriteria
 import app.grocery.list.domain.CategoryAndProducts
 import app.grocery.list.domain.EmojiSearchResult
+import app.grocery.list.domain.EnabledAndDisabledProducts
 import app.grocery.list.domain.Product
 import app.grocery.list.domain.settings.ProductTitleFormat
-import app.grocery.list.domain.settings.Settings
 import app.grocery.list.storage.value.android.StorageValueDelegates
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -26,27 +27,11 @@ internal class AppRepositoryImpl @Inject constructor(
     private val context: Context,
     private val productDao: ProductDao,
     private val productMapper: ProductEntity.Mapper,
-    private val productItemFormatMapper: ProductItemFormatMapper,
     private val categoryDao: CategoryDao,
     private val productListFormatter: ProductListToStringFormatter,
-) : AppRepository() {
+) : AppRepository {
 
-    override val settings by delegates.custom<Settings>(
-        write = { settings ->
-            int(
-                PRODUCT_TITLE_FORMAT_ID,
-                productItemFormatMapper.toInt(settings.productTitleFormat),
-            )
-        },
-        read = {
-            val defaultValue = productItemFormatMapper.toInt(ProductTitleFormat.EmojiAndFullText)
-            val id = int(PRODUCT_TITLE_FORMAT_ID, defaultValue = defaultValue)
-            Settings(
-                productTitleFormat = productItemFormatMapper.fromInt(id = id),
-            )
-        },
-    )
-
+    override val productTitleFormat by delegates.enum(defaultValue = ProductTitleFormat.EmojiAndFullText)
     override val clearNotificationsReminderEnabled by delegates.boolean(defaultValue = true)
 
     override fun categories(): Flow<List<Product.Category>> =
@@ -116,14 +101,11 @@ internal class AppRepositoryImpl @Inject constructor(
                 }
             }
 
-    override fun numberOfAddedProducts(): Flow<Int> =
+    override fun numberOfProducts(): Flow<Int> =
         productDao.count()
 
     override fun numberOfEnabledProducts(): Flow<Int> =
         productDao.countOfEnabled()
-
-    override fun productListCount(): Flow<Int> =
-        productDao.productListCount()
 
     override fun atLeastOneProductEnabled(): Flow<Boolean> =
         productDao.atLeastOneProductEnabled()
@@ -135,15 +117,21 @@ internal class AppRepositoryImpl @Inject constructor(
             )
         )
 
-    override suspend fun enableAll() {
+    override suspend fun enableAllProducts() {
         productDao.setEnabledFlagForAll(enabled = true)
     }
 
-    override suspend fun disableAll() {
+    override suspend fun disableAllProducts() {
         productDao.setEnabledFlagForAll(enabled = false)
     }
 
-    companion object {
-        private const val PRODUCT_TITLE_FORMAT_ID = "PRODUCT_TITLE_FORMAT_ID"
-    }
+    override fun enabledAndDisabledProducts(): Flow<EnabledAndDisabledProducts> =
+        products()
+            .map { products ->
+                EnabledAndDisabledProducts(
+                    all = products,
+                    enabled = products.filter { it.enabled },
+                    disabled = products.filterNot { it.enabled },
+                )
+            }
 }

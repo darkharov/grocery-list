@@ -32,16 +32,16 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     val props =
         combine(
-            repository.productListCount(),
+            repository.numberOfProducts(),
             repository.atLeastOneProductEnabled(),
             loadingListToShare,
         ) {
-                productListCount,
+                numberOfProducts,
                 atLeastOneProductEnabled,
                 loadingListToShare,
             ->
             ProductListActionsProps(
-                productListCount = productListCount,
+                productListCount = numberOfProducts,
                 atLeastOneProductEnabled = atLeastOneProductEnabled,
                 loadingListToShare = loadingListToShare,
             )
@@ -87,7 +87,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     override fun onEnableAllAndStartShopping() {
         dialog.value = null
         viewModelScope.launch(Dispatchers.IO) {
-            repository.enableAll()
+            repository.enableAllProducts()
             events.trySend(Event.OnStartShopping)
         }
     }
@@ -144,7 +144,7 @@ internal class ProductListActionsViewModel @Inject constructor(
             }
             .onSuccess { pastedProducts ->
                 viewModelScope.launch {
-                    val numberOfAddedProducts = repository.numberOfAddedProducts()
+                    val numberOfAddedProducts = repository.numberOfProducts()
                         .flowOn(Dispatchers.IO)
                         .first()
                     if (numberOfAddedProducts == 0) {

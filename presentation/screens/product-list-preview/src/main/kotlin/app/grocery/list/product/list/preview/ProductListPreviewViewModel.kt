@@ -31,7 +31,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
 
     private fun collectProps() = combine(
         getProductTitleFormatter.execute().map(mapperFactory::create),
-        repository.categorizedProducts(),
+        repository.categorizedProducts(AppRepository.CategorizedProductsCriteria.All),
         ProductListMapper::transform,
     ).stateIn(
         viewModelScope,
@@ -70,13 +70,13 @@ internal class ProductListPreviewViewModel @Inject constructor(
 
     override fun onEnableAll() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.enableAll()
+            repository.enableAllProducts()
         }
     }
 
     override fun onDisableEnableAll() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.disableAll()
+            repository.disableAllProducts()
         }
     }
 

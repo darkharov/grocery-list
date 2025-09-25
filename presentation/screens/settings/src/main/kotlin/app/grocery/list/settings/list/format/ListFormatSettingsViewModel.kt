@@ -22,7 +22,7 @@ internal class ListFormatSettingsViewModel @Inject constructor(
 
     val props =
         combine(
-            repository.productTitleFormat(),
+            repository.productTitleFormat.observe(),
             repository.sampleProducts(),
             getProductTitleFormatter.execute(),
         ) { format, sampleProducts, formatter ->
@@ -37,9 +37,9 @@ internal class ListFormatSettingsViewModel @Inject constructor(
             null,
         )
 
-    override fun onProductListFormatSelected(option: ListFormatSettingsProps.ProductTitleFormat) {
+    override fun onProductTitleFormatSelected(option: ListFormatSettingsProps.ProductTitleFormat) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.setProductItemFormat(
+            repository.productTitleFormat.set(
                 productTitleFormatMapper.toDomain(option)
             )
         }

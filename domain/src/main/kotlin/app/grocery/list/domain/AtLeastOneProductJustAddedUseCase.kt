@@ -14,7 +14,7 @@ class AtLeastOneProductJustAddedUseCase @Inject constructor(
 ) {
     fun execute(): Flow<Boolean> =
         appRepository
-            .numberOfAddedProducts()
+            .numberOfProducts()
             .runningFold(Accumulator(), Accumulator::next)
             .map { it.increased }
             .takeWhile { increased -> !(increased) }

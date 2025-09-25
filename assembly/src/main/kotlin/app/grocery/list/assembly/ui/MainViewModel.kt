@@ -37,14 +37,17 @@ class MainViewModel @Inject constructor(
 
     val hasEmojiIfEnoughSpace =
         repository
-            .productTitleFormat()
+            .productTitleFormat
+            .observe()
             .map {
                 when (it) {
-                    ProductTitleFormat.WithoutEmoji ->
+                    ProductTitleFormat.WithoutEmoji -> {
                         false
+                    }
                     ProductTitleFormat.EmojiAndFullText,
-                    ProductTitleFormat.EmojiAndAdditionalDetail ->
+                    ProductTitleFormat.EmojiAndAdditionalDetail -> {
                         true
+                    }
                 }
             }
             .stateIn(viewModelScope, SharingStarted.Eagerly, false)
