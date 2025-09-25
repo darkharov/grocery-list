@@ -41,12 +41,16 @@ internal fun AppCounter(
         AnimatedContent(
             targetState = value,
             transitionSpec = {
-                if (value > 0) {
+                if (targetState > 0) {
                     scaleIn(
                         initialScale = 0f,
                         animationSpec = tween(
                             durationMillis = COUNTER_ANIMATION_DURATION,
-                            delayMillis = COUNTER_ANIMATION_DURATION,
+                            delayMillis = if (initialState == 0) {
+                                0
+                            } else {
+                                COUNTER_ANIMATION_DURATION
+                            },
                         ),
                     )
                 } else {
