@@ -228,14 +228,10 @@ private fun AppToolbarWithCounterPreview(
     )
     props: AppToolbarProps,
 ) {
-    var counterValue by remember { mutableIntStateOf(9) }
     GroceryListTheme {
         AppToolbar(
             props = props,
-            modifier = Modifier
-                .clickable {
-                    counterValue++
-                },
+            modifier = Modifier,
             onUpClick = {},
             onTrailingIconClick = {},
         )
