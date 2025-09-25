@@ -1,12 +1,14 @@
 package app.grocery.list.commons.compose.elements.button.text
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.theme.blackOrWhite
 import app.grocery.list.commons.compose.values.StringValue
@@ -29,10 +31,13 @@ sealed class AppTextButtonProps {
 
     internal abstract val enabled: Boolean
 
+    internal open val padding = Defaults.Padding
+
     @Immutable
     class TextOnly(
         override val text: StringValue,
         override val enabled: Boolean = true,
+        override val padding: PaddingValues = Defaults.Padding,
         val color: Color = Color.Unspecified,
     ) : AppTextButtonProps() {
 
@@ -66,6 +71,13 @@ sealed class AppTextButtonProps {
             get() =
                 MaterialTheme.colorScheme.blackOrWhite
                     .copy(alpha = 0.88f)
+    }
+
+    object Defaults {
+        val Padding = PaddingValues(
+            vertical = 12.dp,
+            horizontal = 16.dp,
+        )
     }
 }
 

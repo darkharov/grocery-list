@@ -26,8 +26,6 @@ import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.theme.blackOrWhite
 
-val AppTextButtonHorizontalOffset = 16.dp
-
 @Composable
 fun AppTextButton(
     props: AppTextButtonProps,
@@ -59,10 +57,7 @@ fun AppTextButton(
     ) {
         Row(
             modifier = Modifier
-                .padding(
-                    vertical = 12.dp,
-                    horizontal = AppTextButtonHorizontalOffset,
-                ),
+                .padding(props.padding),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             val leadingIconId = props.leadingIconId

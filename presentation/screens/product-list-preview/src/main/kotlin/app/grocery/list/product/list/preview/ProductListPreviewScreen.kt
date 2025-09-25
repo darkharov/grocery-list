@@ -41,7 +41,6 @@ import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.elements.button.AppButton
 import app.grocery.list.commons.compose.elements.button.AppButtonProps
 import app.grocery.list.commons.compose.elements.button.text.AppTextButton
-import app.grocery.list.commons.compose.elements.button.text.AppTextButtonHorizontalOffset
 import app.grocery.list.commons.compose.elements.button.text.AppTextButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
@@ -261,8 +260,9 @@ private fun LazyListScope.enableAndDisableAll(
     callbacks: ProductListPreviewCallbacks,
 ) {
     item {
+        val buttonHorizontalPadding = 8.dp
         val desiredHorizontalOffset = dimensionResource(R.dimen.margin_16_32_64)
-        val finalHorizontalOffset = desiredHorizontalOffset - AppTextButtonHorizontalOffset
+        val finalHorizontalOffset = desiredHorizontalOffset - buttonHorizontalPadding
         Row(
             modifier = Modifier
                 .fillParentMaxWidth()
@@ -274,7 +274,11 @@ private fun LazyListScope.enableAndDisableAll(
             AppTextButton(
                 props = AppTextButtonProps.TextOnly(
                     text = StringValue.ResId(R.string.disable_all),
-                    enabled = enableAndDisableAll.disableAllAvailable
+                    enabled = enableAndDisableAll.disableAllAvailable,
+                    padding = PaddingValues(
+                        horizontal = buttonHorizontalPadding,
+                        vertical = 12.dp,
+                    ),
                 ),
                 onClick = {
                     callbacks.onDisableEnableAll()
