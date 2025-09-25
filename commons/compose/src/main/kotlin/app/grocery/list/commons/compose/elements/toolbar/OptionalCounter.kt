@@ -1,4 +1,4 @@
-package app.grocery.list.commons.compose.elements
+package app.grocery.list.commons.compose.elements.toolbar
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.EnterTransition
@@ -33,7 +33,7 @@ import app.grocery.list.commons.compose.theme.GroceryListTheme
 private const val COUNTER_ANIMATION_DURATION = 250
 
 @Composable
-internal fun AppCounter(
+internal fun OptionalCounter(
     value: Int?,
     modifier: Modifier = Modifier,
 ) {
@@ -111,7 +111,7 @@ internal fun AppCounter(
 
 @Preview
 @Composable
-private fun AppCounterPreview() {
+private fun OptionalCounterPreview() {
     var value: Int by remember { mutableIntStateOf(13) }
     GroceryListTheme {
         Box(
@@ -120,7 +120,7 @@ private fun AppCounterPreview() {
                     value++
                 },
         ) {
-            AppCounter(
+            OptionalCounter(
                 value = value,
                 modifier = Modifier
                     .padding(4.dp)
@@ -132,9 +132,9 @@ private fun AppCounterPreview() {
 
 @Preview
 @Composable
-private fun AppCounterWithoutAnimationOnStartPreview() {
+private fun OptionalCounterWithoutAnimationOnStartPreview() {
     GroceryListTheme {
-        AppCounter(
+        OptionalCounter(
             value = 2,
             modifier = Modifier
                 .padding(4.dp)
