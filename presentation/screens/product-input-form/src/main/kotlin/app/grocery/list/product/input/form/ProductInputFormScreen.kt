@@ -30,7 +30,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -149,15 +148,18 @@ internal fun ProductInputFormScreen(
     titleFocusRequester: FocusRequester,
     modifier: Modifier = Modifier,
 ) {
+    val horizontalOffset = dimensionResource(R.dimen.margin_16_32_64)
     Column(
         modifier = modifier
             .windowInsetsPadding(
                 WindowInsets
                     .systemBars
                     .only(WindowInsetsSides.Bottom)
+            )
+            .padding(
+                horizontal = horizontalOffset,
             ),
     ) {
-        val horizontalOffset = dimensionResource(R.dimen.margin_16_32_64)
         val selectedCategory = categoryPicker.selectedCategory
         val topOffset = dimensionResource(R.dimen.margin_80_land_0)
         Spacer(
@@ -171,31 +173,23 @@ internal fun ProductInputFormScreen(
             atLeastOneProductJustAdded = atLeastOneProductJustAdded,
             callbacks = callbacks,
             titleFocusRequester = titleFocusRequester,
-            horizontalOffset = horizontalOffset,
-            modifier = Modifier,
         )
         CategoryPicker(
             props = categoryPicker,
             callbacks = callbacks,
             focusRequester = categoryFocusRequester,
-            modifier = Modifier
-                .padding(
-                    horizontal = horizontalOffset,
-                ),
         )
         Spacer(
             modifier = Modifier
                 .height(32.dp),
         )
         Buttons(
-            horizontalOffset = horizontalOffset,
             editingMode = editingMode,
             title = title.text,
             emoji = emoji,
             selectedCategory = selectedCategory,
             atLeastOneProductJustAdded = atLeastOneProductJustAdded,
             callbacks = callbacks,
-            modifier = Modifier,
         )
     }
 }
@@ -207,15 +201,11 @@ private fun TitleAndEmoji(
     selectedCategory: CategoryProps?,
     atLeastOneProductJustAdded: Boolean,
     callbacks: ProductInputFormCallbacks,
-    horizontalOffset: Dp,
     titleFocusRequester: FocusRequester,
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .padding(
-                horizontal = horizontalOffset,
-            ),
+        modifier = modifier,
         verticalAlignment = Alignment.Bottom,
     ) {
         AppTextField(
@@ -260,7 +250,6 @@ private fun TitleAndEmoji(
 
 @Composable
 private fun Buttons(
-    horizontalOffset: Dp,
     editingMode: Boolean,
     title: String,
     emoji: EmojiProps?,
@@ -280,15 +269,11 @@ private fun Buttons(
                     atLeastOneProductJustAdded = atLeastOneProductJustAdded,
                 )
             },
-            modifier = Modifier
-                .padding(
-                    horizontal = horizontalOffset,
-                ),
+            modifier = modifier,
         )
     } else {
         Row(
-            modifier = modifier
-                .padding(horizontal = horizontalOffset),
+            modifier = modifier,
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             AppButton(
