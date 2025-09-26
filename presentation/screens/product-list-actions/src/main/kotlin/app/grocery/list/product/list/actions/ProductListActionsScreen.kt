@@ -133,7 +133,7 @@ private fun Content(
                     text = stringResource(R.string.clear_list),
                     background = AppButtonProps.Background.Negative,
                     drawableEndId = R.drawable.ic_bin_outline,
-                    state = AppButtonProps.State.enabled(props.productListCount > 0)
+                    state = AppButtonProps.State.enabled(props.productListCount > 0),
                 ),
                 onClick = {
                     callbacks.onGoToClearListConfirmation()
