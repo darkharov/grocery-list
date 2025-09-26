@@ -75,6 +75,19 @@ sealed class AppButtonProps {
             text
     }
 
+    data class Add(
+        override val state: State = State.Enabled,
+    ) : AppButtonProps() {
+
+        override val background = Background.Normal
+        override val drawableEndId = null
+
+        @Stable
+        @Composable
+        override fun title() =
+            "+ ${stringResource(R.string.add)}"
+    }
+
     @Immutable
     data class Next(
         override val state: State = State.Enabled,

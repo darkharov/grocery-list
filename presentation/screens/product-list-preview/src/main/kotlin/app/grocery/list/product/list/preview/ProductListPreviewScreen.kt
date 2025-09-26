@@ -325,9 +325,7 @@ private fun Buttons(
             .spacedBy(16.dp)
     ) {
         AppButton(
-            props = AppButtonProps.Custom(
-                text = "+ ${stringResource(R.string.add)}",
-            ),
+            props = AppButtonProps.Add(),
             onClick = {
                 callbacks.onAddClick()
             },
