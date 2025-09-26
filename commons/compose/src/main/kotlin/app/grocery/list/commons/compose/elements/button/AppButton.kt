@@ -64,7 +64,7 @@ fun AppButton(
                 .weight(1f),
         ) {
             Text(
-                text = props.title(),
+                text = props.title,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(

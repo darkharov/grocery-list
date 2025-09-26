@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -15,23 +16,32 @@ import app.grocery.list.commons.compose.theme.PositiveActionColor
 @Stable
 sealed class AppButtonProps {
 
-    @get:Stable
     @get:DrawableRes
     abstract val drawableEndId: Int?
 
-    @get:Stable
+    @get:Composable
+    @get:ReadOnlyComposable
+    abstract val title: String
+
     abstract val background: Background
 
-    @get:Stable
     protected abstract val state: State
 
-    @Stable
-    @Composable
-    abstract fun title(): String
+    val enabled: Boolean
+        @ReadOnlyComposable
+        get() =
+            state == State.Enabled
 
-    val enabled @Stable get() = state == State.Enabled
-    val progressBar @Stable get() = state == State.DisabledWithProgressBar
-    val hasTrailingElement @Stable get() = state == State.DisabledWithProgressBar || drawableEndId != null
+    val progressBar: Boolean
+        @ReadOnlyComposable
+        get() =
+            state == State.DisabledWithProgressBar
+
+    val hasTrailingElement: Boolean
+        @ReadOnlyComposable
+        get() =
+            state == State.DisabledWithProgressBar ||
+            drawableEndId != null
 
     @Immutable
     enum class State {
@@ -62,19 +72,21 @@ sealed class AppButtonProps {
 
     @Immutable
     data class Custom(
-        private val text: String,
+        val text: String,
         override val background: Background = Background.Normal,
         @DrawableRes
         override val drawableEndId: Int? = null,
         override val state: State = State.Enabled,
     ) : AppButtonProps() {
 
-        @Stable
-        @Composable
-        override fun title(): String =
-            text
+        override val title: String
+            @Composable
+            @ReadOnlyComposable
+            get() =
+                text
     }
 
+    @Immutable
     data class Add(
         override val state: State = State.Enabled,
     ) : AppButtonProps() {
@@ -82,10 +94,11 @@ sealed class AppButtonProps {
         override val background = Background.Normal
         override val drawableEndId = null
 
-        @Stable
-        @Composable
-        override fun title() =
-            "+ ${stringResource(R.string.add)}"
+        override val title: String
+            @Composable
+            @ReadOnlyComposable
+            get() =
+                "+ ${stringResource(R.string.add)}"
     }
 
     @Immutable
@@ -98,9 +111,11 @@ sealed class AppButtonProps {
         override val background = Background.Normal
         override val drawableEndId = null
 
-        @Composable
-        override fun title() =
-            "${stringResource(titleId)} >>"
+        override val title: String
+            @Composable
+            @ReadOnlyComposable
+            get() =
+                "${stringResource(titleId)} >>"
     }
 
     @Immutable
@@ -111,31 +126,37 @@ sealed class AppButtonProps {
         override val background = Background.Normal
         override val drawableEndId = null
 
-        @Composable
-        override fun title() =
-            "✓ ${stringResource(R.string.done)}"
+        override val title: String
+            @Composable
+            @ReadOnlyComposable
+            get() =
+                "✓ ${stringResource(R.string.done)}"
     }
 
+    @Immutable
     enum class Background {
         Normal {
             @Composable
+            @ReadOnlyComposable
             override fun toColor(): Color =
                 MaterialTheme.colorScheme.primary
         },
         Positive {
             @Composable
+            @ReadOnlyComposable
             override fun toColor(): Color =
                 PositiveActionColor
         },
         Negative {
             @Composable
+            @ReadOnlyComposable
             override fun toColor(): Color =
                 NegativeActionColor
         },
         ;
 
-        @Stable
         @Composable
+        @ReadOnlyComposable
         abstract fun toColor(): Color
     }
 }
