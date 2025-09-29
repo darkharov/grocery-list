@@ -8,12 +8,10 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.launch
 
 @Composable
 fun <E> EventConsumer(
@@ -23,11 +21,9 @@ fun <E> EventConsumer(
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(events, lifecycleOwner) {
-        lifecycleOwner.lifecycleScope.launch {
-            lifecycleOwner.repeatOnLifecycle(lifecycleState) {
-                for (event in events) {
-                    onEvent(event)
-                }
+        lifecycleOwner.repeatOnLifecycle(lifecycleState) {
+            for (event in events) {
+                onEvent(event)
             }
         }
     }
