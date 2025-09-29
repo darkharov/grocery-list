@@ -23,7 +23,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +32,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.EventConsumer
@@ -70,7 +70,7 @@ private fun ProductListPreviewScreen(
     delegate: ProductListPreviewDelegate,
 ) {
     val viewModel = hiltViewModel<ProductListPreviewViewModel>()
-    val props by viewModel.props.collectAsState()
+    val props by viewModel.props.collectAsStateWithLifecycle()
     EventConsumer(
         viewModel = viewModel,
         navigation = navigation,
@@ -94,7 +94,7 @@ private fun EventConsumer(
                 navigation.goToProductInputForm()
             }
             is Event.OnNext -> {
-                navigation.goToActions()
+                navigation.goToProductListActions()
             }
             is Event.OnProductDeleted -> {
                 delegate.showUndoProductDeletionSnackbar(event.product)
@@ -325,7 +325,7 @@ private fun Buttons(
             .spacedBy(16.dp)
     ) {
         AppButton(
-            props = AppButtonProps.Add(),
+            props = AppButtonProps.add(),
             onClick = {
                 callbacks.onAddClick()
             },
@@ -333,7 +333,7 @@ private fun Buttons(
                 .weight(1f),
         )
         AppButton(
-            props = AppButtonProps.Next(
+            props = AppButtonProps.next(
                 titleId = R.string.actions,
             ),
             onClick = {
