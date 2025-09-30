@@ -38,11 +38,14 @@ import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.final_.steps.FinalSteps
 import app.grocery.list.final_.steps.finalSteps
 import app.grocery.list.product.input.form.productInputFormScreen
-import app.grocery.list.product.list.actions.productListActionsScreen
+import app.grocery.list.product.list.actions.bar.ProductListActionsBar
+import app.grocery.list.product.list.actions.screen.productListActionsScreen
 import app.grocery.list.product.list.preview.ProductListPreview
 import app.grocery.list.product.list.preview.productListPreviewScreen
 import app.grocery.list.settings.Settings
 import app.grocery.list.settings.settingsAndChildScreens
+import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitch
+import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 
@@ -161,9 +164,27 @@ internal fun AppContent(
             sizeTransform = null,
         ) {
             val navigation = AppNavigationFacade(navController)
-            productListPreviewScreen(delegates, navigation)
+            productListPreviewScreen(
+                delegate = delegates,
+                navigation = navigation,
+                bottomBar = {
+                    ProductListActionsBar(
+                        navigation = navigation,
+                        delegate = delegates,
+                    )
+                },
+            )
             productInputFormScreen(navigation)
-            productListActionsScreen(delegates)
+            productListActionsScreen(
+                delegate = delegates,
+                navigation = navigation,
+                bottomElement = {
+                    UseIconsOnBottomBarSwitch(
+                        strategy = UseIconsOnBottomBarSwitchStrategy.EmbeddedElement,
+                        navigation = navigation,
+                    )
+                },
+            )
             clearNotificationsReminder(navigation)
             finalSteps()
             settingsAndChildScreens(delegates, navController)

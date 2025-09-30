@@ -56,14 +56,6 @@ internal class ProductListPreviewViewModel @Inject constructor(
         }
     }
 
-    override fun onAddClick() {
-        events.trySend(Event.OnAdd)
-    }
-
-    override fun onNextClick() {
-        events.trySend(Event.OnNext)
-    }
-
     override fun onEditProduct(productId: Int) {
         events.trySend(Event.OnEditProduct(productId = productId))
     }
@@ -84,8 +76,6 @@ internal class ProductListPreviewViewModel @Inject constructor(
         events
 
     sealed class Event {
-        data object OnAdd : Event()
-        data object OnNext : Event()
         data class OnProductDeleted(val product: Product) : Event()
         data class OnEditProduct(val productId: Int) : Event()
     }

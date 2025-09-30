@@ -6,19 +6,18 @@ import app.grocery.list.commons.format.ProductListToStringFormatter
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.EnabledAndDisabledProducts
 import app.grocery.list.domain.Product
+import app.grocery.list.product.list.actions.dialog.ProductListActionsDialogProps
+import commons.android.stateIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -28,35 +27,29 @@ internal class ProductListActionsViewModel @Inject constructor(
 ) : ViewModel(),
     ProductListActionsCallbacks {
 
+    private val dialog = MutableStateFlow<ProductListActionsDialogProps?>(null)
+    private val events = Channel<Event>(Channel.UNLIMITED)
     private val loadingListToShare = MutableStateFlow(false)
 
     val props =
         combine(
+            repository.bottomBarMode.observe(),
             repository.numberOfProducts(),
             repository.atLeastOneProductEnabled(),
             loadingListToShare,
         ) {
+                bottomBarMode,
                 numberOfProducts,
                 atLeastOneProductEnabled,
                 loadingListToShare,
             ->
             ProductListActionsProps(
-                productListCount = numberOfProducts,
-                atLeastOneProductEnabled = atLeastOneProductEnabled,
+                useIconsOnBottomBar = bottomBarMode.useIcons,
+                numberOfProducts = numberOfProducts,
                 loadingListToShare = loadingListToShare,
+                atLeastOneProductEnabled = atLeastOneProductEnabled,
             )
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = null,
-        )
-
-    private val dialog = MutableStateFlow<ProductListActionsDialog?>(null)
-    private val events = Channel<Event>(Channel.UNLIMITED)
-
-    override fun onGoToClearListConfirmation() {
-        dialog.value = ProductListActionsDialog.ConfirmClearList
-    }
+        }.stateIn(this)
 
     override fun onClearListConfirmed() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -69,18 +62,10 @@ internal class ProductListActionsViewModel @Inject constructor(
         dialog.value = null
     }
 
-    override fun onExitFromApp() {
-        events.trySend(Event.OnExitFromApp)
-    }
-
-    override fun onStartShopping() {
-        events.trySend(Event.OnStartShopping)
-    }
-
     override fun onNoEnabledProductsToStartShopping(productCount: Int) {
         dialog.value =
-            ProductListActionsDialog.NoEnabledProductsToStartShopping(
-                allProductCount = productCount,
+            ProductListActionsDialogProps.EnableAllAndStartShopping(
+                totalProductCount = productCount,
             )
     }
 
@@ -92,65 +77,36 @@ internal class ProductListActionsViewModel @Inject constructor(
         }
     }
 
-    override fun onShare() {
-        loadingListToShare.value = true
-
-        viewModelScope.launch {
-
-            val products = repository
-                .enabledAndDisabledProducts()
-                .flowOn(Dispatchers.IO)
-                .first()
-
-            loadingListToShare.value = false
-
-            val all = products.all
-
-            if (products.mixed) {
-                dialog.value = ProductListActionsDialog.SublistToSharePicker(
-                    productListSize = all.size,
-                    enabledItemsCount = products.enabled.size,
-                    disabledItemsCount = products.disabled.size,
-                    payload = products,
-                )
-            } else {
-                events.trySend(Event.OnShare(all))
-            }
-        }
-    }
-
     private fun sendShareEventAndRemoveDialog(products: List<Product>) {
         events.trySend(Event.OnShare(products))
         dialog.value = null
     }
 
-    override fun onShareAll(dialog: ProductListActionsDialog.SublistToSharePicker) {
+    override fun onShareAll(dialog: ProductListActionsDialogProps.SublistToSharePicker) {
         sendShareEventAndRemoveDialog((dialog.payload as EnabledAndDisabledProducts).all)
     }
 
-    override fun onShareEnabledOnly(dialog: ProductListActionsDialog.SublistToSharePicker) {
+    override fun onShareEnabledOnly(dialog: ProductListActionsDialogProps.SublistToSharePicker) {
         sendShareEventAndRemoveDialog((dialog.payload as EnabledAndDisabledProducts).enabled)
     }
 
-    override fun onShareDisabledOnly(dialog: ProductListActionsDialog.SublistToSharePicker) {
+    override fun onShareDisabledOnly(dialog: ProductListActionsDialogProps.SublistToSharePicker) {
         sendShareEventAndRemoveDialog((dialog.payload as EnabledAndDisabledProducts).disabled)
     }
 
-    override fun onPaste(text: String) {
+    override fun onPasted(text: String) {
         productListFormatter
             .parse(message = text)
             .onFailure {
-                dialog.value = ProductListActionsDialog.CopiedProductListNotFound
+                dialog.value = ProductListActionsDialogProps.CopiedProductListNotFound
             }
             .onSuccess { pastedProducts ->
-                viewModelScope.launch {
-                    val numberOfAddedProducts = repository.numberOfProducts()
-                        .flowOn(Dispatchers.IO)
-                        .first()
+                viewModelScope.launch(Dispatchers.IO) {
+                    val numberOfAddedProducts = repository.numberOfProducts().first()
                     if (numberOfAddedProducts == 0) {
                         onAddProducts(pastedProducts)
                     } else {
-                        dialog.value = ProductListActionsDialog.HowToPutPastedProducts(
+                        dialog.value = ProductListActionsDialogProps.HowToPutPastedProducts(
                             productList = pastedProducts,
                         )
                     }
@@ -162,7 +118,7 @@ internal class ProductListActionsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             repository.clearProducts()
             repository.putProducts(productList)
-            dialog.value = ProductListActionsDialog.ProductSuccessfullyAdded(
+            dialog.value = ProductListActionsDialogProps.ProductSuccessfullyAdded(
                 count = productList.size,
             )
         }
@@ -171,22 +127,86 @@ internal class ProductListActionsViewModel @Inject constructor(
     override fun onAddProducts(productList: List<Product>) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.putProducts(productList)
-            dialog.value = ProductListActionsDialog.ProductSuccessfullyAdded(
+            dialog.value = ProductListActionsDialogProps.ProductSuccessfullyAdded(
                 count = productList.size,
             )
+        }
+    }
+
+    override fun onAttemptToClearList() {
+        dialog.value = ProductListActionsDialogProps.ConfirmClearList
+    }
+
+    override fun onAdd() {
+        events.trySend(Event.OnGoToProductInputForm)
+    }
+
+    override fun onGoToActions() {
+        events.trySend(Event.OnGoToActions)
+    }
+
+    override fun onExitFromApp() {
+        events.trySend(Event.OnExitFromApp)
+    }
+
+    override fun onAttemptToStartShopping(atLeastOneProductEnabled: Boolean, numberOfProducts: Int) {
+        if (atLeastOneProductEnabled) {
+            events.trySend(Event.OnStartShopping)
+        } else {
+            dialog.value = ProductListActionsDialogProps.EnableAllAndStartShopping(
+                totalProductCount = numberOfProducts,
+            )
+        }
+    }
+
+    override fun onAttemptToShareCurrentList() {
+        handleShareCurrentListAction()
+    }
+
+    override fun onAttemptToPaste() {
+        events.trySend(Event.OnPasteCopiedList)
+    }
+
+    private fun handleShareCurrentListAction() {
+        loadingListToShare.value = true
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val products = repository
+                .enabledAndDisabledProducts()
+                .first()
+
+            loadingListToShare.value = false
+
+            val all = products.all
+
+            if (products.mixed) {
+                dialog.value = ProductListActionsDialogProps.SublistToSharePicker(
+                    productListSize = all.size,
+                    enabledItemsCount = products.enabled.size,
+                    disabledItemsCount = products.disabled.size,
+                    payload = products,
+                )
+            } else {
+                events.trySend(Event.OnShare(all))
+            }
         }
     }
 
     fun events(): ReceiveChannel<Event> =
         events
 
-    fun dialog(): StateFlow<ProductListActionsDialog?> =
+    fun dialog(): StateFlow<ProductListActionsDialogProps?> =
         dialog.asStateFlow()
 
     sealed class Event {
 
         data object OnExitFromApp : Event()
+        data object OnPasteCopiedList : Event()
         data object OnStartShopping : Event()
+        data object OnGoToProductInputForm : Event()
+        data object OnGoToActions : Event()
+        data object OnGoBack : Event()
 
         data class OnShare(val products: List<Product>) : Event()
     }

@@ -170,11 +170,12 @@ private class AppContentToReadMocks : PreviewParameterProvider<String> {
 
     override val values = sequenceOf(
         "Short Text",
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        LoremIpsumShortFragment,
         LoremIpsum,
     )
 }
-private const val LoremIpsum = """
+const val LoremIpsumShortFragment = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+const val LoremIpsum = """
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum condimentum nibh, in dignissim quam pellentesque in. Phasellus eget vehicula velit. Fusce suscipit scelerisque pretium. Ut at enim augue. Quisque ut suscipit quam. Mauris et massa id magna sollicitudin laoreet bibendum non turpis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc faucibus accumsan justo sed facilisis. Etiam pharetra ipsum et laoreet posuere. Quisque efficitur diam sed leo molestie consectetur. Mauris vel odio venenatis, sollicitudin ligula at, consectetur magna. Nam id iaculis nunc.
 
 Curabitur eget quam nec turpis hendrerit semper. Suspendisse sit amet dui purus. Sed pellentesque vitae nibh id convallis. Pellentesque congue, mauris at elementum commodo, nunc ex scelerisque magna, non suscipit risus metus vitae sem. Proin ac velit elit. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer posuere fringilla velit eu tincidunt. Donec ornare quam ut sapien vulputate, sed gravida diam convallis. Maecenas vel malesuada sapien, in molestie erat. Phasellus et lectus dictum arcu condimentum viverra a eu urna. Pellentesque sagittis sapien hendrerit lorem consequat, eget laoreet lorem sodales. Donec pharetra at est et ullamcorper. Aliquam vitae finibus neque. Duis porttitor at felis nec vulputate. Aliquam molestie, diam ut faucibus aliquet, ligula ligula tempus libero, ac tincidunt dolor erat a urna.

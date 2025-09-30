@@ -1,5 +1,5 @@
 package app.grocery.list.product.input.form
 
-interface ProductInputFormNavigation {
-    fun exitFromProductInputForm()
-}
+import app.grocery.list.commons.compose.AbleToGoBack
+
+interface ProductInputFormNavigation : AbleToGoBack

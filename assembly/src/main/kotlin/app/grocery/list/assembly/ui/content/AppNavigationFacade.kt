@@ -5,28 +5,34 @@ import app.grocery.list.clear.notifications.reminder.ClearNotificationsReminderN
 import app.grocery.list.final_.steps.FinalSteps
 import app.grocery.list.product.input.form.ProductInputForm
 import app.grocery.list.product.input.form.ProductInputFormNavigation
-import app.grocery.list.product.list.actions.ProductListActions
+import app.grocery.list.product.list.actions.ProductListActionsNavigation
+import app.grocery.list.product.list.actions.screen.ProductListActions
 import app.grocery.list.product.list.preview.ProductListPreviewNavigation
 
 internal class AppNavigationFacade(
     private val navController: NavHostController,
 ) : ProductInputFormNavigation,
     ClearNotificationsReminderNavigation,
-    ProductListPreviewNavigation {
+    ProductListPreviewNavigation,
+    ProductListActionsNavigation {
 
-    override fun exitFromProductInputForm() {
-        navController.popBackStack()
-    }
-
-    override fun goToActions() {
+    override fun goToProductListActions() {
         navController.navigate(ProductListActions)
     }
 
-    override fun goToProductInputForm(productId: Int?) {
+    override fun goToProductEditingForm(productId: Int) {
         navController.navigate(ProductInputForm(productId = productId))
     }
 
     override fun goToFinalSteps() {
         navController.navigate(FinalSteps)
+    }
+
+    override fun goToNewProductInputForm() {
+        navController.navigate(ProductInputForm())
+    }
+
+    override fun goBack() {
+        navController.popBackStack()
     }
 }

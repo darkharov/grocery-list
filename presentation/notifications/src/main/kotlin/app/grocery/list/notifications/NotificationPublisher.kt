@@ -16,12 +16,12 @@ import app.grocery.list.commons.format.GetProductTitleFormatter
 import app.grocery.list.commons.format.ProductTitleFormatter
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.CategoryAndProducts
+import app.grocery.list.domain.HandleProductListPublishedUseCase
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
 @Singleton
@@ -31,6 +31,7 @@ class NotificationPublisher @Inject internal constructor(
     private val repository: AppRepository,
     private val notificationManager: NotificationManagerCompat,
     private val getProductTitleFormatter: GetProductTitleFormatter,
+    private val handleProductListPublished: HandleProductListPublishedUseCase,
 ) {
     init {
         val defaultChannel = NotificationChannel(
@@ -55,19 +56,18 @@ class NotificationPublisher @Inject internal constructor(
 
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     private fun post() {
-        ProcessLifecycleOwner.get().lifecycleScope.launch {
+        ProcessLifecycleOwner.get().lifecycleScope.launch(Dispatchers.IO) {
             post(
                 formatter = getProductTitleFormatter
                     .execute()
-                    .flowOn(Dispatchers.IO)
                     .first(),
                 categorizedProducts = repository
                     .categorizedProducts(
                         criteria = AppRepository.CategorizedProductsCriteria.EnabledOnly,
                     )
-                    .flowOn(Dispatchers.IO)
                     .first(),
             )
+            handleProductListPublished.execute()
         }
     }
 

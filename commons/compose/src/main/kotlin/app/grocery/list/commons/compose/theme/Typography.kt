@@ -70,7 +70,7 @@ class AppTypography {
 
     val explanation = TextStyle(
         fontFamily = Inter,
-        fontSize = 11.sp,
+        fontSize = 10.sp,
         fontWeight = FontWeight.Normal,
     )
 }

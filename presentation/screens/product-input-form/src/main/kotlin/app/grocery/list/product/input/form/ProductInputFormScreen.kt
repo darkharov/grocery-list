@@ -25,7 +25,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
@@ -39,8 +38,9 @@ import androidx.navigation.toRoute
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.KeyboardOnComposition
 import app.grocery.list.commons.compose.elements.AppTextField
-import app.grocery.list.commons.compose.elements.button.AppButton
-import app.grocery.list.commons.compose.elements.button.AppButtonProps
+import app.grocery.list.commons.compose.elements.button.AppButtonAdd
+import app.grocery.list.commons.compose.elements.button.AppButtonDone
+import app.grocery.list.commons.compose.elements.button.AppButtonStateProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.product.input.form.elements.category.picker.CategoryPicker
@@ -50,7 +50,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ProductInputForm(
-    val productId: Int?,
+    val productId: Int? = null,
 )
 
 fun NavGraphBuilder.productInputFormScreen(
@@ -119,7 +119,7 @@ private fun EventConsumer(
                 softwareKeyboardController?.show()
             }
             ProductInputFormViewModel.Event.Completed -> {
-                navigation.exitFromProductInputForm()
+                navigation.goBack()
             }
             ProductInputFormViewModel.Event.TitleNotSpecified -> {
                 titleFocusRequester.requestFocus()
@@ -259,8 +259,7 @@ private fun Buttons(
     modifier: Modifier = Modifier,
 ) {
     if (editingMode) {
-        AppButton(
-            props = AppButtonProps.Done(),
+        AppButtonDone(
             onClick = {
                 callbacks.onAttemptToCompleteProductInput(
                     productTitle = title,
@@ -276,11 +275,7 @@ private fun Buttons(
             modifier = modifier,
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            AppButton(
-                props = AppButtonProps.Custom(
-                    text = stringResource(R.string.add),
-                    state = AppButtonProps.State.enabled(title.isNotBlank()),
-                ),
+            AppButtonAdd(
                 onClick = {
                     callbacks.onAttemptToCompleteProductInput(
                         productTitle = title,
@@ -291,18 +286,17 @@ private fun Buttons(
                 },
                 modifier = Modifier
                     .weight(1f),
+                state = AppButtonStateProps.enabled(title.isNotBlank()),
             )
-            AppButton(
-                props = AppButtonProps.Done(
-                    state = AppButtonProps.State.enabled(
-                        enabled = atLeastOneProductJustAdded && title.isBlank(),
-                    ),
-                ),
+            AppButtonDone(
                 onClick = {
                     callbacks.onComplete()
                 },
                 modifier = Modifier
                     .weight(1f),
+                state = AppButtonStateProps.enabled(
+                    enabled = atLeastOneProductJustAdded && title.isBlank(),
+                ),
             )
         }
     }

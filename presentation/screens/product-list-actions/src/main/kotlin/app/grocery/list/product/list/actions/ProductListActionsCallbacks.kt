@@ -1,36 +1,43 @@
 package app.grocery.list.product.list.actions
 
 import app.grocery.list.domain.Product
+import app.grocery.list.product.list.actions.dialog.ProductListActionsDialogProps
 
 internal interface ProductListActionsCallbacks {
-    fun onGoToClearListConfirmation()
+    fun onAttemptToClearList()
+    fun onAdd()
+    fun onGoToActions()
     fun onClearListConfirmed()
     fun onDialogDismiss()
     fun onExitFromApp()
-    fun onStartShopping()
+    fun onAttemptToStartShopping(atLeastOneProductEnabled: Boolean, numberOfProducts: Int)
     fun onNoEnabledProductsToStartShopping(productCount: Int)
-    fun onShare()
-    fun onShareAll(dialog: ProductListActionsDialog.SublistToSharePicker)
-    fun onShareEnabledOnly(dialog: ProductListActionsDialog.SublistToSharePicker)
-    fun onShareDisabledOnly(dialog: ProductListActionsDialog.SublistToSharePicker)
-    fun onPaste(text: String)
+    fun onAttemptToShareCurrentList()
+    fun onShareAll(dialog: ProductListActionsDialogProps.SublistToSharePicker)
+    fun onShareEnabledOnly(dialog: ProductListActionsDialogProps.SublistToSharePicker)
+    fun onShareDisabledOnly(dialog: ProductListActionsDialogProps.SublistToSharePicker)
+    fun onAttemptToPaste()
+    fun onPasted(text: String)
     fun onReplaceProductsBy(productList: List<Product>)
     fun onAddProducts(productList: List<Product>)
     fun onEnableAllAndStartShopping()
 }
 
 internal object ProductListActionsCallbacksMock : ProductListActionsCallbacks {
-    override fun onGoToClearListConfirmation() {}
+    override fun onAttemptToClearList() {}
+    override fun onAdd() {}
+    override fun onGoToActions() {}
     override fun onClearListConfirmed() {}
     override fun onDialogDismiss() {}
     override fun onExitFromApp() {}
-    override fun onStartShopping() {}
+    override fun onAttemptToStartShopping(atLeastOneProductEnabled: Boolean, numberOfProducts: Int) {}
     override fun onNoEnabledProductsToStartShopping(productCount: Int) {}
-    override fun onShare() {}
-    override fun onShareAll(dialog: ProductListActionsDialog.SublistToSharePicker) {}
-    override fun onShareEnabledOnly(dialog: ProductListActionsDialog.SublistToSharePicker) {}
-    override fun onShareDisabledOnly(dialog: ProductListActionsDialog.SublistToSharePicker) {}
-    override fun onPaste(text: String) {}
+    override fun onAttemptToShareCurrentList() {}
+    override fun onShareAll(dialog: ProductListActionsDialogProps.SublistToSharePicker) {}
+    override fun onShareEnabledOnly(dialog: ProductListActionsDialogProps.SublistToSharePicker) {}
+    override fun onShareDisabledOnly(dialog: ProductListActionsDialogProps.SublistToSharePicker) {}
+    override fun onAttemptToPaste() {}
+    override fun onPasted(text: String) {}
     override fun onReplaceProductsBy(productList: List<Product>) {}
     override fun onAddProducts(productList: List<Product>) {}
     override fun onEnableAllAndStartShopping() {}

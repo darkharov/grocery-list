@@ -12,6 +12,10 @@
     <string name="category_flour_products_and_sweets">Flour Products / Sweets</string>
     <string name="category_other">Other</string>
     <string name="add">Add</string>
+    <string name="add_product_to_buy">Add a product to buy</string>
+    <string name="bottom_bar">Bottom Bar</string>
+    <string name="use_icons_instead_of_buttons">Use icons instead of buttons</string>
+    <string name="this_action_can_be_cancelled_in_app_settings">This action can also be changed in the application settings.</string>
     <string name="done">Done</string>
     <string name="actions">Actions</string>
     <string name="clear_list">Clear list</string>
@@ -52,6 +56,7 @@
     <string name="disable_all">Disable all</string>
     <string name="error_no_enabled_products_to_start_shopping">All list items (%d) are disabled. Do you want to enable them all and start shopping?</string>
     <string name="enable_all_and_start">Enable all and start</string>
+    <string name="close">Close</string>
 
     <string-array name="final_steps">
         <item>Lock the screen</item>

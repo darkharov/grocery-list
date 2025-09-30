@@ -14,49 +14,38 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
+import app.grocery.list.commons.compose.values.StringValue
 
 private val TrailingElementSize = 24.dp
 private val TrailingElementOffset = 8.dp
 
 @Composable
-fun WideAppButton(
-    props: AppButtonProps,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    AppButton(
-        onClick = onClick,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(
-                horizontal = dimensionResource(R.dimen.margin_16_32_64),
-            ),
-        props = props,
-    )
-}
-
-@Composable
 fun AppButton(
-    props: AppButtonProps,
+    title: StringValue,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    endIcon: Painter? = null,
+    background: AppButtonBackgroundProps = AppButtonBackgroundProps.Normal,
+    state: AppButtonStateProps = AppButtonStateProps.Enabled,
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
         shape = MaterialTheme.shapes.small,
-        enabled = props.enabled,
+        enabled = state.enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = props.background.toColor(),
+            containerColor = background.toColor(),
         ),
     ) {
         Box(
@@ -64,11 +53,11 @@ fun AppButton(
                 .weight(1f),
         ) {
             Text(
-                text = props.title,
+                text = title.value(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        horizontal = if (props.hasTrailingElement) {
+                        horizontal = if (endIcon != null) {
                             TrailingElementOffset + TrailingElementSize
                         } else {
                             0.dp
@@ -80,16 +69,16 @@ fun AppButton(
                 maxLines = 1,
                 style = LocalAppTypography.current.button,
             )
-            val drawableEndId = props.drawableEndId
-            if (props.progressBar) {
+            if (state.loading) {
                 CircularProgressIndicator(
+                    color = Color.Black,
                     modifier = Modifier
                         .size(24.dp)
                         .align(Alignment.CenterEnd),
                 )
-            } else if (drawableEndId != null) {
+            } else if (endIcon != null) {
                 Icon(
-                    painter = painterResource(drawableEndId),
+                    painter = endIcon,
                     contentDescription = null,
                     modifier = Modifier
                         .padding(start = TrailingElementOffset)
@@ -101,42 +90,85 @@ fun AppButton(
     }
 }
 
+@Composable
+fun AppButtonDone(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    state: AppButtonStateProps = AppButtonStateProps.Enabled,
+) {
+    AppButton(
+        title = StringValue.ResId(prefix = "✓ ", resId = R.string.done),
+        modifier = modifier,
+        endIcon = null,
+        state = state,
+        onClick = onClick,
+    )
+}
+
+@Composable
+fun AppButtonNext(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    state: AppButtonStateProps = AppButtonStateProps.Enabled,
+    titleId: Int = R.string.next,
+) {
+    AppButton(
+        title = StringValue.ResId(titleId, postfix = " >>"),
+        modifier = modifier,
+        endIcon = null,
+        state = state,
+        onClick = onClick,
+    )
+}
+
+@Composable
+fun AppButtonAdd(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    state: AppButtonStateProps = AppButtonStateProps.Enabled,
+) {
+    AppButton(
+        title = StringValue.ResId(prefix = "+ ", resId = R.string.add),
+        modifier = modifier,
+        endIcon = null,
+        background = AppButtonBackgroundProps.Normal,
+        state = state,
+        onClick = onClick,
+    )
+}
+
 @Preview
 @Composable
-private fun AppButtonPreview() {
+private fun AppButtonStatePreview(
+    @PreviewParameter(
+        provider = AppButtonStateMocks::class,
+    )
+    state: AppButtonStateProps
+) {
     GroceryListTheme {
-        WideAppButton(
-            props = AppButtonProps.Custom(
-                text = "Text",
-                drawableEndId = R.drawable.ic_android,
-            ),
+        AppButton(
+            title = StringValue.StringWrapper("Title"),
+            endIcon = painterResource(R.drawable.ic_android),
             onClick = {},
+            state = state,
         )
     }
 }
 
 @Preview
 @Composable
-private fun AppButtonNextPreview() {
+private fun AppButtonBackgroundPreview(
+    @PreviewParameter(
+        provider = AppButtonBackgroundMocks::class,
+    )
+    background: AppButtonBackgroundProps,
+) {
     GroceryListTheme {
-        WideAppButton(
-            props = AppButtonProps.Next(),
+        AppButton(
+            title = StringValue.StringWrapper("Title"),
+            endIcon = painterResource(R.drawable.ic_android),
             onClick = {},
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun AppButtonNextDisabledWithProgressBarPreview() {
-    GroceryListTheme {
-        WideAppButton(
-            props = AppButtonProps.Custom(
-                drawableEndId = R.drawable.ic_android,
-                text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
-                state = AppButtonProps.State.DisabledWithProgressBar,
-            ),
-            onClick = {},
+            background = background,
         )
     }
 }

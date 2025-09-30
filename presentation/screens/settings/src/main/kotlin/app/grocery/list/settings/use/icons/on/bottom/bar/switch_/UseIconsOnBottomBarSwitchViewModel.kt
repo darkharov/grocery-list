@@ -1,0 +1,102 @@
+package app.grocery.list.settings.use.icons.on.bottom.bar.switch_
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import app.grocery.list.domain.AppRepository
+import app.grocery.list.domain.settings.BottomBarMode
+import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy.EmbeddedElement
+import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy.Screen
+import commons.android.stateIn
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+
+@HiltViewModel(
+    assistedFactory = UseIconsOnBottomBarSwitchViewModel.Factory::class,
+)
+internal class UseIconsOnBottomBarSwitchViewModel @AssistedInject constructor(
+    @Assisted
+    private val strategy: UseIconsOnBottomBarSwitchStrategy,
+    private val repository: AppRepository,
+) : ViewModel(),
+    UseIconsOnBottomBarSwitchCallbacks {
+
+    private val events = Channel<Event>(capacity = Channel.UNLIMITED)
+
+    val props =
+        repository
+            .bottomBarMode
+            .observe()
+            .map { mode ->
+                UseIconsOnBottomBarSwitchProps(
+                    checked = mode.useIcons,
+                    visible = when (strategy) {
+                        Screen -> true
+                        EmbeddedElement -> mode.shouldOfferToSwitchToIcons
+                    },
+                    strategy = strategy,
+                )
+            }
+            .stateIn(
+                viewModel = this,
+                defaultValue = UseIconsOnBottomBarSwitchProps(
+                    checked = null,
+                    visible = false,
+                    strategy = strategy,
+                ),
+            )
+
+    init {
+        if (strategy.shouldExitIfToggledOn) {
+            viewModelScope.launch {
+                repository
+                    .bottomBarMode
+                    .observe()
+                    .flowOn(Dispatchers.IO)
+                    .first { it.useIcons }
+                events.trySend(Event.OnGoBack)
+            }
+        }
+    }
+
+    override fun onClose() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.bottomBarMode.set(BottomBarMode.Buttons)
+        }
+    }
+
+    override fun onUseIconsOnBottomBarCheckedChange(newValue: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.bottomBarMode.set(
+                if (newValue) {
+                    BottomBarMode.Icons
+                } else {
+                    BottomBarMode.Buttons
+                }
+            )
+        }
+        if (newValue && strategy.shouldExitIfToggledOn) {
+            events.trySend(Event.OnGoBack)
+        }
+    }
+
+    fun events(): ReceiveChannel<Event> =
+        events
+
+    @AssistedFactory
+    fun interface Factory {
+        fun create(strategy: UseIconsOnBottomBarSwitchStrategy): UseIconsOnBottomBarSwitchViewModel
+    }
+
+    sealed class Event {
+        data object OnGoBack : Event()
+    }
+}

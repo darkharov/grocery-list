@@ -19,14 +19,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.elements.AppSwipeToDismissBox
+import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.product.list.preview.ProductListPreviewProps
 import app.grocery.list.product.list.preview.R
@@ -94,7 +95,7 @@ private fun Actions(
                     .background(Color.Red),
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_bin_outline),
+                    painter = rememberVectorPainter(AppIcons.delete),
                     contentDescription = stringResource(R.string.delete),
                     tint = Color.White,
                     modifier = Modifier

@@ -65,6 +65,9 @@ internal interface ProductDao {
     @Query("SELECT COUNT(*) FROM product WHERE enabled == 1")
     fun countOfEnabled(): Flow<Int>
 
+    @Query("SELECT COUNT(*) > 0 FROM product WHERE enabled == 1 LIMIT 1")
+    fun atLeastOneEnabled(): Flow<Boolean>
+
     @Query(
         """
             UPDATE product

@@ -5,8 +5,6 @@ import app.grocery.list.product.list.preview.elements.ProductItemCallbacksMock
 
 internal interface ProductListPreviewCallbacks :
     ProductItemCallbacks {
-    fun onAddClick()
-    fun onNextClick()
     fun onEnableAll()
     fun onDisableEnableAll()
 }
@@ -14,8 +12,6 @@ internal interface ProductListPreviewCallbacks :
 internal object ProductListPreviewCallbacksMock :
     ProductListPreviewCallbacks,
     ProductItemCallbacks by ProductItemCallbacksMock {
-    override fun onAddClick() {}
-    override fun onNextClick() {}
     override fun onEnableAll() {}
     override fun onDisableEnableAll() {}
 }

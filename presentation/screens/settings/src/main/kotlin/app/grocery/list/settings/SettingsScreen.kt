@@ -26,11 +26,14 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.button.text.AppTextButton
 import app.grocery.list.commons.compose.elements.button.text.AppTextButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
+import app.grocery.list.settings.bottom.bar.BottomBarSettings
+import app.grocery.list.settings.bottom.bar.bottomBarSettings
 import app.grocery.list.settings.list.format.ListFormatSettings
 import app.grocery.list.settings.list.format.listFormatSettings
 import kotlinx.serialization.Serializable
@@ -47,6 +50,9 @@ fun NavGraphBuilder.settingsAndChildScreens(
         navController = navController,
     )
     listFormatSettings()
+    bottomBarSettings(
+        ableToGoBack = navController::popBackStack,
+    )
 }
 
 private fun NavGraphBuilder.settings(
@@ -69,6 +75,7 @@ private fun NavGraphBuilder.settings(
         )
         SettingsScreen(
             props = props,
+            navController = navController,
             callbacks = viewModel,
         )
     }
@@ -96,6 +103,7 @@ private fun EventConsumer(
 private fun SettingsScreen(
     props: SettingsProps,
     callbacks: SettingsCallbacks,
+    navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -112,6 +120,17 @@ private fun SettingsScreen(
             ),
             onClick = {
                 callbacks.onListFormatClick()
+            },
+        )
+        AppTextButton(
+            props = AppTextButtonProps.SettingsCategory(
+                text = StringValue.StringWrapper(
+                    value = stringResource(R.string.bottom_bar),
+                ),
+                leadingIconId = R.drawable.ic_bottom_bar,
+            ),
+            onClick = {
+                navController.navigate(BottomBarSettings)
             },
         )
         AppTextButton(
@@ -153,6 +172,7 @@ private fun SettingsScreenPreview() {
             SettingsScreen(
                 props = SettingsProps(appVersionName = "1.0.0"),
                 callbacks = SettingsCallbacksMock,
+                navController = rememberNavController(),
                 modifier = Modifier
                     .padding(padding),
             )

@@ -12,6 +12,10 @@
     <string name="category_flour_products_and_sweets">Борошно / Солодощі</string>
     <string name="category_other">Інше</string>
     <string name="add">Додати</string>
+    <string name="add_product_to_buy">Додати продукт який треба купити</string>
+    <string name="bottom_bar">Нижній бар</string>
+    <string name="use_icons_instead_of_buttons">Використовувати іконки замість кнопок</string>
+    <string name="this_action_can_be_cancelled_in_app_settings">Цю дію також можна змінити в налаштуваннях програми.</string>
     <string name="done">Готово</string>
     <string name="actions">Дії</string>
     <string name="clear_list">Очистити список</string>
@@ -52,6 +56,7 @@
     <string name="disable_all">Виключити усі</string>
     <string name="error_no_enabled_products_to_start_shopping">Усі елементи списку (%d) вимкнені. Хочете включити їх усіх та почати покупки?</string>
     <string name="enable_all_and_start">Включити усі та почати</string>
+    <string name="close">Закрити</string>
 
     <string-array name="final_steps">
         <item>Заблокуйте екран</item>

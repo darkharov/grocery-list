@@ -8,6 +8,7 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.elements.toolbar.AppToolbarProps
 import app.grocery.list.settings.Settings
+import app.grocery.list.settings.bottom.bar.BottomBarSettings
 import app.grocery.list.settings.list.format.ListFormatSettings
 import kotlin.reflect.KClass
 import kotlinx.collections.immutable.ImmutableList
@@ -78,6 +79,7 @@ internal class AppToolbarContentCollection private constructor(
         val Instance = Builder.build {
             title<Settings>(R.string.settings)
             title<ListFormatSettings>(R.string.list_format)
+            title<BottomBarSettings>(R.string.bottom_bar)
         }
     }
 }

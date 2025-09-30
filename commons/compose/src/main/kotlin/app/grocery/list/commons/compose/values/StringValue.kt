@@ -4,15 +4,15 @@ import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 
 @Immutable
 sealed class StringValue {
 
-    @Stable
     @Composable
+    @ReadOnlyComposable
     abstract fun value(): String
 
     @Deprecated(
@@ -28,8 +28,8 @@ sealed class StringValue {
         private val value: String,
     ) : StringValue() {
 
-        @Stable
         @Composable
+        @ReadOnlyComposable
         override fun value(): String =
             value
     }
@@ -38,12 +38,19 @@ sealed class StringValue {
     data class ResId(
         @StringRes
         val resId: Int,
+        private val prefix: String = "",
+        private val postfix: String = "",
         private val arguments: List<Any>? = null,
     ) : StringValue() {
 
-        @Stable
         @Composable
+        @ReadOnlyComposable
         override fun value(): String =
+            "$prefix${unboxResource()}$postfix"
+
+        @Composable
+        @ReadOnlyComposable
+        private fun unboxResource() =
             if (arguments == null) {
                 stringResource(resId)
             } else {
@@ -59,8 +66,8 @@ sealed class StringValue {
         val useCountAsArgument: Boolean = false,
     ) : StringValue() {
 
-        @Stable
         @Composable
+        @ReadOnlyComposable
         override fun value(): String =
             if (useCountAsArgument) {
                 pluralStringResource(resId, count, count)

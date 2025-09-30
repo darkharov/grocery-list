@@ -6,16 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.union
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
@@ -38,8 +31,6 @@ import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
-import app.grocery.list.commons.compose.elements.button.AppButton
-import app.grocery.list.commons.compose.elements.button.AppButtonProps
 import app.grocery.list.commons.compose.elements.button.text.AppTextButton
 import app.grocery.list.commons.compose.elements.button.text.AppTextButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
@@ -55,10 +46,12 @@ data object ProductListPreview
 fun NavGraphBuilder.productListPreviewScreen(
     delegate: ProductListPreviewDelegate,
     navigation: ProductListPreviewNavigation,
+    bottomBar: @Composable () -> Unit,
 ) {
     composable<ProductListPreview> {
         ProductListPreviewScreen(
             delegate = delegate,
+            bottomBar = bottomBar,
             navigation = navigation,
         )
     }
@@ -68,6 +61,7 @@ fun NavGraphBuilder.productListPreviewScreen(
 private fun ProductListPreviewScreen(
     navigation: ProductListPreviewNavigation,
     delegate: ProductListPreviewDelegate,
+    bottomBar: @Composable () -> Unit,
 ) {
     val viewModel = hiltViewModel<ProductListPreviewViewModel>()
     val props by viewModel.props.collectAsStateWithLifecycle()
@@ -78,6 +72,7 @@ private fun ProductListPreviewScreen(
     )
     ProductListPreviewScreen(
         props = props,
+        bottomBar = bottomBar,
         callbacks = viewModel,
     )
 }
@@ -90,17 +85,11 @@ private fun EventConsumer(
 ) {
     EventConsumer(viewModel.events()) { event ->
         when (event) {
-            is Event.OnAdd -> {
-                navigation.goToProductInputForm()
-            }
-            is Event.OnNext -> {
-                navigation.goToProductListActions()
-            }
             is Event.OnProductDeleted -> {
                 delegate.showUndoProductDeletionSnackbar(event.product)
             }
             is Event.OnEditProduct -> {
-                navigation.goToProductInputForm(
+                navigation.goToProductEditingForm(
                     productId = event.productId,
                 )
             }
@@ -112,6 +101,7 @@ private fun EventConsumer(
 private fun ProductListPreviewScreen(
     props: ProductListPreviewProps?,
     callbacks: ProductListPreviewCallbacks,
+    bottomBar: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (props == null) {
@@ -122,6 +112,7 @@ private fun ProductListPreviewScreen(
         Content(
             props = props,
             callbacks = callbacks,
+            bottomBar = bottomBar,
             modifier = modifier,
         )
     }
@@ -131,6 +122,7 @@ private fun ProductListPreviewScreen(
 private fun Content(
     props: ProductListPreviewProps,
     callbacks: ProductListPreviewCallbacks,
+    bottomBar: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -149,9 +141,7 @@ private fun Content(
                 )
             }
         }
-        Buttons(
-            callbacks = callbacks,
-        )
+        bottomBar()
     }
 }
 
@@ -302,50 +292,6 @@ private fun LazyListScope.enableAndDisableAll(
 }
 
 @Composable
-private fun Buttons(
-    callbacks: ProductListPreviewCallbacks,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier
-            .padding(
-                top = 16.dp,
-                bottom = 4.dp,
-            )
-            .padding(
-                horizontal = dimensionResource(R.dimen.margin_16_32_64),
-            )
-            .windowInsetsPadding(
-                WindowInsets
-                    .systemBars
-                    .union(WindowInsets.displayCutout)
-                    .only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal)
-            ),
-        horizontalArrangement = Arrangement
-            .spacedBy(16.dp)
-    ) {
-        AppButton(
-            props = AppButtonProps.add(),
-            onClick = {
-                callbacks.onAddClick()
-            },
-            modifier = Modifier
-                .weight(1f),
-        )
-        AppButton(
-            props = AppButtonProps.next(
-                titleId = R.string.actions,
-            ),
-            onClick = {
-                callbacks.onNextClick()
-            },
-            modifier = Modifier
-                .weight(1f),
-        )
-    }
-}
-
-@Composable
 @PreviewLightDark
 private fun ProductListPreviewPreview(
     @PreviewParameter(
@@ -360,6 +306,7 @@ private fun ProductListPreviewPreview(
                 callbacks = ProductListPreviewCallbacksMock,
                 modifier = Modifier
                     .padding(padding),
+                bottomBar = {},
             )
         }
     }
