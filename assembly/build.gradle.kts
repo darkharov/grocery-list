@@ -32,8 +32,8 @@ android {
         applicationId = Configs.APPLICATION_ID
         minSdk = Configs.Sdk.MIN
         targetSdk = Configs.Sdk.TARGET
-        versionCode = 21
-        versionName = "1.9.0"
+        versionCode = 22
+        versionName = "1.10.0"
     }
 
     signingConfigs {
