@@ -1,8 +1,10 @@
 package app.grocery.list.product.list.actions
 
+import androidx.compose.runtime.Stable
 import app.grocery.list.domain.Product
 import app.grocery.list.product.list.actions.dialog.ProductListActionsDialogProps
 
+@Stable
 internal interface ProductListActionsCallbacks {
     fun onAttemptToClearList()
     fun onAdd()
