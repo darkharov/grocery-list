@@ -216,7 +216,7 @@ private fun TitleAndEmoji(
             modifier = Modifier
                 .weight(5f)
                 .focusRequester(titleFocusRequester),
-            label = StringValue.ResId(R.string.product_to_buy_label),
+            label = StringValue.ResId(R.string.product_title),
             placeholder = StringValue.ResId(R.string.broccoli),
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,

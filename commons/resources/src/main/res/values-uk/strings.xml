@@ -3,7 +3,7 @@
     <string name="grocery_list">Список продуктів</string>
     <string name="settings">Налаштування</string>
     <string name="create_list">Створити список</string>
-    <string name="product_to_buy_label">Продукт, що треба купити</string>
+    <string name="product_title">Назва продукту</string>
     <string name="broccoli">Брокколі</string>
     <string name="category">Категорія</string>
     <string name="category_fruits_vegetables_berries">Фрукти / Овочі / Ягоди</string>
