@@ -47,7 +47,7 @@
     <string name="sample_products">Помідор (чері, 1 контейнер)|0|🍅|Помідор\nСир 500г|1|🧀|Сир\nМолоко 2л|1|🥛|Молоко</string>
     <string name="contact_support">Зв\'язатися з підтримкою</string>
     <string name="sublist_to_share_dialog_title">Якими саме пунктами списку ви хотіли б поділитись?</string>
-    <string name="pattern_all">Усі (%d)</string>
+    <string name="pattern_all">Усіма (%d)</string>
     <string name="pattern_enabled_to_send">Включеними (%d)</string>
     <string name="pattern_disabled_to_send">Виключеними (%d)</string>
     <string name="pattern_product_was_deleted">Пункт \'%s\' видал.</string>
