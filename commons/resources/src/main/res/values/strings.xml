@@ -15,7 +15,7 @@
     <string name="add_product_to_buy">Add a product to buy</string>
     <string name="bottom_bar">Bottom Bar</string>
     <string name="use_icons_instead_of_buttons">Use icons instead of buttons</string>
-    <string name="this_action_can_be_cancelled_in_app_settings">This action can also be changed in the application settings.</string>
+    <string name="this_action_can_be_cancelled_in_app_settings">This action can also be performed in the application settings.</string>
     <string name="done">Done</string>
     <string name="actions">Actions</string>
     <string name="clear_list">Clear list</string>

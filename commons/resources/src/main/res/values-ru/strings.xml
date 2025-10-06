@@ -15,7 +15,7 @@
     <string name="add_product_to_buy">Добавить продукт, который нужно купить</string>
     <string name="bottom_bar">Нижний бар</string>
     <string name="use_icons_instead_of_buttons">Использовать иконки вместо кнопок</string>
-    <string name="this_action_can_be_cancelled_in_app_settings">Это действие также можно изменить в настройках приложения.</string>
+    <string name="this_action_can_be_cancelled_in_app_settings">Это действие можно также выполнить в настройках приложения.</string>
     <string name="done">Готово</string>
     <string name="actions">Действия</string>
     <string name="clear_list">Очистить список</string>
