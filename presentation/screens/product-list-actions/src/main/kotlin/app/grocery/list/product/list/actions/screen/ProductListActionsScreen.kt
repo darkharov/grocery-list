@@ -186,7 +186,7 @@ private fun Buttons(
             ),
             endIcon = rememberVectorPainter(AppIcons.exit),
             onClick = {
-                callbacks.onAttemptToPaste()
+                callbacks.onExitFromApp()
             },
         )
     }
