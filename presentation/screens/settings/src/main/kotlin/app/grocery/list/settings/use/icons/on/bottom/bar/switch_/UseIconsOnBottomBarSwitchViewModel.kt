@@ -3,7 +3,7 @@ package app.grocery.list.settings.use.icons.on.bottom.bar.switch_
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.domain.AppRepository
-import app.grocery.list.domain.settings.BottomBarMode
+import app.grocery.list.domain.settings.BottomBarRoadmapStep
 import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy.EmbeddedElement
 import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy.Screen
 import commons.android.stateIn
@@ -33,14 +33,18 @@ internal class UseIconsOnBottomBarSwitchViewModel @AssistedInject constructor(
 
     val props =
         repository
-            .bottomBarMode
+            .bottomBarRoadmapStep
             .observe()
-            .map { mode ->
+            .map { step ->
                 UseIconsOnBottomBarSwitchProps(
-                    checked = mode.useIcons,
+                    checked = step.useIcons,
                     visible = when (strategy) {
-                        Screen -> true
-                        EmbeddedElement -> mode.shouldOfferToSwitchToIcons
+                        Screen -> {
+                            true
+                        }
+                        EmbeddedElement -> {
+                            step.shouldOfferToSwitchToIcons
+                        }
                     },
                     strategy = strategy,
                 )
@@ -58,7 +62,7 @@ internal class UseIconsOnBottomBarSwitchViewModel @AssistedInject constructor(
         if (strategy.shouldExitIfToggledOn) {
             viewModelScope.launch {
                 repository
-                    .bottomBarMode
+                    .bottomBarRoadmapStep
                     .observe()
                     .flowOn(Dispatchers.IO)
                     .first { it.useIcons }
@@ -67,19 +71,19 @@ internal class UseIconsOnBottomBarSwitchViewModel @AssistedInject constructor(
         }
     }
 
-    override fun onClose() {
+    override fun onClose() {    // user rejected the offer to switch to icons
         viewModelScope.launch(Dispatchers.IO) {
-            repository.bottomBarMode.set(BottomBarMode.Buttons)
+            repository.bottomBarRoadmapStep.set(BottomBarRoadmapStep.ButtonsIsExplicitlySelected)
         }
     }
 
     override fun onUseIconsOnBottomBarCheckedChange(newValue: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.bottomBarMode.set(
+            repository.bottomBarRoadmapStep.set(
                 if (newValue) {
-                    BottomBarMode.Icons
+                    BottomBarRoadmapStep.IconsModeIsExplicitlySelected
                 } else {
-                    BottomBarMode.Buttons
+                    BottomBarRoadmapStep.ButtonsIsExplicitlySelected
                 }
             )
         }

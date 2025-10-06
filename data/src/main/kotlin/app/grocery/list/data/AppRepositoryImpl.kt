@@ -10,7 +10,7 @@ import app.grocery.list.domain.CategoryAndProducts
 import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.EnabledAndDisabledProducts
 import app.grocery.list.domain.Product
-import app.grocery.list.domain.settings.BottomBarMode
+import app.grocery.list.domain.settings.BottomBarRoadmapStep
 import app.grocery.list.domain.settings.ProductTitleFormat
 import app.grocery.list.storage.value.android.StorageValueDelegates
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -34,7 +34,7 @@ internal class AppRepositoryImpl @Inject constructor(
 
     override val productTitleFormat by delegates.enum(defaultValue = ProductTitleFormat.EmojiAndFullText)
     override val clearNotificationsReminderEnabled by delegates.boolean(defaultValue = true)
-    override val bottomBarMode by delegates.enum(defaultValue = BottomBarMode.Initial)
+    override val bottomBarRoadmapStep by delegates.enum(defaultValue = BottomBarRoadmapStep.Initial)
 
     override fun categories(): Flow<List<Product.Category>> =
         categoryDao.categories()

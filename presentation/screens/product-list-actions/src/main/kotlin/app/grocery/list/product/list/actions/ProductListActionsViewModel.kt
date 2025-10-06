@@ -33,18 +33,18 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     val props =
         combine(
-            repository.bottomBarMode.observe(),
+            repository.bottomBarRoadmapStep.observe(),
             repository.numberOfProducts(),
             repository.atLeastOneProductEnabled(),
             loadingListToShare,
         ) {
-                bottomBarMode,
+                bottomBarRoadMapStep,
                 numberOfProducts,
                 atLeastOneProductEnabled,
                 loadingListToShare,
             ->
             ProductListActionsProps(
-                useIconsOnBottomBar = bottomBarMode.useIcons,
+                useIconsOnBottomBar = bottomBarRoadMapStep.useIcons,
                 numberOfProducts = numberOfProducts,
                 loadingListToShare = loadingListToShare,
                 atLeastOneProductEnabled = atLeastOneProductEnabled,

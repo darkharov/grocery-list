@@ -1,6 +1,6 @@
 package app.grocery.list.domain
 
-import app.grocery.list.domain.settings.BottomBarMode
+import app.grocery.list.domain.settings.BottomBarRoadmapStep
 import app.grocery.list.domain.settings.ProductTitleFormat
 import app.grocery.list.storage.value.kotlin.StorageValue
 import kotlinx.coroutines.flow.Flow
@@ -9,7 +9,7 @@ interface AppRepository {
 
     val productTitleFormat: StorageValue<ProductTitleFormat>
     val clearNotificationsReminderEnabled: StorageValue<Boolean>
-    val bottomBarMode: StorageValue<BottomBarMode>
+    val bottomBarRoadmapStep: StorageValue<BottomBarRoadmapStep>
 
     fun categories(): Flow<List<Product.Category>>
     fun products(): Flow<List<Product>>

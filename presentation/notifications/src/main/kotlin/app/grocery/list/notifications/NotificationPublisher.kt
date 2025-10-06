@@ -16,7 +16,7 @@ import app.grocery.list.commons.format.GetProductTitleFormatter
 import app.grocery.list.commons.format.ProductTitleFormatter
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.CategoryAndProducts
-import app.grocery.list.domain.HandleProductListPublishedUseCase
+import app.grocery.list.domain.HandleProductListPostedUseCase
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -31,7 +31,7 @@ class NotificationPublisher @Inject internal constructor(
     private val repository: AppRepository,
     private val notificationManager: NotificationManagerCompat,
     private val getProductTitleFormatter: GetProductTitleFormatter,
-    private val handleProductListPublished: HandleProductListPublishedUseCase,
+    private val handleProductListPublished: HandleProductListPostedUseCase,
 ) {
     init {
         val defaultChannel = NotificationChannel(
