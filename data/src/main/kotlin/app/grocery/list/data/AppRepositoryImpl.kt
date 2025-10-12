@@ -1,7 +1,7 @@
 package app.grocery.list.data
 
 import android.content.Context
-import app.grocery.list.commons.format.ProductListToStringFormatter
+import app.grocery.list.commons.format.SharingStringFormatter
 import app.grocery.list.data.db.ProductDao
 import app.grocery.list.data.db.ProductEntity
 import app.grocery.list.domain.AppRepository
@@ -29,7 +29,7 @@ internal class AppRepositoryImpl @Inject constructor(
     private val productDao: ProductDao,
     private val productMapper: ProductEntity.Mapper,
     private val categoryDao: CategoryDao,
-    private val productListFormatter: ProductListToStringFormatter,
+    private val productListFormatter: SharingStringFormatter,
 ) : AppRepository {
 
     override val productTitleFormat by delegates.enum(defaultValue = ProductTitleFormat.EmojiAndFullText)

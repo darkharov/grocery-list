@@ -2,7 +2,8 @@ package app.grocery.list.product.list.actions
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.grocery.list.commons.format.ProductListToStringFormatter
+import app.grocery.list.commons.format.GetProductTitleFormatter
+import app.grocery.list.commons.format.ProductListParser
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.EnabledAndDisabledProducts
 import app.grocery.list.domain.Product
@@ -23,7 +24,8 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 internal class ProductListActionsViewModel @Inject constructor(
     private val repository: AppRepository,
-    private val productListFormatter: ProductListToStringFormatter,
+    private val productListParser: ProductListParser,
+    private val getProductTitleFormatter: GetProductTitleFormatter,
 ) : ViewModel(),
     ProductListActionsCallbacks {
 
@@ -95,23 +97,53 @@ internal class ProductListActionsViewModel @Inject constructor(
     }
 
     override fun onPasted(text: String) {
-        productListFormatter
-            .parse(message = text)
-            .onFailure {
-                dialog.value = ProductListActionsDialogProps.CopiedProductListNotFound
+        when (val result = productListParser.parse(string = text)) {
+            is ProductListParser.Result.EncodedStringParsed -> {
+                handleParsedProducts(result.products)
             }
-            .onSuccess { pastedProducts ->
+            is ProductListParser.Result.HandTypedStringParsed -> {
+                val products = result.products
                 viewModelScope.launch(Dispatchers.IO) {
-                    val numberOfAddedProducts = repository.numberOfProducts().first()
-                    if (numberOfAddedProducts == 0) {
-                        onAddProducts(pastedProducts)
-                    } else {
-                        dialog.value = ProductListActionsDialogProps.HowToPutPastedProducts(
-                            productList = pastedProducts,
-                        )
-                    }
+                    val formatter = getProductTitleFormatter
+                        .execute()
+                        .first()
+                    dialog.value = ProductListActionsDialogProps.ConfirmHandTypedList(
+                        numberOfFoundProducts = products.size,
+                        itemTitles = formatter.printToString(products, separator = "\n"),
+                        productList = products,
+                    )
                 }
             }
+            is ProductListParser.Result.ProductsNotFound -> {
+                dialog.value = ProductListActionsDialogProps.CopiedProductListNotFound
+            }
+        }
+    }
+
+    override fun onPasteHandTypedProducts(productList: List<Product>) {
+        handleParsedProducts(productList)
+    }
+
+    private fun handleParsedProducts(products: List<Product>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val numberOfAddedProducts = repository.numberOfProducts().first()
+            if (numberOfAddedProducts == 0) {
+                addProducts(products)
+            } else {
+                dialog.value = ProductListActionsDialogProps.HowToPutPastedProducts(
+                    productList = products,
+                )
+            }
+        }
+    }
+
+    private fun addProducts(products: List<Product>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.putProducts(products)
+            dialog.value = ProductListActionsDialogProps.ProductSuccessfullyAdded(
+                count = products.size,
+            )
+        }
     }
 
     override fun onReplaceProductsBy(productList: List<Product>) {
@@ -125,12 +157,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     }
 
     override fun onAddProducts(productList: List<Product>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.putProducts(productList)
-            dialog.value = ProductListActionsDialogProps.ProductSuccessfullyAdded(
-                count = productList.size,
-            )
-        }
+        addProducts(productList)
     }
 
     override fun onAttemptToClearList() {

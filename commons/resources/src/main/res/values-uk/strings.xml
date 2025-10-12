@@ -71,4 +71,10 @@
         <item quantity="many">Додано %d продуктів</item>
     </plurals>
 
+    <plurals name="pattern_products_found">
+        <item quantity="one">Знайдено %d продукт</item>
+        <item quantity="few">Знайдено %d продукта</item>
+        <item quantity="many">Знайдено %d продуктів</item>
+    </plurals>
+
 </resources>

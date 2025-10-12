@@ -11,8 +11,13 @@ class ProductTitleFormatter @AssistedInject constructor(
     private val format: ProductTitleFormat,
     private val errorLogger: ErrorLogger,
 ) {
-    fun printToString(products: List<Product>): String =
-        products.joinToString { product ->
+    fun printToString(
+        products: List<Product>,
+        separator: String = ", ",
+    ): String =
+        products.joinToString(
+            separator = separator,
+        ) { product ->
             print(product).collectStringTitle()
         }
 

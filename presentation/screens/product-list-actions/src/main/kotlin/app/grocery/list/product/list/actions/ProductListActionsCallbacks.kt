@@ -20,6 +20,7 @@ internal interface ProductListActionsCallbacks {
     fun onShareDisabledOnly(dialog: ProductListActionsDialogProps.SublistToSharePicker)
     fun onAttemptToPaste()
     fun onPasted(text: String)
+    fun onPasteHandTypedProducts(productList: List<Product>)
     fun onReplaceProductsBy(productList: List<Product>)
     fun onAddProducts(productList: List<Product>)
     fun onEnableAllAndStartShopping()
@@ -43,4 +44,5 @@ internal object ProductListActionsCallbacksMock : ProductListActionsCallbacks {
     override fun onReplaceProductsBy(productList: List<Product>) {}
     override fun onAddProducts(productList: List<Product>) {}
     override fun onEnableAllAndStartShopping() {}
+    override fun onPasteHandTypedProducts(productList: List<Product>) {}
 }

@@ -10,11 +10,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+object AppGradientDefaults {
+    val height = 220.dp
+}
+
 @Immutable
 enum class AppGradientDirection {
     Upward {
-
-        override val strokeWidth = 220.dp
 
         override fun colors(color: Color): List<Color> =
             listOf(Color.Transparent, color)
@@ -35,8 +37,6 @@ enum class AppGradientDirection {
     },
     Downward {
 
-        override val strokeWidth = 120.dp
-
         override fun colors(color: Color): List<Color> =
             listOf(color, Color.Transparent)
 
@@ -55,7 +55,6 @@ enum class AppGradientDirection {
             )
     },
     ;
-    abstract val strokeWidth: Dp
     abstract fun colors(color: Color): List<Color>
     abstract fun y(cacheDrawScope: CacheDrawScope, strokeWidth: Float): Float
     abstract fun brush(cacheDrawScope: CacheDrawScope, colors: List<Color>, strokeWidthPx: Float): Brush
@@ -64,21 +63,29 @@ enum class AppGradientDirection {
 fun Modifier.drawGradient(
     direction: AppGradientDirection,
     color: Color,
+    height: Dp = AppGradientDefaults.height,
+    visible: Boolean = true,
 ) = this
     .drawWithCache {
-        val colors = direction.colors(color)
-        val strokeWidth = direction.strokeWidth.toPx()
-        val gradient = direction.brush(this, colors, strokeWidth)
-        val y = direction.y(cacheDrawScope = this, strokeWidth = strokeWidth)
-        val start = Offset(0f, y)
-        val end = Offset(size.width, y)
-        onDrawWithContent {
-            drawContent()
-            drawLine(
-                brush = gradient,
-                start = start,
-                end = end,
-                strokeWidth = strokeWidth,
-            )
+        if (visible) {
+            val colors = direction.colors(color)
+            val strokeWidth = height.toPx()
+            val gradient = direction.brush(this, colors, strokeWidth)
+            val y = direction.y(cacheDrawScope = this, strokeWidth = strokeWidth)
+            val start = Offset(0f, y)
+            val end = Offset(size.width, y)
+            onDrawWithContent {
+                drawContent()
+                drawLine(
+                    brush = gradient,
+                    start = start,
+                    end = end,
+                    strokeWidth = strokeWidth,
+                )
+            }
+        } else {
+            onDrawWithContent {
+                drawContent()
+            }
         }
     }

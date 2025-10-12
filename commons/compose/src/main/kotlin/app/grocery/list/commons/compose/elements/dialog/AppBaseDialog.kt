@@ -28,13 +28,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.values.StringValue
 
+val APP_DIALOG_PADDING = 16.dp
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBaseDialog(
     icon: Painter? = null,
     text: StringValue,
     onDismiss: () -> Unit,
-    content: @Composable ColumnScope.() -> Unit,
+    additionalContent: @Composable (ColumnScope.() -> Unit),
 ) {
     BasicAlertDialog(
         onDismissRequest = onDismiss,
@@ -50,11 +52,10 @@ fun AppBaseDialog(
             shape = MaterialTheme.shapes.large,
             tonalElevation = AlertDialogDefaults.TonalElevation,
         ) {
-            val padding = 16.dp
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(padding),
+                    .padding(APP_DIALOG_PADDING),
                 horizontalAlignment = Alignment.End,
             ) {
                 if (icon != null) {
@@ -69,7 +70,7 @@ fun AppBaseDialog(
                 }
                 Spacer(
                     modifier = Modifier
-                        .height(padding),
+                        .height(APP_DIALOG_PADDING),
                 )
                 Text(
                     text = text.value(),
@@ -79,9 +80,9 @@ fun AppBaseDialog(
                 )
                 Spacer(
                     modifier = Modifier
-                        .height(padding),
+                        .height(APP_DIALOG_PADDING),
                 )
-                content()
+                additionalContent()
             }
         }
     }
@@ -92,13 +93,13 @@ internal fun AppTextWithButtonsRowDialog(
     icon: Painter? = null,
     text: StringValue,
     onDismiss: () -> Unit,
-    buttons: @Composable RowScope.() -> Unit,
+    buttons: @Composable (RowScope.() -> Unit),
 ) {
     AppBaseDialog(
         icon = icon,
         onDismiss = onDismiss,
         text = text,
-        content = {
+        additionalContent = {
             Row(
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier

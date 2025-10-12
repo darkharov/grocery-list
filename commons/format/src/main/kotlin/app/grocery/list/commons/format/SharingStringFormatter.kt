@@ -9,7 +9,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 import org.jetbrains.annotations.VisibleForTesting
 
 @Singleton
-class ProductListToStringFormatter @Inject internal constructor() {
+class SharingStringFormatter @Inject internal constructor() {
 
     @OptIn(ExperimentalEncodingApi::class)
     fun print(productList: List<Product>, suffix: String): String {
@@ -46,9 +46,9 @@ class ProductListToStringFormatter @Inject internal constructor() {
         }
 
     @OptIn(ExperimentalEncodingApi::class)
-    fun parse(message: String): Result<List<Product>> {
+    fun parse(string: String): Result<List<Product>> {
         return runCatching {
-            val valuable = message.substringBefore(DELIMITER)
+            val valuable = string.substringBefore(DELIMITER)
             val decoded = Base64.Default.decode(valuable)
             val stringToParse = decoded.decodeToString()
             parseWithoutDecoding(stringToParse)

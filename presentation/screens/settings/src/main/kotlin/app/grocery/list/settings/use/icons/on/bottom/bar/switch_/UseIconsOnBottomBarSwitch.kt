@@ -111,6 +111,7 @@ private fun UseIconsOnBottomBarSwitch(
                             }
                         ),
                     direction = AppGradientDirection.Downward,
+                    gradientHeight = 120.dp,
                 )
                 Spacer(
                     modifier = Modifier

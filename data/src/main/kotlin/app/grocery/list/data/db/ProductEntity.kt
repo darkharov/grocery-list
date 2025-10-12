@@ -6,7 +6,10 @@ import androidx.room.PrimaryKey
 import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
+
+internal const val DEFAULT_CATEGORY_ID = "app.grocery.list.data.db.DEFAULT_CATEGORY_ID"
 
 @Entity(
     tableName = ProductEntity.Table.NAME,
@@ -48,8 +51,10 @@ internal class ProductEntity(
     }
 
     @Singleton
-    class Mapper @Inject constructor() {
-
+    class Mapper @Inject constructor(
+        @Named(DEFAULT_CATEGORY_ID)
+        val defaultCategoryId: Int,
+    ) {
         fun toDataEntity(product: Product): ProductEntity =
             ProductEntity(
                 id = product.id.takeIf { it != 0 },
@@ -57,7 +62,7 @@ internal class ProductEntity(
                 emoji = product.emojiSearchResult?.emoji,
                 keyword = product.emojiSearchResult?.keyword,
                 enabled = product.enabled,
-                nonFkCategoryId = product.categoryId,
+                nonFkCategoryId = product.categoryId.takeIf { it != 0 } ?: defaultCategoryId,
             )
 
         fun toDataEntities(products: List<Product>): List<ProductEntity> =

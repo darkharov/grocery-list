@@ -70,4 +70,10 @@
         <item quantity="other">%d products added</item>
     </plurals>
 
+    <plurals name="pattern_products_found">
+        <item quantity="one">%d product found</item>
+        <item quantity="other">%d products found</item>
+    </plurals>
+
+
 </resources>

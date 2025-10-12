@@ -13,6 +13,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.Dp
+import app.grocery.list.commons.compose.AppGradientDefaults
 import app.grocery.list.commons.compose.AppGradientDirection
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.drawGradient
@@ -24,6 +26,7 @@ fun AppExplanationImage(
     @DrawableRes
     imageId: Int,
     modifier: Modifier = Modifier,
+    gradientHeight: Dp = AppGradientDefaults.height,
     direction: AppGradientDirection = AppGradientDirection.Upward,
 ) {
     val width = with(LocalDensity.current) {
@@ -40,8 +43,9 @@ fun AppExplanationImage(
         modifier = modifier
             .width(width)
             .drawGradient(
-                direction,
-                MaterialTheme.colorScheme.background,
+                direction = direction,
+                color = MaterialTheme.colorScheme.background,
+                height = gradientHeight,
             ),
     )
 }

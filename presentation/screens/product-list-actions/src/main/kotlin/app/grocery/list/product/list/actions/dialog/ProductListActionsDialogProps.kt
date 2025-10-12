@@ -11,6 +11,13 @@ internal sealed class ProductListActionsDialogProps {
     data object CopiedProductListNotFound : ProductListActionsDialogProps()
 
     @Immutable
+    data class ConfirmHandTypedList(
+        val numberOfFoundProducts: Int,
+        val itemTitles: String,
+        val productList: List<Product>,
+    ) : ProductListActionsDialogProps()
+
+    @Immutable
     data class SublistToSharePicker(
         val productListSize: Int,
         val enabledItemsCount: Int,
@@ -34,6 +41,11 @@ internal class ProductListActionsDialogMocks :
     CollectionPreviewParameterProvider<ProductListActionsDialogProps?>(
         listOf(
             ProductListActionsDialogProps.ConfirmClearList,
+            ProductListActionsDialogProps.ConfirmHandTypedList(
+                numberOfFoundProducts = 2,
+                itemTitles = "Broccoli,\nCoffee",
+                productList = emptyList(),
+            ),
             ProductListActionsDialogProps.CopiedProductListNotFound,
             ProductListActionsDialogProps.HowToPutPastedProducts(productList = listOf()),
             ProductListActionsDialogProps.SublistToSharePicker(
