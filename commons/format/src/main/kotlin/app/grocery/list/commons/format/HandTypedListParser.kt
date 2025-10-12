@@ -1,13 +1,15 @@
 package app.grocery.list.commons.format
 
+import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.Product
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class HandTypedListParser @Inject constructor() {
-
-    fun parse(string: String): Result<List<Product>> {
+class HandTypedListParser @Inject constructor(
+    private val repository: AppRepository,
+) {
+    suspend fun parse(string: String): Result<List<Product>> {
 
         val products =
             string
@@ -15,13 +17,15 @@ class HandTypedListParser @Inject constructor() {
                 .map { it.trim() }
                 .filter { it.isNotEmpty() }
                 .map { title ->
-                    Product(
+                    val emojiAndCategoryId = repository.findEmojiAndCategoryId(search = title)
+                    val product = Product(
                         id = 0,
                         title = title.replaceFirstChar { it.titlecaseChar() },
-                        emojiSearchResult = null,
+                        emojiSearchResult = emojiAndCategoryId.emoji,
                         enabled = true,
-                        categoryId = 0,
+                        categoryId = emojiAndCategoryId.categoryId,
                     )
+                    product
                 }
 
         return if (products.isNotEmpty()) {

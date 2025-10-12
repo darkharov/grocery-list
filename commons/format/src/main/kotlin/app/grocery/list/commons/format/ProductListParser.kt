@@ -9,7 +9,7 @@ class ProductListParser @Inject constructor(
     private val sharingStringFormatter: SharingStringFormatter,
     private val handTypedListParser: HandTypedListParser,
 ) {
-    fun parse(string: String): Result {
+    suspend fun parse(string: String): Result {
 
         sharingStringFormatter.parse(string).onSuccess { products ->
             return Result.EncodedStringParsed(products)

@@ -10,6 +10,7 @@ import app.grocery.list.domain.CategoryAndProducts
 import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.EnabledAndDisabledProducts
 import app.grocery.list.domain.Product
+import app.grocery.list.domain.search.EmojiAndCategoryId
 import app.grocery.list.domain.settings.BottomBarRoadmapStep
 import app.grocery.list.domain.settings.ProductTitleFormat
 import app.grocery.list.storage.value.android.StorageValueDelegates
@@ -51,6 +52,9 @@ internal class AppRepositoryImpl @Inject constructor(
 
     override suspend fun findCategory(search: String): Product.Category? =
         categoryDao.category(search = search)
+
+    override suspend fun findEmojiAndCategoryId(search: String): EmojiAndCategoryId =
+        categoryDao.emojiAndCategoryId(search = search)
 
     override suspend fun category(id: Int): Product.Category =
         categoryDao.get(id = id)

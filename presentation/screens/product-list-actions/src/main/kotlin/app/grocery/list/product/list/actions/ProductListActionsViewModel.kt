@@ -97,25 +97,27 @@ internal class ProductListActionsViewModel @Inject constructor(
     }
 
     override fun onPasted(text: String) {
-        when (val result = productListParser.parse(string = text)) {
-            is ProductListParser.Result.EncodedStringParsed -> {
-                handleParsedProducts(result.products)
-            }
-            is ProductListParser.Result.HandTypedStringParsed -> {
-                val products = result.products
-                viewModelScope.launch(Dispatchers.IO) {
-                    val formatter = getProductTitleFormatter
-                        .execute()
-                        .first()
-                    dialog.value = ProductListActionsDialogProps.ConfirmHandTypedList(
-                        numberOfFoundProducts = products.size,
-                        itemTitles = formatter.printToString(products, separator = "\n"),
-                        productList = products,
-                    )
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = productListParser.parse(string = text)) {
+                is ProductListParser.Result.EncodedStringParsed -> {
+                    handleParsedProducts(result.products)
                 }
-            }
-            is ProductListParser.Result.ProductsNotFound -> {
-                dialog.value = ProductListActionsDialogProps.CopiedProductListNotFound
+                is ProductListParser.Result.HandTypedStringParsed -> {
+                    val products = result.products
+                    viewModelScope.launch(Dispatchers.IO) {
+                        val formatter = getProductTitleFormatter
+                            .execute()
+                            .first()
+                        dialog.value = ProductListActionsDialogProps.ConfirmHandTypedList(
+                            numberOfFoundProducts = products.size,
+                            itemTitles = formatter.printToString(products, separator = "\n"),
+                            productList = products,
+                        )
+                    }
+                }
+                is ProductListParser.Result.ProductsNotFound -> {
+                    dialog.value = ProductListActionsDialogProps.CopiedProductListNotFound
+                }
             }
         }
     }

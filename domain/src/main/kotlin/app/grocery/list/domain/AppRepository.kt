@@ -1,5 +1,6 @@
 package app.grocery.list.domain
 
+import app.grocery.list.domain.search.EmojiAndCategoryId
 import app.grocery.list.domain.settings.BottomBarRoadmapStep
 import app.grocery.list.domain.settings.ProductTitleFormat
 import app.grocery.list.storage.value.kotlin.StorageValue
@@ -23,6 +24,7 @@ interface AppRepository {
     suspend fun productTitleAndCategory(productId: Int): Product.TitleAndCategory
     suspend fun findCategory(search: String): Product.Category?
     suspend fun category(id: Int): Product.Category
+    suspend fun findEmojiAndCategoryId(search: String): EmojiAndCategoryId
     suspend fun findEmoji(search: String): EmojiSearchResult?
     suspend fun clearProducts()
     suspend fun deleteProduct(productId: Int): Product
