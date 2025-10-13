@@ -73,4 +73,10 @@ class AppTypography {
         fontSize = 10.sp,
         fontWeight = FontWeight.Normal,
     )
+
+    val dialogTitle = TextStyle(
+        fontFamily = Inter,
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Bold,
+    )
 }

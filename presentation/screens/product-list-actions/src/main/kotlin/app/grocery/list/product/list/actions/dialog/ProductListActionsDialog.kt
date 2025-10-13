@@ -29,6 +29,7 @@ import app.grocery.list.commons.compose.elements.dialog.AppSimpleDialog
 import app.grocery.list.commons.compose.elements.dialog.AppTwoOptionsDialog
 import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.product.list.actions.ProductListActionsCallbacks
 import app.grocery.list.product.list.actions.ProductListActionsCallbacksMock
@@ -199,6 +200,7 @@ private fun ProductListActionsDialog(
                     count = dialog.numberOfFoundProducts,
                     useCountAsArgument = true,
                 ),
+                textStyle = LocalAppTypography.current.dialogTitle,
                 onDismiss = {
                     callbacks.onDialogDismiss()
                 },
@@ -222,7 +224,8 @@ private fun ProductListActionsDialog(
                                 height = offset,
                                 visible = state.canScrollBackward,
                             )
-                            .verticalScroll(state),
+                            .verticalScroll(state)
+                            .padding(horizontal = 40.dp),
                     )
                     Spacer(
                         modifier = Modifier
