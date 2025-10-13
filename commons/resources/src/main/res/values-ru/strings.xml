@@ -62,7 +62,6 @@
         <item>Заблокируйте экран</item>
         <item>Подождите примерно три секунды</item>
         <item>Нажмите на кнопку блокировки экрана повторно</item>
-        <item>Смахивайте уведомления по мере наполнения корзины</item>
     </string-array>
 
     <plurals name="products_successfully_added">

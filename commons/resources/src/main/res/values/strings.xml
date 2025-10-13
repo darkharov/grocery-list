@@ -62,7 +62,6 @@
         <item>Lock the screen</item>
         <item>Wait about three seconds</item>
         <item>Press the screen lock button again</item>
-        <item>Swipe away notifications as your cart fills up</item>
     </string-array>
 
     <plurals name="products_successfully_added">

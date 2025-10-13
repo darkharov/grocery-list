@@ -62,7 +62,6 @@
         <item>Заблокуйте екран</item>
         <item>Зачекайте приблизно три секунди</item>
         <item>Натисніть кнопку блокування екрана вдруге</item>
-        <item>Змахуйте повідомлення у міру заповнення кошика</item>
     </string-array>
 
     <plurals name="products_successfully_added">
