@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -13,6 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
@@ -209,8 +211,10 @@ private fun ProductListActionsDialog(
                     val offset = 48.dp
                     val state = rememberScrollState()
                     Box(
+                        contentAlignment = Alignment.Center,
                         modifier = Modifier
                             .heightIn(max = 4 * offset)
+                            .fillMaxWidth()
                             .drawGradient(
                                 direction = AppGradientDirection.Upward,
                                 color = MaterialTheme.colorScheme.surface,
@@ -228,7 +232,7 @@ private fun ProductListActionsDialog(
                         Text(
                             text = dialog.titlesAsString,
                             modifier = Modifier
-                                .widthIn(220.dp),
+                                .widthIn(max = 180.dp),
                         )
                     }
                     Spacer(
