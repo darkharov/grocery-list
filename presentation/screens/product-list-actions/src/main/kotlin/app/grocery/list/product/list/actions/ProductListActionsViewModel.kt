@@ -96,37 +96,45 @@ internal class ProductListActionsViewModel @Inject constructor(
         sendShareEventAndRemoveDialog((dialog.payload as EnabledAndDisabledProducts).disabled)
     }
 
+    override fun onAttemptToPaste() {
+        events.trySend(Event.OnPasteCopiedList)
+    }
+
     override fun onPasted(text: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = productListParser.parse(string = text)) {
-                is ProductListParser.Result.EncodedStringParsed -> {
-                    handleParsedProducts(result.products)
+            productListParser
+                .parse(string = text)
+                .onSuccess { products ->
+                    handlePastedProducts(products)
                 }
-                is ProductListParser.Result.HandTypedStringParsed -> {
-                    val products = result.products
-                    viewModelScope.launch(Dispatchers.IO) {
-                        val formatter = getProductTitleFormatter
-                            .execute()
-                            .first()
-                        dialog.value = ProductListActionsDialogProps.ConfirmHandTypedList(
-                            numberOfFoundProducts = products.size,
-                            itemTitles = formatter.printToString(products, separator = "\n"),
-                            productList = products,
-                        )
-                    }
+                .onFailure {
+                    showCopiedProductListNotFoundDialog()
                 }
-                is ProductListParser.Result.ProductsNotFound -> {
-                    dialog.value = ProductListActionsDialogProps.CopiedProductListNotFound
-                }
-            }
         }
     }
 
-    override fun onPasteHandTypedProducts(productList: List<Product>) {
-        handleParsedProducts(productList)
+    private suspend fun handlePastedProducts(products: List<Product>) {
+        val formatter = getProductTitleFormatter.execute().first()
+        val titlesAsString = formatter.printToString(products, separator = "\n")
+        showConfirmListDialog(
+            products = products,
+            titlesAsString = titlesAsString,
+        )
     }
 
-    private fun handleParsedProducts(products: List<Product>) {
+    private fun showConfirmListDialog(products: List<Product>, titlesAsString: String) {
+        dialog.value = ProductListActionsDialogProps.ConfirmPastedList(
+            numberOfFoundProducts = products.size,
+            titlesAsString = titlesAsString,
+            productList = products,
+        )
+    }
+
+    private fun showCopiedProductListNotFoundDialog() {
+        dialog.value = ProductListActionsDialogProps.CopiedProductListNotFound
+    }
+
+    override fun onPasteProductsConfirmed(products: List<Product>) {
         viewModelScope.launch(Dispatchers.IO) {
             val numberOfAddedProducts = repository.numberOfProducts().first()
             if (numberOfAddedProducts == 0) {
@@ -190,10 +198,6 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     override fun onAttemptToShareCurrentList() {
         handleShareCurrentListAction()
-    }
-
-    override fun onAttemptToPaste() {
-        events.trySend(Event.OnPasteCopiedList)
     }
 
     private fun handleShareCurrentListAction() {

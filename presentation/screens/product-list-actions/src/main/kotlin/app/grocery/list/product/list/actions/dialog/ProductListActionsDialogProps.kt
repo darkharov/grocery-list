@@ -11,9 +11,9 @@ internal sealed class ProductListActionsDialogProps {
     data object CopiedProductListNotFound : ProductListActionsDialogProps()
 
     @Immutable
-    data class ConfirmHandTypedList(
+    data class ConfirmPastedList(
         val numberOfFoundProducts: Int,
-        val itemTitles: String,
+        val titlesAsString: String,
         val productList: List<Product>,
     ) : ProductListActionsDialogProps()
 
@@ -41,9 +41,9 @@ internal class ProductListActionsDialogMocks :
     CollectionPreviewParameterProvider<ProductListActionsDialogProps?>(
         listOf(
             ProductListActionsDialogProps.ConfirmClearList,
-            ProductListActionsDialogProps.ConfirmHandTypedList(
+            ProductListActionsDialogProps.ConfirmPastedList(
                 numberOfFoundProducts = 2,
-                itemTitles = "Broccoli,\nCoffee",
+                titlesAsString = "Broccoli,\nCoffee",
                 productList = emptyList(),
             ),
             ProductListActionsDialogProps.CopiedProductListNotFound,

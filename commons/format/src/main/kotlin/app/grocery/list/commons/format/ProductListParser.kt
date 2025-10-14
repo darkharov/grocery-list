@@ -9,33 +9,15 @@ class ProductListParser @Inject constructor(
     private val sharingStringFormatter: SharingStringFormatter,
     private val handTypedListParser: HandTypedListParser,
 ) {
-    suspend fun parse(string: String): Result {
-
+    suspend fun parse(string: String): Result<List<Product>> {
         sharingStringFormatter.parse(string).onSuccess { products ->
-            return Result.EncodedStringParsed(products)
+            return Result.success(products)
         }
-
         handTypedListParser.parse(string).onSuccess { products ->
-            return Result.HandTypedStringParsed(
-                string = string,
-                products = products,
-            )
+            return Result.success(products)
         }
-
-        return Result.ProductsNotFound
+        return Result.failure(ProductsNotFoundException())
     }
 
-    sealed class Result {
-
-        data object ProductsNotFound : Result()
-
-        data class EncodedStringParsed(
-            val products: List<Product>,
-        ) : Result()
-
-        data class HandTypedStringParsed(
-            val string: String,
-            val products: List<Product>,
-        ) : Result()
-    }
+    class ProductsNotFoundException : Exception()
 }
