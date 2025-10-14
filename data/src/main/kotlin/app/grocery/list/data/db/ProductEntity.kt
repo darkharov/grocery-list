@@ -62,7 +62,7 @@ internal class ProductEntity(
                 emoji = product.emojiSearchResult?.emoji,
                 keyword = product.emojiSearchResult?.keyword,
                 enabled = product.enabled,
-                nonFkCategoryId = product.categoryId.takeIf { it != 0 } ?: defaultCategoryId,
+                nonFkCategoryId = product.categoryId,
             )
 
         fun toDataEntities(products: List<Product>): List<ProductEntity> =
