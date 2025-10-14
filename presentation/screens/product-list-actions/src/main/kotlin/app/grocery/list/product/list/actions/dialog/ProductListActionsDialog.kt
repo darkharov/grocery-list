@@ -208,10 +208,8 @@ private fun ProductListActionsDialog(
                 additionalContent = {
                     val offset = 48.dp
                     val state = rememberScrollState()
-                    Text(
-                        text = dialog.itemTitles,
+                    Box(
                         modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
                             .heightIn(max = 4 * offset)
                             .drawGradient(
                                 direction = AppGradientDirection.Upward,
@@ -226,8 +224,13 @@ private fun ProductListActionsDialog(
                                 visible = state.canScrollBackward,
                             )
                             .verticalScroll(state)
-                            .padding(horizontal = 40.dp),
-                    )
+                    ) {
+                        Text(
+                            text = dialog.titlesAsString,
+                            modifier = Modifier
+                                .widthIn(220.dp),
+                        )
+                    }
                     Spacer(
                         modifier = Modifier
                             .padding(4.dp),
