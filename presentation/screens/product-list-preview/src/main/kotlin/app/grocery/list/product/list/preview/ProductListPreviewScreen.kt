@@ -22,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -285,7 +284,6 @@ private fun LazyListScope.enableAndDisableAll(
                     text = StringValue.ResId(R.string.enable_all),
                     enabled = enableAndDisableAll.enableAllAvailable,
                     padding = buttonPaddingValues,
-                    textAlign = TextAlign.End,
 
                 ),
                 onClick = {

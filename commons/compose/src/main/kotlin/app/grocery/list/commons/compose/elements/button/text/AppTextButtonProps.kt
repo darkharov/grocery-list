@@ -41,7 +41,7 @@ sealed class AppTextButtonProps {
         override val text: StringValue,
         override val enabled: Boolean = true,
         override val padding: PaddingValues = Defaults.Padding,
-        override val textAlign: TextAlign = TextAlign.Start,
+        override val textAlign: TextAlign = TextAlign.Center,
         val color: Color = Color.Unspecified,
     ) : AppTextButtonProps() {
 
