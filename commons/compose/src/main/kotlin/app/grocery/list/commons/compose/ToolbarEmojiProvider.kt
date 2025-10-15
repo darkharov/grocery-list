@@ -5,6 +5,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import org.joda.time.LocalDateTime
 
 val LocalToolbarEmojiProvider = staticCompositionLocalOf<ToolbarEmojiProvider> {
     ToolbarEmojiProviderMock
@@ -24,7 +25,7 @@ class ToolbarEmojiProviderImpl @Inject internal constructor(
     private val context: Context,
 ) : ToolbarEmojiProvider {
 
-    private val emojis = context.resources.getStringArray(R.array.toolbar_emojis)
+    private val emojis by lazy { context.resources.getStringArray(R.array.toolbar_emojis) }
 
     init {
         emojis.shuffle()
@@ -35,6 +36,9 @@ class ToolbarEmojiProviderImpl @Inject internal constructor(
     }
 
     override fun get(number: Int): String {
+        if (LocalDateTime.now().monthOfYear == 10) {
+            return "🎃"
+        }
         val result = emojis.take(number).joinToString(separator = " ")
         emojis.shuffle()
         return result
