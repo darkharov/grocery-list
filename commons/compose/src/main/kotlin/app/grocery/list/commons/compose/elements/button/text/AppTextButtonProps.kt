@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.R
@@ -33,11 +34,14 @@ sealed class AppTextButtonProps {
 
     internal open val padding = Defaults.Padding
 
+    abstract val textAlign: TextAlign
+
     @Immutable
     class TextOnly(
         override val text: StringValue,
         override val enabled: Boolean = true,
         override val padding: PaddingValues = Defaults.Padding,
+        override val textAlign: TextAlign = TextAlign.Start,
         val color: Color = Color.Unspecified,
     ) : AppTextButtonProps() {
 
@@ -66,6 +70,7 @@ sealed class AppTextButtonProps {
         override val hasDivider = true
         override val enabled = true
 
+        override val textAlign = TextAlign.Start
         override val textColor: Color
             @Composable
             get() =

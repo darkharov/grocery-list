@@ -2,10 +2,10 @@ package app.grocery.list.commons.compose
 
 import android.content.Context
 import androidx.compose.runtime.staticCompositionLocalOf
+import app.grocery.list.domain.Holiday
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
-import org.joda.time.LocalDateTime
 
 val LocalToolbarEmojiProvider = staticCompositionLocalOf<ToolbarEmojiProvider> {
     ToolbarEmojiProviderMock
@@ -36,8 +36,9 @@ class ToolbarEmojiProviderImpl @Inject internal constructor(
     }
 
     override fun get(number: Int): String {
-        if (LocalDateTime.now().monthOfYear == 10) {
-            return "🎃"
+        val holiday = Holiday.entries.find { it.timeToChangeEmoji() }
+        if (holiday != null) {
+            return holiday.emoji()
         }
         val result = emojis.take(number).joinToString(separator = " ")
         emojis.shuffle()

@@ -75,6 +75,7 @@ fun AppTextButton(
             Text(
                 text = props.text.value(),
                 color = props.textColor,
+                textAlign = props.textAlign,
                 style = LocalAppTypography.current.textButton,
             )
             val trailingIconId = props.trailingIconId

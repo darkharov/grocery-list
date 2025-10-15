@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -251,41 +253,46 @@ private fun LazyListScope.enableAndDisableAll(
 ) {
     item {
         val buttonHorizontalPadding = 8.dp
+        val buttonPaddingValues = PaddingValues(
+            horizontal = buttonHorizontalPadding,
+            vertical = 12.dp,
+        )
         val desiredHorizontalOffset = dimensionResource(R.dimen.margin_16_32_64)
         val finalHorizontalOffset = desiredHorizontalOffset - buttonHorizontalPadding
+        val maxWidth = 160.dp
         Row(
             modifier = Modifier
                 .fillParentMaxWidth()
                 .padding(
                     horizontal = finalHorizontalOffset,
                 ),
-            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             AppTextButton(
                 props = AppTextButtonProps.TextOnly(
                     text = StringValue.ResId(R.string.disable_all),
                     enabled = enableAndDisableAll.disableAllAvailable,
-                    padding = PaddingValues(
-                        horizontal = buttonHorizontalPadding,
-                        vertical = 12.dp,
-                    ),
+                    padding = buttonPaddingValues,
                 ),
                 onClick = {
                     callbacks.onDisableEnableAll()
                 },
                 modifier = Modifier
-                    .animateItem(),
+                    .widthIn(max = maxWidth),
             )
             AppTextButton(
                 props = AppTextButtonProps.TextOnly(
                     text = StringValue.ResId(R.string.enable_all),
-                    enabled = enableAndDisableAll.enableAllAvailable
+                    enabled = enableAndDisableAll.enableAllAvailable,
+                    padding = buttonPaddingValues,
+                    textAlign = TextAlign.End,
+
                 ),
                 onClick = {
                     callbacks.onEnableAll()
                 },
                 modifier = Modifier
-                    .animateItem(),
+                    .widthIn(max = maxWidth),
             )
         }
     }
