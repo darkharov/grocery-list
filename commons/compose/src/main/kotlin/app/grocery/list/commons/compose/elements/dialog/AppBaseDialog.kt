@@ -105,6 +105,7 @@ internal fun AppTextWithButtonsRowDialog(
         text = text,
         additionalContent = {
             Row(
+                verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier
                     .align(Alignment.End),
