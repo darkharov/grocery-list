@@ -37,13 +37,13 @@ android {
 
 dependencies {
     implementation(project(":commons:resources"))
+    implementation(project(":domain"))
     api(platform(libs.androidx.compose.bom))
     api(libs.androidx.material.icons.extended)
     api(libs.androidx.ui)
     api(libs.androidx.ui.graphics)
     api(libs.androidx.ui.tooling.preview)
     api(libs.androidx.material3)
-    implementation(libs.joda.time)
     debugApi(libs.androidx.ui.tooling)
     debugApi(libs.androidx.ui.test.manifest)
     implementation(libs.hilt.android)
