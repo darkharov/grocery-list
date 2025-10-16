@@ -237,7 +237,9 @@ private fun TitleAndEmoji(
                 .width(16.dp),
         )
         AppTextField(
-            value = emoji?.value.orEmpty(),
+            value = emoji
+                ?.value
+                ?: " ",    // Hack to keep label raised
             onValueChange = {},
             modifier = Modifier
                 .weight(2f),
