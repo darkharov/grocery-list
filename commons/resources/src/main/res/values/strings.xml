@@ -57,6 +57,8 @@
     <string name="error_no_enabled_products_to_start_shopping">All list items (%d) are disabled. Do you want to enable them all and start shopping?</string>
     <string name="enable_all_and_start">Enable all and start</string>
     <string name="close">Close</string>
+    <string name="fingerprint_location_question">Fingerprint scanner on the lock button?</string>
+    <string name="fingerprint_location_answer">To avoid triggering the fingerprint scanner, press your fingernail on the lowest part of the lock button.\nYou will succeed!</string>
 
     <string-array name="final_steps">
         <item>Lock the screen</item>

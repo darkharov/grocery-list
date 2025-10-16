@@ -57,6 +57,8 @@
     <string name="error_no_enabled_products_to_start_shopping">Все элементы списка (%d) выключены. Хотите включить их всех и начать покупки?</string>
     <string name="enable_all_and_start">Включить все и начать</string>
     <string name="close">Закрыть</string>
+    <string name="fingerprint_location_question">Сканер отпечатка на кнопке блокировки?</string>
+    <string name="fingerprint_location_answer">Чтобы избежать срабатывания сканера отпечатка, нажимайте ногтем на самую нижнюю часть кнопки кнопки блокировки.\nУ вас всё получится!</string>
 
     <string-array name="final_steps">
         <item>Заблокируйте экран</item>
