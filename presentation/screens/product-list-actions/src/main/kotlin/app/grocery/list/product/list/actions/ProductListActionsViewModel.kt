@@ -3,6 +3,7 @@ package app.grocery.list.product.list.actions
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.commons.format.GetProductTitleFormatter
+import app.grocery.list.commons.format.ParseProductListUseCase
 import app.grocery.list.commons.format.SharingStringFormatter
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.EnabledAndDisabledProducts
@@ -25,6 +26,7 @@ import kotlinx.coroutines.launch
 internal class ProductListActionsViewModel @Inject constructor(
     private val repository: AppRepository,
     private val sharingStringFormatter: SharingStringFormatter,
+    private val parseProductList: ParseProductListUseCase,
     private val getProductTitleFormatter: GetProductTitleFormatter,
 ) : ViewModel(),
     ProductListActionsCallbacks {
@@ -108,8 +110,8 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     override fun onPasted(text: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            sharingStringFormatter
-                .parse(sharingString = text)
+            parseProductList
+                .execute(text = text)
                 .onSuccess { products ->
                     handlePastedProducts(products)
                 }
