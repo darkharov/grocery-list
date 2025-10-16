@@ -13,7 +13,6 @@ interface AppRepository {
     val bottomBarRoadmapStep: StorageValue<BottomBarRoadmapStep>
 
     fun categories(): Flow<List<Product.Category>>
-    fun products(): Flow<List<Product>>
     fun categorizedProducts(criteria: CategorizedProductsCriteria): Flow<List<CategoryAndProducts>>
     fun numberOfProducts(): Flow<Int>
     fun numberOfEnabledProducts(): Flow<Int>

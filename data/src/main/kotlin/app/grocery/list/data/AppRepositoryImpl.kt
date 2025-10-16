@@ -82,10 +82,6 @@ internal class AppRepositoryImpl @Inject constructor(
         productDao.setProductEnabled(productId = productId, enabled = enabled)
     }
 
-    override fun products(): Flow<List<Product>> =
-        productDao.selectProducts()
-            .map { productMapper.toDomainModels(it) }
-
     override fun categorizedProducts(
         criteria: CategorizedProductsCriteria,
     ): Flow<List<CategoryAndProducts>> =
@@ -142,7 +138,9 @@ internal class AppRepositoryImpl @Inject constructor(
     }
 
     override fun enabledAndDisabledProducts(): Flow<EnabledAndDisabledProducts> =
-        products()
+        productDao
+            .select(enabledOnly = false)
+            .map { productMapper.toDomainModels(it.values.flatten()) }
             .map { products ->
                 EnabledAndDisabledProducts(
                     all = products,

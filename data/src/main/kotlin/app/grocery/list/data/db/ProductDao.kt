@@ -56,9 +56,6 @@ internal interface ProductDao {
     )
     fun selectTitleAndCategoryId(productId: Int): ProductEntity.TitleAndCategoryId
 
-    @Query("SELECT * FROM product")
-    fun selectProducts(): Flow<List<ProductEntity>>
-
     @Query("SELECT COUNT(*) FROM product")
     fun count(): Flow<Int>
 
