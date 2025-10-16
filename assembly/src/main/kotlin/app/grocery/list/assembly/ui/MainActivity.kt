@@ -15,7 +15,6 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import app.grocery.list.assembly.BuildConfig
-import app.grocery.list.assembly.R
 import app.grocery.list.assembly.ui.content.AppContent
 import app.grocery.list.assembly.ui.content.AppContentDelegate
 import app.grocery.list.commons.compose.theme.ThemeUtil
@@ -110,15 +109,8 @@ class MainActivity :
         currentDestination = newValue
     }
 
-    override fun share(products: List<Product>) {
-        val suffix = getString(
-            R.string.sharing_message_suffix,
-            getString(R.string.paste_copied_list),
-            getString(R.string.actions),
-            "https://play.google.com/store/apps/details?id=app.grocery.list",
-        )
-        val text = sharingStringFormatter.print(products, suffix = suffix)
-        share(text = text)
+    override fun shareProducts(sharingString: String) {
+        share(text = sharingString)
     }
 
     override fun contactSupport() {

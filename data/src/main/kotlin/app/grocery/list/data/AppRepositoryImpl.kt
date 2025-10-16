@@ -1,7 +1,6 @@
 package app.grocery.list.data
 
 import android.content.Context
-import app.grocery.list.commons.format.SharingStringFormatter
 import app.grocery.list.data.db.ProductDao
 import app.grocery.list.data.db.ProductEntity
 import app.grocery.list.domain.AppRepository
@@ -30,7 +29,6 @@ internal class AppRepositoryImpl @Inject constructor(
     private val productDao: ProductDao,
     private val productMapper: ProductEntity.Mapper,
     private val categoryDao: CategoryDao,
-    private val productListFormatter: SharingStringFormatter,
 ) : AppRepository {
 
     override val productTitleFormat by delegates.enum(defaultValue = ProductTitleFormat.EmojiAndFullText)
@@ -118,9 +116,21 @@ internal class AppRepositoryImpl @Inject constructor(
 
     override fun sampleProducts(): Flow<List<Product>> =
         flowOf(
-            productListFormatter.parseWithoutDecoding(
-                productList = context.getString(R.string.sample_products),
-            )
+            context.getString(R.string.sample_products)
+                .split("\n")
+                .map { productAsString ->
+                    val parts = productAsString.split("|").iterator()
+                    Product(
+                        id = 0,
+                        title = parts.next(),
+                        categoryId = parts.next().toInt(),
+                        emojiSearchResult = EmojiSearchResult(
+                            emoji = parts.next(),
+                            keyword = parts.next(),
+                        ),
+                        enabled = true,
+                    )
+                }
         )
 
     override suspend fun enableAllProducts() {

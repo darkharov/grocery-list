@@ -24,7 +24,7 @@ internal fun ProductListActionsEventsConsumer(
                 delegate.exitFromApp()
             }
             is ProductListActionsViewModel.Event.OnShare -> {
-                delegate.share(event.products)
+                delegate.shareProducts(sharingString = event.sharingString)
             }
             is ProductListActionsViewModel.Event.OnStartShopping -> {
                 delegate.startShopping()

@@ -1,86 +1,64 @@
 package app.grocery.list.commons.format
 
-import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
+import app.grocery.list.domain.search.EmojiAndCategoryId
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
-import org.jetbrains.annotations.VisibleForTesting
 
 @Singleton
-class SharingStringFormatter @Inject internal constructor() {
+class SharingStringFormatter @Inject constructor(
+    private val contract: Contract,
+) {
+    suspend fun parse(sharingString: String): Result<List<Product>> {
 
-    @OptIn(ExperimentalEncodingApi::class)
-    fun print(productList: List<Product>, suffix: String): String {
-        val formatted = printWithoutEncoding(productList)
-        val bytes = formatted.encodeToByteArray()
-        val encoded = Base64.Default.encode(bytes)
-        return encoded + DELIMITER + suffix
-    }
+        val products =
+            sharingString
+                .substringBefore(POSTFIX_SEPARATOR)
+                .split(*Delimiters)
+                .map { it.trim() }
+                .filter { it.isNotEmpty() }
+                .map { title ->
+                    val emojiAndCategoryId = contract.findEmojiAndCategoryId(search = title)
+                    val product = Product(
+                        id = 0,
+                        title = title.replaceFirstChar { it.titlecaseChar() },
+                        emojiSearchResult = emojiAndCategoryId.emoji,
+                        enabled = true,
+                        categoryId = emojiAndCategoryId.categoryId,
+                    )
+                    product
+                }
 
-    @VisibleForTesting
-    internal fun printWithoutEncoding(productList: List<Product>): String =
-        productList.joinToString(
-            separator = LIST_ITEM_SEPARATOR.toString(),
-            transform = { it.print() },
-        )
-
-    private fun Product.print(): String =
-        buildString {
-
-            title.filterNotTo(this) {
-                it == FIELDS_SEPARATOR || it == LIST_ITEM_SEPARATOR
-            }
-
-            append(FIELDS_SEPARATOR)
-            append(categoryId)
-
-            val emoji = emojiSearchResult
-            if (emoji != null) {
-                append(FIELDS_SEPARATOR)
-                append(emoji.emoji)
-                append(FIELDS_SEPARATOR)
-                append(emoji.keyword)
-            }
-        }
-
-    @OptIn(ExperimentalEncodingApi::class)
-    fun parse(string: String): Result<List<Product>> {
-        return runCatching {
-            val valuable = string.substringBefore(DELIMITER)
-            val decoded = Base64.Default.decode(valuable)
-            val stringToParse = decoded.decodeToString()
-            parseWithoutDecoding(stringToParse)
+        return if (products.isNotEmpty()) {
+            Result.success(products)
+        } else {
+            Result.failure(ProductsNotFoundException())
         }
     }
 
-    fun parseWithoutDecoding(productList: String): List<Product> =
-        productList
-            .split(LIST_ITEM_SEPARATOR)
-            .map(::parseProduct)
-
-    private fun parseProduct(product: String): Product {
-        val parts = product.split(FIELDS_SEPARATOR).iterator()
-        return Product(
-            id = 0,
-            title = parts.next(),
-            categoryId = parts.next().toInt(),
-            emojiSearchResult = if (parts.hasNext()) {
-                EmojiSearchResult(
-                    emoji = parts.next(),
-                    keyword = parts.next(),
-                )
-            } else {
-                null
-            },
-            enabled = true,
+    fun toSharingString(products: List<Product>): String {
+        val rawPostfix = contract.postfix()
+        val postfix = if (rawPostfix.isEmpty()) {
+            ""
+        } else {
+            POSTFIX_SEPARATOR + rawPostfix
+        }
+        return products.joinToString(
+            separator = "\n",
+            postfix = postfix,
+            transform = { it.title },
         )
     }
 
     companion object {
-        private const val FIELDS_SEPARATOR = '|'
-        private const val LIST_ITEM_SEPARATOR = '\n'
-        private const val DELIMITER = "\n--------\n" // DO NOT UPDATE THIS VALUE!
+        private val Delimiters = arrayOf(",", ";", "\n")
+        private const val POSTFIX_SEPARATOR = "\n--------\n" // DO NOT UPDATE THIS VALUE!
+    }
+
+    class ProductsNotFoundException : Exception()
+
+    interface Contract {
+        fun postfix(): String
+        suspend fun findEmojiAndCategoryId(search: String): EmojiAndCategoryId
     }
 }

@@ -20,7 +20,7 @@ internal object AppContentDelegateMock : AppContentDelegate {
     override fun exitFromApp() {}
     override fun startShopping() {}
     override fun handleCurrentDestinationChange(newValue: NavDestination) {}
-    override fun share(products: List<Product>) {}
+    override fun shareProducts(sharingString: String) {}
     override fun contactSupport() {}
     override fun showUndoProductDeletionSnackbar(product: Product) {}
     override fun undoProductDeletion(product: Product) {}

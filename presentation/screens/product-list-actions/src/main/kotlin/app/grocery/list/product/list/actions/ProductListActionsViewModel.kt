@@ -3,7 +3,7 @@ package app.grocery.list.product.list.actions
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.commons.format.GetProductTitleFormatter
-import app.grocery.list.commons.format.ProductListParser
+import app.grocery.list.commons.format.SharingStringFormatter
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.EnabledAndDisabledProducts
 import app.grocery.list.domain.Product
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 internal class ProductListActionsViewModel @Inject constructor(
     private val repository: AppRepository,
-    private val productListParser: ProductListParser,
+    private val sharingStringFormatter: SharingStringFormatter,
     private val getProductTitleFormatter: GetProductTitleFormatter,
 ) : ViewModel(),
     ProductListActionsCallbacks {
@@ -80,8 +80,14 @@ internal class ProductListActionsViewModel @Inject constructor(
     }
 
     private fun sendShareEventAndRemoveDialog(products: List<Product>) {
-        events.trySend(Event.OnShare(products))
+        sendOnShareEvent(products)
         dialog.value = null
+    }
+
+    private fun sendOnShareEvent(allProducts: List<Product>) {
+        val sharingString = sharingStringFormatter.toSharingString(allProducts)
+        val event = Event.OnShare(sharingString = sharingString)
+        events.trySend(event)
     }
 
     override fun onShareAll(dialog: ProductListActionsDialogProps.SublistToSharePicker) {
@@ -102,8 +108,8 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     override fun onPasted(text: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            productListParser
-                .parse(string = text)
+            sharingStringFormatter
+                .parse(sharingString = text)
                 .onSuccess { products ->
                     handlePastedProducts(products)
                 }
@@ -221,7 +227,7 @@ internal class ProductListActionsViewModel @Inject constructor(
                     payload = products,
                 )
             } else {
-                events.trySend(Event.OnShare(all))
+                sendOnShareEvent(products.all)
             }
         }
     }
@@ -241,6 +247,6 @@ internal class ProductListActionsViewModel @Inject constructor(
         data object OnGoToActions : Event()
         data object OnGoBack : Event()
 
-        data class OnShare(val products: List<Product>) : Event()
+        data class OnShare(val sharingString: String) : Event()
     }
 }
