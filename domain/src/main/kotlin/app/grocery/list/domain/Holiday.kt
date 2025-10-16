@@ -8,12 +8,17 @@ sealed interface Holiday {
     fun emoji(): String
 
     companion object {
-        val entries = listOf(
+        private val entries = listOf(
             March8,
             AprilFoolsDay,
             Halloween,
             Christmas,
         )
+
+        fun alternativeEmoji(): String? =
+            entries
+                .find { it.timeToChangeEmoji() }
+                ?.emoji()
     }
 
     private data object Halloween :

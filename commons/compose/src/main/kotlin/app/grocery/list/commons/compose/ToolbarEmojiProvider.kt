@@ -35,11 +35,11 @@ class ToolbarEmojiProviderImpl @Inject internal constructor(
         }
     }
 
-    override fun get(number: Int): String {
-        val holiday = Holiday.entries.find { it.timeToChangeEmoji() }
-        if (holiday != null) {
-            return holiday.emoji()
-        }
+    override fun get(number: Int): String =
+        Holiday.alternativeEmoji()
+            ?: ordinaryEmojis(number)
+
+    private fun ordinaryEmojis(number: Int): String {
         val result = emojis.take(number).joinToString(separator = " ")
         emojis.shuffle()
         return result
