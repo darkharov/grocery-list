@@ -34,6 +34,11 @@ class NotificationPublisher @Inject internal constructor(
     private val handleProductListPublished: HandleProductListPostedUseCase,
 ) {
     init {
+        ensureDefaultNotificationChannel()
+        cancelAllIfProductListChanged()
+    }
+
+    private fun ensureDefaultNotificationChannel() {
         val defaultChannel = NotificationChannel(
             DEFAULT_CHANNEL_ID,
             context.getString(R.string.app_name),
@@ -42,17 +47,32 @@ class NotificationPublisher @Inject internal constructor(
         notificationManager.createNotificationChannel(defaultChannel)
     }
 
+    private fun cancelAllIfProductListChanged() {
+        ProcessLifecycleOwner
+            .get()
+            .lifecycleScope
+            .launch(Dispatchers.IO) {
+                repository
+                    .productListChanged()
+                    .collect { cancelAllNotifications() }
+            }
+    }
+
     fun tryToPost(): Boolean =
         if (
             ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) ==
             PackageManager.PERMISSION_GRANTED
         ) {
-            notificationManager.cancelAll()
+            cancelAllNotifications()
             post()
             true
         } else {
             false
         }
+
+    private fun cancelAllNotifications() {
+        notificationManager.cancelAll()
+    }
 
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     private fun post() {

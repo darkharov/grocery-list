@@ -1,6 +1,8 @@
 package app.grocery.list.data
 
 import android.content.Context
+import androidx.room.InvalidationTracker
+import app.grocery.list.data.db.AppDatabase
 import app.grocery.list.data.db.ProductDao
 import app.grocery.list.data.db.ProductEntity
 import app.grocery.list.domain.AppRepository
@@ -16,7 +18,10 @@ import app.grocery.list.storage.value.android.StorageValueDelegates
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -29,11 +34,35 @@ internal class AppRepositoryImpl @Inject constructor(
     private val productDao: ProductDao,
     private val productMapper: ProductEntity.Mapper,
     private val categoryDao: CategoryDao,
+    appDatabase: AppDatabase,
 ) : AppRepository {
+
+    private val productListChanged = MutableSharedFlow<Unit>(
+        replay = 0,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST,
+        extraBufferCapacity = 1,
+    )
+
+    init {
+        appDatabase.invalidationTracker.addObserver(
+            observer = object : InvalidationTracker.Observer(
+                tables = arrayOf(ProductEntity.Table.NAME),
+            ) {
+                override fun onInvalidated(tables: Set<String>) {
+                    if (tables.contains(ProductEntity.Table.NAME)) {
+                        productListChanged.tryEmit(Unit)
+                    }
+                }
+            }
+        )
+    }
 
     override val productTitleFormat by delegates.enum(defaultValue = ProductTitleFormat.EmojiAndFullText)
     override val clearNotificationsReminderEnabled by delegates.boolean(defaultValue = true)
     override val bottomBarRoadmapStep by delegates.enum(defaultValue = BottomBarRoadmapStep.Initial)
+
+    override fun productListChanged(): SharedFlow<Unit> =
+        productListChanged
 
     override fun categories(): Flow<List<Product.Category>> =
         categoryDao.categories()
