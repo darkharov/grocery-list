@@ -58,7 +58,7 @@
     <string name="enable_all_and_start">Включити усі та почати</string>
     <string name="close">Закрити</string>
     <string name="fingerprint_location_question">Сканер відбитка розміщено на кнопці блокування?</string>
-    <string name="fingerprint_location_answer">Щоб уникнути спрацьовування сканеру відбитку, натискайте нігтем на нижню частину кнопки блокування.\nУ вас все вийде!</string>
+    <string name="fingerprint_location_answer">Щоб уникнути спрацьовування сканеру відбитку, натискайте на нижню частину кнопки блокування.\nУ вас все вийде!</string>
 
     <string-array name="final_steps">
         <item>Заблокуйте екран</item>

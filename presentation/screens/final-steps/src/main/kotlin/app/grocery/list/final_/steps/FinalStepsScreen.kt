@@ -65,7 +65,7 @@ private fun Content() {
         Item(text = item)
     }
     var fingerprintDialogShown by rememberSaveable { mutableStateOf(false) }
-    Item(
+    ClickableLabel(
         text = stringResource(R.string.fingerprint_location_question),
         onClick = {
             fingerprintDialogShown = true
@@ -85,51 +85,75 @@ private fun Content() {
     }
 }
 
-// TODO: create separate layouts for clickable and ordinary items
 @Composable
-private fun Item(
-    text: String,
-    onClick: (() -> Unit)? = null,
-) {
+private fun Item(text: String) {
     Row(
         modifier = Modifier
-            .padding(bottom = 8.dp)
-            .then(
-                if (onClick != null) {
-                    Modifier
-                        .padding(top = 16.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .clickable { onClick() }
-                        .padding(top = 2.dp, bottom = 8.dp)
-                } else {
-                    Modifier
-                },
-            ),
+            .padding(bottom = 8.dp),
     ) {
-        Text(
-            text = "\u2022",
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-            style = LocalAppTypography.current.plainText,
-            modifier = Modifier
-                .alpha(
-                    if (onClick != null) 0f else 1f,
-                )
-        )
-        Spacer(
-            modifier = Modifier
-                .width(8.dp),
+        BulletOrOffset(
+            isOffset = false,
         )
         Text(
             text = text,
             style = LocalAppTypography.current.plainText,
-            textDecoration = if (onClick != null) {
-                TextDecoration.Underline
-            } else {
-                TextDecoration.None
-            },
         )
     }
+}
+
+@Composable
+private fun ClickableLabel(
+    text: String,
+    onClick: () -> Unit,
+) {
+    Row(
+        Modifier
+            .padding(
+                top = 16.dp,
+            )
+            .clip(RoundedCornerShape(8.dp))
+            .clickable { onClick() }
+            .padding(
+                top = 6.dp,
+                bottom = 12.dp,
+            ),
+    ) {
+        BulletOrOffset(
+            isOffset = true,
+        )
+        Text(
+            text = text,
+            style = LocalAppTypography.current.plainText,
+            textDecoration = TextDecoration.Underline,
+        )
+        BulletOrOffset(
+            isOffset = true,
+        )
+    }
+}
+
+@Composable
+private fun BulletOrOffset(
+    isOffset: Boolean,
+) {
+    Text(
+        text = "•",
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.primary,
+        style = LocalAppTypography.current.plainText,
+        modifier = Modifier
+            .alpha(
+                if (isOffset) {
+                    0f
+                } else {
+                    1f
+                },
+            )
+    )
+    Spacer(
+        modifier = Modifier
+            .width(8.dp),
+    )
 }
 
 @PreviewLightDark

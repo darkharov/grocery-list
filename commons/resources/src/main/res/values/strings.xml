@@ -58,7 +58,7 @@
     <string name="enable_all_and_start">Enable all and start</string>
     <string name="close">Close</string>
     <string name="fingerprint_location_question">Fingerprint scanner on the lock button?</string>
-    <string name="fingerprint_location_answer">To avoid triggering the fingerprint scanner, press your fingernail on the lowest part of the lock button.\nYou will succeed!</string>
+    <string name="fingerprint_location_answer">To avoid triggering the fingerprint scanner, press on the lowest part of the lock button.\nYou will succeed!</string>
 
     <string-array name="final_steps">
         <item>Lock the screen</item>
