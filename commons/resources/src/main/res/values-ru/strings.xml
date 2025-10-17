@@ -58,7 +58,7 @@
     <string name="enable_all_and_start">Включить все и начать</string>
     <string name="close">Закрыть</string>
     <string name="fingerprint_location_question">Сканер отпечатка на кнопке блокировки?</string>
-    <string name="fingerprint_location_answer">Чтобы избежать срабатывания сканера отпечатка, нажимайте на самую нижнюю часть кнопки кнопки блокировки.\nУ вас всё получится!</string>
+    <string name="fingerprint_location_answer">Чтобы избежать срабатывания сканера отпечатка, нажимайте на самую нижнюю часть кнопки блокировки.\nУ вас всё получится!</string>
 
     <string-array name="final_steps">
         <item>Заблокируйте экран</item>
