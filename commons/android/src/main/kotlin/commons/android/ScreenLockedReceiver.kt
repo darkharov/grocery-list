@@ -9,7 +9,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 
 class ScreenLockedReceiver private constructor(
-    private val onScreenLocked: () -> Unit,
+    private val onScreenLocked: ScreenLockedReceiver.() -> Unit,
 ) : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -19,16 +19,27 @@ class ScreenLockedReceiver private constructor(
     }
 
     companion object {
+
         private const val TARGET_ACTION = Intent.ACTION_SCREEN_OFF
+
         fun register(
             activity: ComponentActivity,
             onScreenLocked: () -> Unit,
         ) {
+            val receiver = ScreenLockedReceiver(
+                onScreenLocked = {
+                    onScreenLocked()
+                    activity.unregisterReceiver(this)   // sequential clicks on power button are unnecessary
+                }
+            )
             val intentFilter = IntentFilter(TARGET_ACTION)
-            val receiver = ScreenLockedReceiver(onScreenLocked = onScreenLocked)
-            activity.registerReceiver(receiver, intentFilter)
             activity.lifecycle.addObserver(
                 observer = object : DefaultLifecycleObserver {
+
+                    override fun onResume(owner: LifecycleOwner) {
+                        activity.registerReceiver(receiver, intentFilter)
+                    }
+
                     override fun onDestroy(owner: LifecycleOwner) {
                         activity.unregisterReceiver(receiver)
                     }
