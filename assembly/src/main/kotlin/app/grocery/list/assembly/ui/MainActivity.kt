@@ -88,7 +88,6 @@ class MainActivity :
         ScreenLockedReceiver.register(this) {
             if (currentDestination?.hasRoute(FinalSteps::class) == true) {
                 notificationPublisher.tryToPost()
-                finish()
             }
         }
     }
