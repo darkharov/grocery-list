@@ -186,7 +186,7 @@ internal fun AppContent(
                 },
             )
             clearNotificationsReminder(navigation)
-            finalSteps()
+            finalSteps(navigation)
             settingsAndChildScreens(delegates, navController)
         }
     }

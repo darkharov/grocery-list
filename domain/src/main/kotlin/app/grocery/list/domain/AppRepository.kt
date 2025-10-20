@@ -5,7 +5,6 @@ import app.grocery.list.domain.settings.BottomBarRoadmapStep
 import app.grocery.list.domain.settings.ProductTitleFormat
 import app.grocery.list.storage.value.kotlin.StorageValue
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharedFlow
 
 interface AppRepository {
 
@@ -13,7 +12,6 @@ interface AppRepository {
     val clearNotificationsReminderEnabled: StorageValue<Boolean>
     val bottomBarRoadmapStep: StorageValue<BottomBarRoadmapStep>
 
-    fun productListChanged(): SharedFlow<Unit>
     fun categories(): Flow<List<Product.Category>>
     fun categorizedProducts(criteria: CategorizedProductsCriteria): Flow<List<CategoryAndProducts>>
     fun numberOfProducts(): Flow<Int>
@@ -32,6 +30,7 @@ interface AppRepository {
     suspend fun putProduct(product: Product)
     suspend fun putProducts(products: List<Product>)
     suspend fun setProductEnabled(productId: Int, enabled: Boolean)
+    suspend fun setProductsEnabled(productIds: List<Int>, enabled: Boolean)
     suspend fun enableAllProducts()
     suspend fun disableAllProducts()
 

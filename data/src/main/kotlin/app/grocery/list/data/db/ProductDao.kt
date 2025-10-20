@@ -69,10 +69,10 @@ internal interface ProductDao {
         """
             UPDATE product
                SET enabled = :enabled
-             WHERE product_id == :productId
+             WHERE product_id IN (:productIds)
         """
     )
-    fun setProductEnabled(productId: Int, enabled: Boolean)
+    fun setProductsEnabled(productIds: List<Int>, enabled: Boolean)
 
     @Query(
         """

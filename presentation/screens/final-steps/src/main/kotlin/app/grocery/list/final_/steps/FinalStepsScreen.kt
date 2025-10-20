@@ -25,23 +25,47 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppContentToRead
 import app.grocery.list.commons.compose.elements.dialog.AppSimpleDialog
 import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
+import app.grocery.list.final_.steps.FinalStepsViewModel.Event
 import kotlinx.serialization.Serializable
 
 @Serializable
 data object FinalSteps
 
-fun NavGraphBuilder.finalSteps() {
+fun NavGraphBuilder.finalSteps(
+    navigation: FinalStepsNavigation,
+) {
     composable<FinalSteps> {
-        FinalSteps()
+        FinalSteps(navigation = navigation)
     }
+}
+
+@Composable
+private fun FinalSteps(
+    navigation: FinalStepsNavigation,
+) {
+    val viewModel = hiltViewModel<FinalStepsViewModel>()
+    EventConsumer(
+        events = viewModel.events(),
+    ) { event ->
+        when (event) {
+            is Event.OnNoEnabledProductsAnymore -> {
+                navigation.backToActionsOrListPreview()
+            }
+        }
+    }
+    FinalSteps(
+        modifier = Modifier,
+    )
 }
 
 @Composable

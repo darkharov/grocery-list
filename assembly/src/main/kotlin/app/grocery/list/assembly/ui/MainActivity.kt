@@ -92,6 +92,11 @@ class MainActivity :
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        notificationPublisher.cancelAllNotifications()
+    }
+
     override fun exitFromApp() {
         finish()
     }
