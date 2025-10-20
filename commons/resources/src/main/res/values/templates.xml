@@ -134,6 +134,7 @@
 
     <string-array name="other">
         <item>Olive oil|Oil olive </item>
+        <item>{🌻}Sunflower oil</item>
         <item>{🥚}Egg</item>
         <item>Water</item>
         <item>{☕}Coffee</item>
