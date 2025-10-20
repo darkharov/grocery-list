@@ -25,7 +25,7 @@ sealed interface Holiday {
         Holiday by SimpleHoliday(
             emojis = listOf("🎃"),
             month = 10,
-            days = (15..31),
+            days = (25..31),
         )
 
     private data object AprilFoolsDay :
@@ -45,6 +45,7 @@ sealed interface Holiday {
         Holiday by SimpleHoliday(
             emojis = listOf("🎄"),
             month = 12,
+            days = (20..31),
         )
 
     private class SimpleHoliday(
