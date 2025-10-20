@@ -38,6 +38,8 @@ import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.final_.steps.FinalStepsViewModel.Event
 import kotlinx.serialization.Serializable
 
+private val BulletOffset = 8.dp
+
 @Serializable
 data object FinalSteps
 
@@ -116,7 +118,7 @@ private fun Item(text: String) {
             .padding(bottom = 8.dp),
     ) {
         BulletOrOffset(
-            isOffset = false,
+            isBullet = true,
         )
         Text(
             text = text,
@@ -134,31 +136,33 @@ private fun ClickableLabel(
         Modifier
             .padding(
                 top = 16.dp,
-            )
-            .clip(RoundedCornerShape(8.dp))
-            .clickable { onClick() }
-            .padding(
-                top = 6.dp,
-                bottom = 12.dp,
             ),
     ) {
         BulletOrOffset(
-            isOffset = true,
+            isBullet = false,
         )
         Text(
             text = text,
             style = LocalAppTypography.current.plainText,
             textDecoration = TextDecoration.Underline,
+            modifier = Modifier
+                .clip(RoundedCornerShape(8.dp))
+                .clickable { onClick() }
+                .padding(horizontal = BulletOffset)
+                .padding(
+                    top = 6.dp,
+                    bottom = 12.dp,
+                ),
         )
         BulletOrOffset(
-            isOffset = true,
+            isBullet = false,
         )
     }
 }
 
 @Composable
 private fun BulletOrOffset(
-    isOffset: Boolean,
+    isBullet: Boolean,
 ) {
     Text(
         text = "•",
@@ -167,17 +171,19 @@ private fun BulletOrOffset(
         style = LocalAppTypography.current.plainText,
         modifier = Modifier
             .alpha(
-                if (isOffset) {
-                    0f
-                } else {
+                if (isBullet) {
                     1f
+                } else {
+                    0f
                 },
-            )
+            ),
     )
-    Spacer(
-        modifier = Modifier
-            .width(8.dp),
-    )
+    if (isBullet) {
+        Spacer(
+            modifier = Modifier
+                .width(BulletOffset),
+        )
+    }
 }
 
 @PreviewLightDark
