@@ -7,9 +7,10 @@ import android.content.IntentFilter
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
 
 class ScreenLockedReceiver private constructor(
-    private val onScreenLocked: ScreenLockedReceiver.() -> Unit,
+    private val onScreenLocked: () -> Unit,
 ) : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -26,25 +27,21 @@ class ScreenLockedReceiver private constructor(
             activity: ComponentActivity,
             onScreenLocked: () -> Unit,
         ) {
-            val receiver = ScreenLockedReceiver(
-                onScreenLocked = {
-                    onScreenLocked()
-                    activity.unregisterReceiver(this)   // sequential clicks on power button are unnecessary
+            val receiver = ScreenLockedReceiver(onScreenLocked = onScreenLocked)
+            val processLifecycle = ProcessLifecycleOwner.get().lifecycle
+            val processLifecycleObserver = object : DefaultLifecycleObserver {
+                override fun onResume(owner: LifecycleOwner) {
+                    activity.registerReceiver(receiver, IntentFilter(TARGET_ACTION))
                 }
-            )
-            activity.addOnUserLeaveHintListener {       // if the user leaves the app and locks the screen,
-                activity.unregisterReceiver(receiver)   // we should not react
+                override fun onPause(owner: LifecycleOwner) {
+                    activity.unregisterReceiver(receiver)
+                }
             }
-            val intentFilter = IntentFilter(TARGET_ACTION)
+            processLifecycle.addObserver(processLifecycleObserver)
             activity.lifecycle.addObserver(
                 observer = object : DefaultLifecycleObserver {
-
-                    override fun onResume(owner: LifecycleOwner) {
-                        activity.registerReceiver(receiver, intentFilter)
-                    }
-
                     override fun onDestroy(owner: LifecycleOwner) {
-                        activity.unregisterReceiver(receiver)
+                        processLifecycle.removeObserver(processLifecycleObserver)
                     }
                 }
             )
