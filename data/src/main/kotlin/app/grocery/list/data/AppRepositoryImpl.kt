@@ -34,6 +34,7 @@ internal class AppRepositoryImpl @Inject constructor(
     override val productTitleFormat by delegates.enum(defaultValue = ProductTitleFormat.EmojiAndFullText)
     override val clearNotificationsReminderEnabled by delegates.boolean(defaultValue = true)
     override val bottomBarRoadmapStep by delegates.enum(defaultValue = BottomBarRoadmapStep.Initial)
+    override val recommendAppWhenSharingList by delegates.boolean(defaultValue = true)
 
     override fun categories(): Flow<List<Product.Category>> =
         categoryDao.categories()

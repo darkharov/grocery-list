@@ -11,6 +11,7 @@ interface AppRepository {
     val productTitleFormat: StorageValue<ProductTitleFormat>
     val clearNotificationsReminderEnabled: StorageValue<Boolean>
     val bottomBarRoadmapStep: StorageValue<BottomBarRoadmapStep>
+    val recommendAppWhenSharingList: StorageValue<Boolean>
 
     fun categories(): Flow<List<Product.Category>>
     fun categorizedProducts(criteria: CategorizedProductsCriteria): Flow<List<CategoryAndProducts>>

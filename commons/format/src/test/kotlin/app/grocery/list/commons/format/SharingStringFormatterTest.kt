@@ -49,7 +49,10 @@ internal class SharingStringFormatterTest {
             categoryId = prototype.categoryId,
         )
         val formatter = SharingStringFormatter(ContractMock(emojiAndCategoryId))
-        val actualFormat = formatter.toSharingString(listOf(prototype))
+        val actualFormatWithPostfix = formatter.toSharingString(listOf(prototype), recommendUsingThisApp = true)
+        assert(actualFormatWithPostfix == productTitle)
+
+        val actualFormat = formatter.toSharingString(listOf(prototype), recommendUsingThisApp = false)
         assert(actualFormat == productTitle)
 
         val parsed = runBlocking {
@@ -62,7 +65,7 @@ internal class SharingStringFormatterTest {
         private val emojiAndCategoryId: EmojiAndCategoryId,
     ) : SharingStringFormatter.Contract {
 
-        override fun postfix(): String =
+        override fun recommendationToUseThisApp(): String =
             ""
 
         override suspend fun findEmojiAndCategoryId(search: String): EmojiAndCategoryId =

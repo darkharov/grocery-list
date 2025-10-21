@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import app.grocery.list.commons.compose.AppGradientDirection
 import app.grocery.list.commons.compose.drawGradient
+import app.grocery.list.commons.compose.elements.AppTitledCheckbox
 import app.grocery.list.commons.compose.elements.button.text.AppTextButton
 import app.grocery.list.commons.compose.elements.button.text.AppTextButtonProps
 import app.grocery.list.commons.compose.elements.dialog.APP_DIALOG_PADDING
@@ -256,6 +257,60 @@ private fun ProductListActionsDialog(
                             ),
                             onClick = {
                                 callbacks.onPasteProductsConfirmed(dialog.productList)
+                            },
+                        )
+                    }
+                },
+            )
+        }
+        is ProductListActionsDialogProps.ConfirmSharing -> {
+            AppBaseDialog(
+                icon = rememberVectorPainter(AppIcons.share),
+                text = StringValue.PluralResId(
+                    resId = R.plurals.pattern_products_collected,
+                    count = dialog.numberOfProducts,
+                    useCountAsArgument = true,
+                ),
+                textStyle = LocalAppTypography.current.dialogTitle,
+                onDismiss = {
+                    callbacks.onDialogDismiss()
+                },
+                additionalContent = {
+                    Spacer(
+                        modifier = Modifier
+                            .height(8.dp)
+                    )
+                    AppTitledCheckbox(
+                        title = stringResource(R.string.recommend_using_the_app),
+                        checked = dialog.recommendUsingThisApp,
+                        onCheckedChange = {
+                            callbacks.onRecommendThisAppCheckedClick(dialog = dialog)
+                        },
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .align(Alignment.CenterHorizontally),
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .height(24.dp)
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(APP_DIALOG_PADDING),
+                    ) {
+                        AppTextButton(
+                            props = AppTextButtonProps.TextOnly(
+                                text = StringValue.ResId(android.R.string.cancel),
+                            ),
+                            onClick = {
+                                callbacks.onDialogDismiss()
+                            },
+                        )
+                        AppTextButton(
+                            props = AppTextButtonProps.TextOnly(
+                                text = StringValue.ResId(R.string.share),
+                            ),
+                            onClick = {
+                                callbacks.onSharingConfirmed(dialog)
                             },
                         )
                     }

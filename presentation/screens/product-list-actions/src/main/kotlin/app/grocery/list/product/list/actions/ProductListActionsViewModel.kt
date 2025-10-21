@@ -9,6 +9,7 @@ import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.EnabledAndDisabledProducts
 import app.grocery.list.domain.Product
 import app.grocery.list.product.list.actions.dialog.ProductListActionsDialogProps
+import app.grocery.list.storage.value.kotlin.get
 import commons.android.stateIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -81,27 +82,44 @@ internal class ProductListActionsViewModel @Inject constructor(
         }
     }
 
-    private fun sendShareEventAndRemoveDialog(products: List<Product>) {
-        sendOnShareEvent(products)
-        dialog.value = null
+    override fun onShareAll(dialog: ProductListActionsDialogProps.SublistToSharePicker) {
+        showConfirmSharingDialog((dialog.payload as EnabledAndDisabledProducts).all)
     }
 
-    private fun sendOnShareEvent(allProducts: List<Product>) {
-        val sharingString = sharingStringFormatter.toSharingString(allProducts)
+    override fun onShareEnabledOnly(dialog: ProductListActionsDialogProps.SublistToSharePicker) {
+        showConfirmSharingDialog((dialog.payload as EnabledAndDisabledProducts).enabled)
+    }
+
+    override fun onShareDisabledOnly(dialog: ProductListActionsDialogProps.SublistToSharePicker) {
+        showConfirmSharingDialog((dialog.payload as EnabledAndDisabledProducts).disabled)
+    }
+
+    private fun showConfirmSharingDialog(products: List<Product>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            dialog.value = ProductListActionsDialogProps.ConfirmSharing(
+                numberOfProducts = products.size,
+                recommendUsingThisApp = repository.recommendAppWhenSharingList.get(),
+                payload = products,
+            )
+        }
+    }
+
+    override fun onSharingConfirmed(dialog: ProductListActionsDialogProps.ConfirmSharing) {
+        this.dialog.value = null
+        val sharingString = sharingStringFormatter.toSharingString(
+            products = dialog.payload,
+            recommendUsingThisApp = dialog.recommendUsingThisApp,
+        )
         val event = Event.OnShare(sharingString = sharingString)
         events.trySend(event)
     }
 
-    override fun onShareAll(dialog: ProductListActionsDialogProps.SublistToSharePicker) {
-        sendShareEventAndRemoveDialog((dialog.payload as EnabledAndDisabledProducts).all)
-    }
-
-    override fun onShareEnabledOnly(dialog: ProductListActionsDialogProps.SublistToSharePicker) {
-        sendShareEventAndRemoveDialog((dialog.payload as EnabledAndDisabledProducts).enabled)
-    }
-
-    override fun onShareDisabledOnly(dialog: ProductListActionsDialogProps.SublistToSharePicker) {
-        sendShareEventAndRemoveDialog((dialog.payload as EnabledAndDisabledProducts).disabled)
+    override fun onRecommendThisAppCheckedClick(dialog: ProductListActionsDialogProps.ConfirmSharing) {
+        val recommendUsingThisApp = !(dialog.recommendUsingThisApp)
+        this.dialog.value = dialog.copy(recommendUsingThisApp = recommendUsingThisApp)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.recommendAppWhenSharingList.set(recommendUsingThisApp)
+        }
     }
 
     override fun onAttemptToPaste() {
@@ -229,7 +247,7 @@ internal class ProductListActionsViewModel @Inject constructor(
                     payload = products,
                 )
             } else {
-                sendOnShareEvent(products.all)
+                showConfirmSharingDialog(products = products.all)
             }
         }
     }

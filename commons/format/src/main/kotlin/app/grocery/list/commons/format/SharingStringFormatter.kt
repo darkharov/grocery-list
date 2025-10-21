@@ -36,12 +36,11 @@ class SharingStringFormatter @Inject constructor(
         }
     }
 
-    fun toSharingString(products: List<Product>): String {
-        val rawPostfix = contract.postfix()
-        val postfix = if (rawPostfix.isEmpty()) {
-            ""
+    fun toSharingString(products: List<Product>, recommendUsingThisApp: Boolean): String {
+        val postfix = if (recommendUsingThisApp) {
+            POSTFIX_SEPARATOR + contract.recommendationToUseThisApp()
         } else {
-            POSTFIX_SEPARATOR + rawPostfix
+            ""
         }
         return products.joinToString(
             separator = "\n",
@@ -58,7 +57,7 @@ class SharingStringFormatter @Inject constructor(
     class ProductsNotFoundException : Exception()
 
     interface Contract {
-        fun postfix(): String
+        fun recommendationToUseThisApp(): String
         suspend fun findEmojiAndCategoryId(search: String): EmojiAndCategoryId
     }
 }

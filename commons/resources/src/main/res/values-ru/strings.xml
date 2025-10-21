@@ -23,7 +23,7 @@
     <string name="exit">Выйти</string>
     <string name="save_and_exit">Сохранить и выйти</string>
     <string name="share_current_list">Поделиться текущим списком</string>
-    <string name="sharing_message_suffix">1) Скопируйте это сообщение\n2) Нажмите \'%s\' в разделе \'%s\' в %s</string>
+    <string name="recommendation_to_use_this_app">1) Скопируйте это сообщение\n2) Нажмите \'%s\' в разделе \'%s\' в %s</string>
     <string name="paste_copied_list">Вставить скопированный список</string>
     <string name="copied_product_list_not_found">Скопированный список продуктов к сожалению не найден</string>
     <string name="add_or_replace_copied_products">Вы хотите добавить новые элементы к уже имеющимся или полностью заменить имеющиеся новыми?</string>
@@ -59,6 +59,8 @@
     <string name="close">Закрыть</string>
     <string name="fingerprint_location_question">Сканер отпечатка на кнопке блокировки?</string>
     <string name="fingerprint_location_answer">Чтобы избежать срабатывания сканера отпечатка, нажимайте на самую нижнюю часть кнопки блокировки.\nУ вас всё получится!</string>
+    <string name="recommend_using_the_app">Рекомендовать это приложение</string>
+    <string name="share">Поделиться</string>
 
     <string-array name="final_steps">
         <item>Заблокируйте экран</item>
@@ -76,6 +78,12 @@
         <item quantity="one">Найден %d продукт</item>
         <item quantity="few">Найдено %d продукта</item>
         <item quantity="many">Найдено %d продуктов</item>
+    </plurals>
+
+    <plurals name="pattern_products_collected">
+        <item quantity="one">Собран %d продукт</item>
+        <item quantity="few">Собрано %d продукта</item>
+        <item quantity="many">Собрано %d продуктов</item>
     </plurals>
 
 </resources>

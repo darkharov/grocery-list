@@ -16,10 +16,10 @@ class SharingStringFormatterContractImpl @Inject constructor(
     private val repository: AppRepository,
 ) : SharingStringFormatter.Contract {
 
-    override fun postfix(): String =
+    override fun recommendationToUseThisApp(): String =
         with(context) {
             getString(
-                R.string.sharing_message_suffix,
+                R.string.recommendation_to_use_this_app,
                 getString(R.string.paste_copied_list),
                 getString(R.string.actions),
                 "https://play.google.com/store/apps/details?id=app.grocery.list",

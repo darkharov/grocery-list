@@ -24,6 +24,8 @@ internal interface ProductListActionsCallbacks {
     fun onReplaceProductsBy(productList: List<Product>)
     fun onAddProducts(productList: List<Product>)
     fun onEnableAllAndStartShopping()
+    fun onRecommendThisAppCheckedClick(dialog: ProductListActionsDialogProps.ConfirmSharing)
+    fun onSharingConfirmed(dialog: ProductListActionsDialogProps.ConfirmSharing)
 }
 
 internal object ProductListActionsCallbacksMock : ProductListActionsCallbacks {
@@ -45,4 +47,6 @@ internal object ProductListActionsCallbacksMock : ProductListActionsCallbacks {
     override fun onAddProducts(productList: List<Product>) {}
     override fun onEnableAllAndStartShopping() {}
     override fun onPasteProductsConfirmed(products: List<Product>) {}
+    override fun onRecommendThisAppCheckedClick(dialog: ProductListActionsDialogProps.ConfirmSharing) {}
+    override fun onSharingConfirmed(dialog: ProductListActionsDialogProps.ConfirmSharing) {}
 }

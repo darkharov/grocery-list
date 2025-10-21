@@ -35,6 +35,13 @@ internal sealed class ProductListActionsDialogProps {
     data class EnableAllAndStartShopping(
         val totalProductCount: Int,
     ) : ProductListActionsDialogProps()
+
+    @Immutable
+    data class ConfirmSharing(
+        val numberOfProducts: Int,
+        val recommendUsingThisApp: Boolean,
+        val payload: List<Product>,
+    ) : ProductListActionsDialogProps()
 }
 
 internal class ProductListActionsDialogMocks :
@@ -52,6 +59,11 @@ internal class ProductListActionsDialogMocks :
                 productListSize = 11,
                 enabledItemsCount = 8,
                 disabledItemsCount = 3,
+            ),
+            ProductListActionsDialogProps.ConfirmSharing(
+                numberOfProducts = 4,
+                recommendUsingThisApp = true,
+                payload = emptyList(),
             ),
         )
     )

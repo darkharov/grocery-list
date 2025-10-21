@@ -23,7 +23,7 @@
     <string name="exit">Exit</string>
     <string name="save_and_exit">Save and exit</string>
     <string name="share_current_list">Share current list</string>
-    <string name="sharing_message_suffix">1) Copy this message\n2) Press \'%s\' in \'%s\' section of %s</string>
+    <string name="recommendation_to_use_this_app">1) Copy this message\n2) Press \'%s\' in \'%s\' section of %s</string>
     <string name="paste_copied_list">Paste copied list</string>
     <string name="copied_product_list_not_found">The copied product list was unfortunately not found</string>
     <string name="add_or_replace_copied_products">Do you want to add new elements to the existing ones or completely replace the existing ones with new ones?</string>
@@ -59,6 +59,8 @@
     <string name="close">Close</string>
     <string name="fingerprint_location_question">Fingerprint scanner on the lock button?</string>
     <string name="fingerprint_location_answer">To avoid triggering the fingerprint scanner, press on the lowest part of the lock button.\nYou will succeed!</string>
+    <string name="recommend_using_the_app">Recommend using this app</string>
+    <string name="share">Share</string>
 
     <string-array name="final_steps">
         <item>Lock the screen</item>
@@ -76,5 +78,9 @@
         <item quantity="other">%d products found</item>
     </plurals>
 
+    <plurals name="pattern_products_collected">
+        <item quantity="one">%d product collected</item>
+        <item quantity="other">%d products collected</item>
+    </plurals>
 
 </resources>
