@@ -32,6 +32,9 @@ class ScreenLockedReceiver private constructor(
                     activity.unregisterReceiver(this)   // sequential clicks on power button are unnecessary
                 }
             )
+            activity.addOnUserLeaveHintListener {       // if the user leaves the app and locks the screen,
+                activity.unregisterReceiver(receiver)   // we should not react
+            }
             val intentFilter = IntentFilter(TARGET_ACTION)
             activity.lifecycle.addObserver(
                 observer = object : DefaultLifecycleObserver {
