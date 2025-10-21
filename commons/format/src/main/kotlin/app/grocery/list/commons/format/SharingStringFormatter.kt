@@ -50,8 +50,14 @@ class SharingStringFormatter @Inject constructor(
     }
 
     companion object {
+
+        // Do NOT delete instances from this array
+        // to maintain compatibility with the previously shared lists
         private val Delimiters = arrayOf(",", ";", "\n")
-        private const val POSTFIX_SEPARATOR = "\n--------\n" // DO NOT UPDATE THIS VALUE!
+
+        // Do NOT update this value
+        // to maintain compatibility with the previously shared lists
+        private const val POSTFIX_SEPARATOR = "\n--------\n"
     }
 
     class ProductsNotFoundException : Exception()
