@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -28,16 +30,11 @@ class ScreenLockedReceiver private constructor(
             onScreenLocked: () -> Unit,
         ) {
             val receiver = ScreenLockedReceiver(onScreenLocked = onScreenLocked)
+
             val processLifecycle = ProcessLifecycleOwner.get().lifecycle
-            val processLifecycleObserver = object : DefaultLifecycleObserver {
-                override fun onResume(owner: LifecycleOwner) {
-                    activity.registerReceiver(receiver, IntentFilter(TARGET_ACTION))
-                }
-                override fun onPause(owner: LifecycleOwner) {
-                    activity.unregisterReceiver(receiver)
-                }
-            }
+            val processLifecycleObserver = ProcessLifecycleObserverImpl(activity, receiver)
             processLifecycle.addObserver(processLifecycleObserver)
+
             activity.lifecycle.addObserver(
                 observer = object : DefaultLifecycleObserver {
                     override fun onDestroy(owner: LifecycleOwner) {
@@ -45,6 +42,24 @@ class ScreenLockedReceiver private constructor(
                     }
                 }
             )
+        }
+
+        private class ProcessLifecycleObserverImpl(
+            private val activity: ComponentActivity,
+            private val receiver: ScreenLockedReceiver,
+        ) : DefaultLifecycleObserver {
+
+            private val handler = Handler(Looper.getMainLooper())
+            private val unregisterReceiver = Runnable { activity.unregisterReceiver(receiver) }
+
+            override fun onResume(owner: LifecycleOwner) {
+                handler.removeCallbacks(unregisterReceiver)
+                activity.registerReceiver(receiver, IntentFilter(TARGET_ACTION))
+            }
+
+            override fun onPause(owner: LifecycleOwner) {
+                handler.postDelayed(unregisterReceiver, 250L)
+            }
         }
     }
 }
