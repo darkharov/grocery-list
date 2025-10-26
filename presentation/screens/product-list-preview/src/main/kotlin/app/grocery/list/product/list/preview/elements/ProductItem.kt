@@ -40,7 +40,6 @@ internal fun ProductItem(
 ) {
     val horizontalPadding = dimensionResource(R.dimen.margin_16_32_64)
     AppSwipeToDismissBox(
-        key = product.key,
         enableDismissFromStartToEnd = false,
         backgroundContent = { swipeToDismissBoxState ->
             Actions(
@@ -48,7 +47,7 @@ internal fun ProductItem(
                 horizontalPadding = horizontalPadding,
             )
         },
-        onSwipeFromEndToStartFinished = {
+        onDismiss = {
             callbacks.onDelete(
                 productId = product.id,
             )
