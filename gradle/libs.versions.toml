@@ -16,7 +16,6 @@ kotlinxCoroutinesCore = "1.10.2"
 kotlinxMetadataJvm = "0.9.0"
 kotlinxSerializationJson = "1.8.1"
 lifecycleProcess = "2.9.4"
-lifecycleRuntimeKtx = "2.9.4"
 activityKtx = "1.11.0"
 composeBom = "2025.09.00"
 jetbrainsKotlinJvm = "2.0.0"
@@ -39,7 +38,6 @@ firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-crashlytics-ndk = { module = "com.google.firebase:firebase-crashlytics-ndk" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
