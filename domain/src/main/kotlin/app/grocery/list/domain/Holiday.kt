@@ -34,6 +34,7 @@ sealed interface Holiday {
             month = 4,
             days = (1..1),
         )
+
     private data object March8 :
         Holiday by SimpleHoliday(
             emojis = listOf("🌷", "💐"),
