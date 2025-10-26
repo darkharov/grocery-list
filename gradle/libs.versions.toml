@@ -20,7 +20,7 @@ activityKtx = "1.11.0"
 composeBom = "2025.09.00"
 jetbrainsKotlinJvm = "2.0.0"
 navigationComposeVersion = "2.9.4"
-roomRuntime = "2.8.0"
+roomRuntime = "2.8.3"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
