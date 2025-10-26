@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
@@ -9,4 +12,11 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
     id("com.google.gms.google-services") version "4.4.3" apply false
     id("com.google.firebase.crashlytics") version "3.0.5" apply false
+}
+
+tasks.withType<KotlinJvmCompile>().configureEach {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.valueOf(Configs.Java.JVM_TARGET))
+        freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
+    }
 }

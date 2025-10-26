@@ -27,10 +27,6 @@ android {
         targetCompatibility = Configs.Java.ENUM_ENTRY
     }
 
-    kotlinOptions {
-        jvmTarget = Configs.Java.STRING_VALUE
-    }
-
     buildFeatures {
         compose = true
     }
