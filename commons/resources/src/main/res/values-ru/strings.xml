@@ -23,7 +23,7 @@
     <string name="exit">Выйти</string>
     <string name="save_and_exit">Сохранить и выйти</string>
     <string name="share_current_list">Поделиться текущим списком</string>
-    <string name="recommendation_to_use_this_app">1) Скопируйте это сообщение\n2) Нажмите \'%s\' в разделе \'%s\' в %s</string>
+    <string name="recommendation_to_use_this_app">1) Скопируйте это сообщение\n2) Нажмите \'%1$s\' в разделе \'%2$s\' в %3$s</string>
     <string name="paste_copied_list">Вставить скопированный список</string>
     <string name="copied_product_list_not_found">Скопированный список продуктов к сожалению не найден</string>
     <string name="add_or_replace_copied_products">Вы хотите добавить новые элементы к уже имеющимся или полностью заменить имеющиеся новыми?</string>
