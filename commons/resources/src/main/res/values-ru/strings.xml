@@ -32,6 +32,9 @@
     <string name="delete">Удалить</string>
     <string name="next">Далее</string>
     <string name="list_is_empty">Список пуст…</string>
+    <string name="ceaser_salad_with_chicken">Салат \"Цезарь\" с курицей</string>
+    <string name="greek_salad">Салат Греческий</string>
+    <string name="fruits_and_honey">Фрукты и мёд</string>
     <string name="advice">Совет</string>
     <string name="remove_unnecessary_notifications">Удалите ненужные уведомления других приложений</string>
     <string name="do_not_show_this_screen_again">Больше не показывать этот экран</string>

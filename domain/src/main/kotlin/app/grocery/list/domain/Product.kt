@@ -7,6 +7,7 @@ data class Product(
     val enabled: Boolean,
     val categoryId: Int,
 ) {
+    val disabled = !(enabled)
 
     data class Category(
         val id: Int,

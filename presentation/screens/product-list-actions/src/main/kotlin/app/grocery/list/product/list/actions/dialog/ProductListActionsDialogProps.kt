@@ -2,6 +2,8 @@ package app.grocery.list.product.list.actions.dialog
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
+import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogProps
+import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListMock
 import app.grocery.list.domain.Product
 
 @Immutable
@@ -11,10 +13,8 @@ internal sealed class ProductListActionsDialogProps {
     data object CopiedProductListNotFound : ProductListActionsDialogProps()
 
     @Immutable
-    data class ConfirmPastedList(
-        val numberOfFoundProducts: Int,
-        val titlesAsString: String,
-        val productList: List<Product>,
+    data class ConfirmPastedListWrapper(
+        val confirmPastedList: ConfirmPastedListDialogProps,
     ) : ProductListActionsDialogProps()
 
     @Immutable
@@ -48,10 +48,8 @@ internal class ProductListActionsDialogMocks :
     CollectionPreviewParameterProvider<ProductListActionsDialogProps?>(
         listOf(
             ProductListActionsDialogProps.ConfirmClearList,
-            ProductListActionsDialogProps.ConfirmPastedList(
-                numberOfFoundProducts = 2,
-                titlesAsString = "Broccoli,\nCoffee",
-                productList = emptyList(),
+            ProductListActionsDialogProps.ConfirmPastedListWrapper(
+                ConfirmPastedListMock.prototype
             ),
             ProductListActionsDialogProps.CopiedProductListNotFound,
             ProductListActionsDialogProps.HowToPutPastedProducts(productList = listOf()),

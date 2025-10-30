@@ -11,6 +11,7 @@ import app.grocery.list.domain.EnabledAndDisabledProducts
 import app.grocery.list.domain.Product
 import app.grocery.list.domain.format.ProductTitleFormatter
 import app.grocery.list.domain.internal.ONLY_FOR_MIGRATION
+import app.grocery.list.domain.list.preview.Template
 import app.grocery.list.domain.search.EmojiAndCategoryId
 import app.grocery.list.domain.settings.BottomBarRoadmapStep
 import app.grocery.list.domain.settings.ProductTitleFormat
@@ -32,6 +33,7 @@ internal class AppRepositoryImpl @Inject constructor(
     @ApplicationContext
     private val context: Context,
     private val productDao: ProductDao,
+    private val templateDao: TemplateDao,
     private val productMapper: ProductEntity.Mapper,
     private val categoryDao: CategoryDao,
 ) : AppRepository {
@@ -158,6 +160,12 @@ internal class AppRepositoryImpl @Inject constructor(
                     disabled = products.filterNot { it.enabled },
                 )
             }
+
+    override suspend fun templates(): List<Template> =
+        templateDao.templates()
+
+    override suspend fun productTitles(templateId: Int): List<String> =
+        templateDao.productTitles(templateId = templateId)
 
     @Deprecated(ONLY_FOR_MIGRATION)
     override val productTitleFormat by delegates.enum(defaultValue = ProductTitleFormat.EmojiAndFullText)

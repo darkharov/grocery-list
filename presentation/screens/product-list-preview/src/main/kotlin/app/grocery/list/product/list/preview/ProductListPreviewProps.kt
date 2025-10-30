@@ -9,34 +9,63 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.parcelize.Parcelize
 
 @Immutable
-internal data class ProductListPreviewProps(
-    val categories: ImmutableList<Category>,
-    val enableAndDisableAll: EnableAndDisableAllState?,
-) {
-    @Immutable
-    data class EnableAndDisableAllState(
-        val enableAllAvailable: Boolean,
-        val disableAllAvailable: Boolean,
-    )
+sealed class ProductListPreviewProps {
 
     @Immutable
-    data class Product(
-        val id: Int,
-        val enabled: Boolean = true,
-        val title: AnnotatedString,
-    ) {
-        val key = ProductKey(id = id)
+    data class Empty(
+        val templates: List<Template>,
+    ) : ProductListPreviewProps() {
+
+        @Immutable
+        data class Template(
+            val id: Int,
+            val title: String,
+        )
     }
 
     @Immutable
-    data class Category(
-        val id: Int,
-        val title: String,
-        val products: ImmutableList<Product>,
-    ) {
-        val key = CategoryKey(id = id)
-        val topOffsetKey = CategoryTopOffsetKey(id = id)
+    data class Items(
+        val items: ImmutableList<CategoryAndFormattedProducts>,
+        val enableAndDisableAll: EnableAndDisableAll?,
+    ) : ProductListPreviewProps() {
+
+        @Immutable
+        data class EnableAndDisableAll(
+            val enableAllAvailable: Boolean,
+            val disableAllAvailable: Boolean,
+        ) {
+            val key = EnabledAllAndDisableAllKey
+        }
+
+        @Immutable
+        data class CategoryAndFormattedProducts(
+            val category: Category?,
+            val products: List<Product>,
+        )
+
+        @Immutable
+        data class Category(
+            val id: Int,
+            val title: String,
+        ) {
+            val key = CategoryKey(id = id)
+            val topOffsetKey = CategoryTopOffsetKey(id = id)
+        }
+
+        @Immutable
+        data class Product(
+            val id: Int,
+            val enabled: Boolean = true,
+            val title: AnnotatedString,
+        ) {
+            val key = ProductKey(id = id)
+        }
     }
+
+
+    @Immutable
+    @Parcelize
+    data object EnabledAllAndDisableAllKey : Parcelable
 
     @Immutable
     @Parcelize
@@ -51,67 +80,72 @@ internal data class ProductListPreviewProps(
     data class CategoryTopOffsetKey(val id: Int) : Parcelable
 }
 
-
 internal class ProductListPreviewMocks : PreviewParameterProvider<ProductListPreviewProps?> {
 
     private val productIds = generateSequence(1) { it + 1 }.iterator()
     private val categoryIds = generateSequence(1) { it + 1 }.iterator()
 
-    private val prototype = ProductListPreviewProps(
-        enableAndDisableAll = ProductListPreviewProps.EnableAndDisableAllState(
+    private val prototype = ProductListPreviewProps.Items(
+        enableAndDisableAll = ProductListPreviewProps.Items.EnableAndDisableAll(
             enableAllAvailable = true,
             disableAllAvailable = false,
         ),
-        categories = persistentListOf(
-            ProductListPreviewProps.Category(
-                id = categoryIds.next(),
-                title = "Veggies",
+        items = persistentListOf(
+            ProductListPreviewProps.Items.CategoryAndFormattedProducts(
+                category = ProductListPreviewProps.Items.Category(
+                    id = categoryIds.next(),
+                    title = "Veggies",
+                ),
                 products = persistentListOf(
-                    ProductListPreviewProps.Product(
+                    ProductListPreviewProps.Items.Product(
                         id = productIds.next(),
                         title = AnnotatedString("🍅 Tomato"),
                     ),
-                    ProductListPreviewProps.Product(
+                    ProductListPreviewProps.Items.Product(
                         id = productIds.next(),
                         title = AnnotatedString("🥔 Potato"),
                     ),
                 ),
             ),
-            ProductListPreviewProps.Category(
-                id = categoryIds.next(),
-                title = "Dairy Products",
+            ProductListPreviewProps.Items.CategoryAndFormattedProducts(
+                category = ProductListPreviewProps.Items.Category(
+                    id = categoryIds.next(),
+                    title = "Dairy Products",
+                ),
                 products = persistentListOf(
-                    ProductListPreviewProps.Product(
+                    ProductListPreviewProps.Items.Product(
                         id = productIds.next(),
                         title = AnnotatedString("🥛Milk 2L"),
                     ),
-                    ProductListPreviewProps.Product(
+                    ProductListPreviewProps.Items.Product(
                         id = productIds.next(),
                         title = AnnotatedString("Yogurt x8"),
                     ),
-                    ProductListPreviewProps.Product(
+                    ProductListPreviewProps.Items.Product(
                         id = productIds.next(),
                         title = AnnotatedString("Feta"),
                     ),
-                    ProductListPreviewProps.Product(
+                    ProductListPreviewProps.Items.Product(
                         id = productIds.next(),
                         title = AnnotatedString("Blue Cheese"),
                     ),
                 ),
             ),
-            ProductListPreviewProps.Category(
-                id = categoryIds.next(),
-                title = "Sweets",
+            ProductListPreviewProps.Items.CategoryAndFormattedProducts(
+                category = ProductListPreviewProps.Items.Category(
+                    id = categoryIds.next(),
+                    title = "Sweets",
+                ),
                 products = persistentListOf(
-                    ProductListPreviewProps.Product(
+                    ProductListPreviewProps.Items.Product(
                         id = productIds.next(),
                         title = AnnotatedString("🍬 Candies"),
                     ),
-                    ProductListPreviewProps.Product(
+                    ProductListPreviewProps.Items.Product(
                         id = productIds.next(),
                         title = AnnotatedString("🍦 Ice Cream"),
                     ),
-                    ProductListPreviewProps.Product(
+                    ProductListPreviewProps.Items.Product(
                         id = productIds.next(),
                         title = AnnotatedString("Buns"),
                     ),
@@ -122,11 +156,7 @@ internal class ProductListPreviewMocks : PreviewParameterProvider<ProductListPre
 
     override val values: Sequence<ProductListPreviewProps?> =
         sequenceOf(
-            null,
-            ProductListPreviewProps(
-                enableAndDisableAll = null,
-                categories = persistentListOf(),
-            ),
+            //null,
             prototype,
         )
 }

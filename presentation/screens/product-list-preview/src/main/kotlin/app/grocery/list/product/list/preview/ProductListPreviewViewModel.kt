@@ -2,40 +2,41 @@ package app.grocery.list.product.list.preview
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogMapper
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.Product
+import app.grocery.list.domain.format.ProductListSeparator
+import app.grocery.list.domain.list.preview.GetFormattedTemplateProductsUseCase
+import app.grocery.list.domain.list.preview.GetProductListPreviewUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 internal class ProductListPreviewViewModel @Inject constructor(
-    private val mapperFactory: ProductListMapper.Factory,
+    getPreview: GetProductListPreviewUseCase,
     private val repository: AppRepository,
+    private val getTemplateProducts: GetFormattedTemplateProductsUseCase,
+    private val confirmPastedListDialogMapper: ConfirmPastedListDialogMapper,
 ) : ViewModel(),
     ProductListPreviewCallbacks {
 
-    val props: StateFlow<ProductListPreviewProps?> = collectProps()
+    val props: StateFlow<ProductListPreviewProps?> =
+        getPreview
+            .execute()
+            .map(ProductListPreviewMapper::transform)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
+    private val dialog = MutableStateFlow<ProductListPreviewDialogProps?>(null)
     private val events = Channel<Event>(Channel.UNLIMITED)
-
-    private fun collectProps() = combine(
-        repository.productTitleFormatter.observe().map(mapperFactory::create),
-        repository.categorizedProducts(AppRepository.CategorizedProductsCriteria.All),
-        ProductListMapper::transform,
-    ).stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        null,
-    )
 
     override fun onDelete(productId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -70,8 +71,38 @@ internal class ProductListPreviewViewModel @Inject constructor(
         }
     }
 
+    override fun onTemplateClick(templateId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val products = getTemplateProducts.execute(
+                templateId = templateId,
+                separator = ProductListSeparator.Dialog,
+            )
+            dialog.value = ProductListPreviewDialogProps.ConfirmPastedProductsWrapper(
+                confirmPastedListDialogMapper.transform(products)
+            )
+        }
+    }
+
+    override fun onDialogDismiss() {
+        removeDialog()
+    }
+
+    override fun onPasteProductsConfirmed(products: List<Product>) {
+        removeDialog()
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.putProducts(products)
+        }
+    }
+
+    private fun removeDialog() {
+        dialog.value = null
+    }
+
     fun events(): ReceiveChannel<Event> =
         events
+
+    fun dialog(): StateFlow<ProductListPreviewDialogProps?> =
+        dialog
 
     sealed class Event {
         data class OnProductDeleted(val product: Product) : Event()

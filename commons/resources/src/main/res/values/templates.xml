@@ -148,7 +148,7 @@
         <item>Oatmeal</item>
         <item>Diapers</item>
         <item>{🧂}Salt</item>
-        <item>Ground Pepper|Pepper Ground</item>
+        <item>Ground Pepper|Pepper Ground|Black pepper|Pepper black</item>
         <item>Powder</item>
         <item>Sponge</item>
         <item>Salad bowl</item>
@@ -190,6 +190,40 @@
         <item>{🪳}Cockroach</item>
         <item>{🍟}Fries</item>
         <item>{🕯️}Candles</item>
+    </string-array>
+
+    <string-array name="ceaser_salad_with_chicken">
+        <item>Chinese cabbage</item>
+        <item>Cherry tomatoes</item>
+        <item>Chicken breast</item>
+        <item>Hard cheese</item>
+        <item>White bread</item>
+        <item>Salt</item>
+        <item>Olive oil</item>
+        <item>Black pepper</item>
+        <item>Mayonnaise</item>
+        <item>Garlic</item>
+    </string-array>
+
+    <string-array name="greek_salad">
+        <item>2 Cucumbers</item>
+        <item>5 Tomatoes</item>
+        <item>1 Lemon</item>
+        <item>1 Red onion</item>
+        <item>1 bell pepper</item>
+        <item>Olives</item>
+        <item>Olive oil</item>
+        <item>200g feta cheese</item>
+    </string-array>
+
+    <string-array name="fruits_and_honey">
+        <item>Grapes</item>
+        <item>Blueberries</item>
+        <item>Kiwi</item>
+        <item>Lemon</item>
+        <item>Mango</item>
+        <item>Apples</item>
+        <item>Honey</item>
     </string-array>
 
 </resources>

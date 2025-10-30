@@ -2,12 +2,13 @@ package app.grocery.list.product.list.actions
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogMapper
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.EnabledAndDisabledProducts
 import app.grocery.list.domain.Product
 import app.grocery.list.domain.format.ParseProductListUseCase
+import app.grocery.list.domain.format.ProductListSeparator
 import app.grocery.list.domain.format.SharingStringFormatter
-import app.grocery.list.domain.format.printToString
 import app.grocery.list.product.list.actions.dialog.ProductListActionsDialogProps
 import app.grocery.list.storage.value.kotlin.get
 import commons.android.stateIn
@@ -28,6 +29,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     private val repository: AppRepository,
     private val sharingStringFormatter: SharingStringFormatter,
     private val parseProductList: ParseProductListUseCase,
+    private val confirmPastedListDialogMapper: ConfirmPastedListDialogMapper,
 ) : ViewModel(),
     ProductListActionsCallbacks {
 
@@ -128,35 +130,19 @@ internal class ProductListActionsViewModel @Inject constructor(
     override fun onPasted(text: String) {
         viewModelScope.launch(Dispatchers.IO) {
             parseProductList
-                .execute(text = text)
+                .execute(
+                    text = text,
+                    separator = ProductListSeparator.Dialog,
+                )
                 .onSuccess { products ->
-                    handlePastedProducts(products)
+                    dialog.value = ProductListActionsDialogProps.ConfirmPastedListWrapper(
+                        confirmPastedListDialogMapper.transform(products)
+                    )
                 }
                 .onFailure {
-                    showCopiedProductListNotFoundDialog()
+                    dialog.value = ProductListActionsDialogProps.CopiedProductListNotFound
                 }
         }
-    }
-
-    private suspend fun handlePastedProducts(products: List<Product>) {
-        val formatter = repository.productTitleFormatter.get()
-        val titlesAsString = formatter.printToString(products, separator = "\n")
-        showConfirmListDialog(
-            products = products,
-            titlesAsString = titlesAsString,
-        )
-    }
-
-    private fun showConfirmListDialog(products: List<Product>, titlesAsString: String) {
-        dialog.value = ProductListActionsDialogProps.ConfirmPastedList(
-            numberOfFoundProducts = products.size,
-            titlesAsString = titlesAsString,
-            productList = products,
-        )
-    }
-
-    private fun showCopiedProductListNotFoundDialog() {
-        dialog.value = ProductListActionsDialogProps.CopiedProductListNotFound
     }
 
     override fun onPasteProductsConfirmed(products: List<Product>) {

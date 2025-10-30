@@ -3,6 +3,7 @@ package app.grocery.list.settings.list.format
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.domain.AppRepository
+import app.grocery.list.domain.format.ProductListSeparator
 import app.grocery.list.domain.format.printToString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -26,7 +27,11 @@ internal class ListFormatSettingsViewModel @Inject constructor(
         ) { formatter, sampleProducts ->
             ListFormatSettingsProps(
                 productTitleFormat = productTitleFormatMapper.toPresentation(formatter),
-                sampleOfNotificationTitle = formatter.printToString(sampleProducts),
+                sampleOfNotificationTitle = formatter
+                    .printToString(
+                        products = sampleProducts,
+                        separator = ProductListSeparator.Notifications,
+                    ),
             )
         }
         .stateIn(

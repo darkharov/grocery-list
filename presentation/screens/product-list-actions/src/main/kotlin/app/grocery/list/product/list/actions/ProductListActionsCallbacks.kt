@@ -1,16 +1,19 @@
 package app.grocery.list.product.list.actions
 
 import androidx.compose.runtime.Stable
+import app.grocery.list.commons.compose.OnDialogDismiss
+import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogCallbacks
 import app.grocery.list.domain.Product
 import app.grocery.list.product.list.actions.dialog.ProductListActionsDialogProps
 
 @Stable
-internal interface ProductListActionsCallbacks {
+internal interface ProductListActionsCallbacks :
+    OnDialogDismiss,
+    ConfirmPastedListDialogCallbacks {
     fun onAttemptToClearList()
     fun onAdd()
     fun onGoToActions()
     fun onClearListConfirmed()
-    fun onDialogDismiss()
     fun onExitFromApp()
     fun onAttemptToStartShopping(atLeastOneProductEnabled: Boolean, numberOfProducts: Int)
     fun onNoEnabledProductsToStartShopping(productCount: Int)
@@ -20,7 +23,6 @@ internal interface ProductListActionsCallbacks {
     fun onShareDisabledOnly(dialog: ProductListActionsDialogProps.SublistToSharePicker)
     fun onAttemptToPaste()
     fun onPasted(text: String)
-    fun onPasteProductsConfirmed(products: List<Product>)
     fun onReplaceProductsBy(productList: List<Product>)
     fun onAddProducts(productList: List<Product>)
     fun onEnableAllAndStartShopping()

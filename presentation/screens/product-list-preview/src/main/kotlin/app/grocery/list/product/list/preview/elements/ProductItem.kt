@@ -34,7 +34,7 @@ import app.grocery.list.product.list.preview.R
 
 @Composable
 internal fun ProductItem(
-    product: ProductListPreviewProps.Product,
+    product: ProductListPreviewProps.Items.Product,
     callbacks: ProductItemCallbacks,
     modifier: Modifier = Modifier,
 ) {
@@ -110,7 +110,7 @@ private fun Actions(
 
 @Composable
 private fun Content(
-    product: ProductListPreviewProps.Product,
+    product: ProductListPreviewProps.Items.Product,
     horizontalPadding: Dp,
     callbacks: ProductItemCallbacks,
 ) {
@@ -150,7 +150,7 @@ private fun ProductItemPreview() {
     GroceryListTheme {
         Scaffold { padding ->
             ProductItem(
-                product = ProductListPreviewProps.Product(
+                product = ProductListPreviewProps.Items.Product(
                     id = 1,
                     title = AnnotatedString("🍅 Tomato"),
                     enabled = true,

@@ -2,6 +2,7 @@ package app.grocery.list.domain
 
 import app.grocery.list.domain.format.ProductTitleFormatter
 import app.grocery.list.domain.internal.ONLY_FOR_MIGRATION
+import app.grocery.list.domain.list.preview.Template
 import app.grocery.list.domain.search.EmojiAndCategoryId
 import app.grocery.list.domain.settings.BottomBarRoadmapStep
 import app.grocery.list.domain.settings.ProductTitleFormat
@@ -38,6 +39,8 @@ interface AppRepository {
     suspend fun setProductsEnabled(productIds: List<Int>, enabled: Boolean)
     suspend fun enableAllProducts()
     suspend fun disableAllProducts()
+    suspend fun templates(): List<Template>
+    suspend fun productTitles(templateId: Int): List<String>
 
     suspend fun runMigrations()
 

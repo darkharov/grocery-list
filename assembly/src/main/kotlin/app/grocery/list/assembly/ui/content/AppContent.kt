@@ -40,7 +40,7 @@ import app.grocery.list.final_.steps.finalSteps
 import app.grocery.list.product.input.form.productInputFormScreen
 import app.grocery.list.product.list.actions.bar.ProductListActionsBar
 import app.grocery.list.product.list.actions.screen.productListActionsScreen
-import app.grocery.list.product.list.preview.ProductListPreview
+import app.grocery.list.product.list.preview.ProductListPreviewScreen
 import app.grocery.list.product.list.preview.productListPreviewScreen
 import app.grocery.list.settings.Settings
 import app.grocery.list.settings.settingsAndChildScreens
@@ -59,7 +59,7 @@ internal fun AppContent(
     snackbars: ReceiveChannel<AppSnackbar>,
     modifier: Modifier = Modifier,
 ) {
-    val startRoute = ProductListPreview
+    val startRoute = ProductListPreviewScreen
     val navController = rememberNavController()
     val currentDestination by navController.currentBackStackEntryAsState()
     val snackbarHostState = remember { SnackbarHostState() }

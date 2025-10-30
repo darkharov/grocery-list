@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.CategoryAndProducts
 import app.grocery.list.domain.HandleProductListPostedUseCase
+import app.grocery.list.domain.format.ProductListSeparator
 import app.grocery.list.domain.format.ProductTitleFormatter
 import app.grocery.list.domain.format.printToString
 import app.grocery.list.storage.value.kotlin.get
@@ -92,11 +93,16 @@ class NotificationPublisher @Inject internal constructor(
         for (group in allProducts.chunked(maxItemsPerNotification).reversed()) {
             val groupKey = group.first().id
             val productIds = group.map { it.id }
-            val sortedGroup = group.sortedBy { it.emojiSearchResult != null }
+            val sortedGroup = group
+                .sortedBy { it.title.length }
+                .sortedBy { it.emojiSearchResult != null }
             val notification = notification(
                 groupKey = groupKey,
                 productIds = productIds,
-                contentTitle = formatter.printToString(sortedGroup),
+                contentTitle = formatter.printToString(
+                    products = sortedGroup,
+                    separator = ProductListSeparator.Notifications,
+                ),
             )
             notificationManager.notify(TYPE_PRODUCT, groupKey, notification)
         }

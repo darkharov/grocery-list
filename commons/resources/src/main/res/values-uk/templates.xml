@@ -192,4 +192,38 @@
         <item>{🕯️}Свічки|Свічі</item>
     </string-array>
 
+    <string-array name="ceaser_salad_with_chicken">
+        <item>Пекінська капуста</item>
+        <item>Помідори чері</item>
+        <item>Грудка куряча</item>
+        <item>Твердий сир</item>
+        <item>Білий хліб</item>
+        <item>Сіль</item>
+        <item>Оливкова олія</item>
+        <item>Перець чорний</item>
+        <item>Майонез</item>
+        <item>Часник</item>
+    </string-array>
+
+    <string-array name="greek_salad">
+        <item>Огірки 2шт</item>
+        <item>Помідори 5шт</item>
+        <item>Лимон 1шт</item>
+        <item>Червона цибуля 1шт</item>
+        <item>Болгарський перець 1шт</item>
+        <item>Маслини</item>
+        <item>Оливкова олія</item>
+        <item>Сир фета 200г</item>
+    </string-array>
+
+    <string-array name="fruits_and_honey">
+        <item>Виноград</item>
+        <item>Чорниця</item>
+        <item>Ківі</item>
+        <item>Лимон</item>
+        <item>Манго</item>
+        <item>Яблука</item>
+        <item>Мед</item>
+    </string-array>
+
 </resources>

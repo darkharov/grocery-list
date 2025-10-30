@@ -90,10 +90,8 @@ enum class ProductTitleFormatter {
 
 fun ProductTitleFormatter.printToString(
     products: List<Product>,
-    separator: String = ", ",
+    separator: ProductListSeparator,
 ): String =
-    products.joinToString(
-        separator = separator,
-    ) { product ->
+    products.joinToString(separator = separator.value) { product ->
         print(product).collectStringTitle()
     }

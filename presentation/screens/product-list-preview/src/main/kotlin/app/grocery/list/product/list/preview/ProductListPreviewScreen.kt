@@ -1,5 +1,6 @@
 package app.grocery.list.product.list.preview
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,14 +15,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -34,6 +39,7 @@ import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.elements.button.text.AppTextButton
 import app.grocery.list.commons.compose.elements.button.text.AppTextButtonProps
+import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialog
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
@@ -42,14 +48,14 @@ import app.grocery.list.product.list.preview.elements.ProductItem
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ProductListPreview
+data object ProductListPreviewScreen
 
 fun NavGraphBuilder.productListPreviewScreen(
     delegate: ProductListPreviewDelegate,
     navigation: ProductListPreviewNavigation,
     bottomBar: @Composable () -> Unit,
 ) {
-    composable<ProductListPreview> {
+    composable<ProductListPreviewScreen> {
         ProductListPreviewScreen(
             delegate = delegate,
             bottomBar = bottomBar,
@@ -66,6 +72,7 @@ private fun ProductListPreviewScreen(
 ) {
     val viewModel = hiltViewModel<ProductListPreviewViewModel>()
     val props by viewModel.props.collectAsStateWithLifecycle()
+    val dialog by viewModel.dialog().collectAsStateWithLifecycle()
     EventConsumer(
         viewModel = viewModel,
         navigation = navigation,
@@ -76,6 +83,27 @@ private fun ProductListPreviewScreen(
         bottomBar = bottomBar,
         callbacks = viewModel,
     )
+    OptionalDialog(
+        props = dialog,
+        callbacks = viewModel,
+    )
+}
+
+@Composable
+private fun OptionalDialog(
+    props: ProductListPreviewDialogProps?,
+    callbacks: ProductListPreviewCallbacks,
+) {
+    if (props != null) {
+        when (props) {
+            is ProductListPreviewDialogProps.ConfirmPastedProductsWrapper -> {
+                ConfirmPastedListDialog(
+                    props = props.dialog,
+                    callbacks = callbacks,
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -133,13 +161,19 @@ private fun Content(
             modifier = Modifier
                 .weight(1f),
         ) {
-            if (props.categories.isEmpty()) {
-                NoItemsMessage()
-            } else {
-                ListWithDividers(
-                    props = props,
-                    callbacks = callbacks,
-                )
+            when (props) {
+                is ProductListPreviewProps.Empty -> {
+                    ListEmptyAndTemplates(
+                        props = props,
+                        callbacks = callbacks,
+                    )
+                }
+                is ProductListPreviewProps.Items -> {
+                    ListWithDividers(
+                        props = props,
+                        callbacks = callbacks,
+                    )
+                }
             }
         }
         bottomBar()
@@ -147,23 +181,61 @@ private fun Content(
 }
 
 @Composable
-private fun NoItemsMessage(
+private fun ListEmptyAndTemplates(
+    props: ProductListPreviewProps.Empty,
+    callbacks: ProductListPreviewCallbacks,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
+            .padding(
+                horizontal = 16.dp + dimensionResource(R.dimen.margin_16_32_64),
+            )
             .fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
-        Text(
-            text = stringResource(R.string.list_is_empty),
-        )
+        Column {
+            val startPadding = 8.dp
+            Text(
+                text = stringResource(R.string.list_is_empty),
+                style = LocalAppTypography.current.label,
+                modifier = Modifier
+                    .padding(start = startPadding),
+            )
+            Spacer(
+                modifier = Modifier
+                    .height(16.dp),
+            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                for (template in props.templates) {
+                    Text(
+                        text = "+ ${template.title}",
+                        color = MaterialTheme.colorScheme.secondary,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .clickable {
+                                callbacks.onTemplateClick(
+                                    templateId = template.id,
+                                )
+                            }
+                            .padding(vertical = 6.dp)
+                            .padding(
+                                end = 12.dp,
+                                start = startPadding,
+                            ),
+                    )
+                }
+            }
+        }
     }
 }
 
 @Composable
 private fun ListWithDividers(
-    props: ProductListPreviewProps,
+    props: ProductListPreviewProps.Items,
     callbacks: ProductListPreviewCallbacks,
     modifier: Modifier = Modifier,
 ) {
@@ -190,7 +262,7 @@ private fun ListWithDividers(
 }
 
 private fun LazyListScope.items(
-    props: ProductListPreviewProps,
+    props: ProductListPreviewProps.Items,
     callbacks: ProductListPreviewCallbacks,
 ) {
     val enableAndDisableAll = props.enableAndDisableAll
@@ -200,39 +272,42 @@ private fun LazyListScope.items(
             callbacks = callbacks,
         )
     }
-    for ((index, category) in props.categories.withIndex()) {
-        if (index > 0) {
-            // I am afraid of dynamic paddings in lazy columns
+    for ((index, item) in props.items.withIndex()) {
+        val category = item.category
+        if (category != null) {
+            if (index > 0) {
+                // I am afraid of dynamic paddings in lazy columns
+                item(
+                    key = category.topOffsetKey,
+                    contentType = { "Category top offset" },
+                ) {
+                    Spacer(
+                        modifier = Modifier
+                            .height(26.dp),
+                    )
+                }
+            }
             item(
-                key = category.topOffsetKey,
-                contentType = { "Category top offset" },
+                key = category.key,
+                contentType = "Category",
             ) {
-                Spacer(
+                Text(
+                    text = category.title,
                     modifier = Modifier
-                        .height(26.dp),
+                        .padding(
+                            horizontal = dimensionResource(R.dimen.margin_16_32_64),
+                        )
+                        .padding(
+                            top = 6.dp,
+                            bottom = 6.dp,
+                        )
+                        .animateItem(),
+                    style = LocalAppTypography.current.header,
                 )
             }
         }
-        item(
-            key = category.key,
-            contentType = "Category",
-        ) {
-            Text(
-                text = category.title,
-                modifier = Modifier
-                    .padding(
-                        horizontal = dimensionResource(R.dimen.margin_16_32_64),
-                    )
-                    .padding(
-                        top = 6.dp,
-                        bottom = 6.dp,
-                    )
-                    .animateItem(),
-                style = LocalAppTypography.current.header,
-            )
-        }
         items(
-            items = category.products,
+            items = item.products,
             key = { it.key },
             contentType = { "Product" },
         ) { product ->
@@ -247,10 +322,12 @@ private fun LazyListScope.items(
 }
 
 private fun LazyListScope.enableAndDisableAll(
-    enableAndDisableAll: ProductListPreviewProps.EnableAndDisableAllState,
+    enableAndDisableAll: ProductListPreviewProps.Items.EnableAndDisableAll,
     callbacks: ProductListPreviewCallbacks,
 ) {
-    item {
+    item(
+        key = enableAndDisableAll.key,
+    ) {
         val buttonHorizontalPadding = 8.dp
         val buttonPaddingValues = PaddingValues(
             horizontal = buttonHorizontalPadding,
