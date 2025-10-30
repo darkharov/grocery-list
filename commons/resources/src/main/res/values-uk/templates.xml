@@ -16,7 +16,7 @@
         <item>{🌽}Кукурудза|Кукурудзи</item>
         <item>{🥥}Кокос</item>
         <item>{🍍}Ананас</item>
-        <item>{🫒}Оливки|Олива|Оливок</item>
+        <item>{🫒}Оливки|Олива|Оливок|Маслини</item>
         <item>{🥭}Манго</item>
         <item>{🍐}Груша|Груші</item>
         <item>{🥑}Авокадо</item>
@@ -75,7 +75,7 @@
         <item>Йогурт</item>
         <item>Кефір</item>
         <item>Маскарпоне</item>
-        <item>Сир фета</item>
+        <item>{◽}Сир фета</item>
         <item>Сметана</item>
     </string-array>
 
