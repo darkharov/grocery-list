@@ -1,5 +1,7 @@
 package app.grocery.list.domain
 
+import app.grocery.list.domain.format.ProductTitleFormatter
+import app.grocery.list.domain.internal.ONLY_FOR_MIGRATION
 import app.grocery.list.domain.search.EmojiAndCategoryId
 import app.grocery.list.domain.settings.BottomBarRoadmapStep
 import app.grocery.list.domain.settings.ProductTitleFormat
@@ -8,7 +10,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface AppRepository {
 
+    @Deprecated(ONLY_FOR_MIGRATION)
     val productTitleFormat: StorageValue<ProductTitleFormat>
+    val productTitleFormatter: StorageValue<ProductTitleFormatter>
     val clearNotificationsReminderEnabled: StorageValue<Boolean>
     val bottomBarRoadmapStep: StorageValue<BottomBarRoadmapStep>
     val recommendAppWhenSharingList: StorageValue<Boolean>
@@ -34,6 +38,8 @@ interface AppRepository {
     suspend fun setProductsEnabled(productIds: List<Int>, enabled: Boolean)
     suspend fun enableAllProducts()
     suspend fun disableAllProducts()
+
+    suspend fun runMigrations()
 
     enum class CategorizedProductsCriteria {
         All,

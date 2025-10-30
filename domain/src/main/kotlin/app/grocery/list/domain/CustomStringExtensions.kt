@@ -1,4 +1,4 @@
-package app.grocery.list.commons.format
+package app.grocery.list.domain
 
 fun String.ellipsize(maxLength: Int): String =
     if (length <= maxLength) {

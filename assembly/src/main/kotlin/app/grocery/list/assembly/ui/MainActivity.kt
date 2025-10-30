@@ -18,8 +18,8 @@ import app.grocery.list.assembly.BuildConfig
 import app.grocery.list.assembly.ui.content.AppContent
 import app.grocery.list.assembly.ui.content.AppContentDelegate
 import app.grocery.list.commons.compose.theme.ThemeUtil
-import app.grocery.list.commons.format.SharingStringFormatter
 import app.grocery.list.domain.Product
+import app.grocery.list.domain.format.SharingStringFormatter
 import app.grocery.list.final_.steps.FinalSteps
 import app.grocery.list.notifications.NotificationPublisher
 import commons.android.PermissionUtil

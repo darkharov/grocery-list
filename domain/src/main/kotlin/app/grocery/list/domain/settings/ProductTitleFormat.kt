@@ -1,8 +1,11 @@
 package app.grocery.list.domain.settings
 
-// Do not reorder. The 'ordinal' field is used as a key for read/write operations
+import app.grocery.list.domain.internal.ONLY_FOR_MIGRATION
+
+@Deprecated(ONLY_FOR_MIGRATION)
 enum class ProductTitleFormat {
     WithoutEmoji,
     EmojiAndFullText,
     EmojiAndAdditionalDetail,
+    Null,
 }

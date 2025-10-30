@@ -1,4 +1,4 @@
-package app.grocery.list.commons.format
+package app.grocery.list.domain.format
 
 import app.grocery.list.domain.Product
 import javax.inject.Inject

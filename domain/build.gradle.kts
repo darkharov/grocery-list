@@ -21,4 +21,5 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.joda.time)
     api(project(":commons:storage-value:kotlin"))
+    testImplementation(libs.junit)
 }

@@ -1,7 +1,8 @@
-package app.grocery.list.commons.format
+package format
 
 import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
+import app.grocery.list.domain.format.SharingStringFormatter
 import app.grocery.list.domain.search.EmojiAndCategoryId
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
@@ -9,6 +10,7 @@ import org.junit.Test
 internal class SharingStringFormatterTest {
 
     private val productTitle = "Apple 5 pcs"
+    private val productTitleWithPostfix = "$productTitle\n--------\n"
 
     private val emojiAndCategoryId =
         EmojiAndCategoryId(
@@ -50,7 +52,7 @@ internal class SharingStringFormatterTest {
         )
         val formatter = SharingStringFormatter(ContractMock(emojiAndCategoryId))
         val actualFormatWithPostfix = formatter.toSharingString(listOf(prototype), recommendUsingThisApp = true)
-        assert(actualFormatWithPostfix == productTitle)
+        assert(actualFormatWithPostfix == productTitleWithPostfix)
 
         val actualFormat = formatter.toSharingString(listOf(prototype), recommendUsingThisApp = false)
         assert(actualFormat == productTitle)

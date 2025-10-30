@@ -4,9 +4,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import app.grocery.list.commons.format.ProductTitleFormatter
 import app.grocery.list.domain.CategoryAndProducts
 import app.grocery.list.domain.Product
+import app.grocery.list.domain.format.ProductTitleFormatter
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -44,7 +44,7 @@ internal class ProductListMapper @AssistedInject constructor(
             }
             .toImmutableList()
 
-    private fun ProductTitleFormatter.FormattingResult.collectTitle(): AnnotatedString =
+    private fun ProductTitleFormatter.Result.collectTitle(): AnnotatedString =
         buildAnnotatedString {
             if (!(emoji.isNullOrBlank())) {
                 append(emoji)

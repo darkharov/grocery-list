@@ -14,11 +14,12 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import app.grocery.list.commons.format.GetProductTitleFormatter
-import app.grocery.list.commons.format.ProductTitleFormatter
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.CategoryAndProducts
 import app.grocery.list.domain.HandleProductListPostedUseCase
+import app.grocery.list.domain.format.ProductTitleFormatter
+import app.grocery.list.domain.format.printToString
+import app.grocery.list.storage.value.kotlin.get
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -32,7 +33,6 @@ class NotificationPublisher @Inject internal constructor(
     private val context: Context,
     private val repository: AppRepository,
     private val notificationManager: NotificationManagerCompat,
-    private val getProductTitleFormatter: GetProductTitleFormatter,
     private val handleProductListPublished: HandleProductListPostedUseCase,
 ) {
     init {
@@ -68,9 +68,9 @@ class NotificationPublisher @Inject internal constructor(
     private fun post() {
         ProcessLifecycleOwner.get().lifecycleScope.launch(Dispatchers.IO) {
             post(
-                formatter = getProductTitleFormatter
-                    .execute()
-                    .first(),
+                formatter = repository
+                    .productTitleFormatter
+                    .get(),
                 categorizedProducts = repository
                     .categorizedProducts(
                         criteria = AppRepository.CategorizedProductsCriteria.EnabledOnly,

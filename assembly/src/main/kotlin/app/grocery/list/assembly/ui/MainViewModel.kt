@@ -4,11 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.assembly.ui.content.AppEvent
 import app.grocery.list.assembly.ui.content.AppSnackbar
-import app.grocery.list.commons.format.ProductTitleFormatter
-import app.grocery.list.commons.format.ellipsize
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.Product
-import app.grocery.list.domain.settings.ProductTitleFormat
+import app.grocery.list.domain.ellipsize
+import app.grocery.list.domain.format.ProductTitleFormatter
 import app.grocery.list.storage.value.kotlin.get
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -24,7 +23,6 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: AppRepository,
-    private val productTitleFormatterFactory: ProductTitleFormatter.Factory,
 ) : ViewModel() {
 
     private val appEvents = Channel<AppEvent>(capacity = Channel.UNLIMITED)
@@ -37,15 +35,15 @@ class MainViewModel @Inject constructor(
 
     val hasEmojiIfEnoughSpace =
         repository
-            .productTitleFormat
+            .productTitleFormatter
             .observe()
             .map {
                 when (it) {
-                    ProductTitleFormat.WithoutEmoji -> {
+                    ProductTitleFormatter.WithoutEmoji -> {
                         false
                     }
-                    ProductTitleFormat.EmojiAndFullText,
-                    ProductTitleFormat.EmojiAndAdditionalDetail -> {
+                    ProductTitleFormatter.EmojiAndFullText,
+                    ProductTitleFormatter.EmojiAndAdditionalDetail -> {
                         true
                     }
                 }
@@ -75,8 +73,7 @@ class MainViewModel @Inject constructor(
     fun showUndoProductDeletionSnackbar(product: Product) {
         val event = AppSnackbar.UndoDeletionProduct(
             product = product,
-            formattedTitle = productTitleFormatterFactory
-                .create(ProductTitleFormat.WithoutEmoji)
+            formattedTitle = ProductTitleFormatter.WithoutEmoji
                 .print(product)
                 .collectStringTitle()
                 .ellipsize(maxLength = 10),

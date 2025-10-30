@@ -9,17 +9,22 @@ import app.grocery.list.domain.CategoryAndProducts
 import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.EnabledAndDisabledProducts
 import app.grocery.list.domain.Product
+import app.grocery.list.domain.format.ProductTitleFormatter
+import app.grocery.list.domain.internal.ONLY_FOR_MIGRATION
 import app.grocery.list.domain.search.EmojiAndCategoryId
 import app.grocery.list.domain.settings.BottomBarRoadmapStep
 import app.grocery.list.domain.settings.ProductTitleFormat
 import app.grocery.list.storage.value.android.StorageValueDelegates
+import app.grocery.list.storage.value.kotlin.get
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 @Singleton
 internal class AppRepositoryImpl @Inject constructor(
@@ -31,7 +36,7 @@ internal class AppRepositoryImpl @Inject constructor(
     private val categoryDao: CategoryDao,
 ) : AppRepository {
 
-    override val productTitleFormat by delegates.enum(defaultValue = ProductTitleFormat.EmojiAndFullText)
+    override val productTitleFormatter by delegates.enum(defaultValue = ProductTitleFormatter.EmojiAndFullText)
     override val clearNotificationsReminderEnabled by delegates.boolean(defaultValue = true)
     override val bottomBarRoadmapStep by delegates.enum(defaultValue = BottomBarRoadmapStep.Initial)
     override val recommendAppWhenSharingList by delegates.boolean(defaultValue = true)
@@ -153,4 +158,22 @@ internal class AppRepositoryImpl @Inject constructor(
                     disabled = products.filterNot { it.enabled },
                 )
             }
+
+    @Deprecated(ONLY_FOR_MIGRATION)
+    override val productTitleFormat by delegates.enum(defaultValue = ProductTitleFormat.EmojiAndFullText)
+
+    override suspend fun runMigrations() {
+        withContext(Dispatchers.IO) {
+            migrateProductTitleFormatter()
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private suspend fun AppRepositoryImpl.migrateProductTitleFormatter() {
+        val oldValue = productTitleFormat.get()
+        if (oldValue != ProductTitleFormat.Null) {
+            productTitleFormatter.set(ProductTitleFormatter.entries[oldValue.ordinal])
+            productTitleFormat.set(ProductTitleFormat.Null)
+        }
+    }
 }

@@ -82,7 +82,6 @@ dependencies {
     implementation(project(":commons:resources"))
     implementation(project(":commons:compose"))
     implementation(project(":commons:android"))
-    implementation(project(":commons:format"))
     implementation(project(":presentation:notifications"))
     implementation(project(":presentation:screens:product-input-form"))
     implementation(project(":presentation:screens:product-list-preview"))
@@ -108,4 +107,5 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics.ndk)
+    implementation(libs.androidx.lifecycle.process)
 }

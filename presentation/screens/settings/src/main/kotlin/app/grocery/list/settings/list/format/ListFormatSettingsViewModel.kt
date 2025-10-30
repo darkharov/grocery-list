@@ -2,8 +2,8 @@ package app.grocery.list.settings.list.format
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.grocery.list.commons.format.GetProductTitleFormatter
 import app.grocery.list.domain.AppRepository
+import app.grocery.list.domain.format.printToString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 internal class ListFormatSettingsViewModel @Inject constructor(
-    getProductTitleFormatter: GetProductTitleFormatter,
     private val repository: AppRepository,
     private val productTitleFormatMapper: ProductTitleFormatMapper,
 ) : ViewModel(),
@@ -22,12 +21,11 @@ internal class ListFormatSettingsViewModel @Inject constructor(
 
     val props =
         combine(
-            repository.productTitleFormat.observe(),
+            repository.productTitleFormatter.observe(),
             repository.sampleProducts(),
-            getProductTitleFormatter.execute(),
-        ) { format, sampleProducts, formatter ->
+        ) { formatter, sampleProducts ->
             ListFormatSettingsProps(
-                productTitleFormat = productTitleFormatMapper.toPresentation(format),
+                productTitleFormat = productTitleFormatMapper.toPresentation(formatter),
                 sampleOfNotificationTitle = formatter.printToString(sampleProducts),
             )
         }
@@ -39,7 +37,7 @@ internal class ListFormatSettingsViewModel @Inject constructor(
 
     override fun onProductTitleFormatSelected(option: ListFormatSettingsProps.ProductTitleFormat) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.productTitleFormat.set(
+            repository.productTitleFormatter.set(
                 productTitleFormatMapper.toDomain(option)
             )
         }

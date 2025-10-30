@@ -2,12 +2,12 @@ package app.grocery.list.product.list.actions
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.grocery.list.commons.format.GetProductTitleFormatter
-import app.grocery.list.commons.format.ParseProductListUseCase
-import app.grocery.list.commons.format.SharingStringFormatter
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.EnabledAndDisabledProducts
 import app.grocery.list.domain.Product
+import app.grocery.list.domain.format.ParseProductListUseCase
+import app.grocery.list.domain.format.SharingStringFormatter
+import app.grocery.list.domain.format.printToString
 import app.grocery.list.product.list.actions.dialog.ProductListActionsDialogProps
 import app.grocery.list.storage.value.kotlin.get
 import commons.android.stateIn
@@ -28,7 +28,6 @@ internal class ProductListActionsViewModel @Inject constructor(
     private val repository: AppRepository,
     private val sharingStringFormatter: SharingStringFormatter,
     private val parseProductList: ParseProductListUseCase,
-    private val getProductTitleFormatter: GetProductTitleFormatter,
 ) : ViewModel(),
     ProductListActionsCallbacks {
 
@@ -140,7 +139,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     }
 
     private suspend fun handlePastedProducts(products: List<Product>) {
-        val formatter = getProductTitleFormatter.execute().first()
+        val formatter = repository.productTitleFormatter.get()
         val titlesAsString = formatter.printToString(products, separator = "\n")
         showConfirmListDialog(
             products = products,
