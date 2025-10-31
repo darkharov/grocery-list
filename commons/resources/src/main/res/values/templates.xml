@@ -208,12 +208,12 @@
     <string-array name="greek_salad">
         <item>2 Cucumbers</item>
         <item>5 Tomatoes</item>
-        <item>1 Lemon</item>
-        <item>1 Red onion</item>
-        <item>1 bell pepper</item>
+        <item>Lemon</item>
+        <item>Red onion</item>
+        <item>Bell pepper</item>
         <item>Olives</item>
         <item>Olive oil</item>
-        <item>200g feta cheese</item>
+        <item>200g of feta cheese</item>
     </string-array>
 
     <string-array name="fruits_and_honey">
