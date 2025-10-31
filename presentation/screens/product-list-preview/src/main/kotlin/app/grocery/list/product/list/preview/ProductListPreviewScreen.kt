@@ -217,9 +217,7 @@ private fun ListEmptyAndTemplates(
                         modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
                             .clickable {
-                                callbacks.onTemplateClick(
-                                    templateId = template.id,
-                                )
+                                callbacks.onTemplateClick(template)
                             }
                             .padding(vertical = 6.dp)
                             .padding(

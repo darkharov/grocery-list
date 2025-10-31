@@ -2,7 +2,9 @@ package app.grocery.list.product.list.actions
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogMapper
+import app.grocery.list.commons.compose.R
+import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogProps
+import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.EnabledAndDisabledProducts
 import app.grocery.list.domain.Product
@@ -29,7 +31,6 @@ internal class ProductListActionsViewModel @Inject constructor(
     private val repository: AppRepository,
     private val sharingStringFormatter: SharingStringFormatter,
     private val parseProductList: ParseProductListUseCase,
-    private val confirmPastedListDialogMapper: ConfirmPastedListDialogMapper,
 ) : ViewModel(),
     ProductListActionsCallbacks {
 
@@ -136,7 +137,15 @@ internal class ProductListActionsViewModel @Inject constructor(
                 )
                 .onSuccess { products ->
                     dialog.value = ProductListActionsDialogProps.ConfirmPastedListWrapper(
-                        confirmPastedListDialogMapper.transform(products)
+                        ConfirmPastedListDialogProps(
+                            title = StringValue.PluralResId(
+                                resId = R.plurals.pattern_products_found,
+                                count = products.items.size,
+                                useCountAsArgument = true,
+                            ),
+                            text = products.formattedString,
+                            productList = products.items,
+                        )
                     )
                 }
                 .onFailure {

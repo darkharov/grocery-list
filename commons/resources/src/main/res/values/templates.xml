@@ -195,6 +195,7 @@
     <string-array name="ceaser_salad_with_chicken">
         <item>Chinese cabbage</item>
         <item>Cherry tomatoes</item>
+        <item>Garlic</item>
         <item>Chicken breast</item>
         <item>Hard cheese</item>
         <item>White bread</item>
@@ -202,7 +203,6 @@
         <item>Olive oil</item>
         <item>Black pepper</item>
         <item>Mayonnaise</item>
-        <item>Garlic</item>
     </string-array>
 
     <string-array name="greek_salad">
@@ -216,7 +216,7 @@
         <item>200g of feta cheese</item>
     </string-array>
 
-    <string-array name="fruits_and_honey">
+    <string-array name="berries_fruits_and_honey">
         <item>Grapes</item>
         <item>Blueberries</item>
         <item>Kiwi</item>

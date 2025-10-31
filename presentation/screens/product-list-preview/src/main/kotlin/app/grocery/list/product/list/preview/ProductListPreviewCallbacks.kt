@@ -12,7 +12,7 @@ internal interface ProductListPreviewCallbacks :
     ConfirmPastedListDialogCallbacks {
     fun onEnableAll()
     fun onDisableEnableAll()
-    fun onTemplateClick(templateId: Int)
+    fun onTemplateClick(template: ProductListPreviewProps.Empty.Template)
 }
 
 internal object ProductListPreviewCallbacksMock :
@@ -21,5 +21,5 @@ internal object ProductListPreviewCallbacksMock :
     ConfirmPastedListDialogCallbacks by ConfirmPastedListDialogCallbacksMock {
     override fun onEnableAll() {}
     override fun onDisableEnableAll() {}
-    override fun onTemplateClick(templateId: Int) {}
+    override fun onTemplateClick(template: ProductListPreviewProps.Empty.Template) {}
 }

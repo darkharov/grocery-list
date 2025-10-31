@@ -2,7 +2,8 @@ package app.grocery.list.product.list.preview
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogMapper
+import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogProps
+import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.Product
 import app.grocery.list.domain.format.ProductListSeparator
@@ -25,7 +26,6 @@ internal class ProductListPreviewViewModel @Inject constructor(
     getPreview: GetProductListPreviewUseCase,
     private val repository: AppRepository,
     private val getTemplateProducts: GetFormattedTemplateProductsUseCase,
-    private val confirmPastedListDialogMapper: ConfirmPastedListDialogMapper,
 ) : ViewModel(),
     ProductListPreviewCallbacks {
 
@@ -71,14 +71,18 @@ internal class ProductListPreviewViewModel @Inject constructor(
         }
     }
 
-    override fun onTemplateClick(templateId: Int) {
+    override fun onTemplateClick(template: ProductListPreviewProps.Empty.Template) {
         viewModelScope.launch(Dispatchers.IO) {
             val products = getTemplateProducts.execute(
-                templateId = templateId,
+                templateId = template.id,
                 separator = ProductListSeparator.Dialog,
             )
             dialog.value = ProductListPreviewDialogProps.ConfirmPastedProductsWrapper(
-                confirmPastedListDialogMapper.transform(products)
+                ConfirmPastedListDialogProps(
+                    title = StringValue.StringWrapper(template.title),
+                    text = products.formattedString,
+                    productList = products.items,
+                )
             )
         }
     }

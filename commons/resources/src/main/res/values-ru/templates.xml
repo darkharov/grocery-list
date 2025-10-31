@@ -195,6 +195,7 @@
     <string-array name="ceaser_salad_with_chicken">
         <item>Пекинская капуста</item>
         <item>Помидоры черри</item>
+        <item>Чеснок</item>
         <item>Грудка куриная</item>
         <item>Твёрдый сыр</item>
         <item>Белый хлеб</item>
@@ -202,7 +203,6 @@
         <item>Оливковое масло</item>
         <item>Перец черный</item>
         <item>Майонез</item>
-        <item>Чеснок</item>
     </string-array>
 
     <string-array name="greek_salad">
@@ -216,7 +216,7 @@
         <item>Сыр фета 200г</item>
     </string-array>
 
-    <string-array name="fruits_and_honey">
+    <string-array name="berries_fruits_and_honey">
         <item>Виноград</item>
         <item>Голубика</item>
         <item>Киви</item>

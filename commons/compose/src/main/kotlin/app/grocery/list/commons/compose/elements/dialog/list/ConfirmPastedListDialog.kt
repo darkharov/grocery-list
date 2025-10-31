@@ -38,11 +38,7 @@ fun ConfirmPastedListDialog(
 ) {
     AppBaseDialog(
         icon = rememberVectorPainter(AppIcons.paste),
-        text = StringValue.PluralResId(
-            resId = R.plurals.pattern_products_found,
-            count = props.numberOfFoundProducts,
-            useCountAsArgument = true,
-        ),
+        text = props.title,
         textStyle = LocalAppTypography.current.dialogTitle,
         onDismiss = {
             callbacks.onDialogDismiss()
@@ -70,7 +66,7 @@ fun ConfirmPastedListDialog(
                     .verticalScroll(state)
             ) {
                 Text(
-                    text = props.titlesAsString,
+                    text = props.text,
                     modifier = Modifier
                         .widthIn(max = 180.dp),
                 )
