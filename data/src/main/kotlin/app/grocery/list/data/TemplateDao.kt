@@ -34,17 +34,17 @@ class TemplateDao @Inject constructor(
         @ArrayRes
         val productTitles: Int,
     ) {
-        FruitsAndHoney(
-            titleId = R.string.fruits_and_honey,
-            productTitles = R.array.fruits_and_honey,
+        CesarSaladWithChicken(
+            titleId = R.string.ceaser_salad_with_chicken,
+            productTitles = R.array.ceaser_salad_with_chicken,
         ),
         GreekSalad(
             titleId = R.string.greek_salad,
             productTitles = R.array.greek_salad,
         ),
-        CesarSaladWithChicken(
-            titleId = R.string.ceaser_salad_with_chicken,
-            productTitles = R.array.ceaser_salad_with_chicken,
+        FruitsAndHoney(
+            titleId = R.string.berries_fruits_and_honey,
+            productTitles = R.array.berries_fruits_and_honey,
         ),
         ;
     }
