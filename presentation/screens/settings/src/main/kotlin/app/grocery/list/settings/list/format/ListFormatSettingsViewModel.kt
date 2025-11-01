@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.domain.SettingsRepository
 import app.grocery.list.domain.format.ProductListSeparator
-import app.grocery.list.domain.format.printToString
+import app.grocery.list.domain.format.ProductTitleFormatter
 import app.grocery.list.domain.product.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -30,9 +30,9 @@ internal class ListFormatSettingsViewModel @Inject constructor(
             ListFormatSettingsProps(
                 productTitleFormat = productTitleFormatMapper.toPresentation(formatter),
                 sampleOfNotificationTitle = formatter
-                    .printToString(
+                    .print(
                         products = sampleProducts,
-                        separator = ProductListSeparator.Notifications,
+                        separator = ProductTitleFormatter.ProductListSeparator.Notifications,
                     ),
             )
         }

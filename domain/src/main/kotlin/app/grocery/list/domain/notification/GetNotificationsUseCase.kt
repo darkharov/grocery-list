@@ -3,7 +3,6 @@ package app.grocery.list.domain.notification
 import app.grocery.list.domain.SettingsRepository
 import app.grocery.list.domain.format.ProductListSeparator
 import app.grocery.list.domain.format.ProductTitleFormatter
-import app.grocery.list.domain.format.printToString
 import app.grocery.list.domain.product.CategoryAndProducts
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
@@ -62,7 +61,7 @@ class GetNotificationsUseCase @Inject internal constructor(
         return NotificationContent(
             groupKey = groupKey,
             productIds = productIds,
-            formattedProductTitles = formatter.printToString(
+            formattedProductTitles = formatter.print(
                 products = sortedGroup,
                 separator = ProductListSeparator.Notifications,
             ),

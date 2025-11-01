@@ -2,7 +2,6 @@ package app.grocery.list.domain.sharing
 
 import app.grocery.list.domain.SettingsRepository
 import app.grocery.list.domain.format.ProductListSeparator
-import app.grocery.list.domain.format.printToString
 import app.grocery.list.domain.product.Product
 import app.grocery.list.storage.value.kotlin.get
 import javax.inject.Inject
@@ -35,7 +34,7 @@ class ParseProductListUseCase @Inject internal constructor(
                 formattedString = settingsRepository
                     .productTitleFormatter
                     .get()
-                    .printToString(products, separator),
+                    .print(products, separator),
             )
         )
 

@@ -50,6 +50,14 @@ enum class ProductTitleFormatter {
 
     abstract fun print(product: Product): Result
 
+    fun print(
+        products: List<Product>,
+        separator: ProductListSeparator,
+    ): String =
+        products.joinToString(separator = separator.value) { product ->
+            print(product).collectStringTitle()
+        }
+
     data class Result(
         val emoji: String?,
         val title: String,
@@ -85,11 +93,3 @@ enum class ProductTitleFormatter {
         }
     }
 }
-
-fun ProductTitleFormatter.printToString(
-    products: List<Product>,
-    separator: ProductListSeparator,
-): String =
-    products.joinToString(separator = separator.value) { product ->
-        print(product).collectStringTitle()
-    }
