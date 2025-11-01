@@ -1,6 +1,6 @@
 package app.grocery.list.product.input.form
 
-import app.grocery.list.domain.EmojiSearchResult
+import app.grocery.list.domain.product.EmojiSearchResult
 import javax.inject.Inject
 import javax.inject.Singleton
 

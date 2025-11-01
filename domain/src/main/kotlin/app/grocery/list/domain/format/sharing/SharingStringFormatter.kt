@@ -1,12 +1,12 @@
 package app.grocery.list.domain.format.sharing
 
-import app.grocery.list.domain.Product
-import app.grocery.list.domain.search.EmojiAndCategoryId
+import app.grocery.list.domain.product.EmojiAndCategoryId
+import app.grocery.list.domain.product.Product
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class SharingStringFormatter @Inject constructor(
+class SharingStringFormatter @Inject constructor(
     private val contract: Contract,
 ) {
     suspend fun parse(sharingString: String): Result<List<Product>> {

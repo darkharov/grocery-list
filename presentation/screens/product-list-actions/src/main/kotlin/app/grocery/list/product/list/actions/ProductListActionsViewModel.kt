@@ -6,11 +6,12 @@ import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogProps
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.domain.AppRepository
-import app.grocery.list.domain.EnabledAndDisabledProducts
-import app.grocery.list.domain.Product
 import app.grocery.list.domain.format.ProductListSeparator
 import app.grocery.list.domain.format.sharing.ParseProductListUseCase
 import app.grocery.list.domain.format.sharing.ShareProductListUseCase
+import app.grocery.list.domain.product.EnabledAndDisabledProducts
+import app.grocery.list.domain.product.Product
+import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.product.list.actions.dialog.ProductListActionsDialogProps
 import app.grocery.list.storage.value.kotlin.get
 import commons.android.stateIn
@@ -28,7 +29,8 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 internal class ProductListActionsViewModel @Inject constructor(
-    private val repository: AppRepository,
+    private val productRepository: ProductRepository,
+    private val appRepository: AppRepository,
     private val shareProductList: ShareProductListUseCase,
     private val parseProductList: ParseProductListUseCase,
 ) : ViewModel(),
@@ -40,9 +42,9 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     val props =
         combine(
-            repository.bottomBarRoadmapStep.observe(),
-            repository.numberOfProducts(),
-            repository.atLeastOneProductEnabled(),
+            appRepository.bottomBarRoadmapStep.observe(),
+            productRepository.numberOfProducts(),
+            productRepository.atLeastOneProductEnabled(),
             loadingListToShare,
         ) {
                 bottomBarRoadMapStep,
@@ -61,7 +63,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     override fun onClearListConfirmed() {
         viewModelScope.launch(Dispatchers.IO) {
             dialog.value = null
-            repository.clearProducts()
+            productRepository.clearProducts()
         }
     }
 
@@ -79,7 +81,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     override fun onEnableAllAndStartShopping() {
         dialog.value = null
         viewModelScope.launch(Dispatchers.IO) {
-            repository.enableAllProducts()
+            productRepository.enableAllProducts()
             events.trySend(Event.OnStartShopping)
         }
     }
@@ -100,7 +102,7 @@ internal class ProductListActionsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             dialog.value = ProductListActionsDialogProps.ConfirmSharing(
                 numberOfProducts = products.size,
-                recommendUsingThisApp = repository.recommendAppWhenSharingList.get(),
+                recommendUsingThisApp = appRepository.recommendAppWhenSharingList.get(),
                 payload = products,
             )
         }
@@ -120,7 +122,7 @@ internal class ProductListActionsViewModel @Inject constructor(
         val recommendUsingThisApp = !(dialog.recommendUsingThisApp)
         this.dialog.value = dialog.copy(recommendUsingThisApp = recommendUsingThisApp)
         viewModelScope.launch(Dispatchers.IO) {
-            repository.recommendAppWhenSharingList.set(recommendUsingThisApp)
+            appRepository.recommendAppWhenSharingList.set(recommendUsingThisApp)
         }
     }
 
@@ -156,7 +158,7 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     override fun onPasteProductsConfirmed(products: List<Product>) {
         viewModelScope.launch(Dispatchers.IO) {
-            val numberOfAddedProducts = repository.numberOfProducts().first()
+            val numberOfAddedProducts = productRepository.numberOfProducts().first()
             if (numberOfAddedProducts == 0) {
                 addProducts(products)
             } else {
@@ -169,7 +171,7 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     private fun addProducts(products: List<Product>) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.putProducts(products)
+            productRepository.putProducts(products)
             dialog.value = ProductListActionsDialogProps.ProductSuccessfullyAdded(
                 count = products.size,
             )
@@ -178,8 +180,8 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     override fun onReplaceProductsBy(productList: List<Product>) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.clearProducts()
-            repository.putProducts(productList)
+            productRepository.clearProducts()
+            productRepository.putProducts(productList)
             dialog.value = ProductListActionsDialogProps.ProductSuccessfullyAdded(
                 count = productList.size,
             )
@@ -225,7 +227,7 @@ internal class ProductListActionsViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            val products = repository
+            val products = productRepository
                 .enabledAndDisabledProducts()
                 .first()
 

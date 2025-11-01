@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import app.grocery.list.domain.AppRepository
+import app.grocery.list.domain.product.ProductRepository
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 internal class NotificationDismissReceiver : BroadcastReceiver() {
 
-    @Inject lateinit var repository: AppRepository
+    @Inject lateinit var repository: ProductRepository
 
     override fun onReceive(context: Context, intent: Intent) {
         ProcessLifecycleOwner

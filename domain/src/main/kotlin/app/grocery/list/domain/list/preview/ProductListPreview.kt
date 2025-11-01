@@ -1,7 +1,7 @@
 package app.grocery.list.domain.list.preview
 
-import app.grocery.list.domain.Product
 import app.grocery.list.domain.format.ProductTitleFormatter
+import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.template.Template
 
 sealed class ProductListPreview {

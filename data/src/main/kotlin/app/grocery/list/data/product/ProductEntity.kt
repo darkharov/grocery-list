@@ -1,10 +1,11 @@
-package app.grocery.list.data.db
+package app.grocery.list.data.product
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import app.grocery.list.domain.EmojiSearchResult
-import app.grocery.list.domain.Product
+import app.grocery.list.data.db.SqlAffixes
+import app.grocery.list.domain.product.EmojiSearchResult
+import app.grocery.list.domain.product.Product
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton

@@ -1,7 +1,7 @@
 package app.grocery.list.assembly.ui.content
 
 import androidx.compose.runtime.Immutable
-import app.grocery.list.domain.Product
+import app.grocery.list.domain.product.Product
 
 @Immutable
 sealed class AppSnackbar {

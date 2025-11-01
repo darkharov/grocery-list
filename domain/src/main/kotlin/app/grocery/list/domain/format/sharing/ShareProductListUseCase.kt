@@ -1,6 +1,6 @@
 package app.grocery.list.domain.format.sharing
 
-import app.grocery.list.domain.Product
+import app.grocery.list.domain.product.Product
 import javax.inject.Inject
 import javax.inject.Singleton
 

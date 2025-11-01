@@ -1,10 +1,10 @@
 package app.grocery.list.domain.format.sharing
 
 import app.grocery.list.domain.AppRepository
-import app.grocery.list.domain.Product
 import app.grocery.list.domain.format.FormattedProducts
 import app.grocery.list.domain.format.ProductListSeparator
 import app.grocery.list.domain.format.printToString
+import app.grocery.list.domain.product.Product
 import app.grocery.list.storage.value.kotlin.get
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,7 +12,7 @@ import javax.inject.Singleton
 @Suppress("DEPRECATION")
 @Singleton
 class ParseProductListUseCase @Inject internal constructor(
-    private val repository: AppRepository,
+    private val appRepository: AppRepository,
     private val formatter: SharingStringFormatter,
     private val legacyFormatter: LegacySharingStringFormatter,
 ) {
@@ -33,7 +33,7 @@ class ParseProductListUseCase @Inject internal constructor(
         Result.success(
             FormattedProducts(
                 originalProducts = products,
-                formattedString = repository
+                formattedString = appRepository
                     .productTitleFormatter
                     .get()
                     .printToString(products, separator),

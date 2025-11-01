@@ -1,6 +1,6 @@
 package app.grocery.list.domain.format
 
-import app.grocery.list.domain.Product
+import app.grocery.list.domain.product.Product
 
 /**
  * ATTENTION! In case of repackaging/reordering, you need to add a migration.

@@ -5,9 +5,10 @@ import androidx.lifecycle.viewModelScope
 import app.grocery.list.assembly.ui.content.AppEvent
 import app.grocery.list.assembly.ui.content.AppSnackbar
 import app.grocery.list.domain.AppRepository
-import app.grocery.list.domain.Product
 import app.grocery.list.domain.ellipsize
 import app.grocery.list.domain.format.ProductTitleFormatter
+import app.grocery.list.domain.product.Product
+import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.storage.value.kotlin.get
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -22,19 +23,20 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repository: AppRepository,
+    private val appRepository: AppRepository,
+    private val productRepository: ProductRepository,
 ) : ViewModel() {
 
     private val appEvents = Channel<AppEvent>(capacity = Channel.UNLIMITED)
     private val snackbars = Channel<AppSnackbar>(capacity = Channel.UNLIMITED)
 
     val numberOfEnabledProducts =
-        repository
+        productRepository
             .numberOfEnabledProducts()
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     val hasEmojiIfEnoughSpace =
-        repository
+        appRepository
             .productTitleFormatter
             .observe()
             .map {
@@ -61,7 +63,7 @@ class MainViewModel @Inject constructor(
     fun notifyPushNotificationsGranted() {
         viewModelScope.launch(Dispatchers.IO) {
             progress.value = true
-            val enabled = repository.clearNotificationsReminderEnabled.get()
+            val enabled = appRepository.clearNotificationsReminderEnabled.get()
             val event = AppEvent.PushNotificationsGranted(
                 clearNotificationsReminderEnabled = enabled
             )
@@ -83,7 +85,7 @@ class MainViewModel @Inject constructor(
 
     fun undoProductDeletion(product: Product) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.putProduct(product)
+            productRepository.putProduct(product)
         }
     }
 }

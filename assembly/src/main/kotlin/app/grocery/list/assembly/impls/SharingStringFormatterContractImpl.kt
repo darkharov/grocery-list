@@ -2,9 +2,9 @@ package app.grocery.list.assembly.impls
 
 import android.content.Context
 import app.grocery.list.assembly.R
-import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.format.sharing.SharingStringFormatter
-import app.grocery.list.domain.search.EmojiAndCategoryId
+import app.grocery.list.domain.product.EmojiAndCategoryId
+import app.grocery.list.domain.product.ProductRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,7 +13,7 @@ import javax.inject.Singleton
 class SharingStringFormatterContractImpl @Inject constructor(
     @ApplicationContext
     private val context: Context,
-    private val repository: AppRepository,
+    private val repository: ProductRepository,
 ) : SharingStringFormatter.Contract {
 
     override fun recommendationToUseThisApp(): String =

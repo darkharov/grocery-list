@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.format.ProductListSeparator
 import app.grocery.list.domain.format.printToString
+import app.grocery.list.domain.product.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -15,15 +16,16 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 internal class ListFormatSettingsViewModel @Inject constructor(
-    private val repository: AppRepository,
+    productRepository: ProductRepository,
+    private val appRepository: AppRepository,
     private val productTitleFormatMapper: ProductTitleFormatMapper,
 ) : ViewModel(),
     ListFormatSettingsCallbacks {
 
     val props =
         combine(
-            repository.productTitleFormatter.observe(),
-            repository.sampleProducts(),
+            appRepository.productTitleFormatter.observe(),
+            productRepository.sampleProducts(),
         ) { formatter, sampleProducts ->
             ListFormatSettingsProps(
                 productTitleFormat = productTitleFormatMapper.toPresentation(formatter),
@@ -42,7 +44,7 @@ internal class ListFormatSettingsViewModel @Inject constructor(
 
     override fun onProductTitleFormatSelected(option: ListFormatSettingsProps.ProductTitleFormat) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.productTitleFormatter.set(
+            appRepository.productTitleFormatter.set(
                 productTitleFormatMapper.toDomain(option)
             )
         }

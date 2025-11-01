@@ -2,10 +2,10 @@ package app.grocery.list.data.internal.di
 
 import android.content.Context
 import androidx.room.Room
-import app.grocery.list.data.CategoryDao
 import app.grocery.list.data.db.AppDatabase
-import app.grocery.list.data.db.DEFAULT_CATEGORY_ID
-import app.grocery.list.data.db.ProductDao
+import app.grocery.list.data.product.CategoryDao
+import app.grocery.list.data.product.DEFAULT_CATEGORY_ID
+import app.grocery.list.data.product.ProductDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

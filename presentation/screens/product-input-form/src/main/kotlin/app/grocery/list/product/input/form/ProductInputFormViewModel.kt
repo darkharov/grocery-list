@@ -4,10 +4,10 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.grocery.list.domain.AppRepository
-import app.grocery.list.domain.AtLeastOneProductJustAddedUseCase
-import app.grocery.list.domain.EmojiSearchResult
-import app.grocery.list.domain.Product
+import app.grocery.list.domain.product.AtLeastOneProductJustAddedUseCase
+import app.grocery.list.domain.product.EmojiSearchResult
+import app.grocery.list.domain.product.Product
+import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.product.input.form.elements.category.picker.CategoryMapper
 import app.grocery.list.product.input.form.elements.category.picker.CategoryPickerProps
 import app.grocery.list.product.input.form.elements.category.picker.CategoryProps
@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 internal class ProductInputFormViewModel @AssistedInject constructor(
     @Assisted
     private val productId: Int?,
-    private val repository: AppRepository,
+    private val repository: ProductRepository,
     private val categoryMapper: CategoryMapper,
     private val emojiSearchResultMapper: EmojiSearchResultMapper,
     atLeastOneProductJustAdded: AtLeastOneProductJustAddedUseCase,

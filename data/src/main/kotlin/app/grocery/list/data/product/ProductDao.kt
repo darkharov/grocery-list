@@ -1,4 +1,4 @@
-package app.grocery.list.data.db
+package app.grocery.list.data.product
 
 import androidx.room.Dao
 import androidx.room.Insert

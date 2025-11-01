@@ -2,7 +2,7 @@ package app.grocery.list.final_.steps
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.grocery.list.domain.AppRepository
+import app.grocery.list.domain.product.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class FinalStepsViewModel @Inject constructor(
-    private val repository: AppRepository,
+    private val repository: ProductRepository,
 ) : ViewModel() {
 
     private val events = Channel<Event>(

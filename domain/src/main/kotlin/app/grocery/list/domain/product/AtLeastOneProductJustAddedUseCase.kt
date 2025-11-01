@@ -1,4 +1,4 @@
-package app.grocery.list.domain
+package app.grocery.list.domain.product
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.takeWhile
 
 @Singleton
 class AtLeastOneProductJustAddedUseCase @Inject constructor(
-    private val appRepository: AppRepository,
+    private val productRepository: ProductRepository,
 ) {
     fun execute(): Flow<Boolean> =
-        appRepository
+        productRepository
             .numberOfProducts()
             .runningFold(Accumulator(), Accumulator::next)
             .map { it.increased }

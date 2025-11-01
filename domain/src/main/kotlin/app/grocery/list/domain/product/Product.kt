@@ -1,4 +1,4 @@
-package app.grocery.list.domain
+package app.grocery.list.domain.product
 
 data class Product(
     val id: Int,

@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogProps
 import app.grocery.list.commons.compose.values.StringValue
-import app.grocery.list.domain.AppRepository
-import app.grocery.list.domain.Product
 import app.grocery.list.domain.format.FormatTemplateProductsUseCase
 import app.grocery.list.domain.format.ProductListSeparator
 import app.grocery.list.domain.list.preview.GetProductListPreviewUseCase
+import app.grocery.list.domain.product.Product
+import app.grocery.list.domain.product.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 internal class ProductListPreviewViewModel @Inject constructor(
     getPreview: GetProductListPreviewUseCase,
-    private val repository: AppRepository,
+    private val repository: ProductRepository,
     private val getFormattedTemplateProducts: FormatTemplateProductsUseCase,
 ) : ViewModel(),
     ProductListPreviewCallbacks {

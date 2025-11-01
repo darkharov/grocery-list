@@ -1,7 +1,7 @@
 package app.grocery.list.assembly.ui.content
 
 import androidx.navigation.NavDestination
-import app.grocery.list.domain.Product
+import app.grocery.list.domain.product.Product
 import app.grocery.list.product.list.actions.ProductListActionsDelegate
 import app.grocery.list.product.list.preview.ProductListPreviewDelegate
 import app.grocery.list.settings.SettingsDelegate

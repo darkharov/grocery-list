@@ -1,8 +1,10 @@
 package app.grocery.list.data.internal.di
 
 import app.grocery.list.data.AppRepositoryImpl
+import app.grocery.list.data.product.ProductRepositoryImpl
 import app.grocery.list.data.templates.TemplateRepositoryImpl
 import app.grocery.list.domain.AppRepository
+import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.domain.template.TemplateRepository
 import dagger.Binds
 import dagger.Module
@@ -14,8 +16,11 @@ import dagger.hilt.components.SingletonComponent
 internal interface ImplsModule {
 
     @Binds
-    fun productRepository(impl: AppRepositoryImpl): AppRepository
+    fun appRepository(impl: AppRepositoryImpl): AppRepository
 
     @Binds
-    fun templateRepository(impl: TemplateRepository): TemplateRepositoryImpl
+    fun productRepository(impl: ProductRepositoryImpl): ProductRepository
+
+    @Binds
+    fun templateRepository(impl: TemplateRepositoryImpl): TemplateRepository
 }

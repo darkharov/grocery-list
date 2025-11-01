@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogProps
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListMock
-import app.grocery.list.domain.Product
+import app.grocery.list.domain.product.Product
 
 @Immutable
 internal sealed class ProductListActionsDialogProps {

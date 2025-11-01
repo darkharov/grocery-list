@@ -1,10 +1,11 @@
-package app.grocery.list.data
+package app.grocery.list.data.product
 
 import android.content.Context
 import androidx.annotation.ArrayRes
-import app.grocery.list.domain.EmojiSearchResult
-import app.grocery.list.domain.Product
-import app.grocery.list.domain.search.EmojiAndCategoryId
+import app.grocery.list.data.R
+import app.grocery.list.domain.product.EmojiAndCategoryId
+import app.grocery.list.domain.product.EmojiSearchResult
+import app.grocery.list.domain.product.Product
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -3,7 +3,7 @@ package app.grocery.list.product.list.actions
 import androidx.compose.runtime.Stable
 import app.grocery.list.commons.compose.OnDialogDismiss
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogCallbacks
-import app.grocery.list.domain.Product
+import app.grocery.list.domain.product.Product
 import app.grocery.list.product.list.actions.dialog.ProductListActionsDialogProps
 
 @Stable

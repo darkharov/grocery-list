@@ -1,11 +1,12 @@
 package app.grocery.list.domain.format.notification
 
 import app.grocery.list.domain.AppRepository
-import app.grocery.list.domain.CategoryAndProducts
-import app.grocery.list.domain.Product
 import app.grocery.list.domain.format.ProductListSeparator
 import app.grocery.list.domain.format.ProductTitleFormatter
 import app.grocery.list.domain.format.printToString
+import app.grocery.list.domain.product.CategoryAndProducts
+import app.grocery.list.domain.product.Product
+import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.storage.value.kotlin.get
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,7 +14,8 @@ import kotlinx.coroutines.flow.first
 
 @Singleton
 class FormatProductsForNotificationsUseCase @Inject internal constructor(
-    private val repository: AppRepository,
+    private val productRepository: ProductRepository,
+    private val appRepository: AppRepository,
 ) {
     suspend fun execute(maxNumberOfItems: Int): List<NotificationContent> {
         val formatter = productTitleFormatter()
@@ -29,12 +31,12 @@ class FormatProductsForNotificationsUseCase @Inject internal constructor(
     }
 
     private suspend fun productTitleFormatter(): ProductTitleFormatter =
-        repository.productTitleFormatter.get()
+        appRepository.productTitleFormatter.get()
 
     private suspend fun enabledProducts() =
-        repository
+        productRepository
             .categorizedProducts(
-                criteria = AppRepository.CategorizedProductsCriteria.EnabledOnly,
+                criteria = ProductRepository.CategorizedProductsCriteria.EnabledOnly,
             )
             .first()
 
