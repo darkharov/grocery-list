@@ -6,7 +6,7 @@ import javax.inject.Singleton
 
 @Singleton
 class HandleProductListPostedUseCase @Inject internal constructor(
-    private val repository: AppRepository,
+    private val repository: SettingsRepository,
 ) {
     suspend fun execute() {
         repository

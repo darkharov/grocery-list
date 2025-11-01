@@ -2,8 +2,8 @@ package app.grocery.list.settings.use.icons.on.bottom.bar.switch_
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.BottomBarRoadmapStep
+import app.grocery.list.domain.SettingsRepository
 import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy.EmbeddedElement
 import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy.Screen
 import commons.android.stateIn
@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 internal class UseIconsOnBottomBarSwitchViewModel @AssistedInject constructor(
     @Assisted
     private val strategy: UseIconsOnBottomBarSwitchStrategy,
-    private val repository: AppRepository,
+    private val repository: SettingsRepository,
 ) : ViewModel(),
     UseIconsOnBottomBarSwitchCallbacks {
 

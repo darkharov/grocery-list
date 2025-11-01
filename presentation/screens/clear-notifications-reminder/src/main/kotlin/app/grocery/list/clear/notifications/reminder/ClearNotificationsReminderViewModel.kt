@@ -2,7 +2,7 @@ package app.grocery.list.clear.notifications.reminder
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.grocery.list.domain.AppRepository
+import app.grocery.list.domain.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 internal class ClearNotificationsReminderViewModel @Inject constructor(
-    private val appRepository: AppRepository,
+    private val settingsRepository: SettingsRepository,
 ) : ViewModel(),
     ClearNotificationsReminderCallbacks {
 
@@ -30,7 +30,7 @@ internal class ClearNotificationsReminderViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             for (doNotShowAgain in doNotShowAgainChannel) {
-                appRepository.clearNotificationsReminderEnabled.set(!(doNotShowAgain))
+                settingsRepository.clearNotificationsReminderEnabled.set(!(doNotShowAgain))
                 props.update { it.copy(progress = false) }
             }
         }

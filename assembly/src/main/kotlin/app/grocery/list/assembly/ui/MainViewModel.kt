@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.assembly.ui.content.AppEvent
 import app.grocery.list.assembly.ui.content.AppSnackbar
-import app.grocery.list.domain.AppRepository
+import app.grocery.list.domain.SettingsRepository
 import app.grocery.list.domain.ellipsize
 import app.grocery.list.domain.format.ProductTitleFormatter
 import app.grocery.list.domain.product.Product
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val appRepository: AppRepository,
+    private val settingsRepository: SettingsRepository,
     private val productRepository: ProductRepository,
 ) : ViewModel() {
 
@@ -36,7 +36,7 @@ class MainViewModel @Inject constructor(
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     val hasEmojiIfEnoughSpace =
-        appRepository
+        settingsRepository
             .productTitleFormatter
             .observe()
             .map {
@@ -63,7 +63,7 @@ class MainViewModel @Inject constructor(
     fun notifyPushNotificationsGranted() {
         viewModelScope.launch(Dispatchers.IO) {
             progress.value = true
-            val enabled = appRepository.clearNotificationsReminderEnabled.get()
+            val enabled = settingsRepository.clearNotificationsReminderEnabled.get()
             val event = AppEvent.PushNotificationsGranted(
                 clearNotificationsReminderEnabled = enabled
             )

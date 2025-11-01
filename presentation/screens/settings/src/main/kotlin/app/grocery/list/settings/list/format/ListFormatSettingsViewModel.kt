@@ -2,7 +2,7 @@ package app.grocery.list.settings.list.format
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.grocery.list.domain.AppRepository
+import app.grocery.list.domain.SettingsRepository
 import app.grocery.list.domain.format.ProductListSeparator
 import app.grocery.list.domain.format.printToString
 import app.grocery.list.domain.product.ProductRepository
@@ -17,14 +17,14 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 internal class ListFormatSettingsViewModel @Inject constructor(
     productRepository: ProductRepository,
-    private val appRepository: AppRepository,
+    private val settingsRepository: SettingsRepository,
     private val productTitleFormatMapper: ProductTitleFormatMapper,
 ) : ViewModel(),
     ListFormatSettingsCallbacks {
 
     val props =
         combine(
-            appRepository.productTitleFormatter.observe(),
+            settingsRepository.productTitleFormatter.observe(),
             productRepository.sampleProducts(),
         ) { formatter, sampleProducts ->
             ListFormatSettingsProps(
@@ -44,7 +44,7 @@ internal class ListFormatSettingsViewModel @Inject constructor(
 
     override fun onProductTitleFormatSelected(option: ListFormatSettingsProps.ProductTitleFormat) {
         viewModelScope.launch(Dispatchers.IO) {
-            appRepository.productTitleFormatter.set(
+            settingsRepository.productTitleFormatter.set(
                 productTitleFormatMapper.toDomain(option)
             )
         }

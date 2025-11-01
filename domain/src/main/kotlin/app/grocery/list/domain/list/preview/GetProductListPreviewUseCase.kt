@@ -1,6 +1,6 @@
 package app.grocery.list.domain.list.preview
 
-import app.grocery.list.domain.AppRepository
+import app.grocery.list.domain.SettingsRepository
 import app.grocery.list.domain.format.ProductTitleFormatter
 import app.grocery.list.domain.product.CategoryAndProducts
 import app.grocery.list.domain.product.ProductRepository
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.map
 
 @Singleton
 class GetProductListPreviewUseCase @Inject constructor(
-    private val appRepository: AppRepository,
+    private val settingsRepository: SettingsRepository,
     private val productRepository: ProductRepository,
     private val templateRepository: TemplateRepository,
 ) {
@@ -29,7 +29,7 @@ class GetProductListPreviewUseCase @Inject constructor(
                         flowOf(ProductListPreview.Empty(templateRepository.all()))
                     }
                     else -> {
-                        appRepository
+                        settingsRepository
                             .productTitleFormatter
                             .observe()
                             .map { formatter ->

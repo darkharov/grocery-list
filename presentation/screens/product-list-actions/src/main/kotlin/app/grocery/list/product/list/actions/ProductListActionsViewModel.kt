@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogProps
 import app.grocery.list.commons.compose.values.StringValue
-import app.grocery.list.domain.AppRepository
+import app.grocery.list.domain.SettingsRepository
 import app.grocery.list.domain.format.ProductListSeparator
 import app.grocery.list.domain.format.sharing.ParseProductListUseCase
 import app.grocery.list.domain.format.sharing.ShareProductListUseCase
@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 internal class ProductListActionsViewModel @Inject constructor(
     private val productRepository: ProductRepository,
-    private val appRepository: AppRepository,
+    private val settingsRepository: SettingsRepository,
     private val shareProductList: ShareProductListUseCase,
     private val parseProductList: ParseProductListUseCase,
 ) : ViewModel(),
@@ -42,7 +42,7 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     val props =
         combine(
-            appRepository.bottomBarRoadmapStep.observe(),
+            settingsRepository.bottomBarRoadmapStep.observe(),
             productRepository.numberOfProducts(),
             productRepository.atLeastOneProductEnabled(),
             loadingListToShare,
@@ -102,7 +102,7 @@ internal class ProductListActionsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             dialog.value = ProductListActionsDialogProps.ConfirmSharing(
                 numberOfProducts = products.size,
-                recommendUsingThisApp = appRepository.recommendAppWhenSharingList.get(),
+                recommendUsingThisApp = settingsRepository.recommendAppWhenSharingList.get(),
                 payload = products,
             )
         }
@@ -122,7 +122,7 @@ internal class ProductListActionsViewModel @Inject constructor(
         val recommendUsingThisApp = !(dialog.recommendUsingThisApp)
         this.dialog.value = dialog.copy(recommendUsingThisApp = recommendUsingThisApp)
         viewModelScope.launch(Dispatchers.IO) {
-            appRepository.recommendAppWhenSharingList.set(recommendUsingThisApp)
+            settingsRepository.recommendAppWhenSharingList.set(recommendUsingThisApp)
         }
     }
 
