@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 internal class ProductListPreviewViewModel @Inject constructor(
     getPreview: GetProductListPreviewUseCase,
     private val repository: AppRepository,
-    private val getTemplateProducts: GetFormattedTemplateProductsUseCase,
+    private val getFormattedTemplateProducts: GetFormattedTemplateProductsUseCase,
 ) : ViewModel(),
     ProductListPreviewCallbacks {
 
@@ -73,7 +73,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
 
     override fun onTemplateClick(template: ProductListPreviewProps.Empty.Template) {
         viewModelScope.launch(Dispatchers.IO) {
-            val products = getTemplateProducts.execute(
+            val products = getFormattedTemplateProducts.execute(
                 templateId = template.id,
                 separator = ProductListSeparator.Dialog,
             )
