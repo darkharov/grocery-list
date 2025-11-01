@@ -3,7 +3,7 @@ package app.grocery.list.assembly
 import android.app.Application
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import app.grocery.list.domain.AppRepository
+import app.grocery.list.data.InitializeData
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 import kotlinx.coroutines.launch
@@ -12,9 +12,9 @@ import kotlinx.coroutines.launch
 class ApplicationImpl : Application() {
 
     @Inject
-    fun runMigrations(repository: AppRepository) {
+    fun initializeData(initializeData: InitializeData) {
         ProcessLifecycleOwner.get().lifecycleScope.launch {
-            repository.runMigrations()
+            initializeData.execute()
         }
     }
 }

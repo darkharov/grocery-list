@@ -18,13 +18,13 @@ internal class AppRepositoryImpl @Inject constructor(
 ) : AppRepository {
 
     @Deprecated(ONLY_FOR_MIGRATION)
-    override val productTitleFormat by delegates.enum(defaultValue = ProductTitleFormat.EmojiAndFullText)
+    private val productTitleFormat by delegates.enum(defaultValue = ProductTitleFormat.EmojiAndFullText)
     override val productTitleFormatter by delegates.enum(defaultValue = ProductTitleFormatter.EmojiAndFullText)
     override val clearNotificationsReminderEnabled by delegates.boolean(defaultValue = true)
     override val bottomBarRoadmapStep by delegates.enum(defaultValue = BottomBarRoadmapStep.Initial)
     override val recommendAppWhenSharingList by delegates.boolean(defaultValue = true)
 
-    override suspend fun runMigrations() {
+    suspend fun runMigrations() {
         withContext(Dispatchers.IO) {
             migrateProductTitleFormatter()
         }
