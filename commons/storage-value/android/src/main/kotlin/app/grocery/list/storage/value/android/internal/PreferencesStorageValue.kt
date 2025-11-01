@@ -7,8 +7,6 @@ import androidx.datastore.preferences.core.edit
 import app.grocery.list.storage.value.kotlin.StorageValue
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.properties.ReadOnlyProperty
-import kotlin.reflect.KProperty
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -72,30 +70,24 @@ internal sealed class PreferencesStorageValue<T> : StorageValue<T> {
     ) {
         fun <T : Any> primitiveValue(
             defaultValue: T,
-            makeKey: (classFieldKey: String) -> Preferences.Key<T>,
-        ) =
-            ReadOnlyProperty<Any, StorageValue<T>> { thisRef, property ->
-                PrimitiveValue(
-                    key = makeKey(classFieldKey(thisRef, property)),
-                    dataStore = dataStore,
-                    defaultValue = defaultValue
-                )
-            }
+            key: Preferences.Key<T>,
+        ): StorageValue<T> =
+            PrimitiveValue(
+                key = key,
+                dataStore = dataStore,
+                defaultValue = defaultValue
+            )
 
         fun <T> custom(
             write: Writer.(T) -> Unit,
             read: Reader.() -> T,
-        ): ReadOnlyProperty<Any, StorageValue<T>> =
-            ReadOnlyProperty<Any, StorageValue<T>> { thisRef, property ->
-                CustomValue(
-                    dataStore = dataStore,
-                    keysHelper = KeysHelper(prefix = classFieldKey(thisRef, property)),
-                    write = write,
-                    read = read,
-                )
-            }
-
-        private fun classFieldKey(thisRef: Any, property: KProperty<*>): String =
-            thisRef::class.qualifiedName + '$' + property.name
+            keyPrefix: String,
+        ): StorageValue<T> =
+            CustomValue(
+                dataStore = dataStore,
+                keysHelper = KeysHelper(prefix = keyPrefix),
+                write = write,
+                read = read,
+            )
     }
 }

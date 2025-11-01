@@ -9,44 +9,58 @@ import app.grocery.list.storage.value.android.internal.Writer
 import app.grocery.list.storage.value.kotlin.StorageValue
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.properties.ReadOnlyProperty
 
 @Singleton
 class StorageValueDelegates @Inject internal constructor(
     private val factory: PreferencesStorageValue.DelegatesFactory,
 ) {
-    fun int(defaultValue: Int = 0): ReadOnlyProperty<Any, StorageValue<Int>> =
+    fun int(
+        defaultValue: Int = 0,
+        key: String,
+    ): StorageValue<Int> =
         factory.primitiveValue(
             defaultValue = defaultValue,
-            makeKey = ::intPreferencesKey
+            key = intPreferencesKey(key),
         )
 
-    fun boolean(defaultValue: Boolean = false): ReadOnlyProperty<Any, StorageValue<Boolean>> =
+    fun boolean(
+        defaultValue: Boolean = false,
+        key: String,
+    ): StorageValue<Boolean> =
         factory.primitiveValue(
             defaultValue = defaultValue,
-            makeKey = ::booleanPreferencesKey
+            key = booleanPreferencesKey(key),
         )
 
-    inline fun <reified E : Enum<E>> enum(defaultValue: E): ReadOnlyProperty<Any, StorageValue<E>> {
+    inline fun <reified E : Enum<E>> enum(
+        defaultValue: E,
+        keyPrefix: String,
+    ): StorageValue<E> {
         val key = "ordinal"
         return custom(
             write = { int(key, it.ordinal) },
-            read = { enumValues<E>()[int(key, defaultValue = defaultValue.ordinal)] }
+            read = { enumValues<E>()[int(key, defaultValue = defaultValue.ordinal)] },
+            keyPrefix = keyPrefix,
         )
     }
 
-    fun string(defaultValue: String = ""): ReadOnlyProperty<Any, StorageValue<String>> =
+    fun string(
+        defaultValue: String = "",
+        key: String,
+    ): StorageValue<String> =
         factory.primitiveValue(
             defaultValue = defaultValue,
-            makeKey = ::stringPreferencesKey
+            key = stringPreferencesKey(key),
         )
 
     fun <T> custom(
         write: Writer.(T) -> Unit,
         read: Reader.() -> T,
-    ): ReadOnlyProperty<Any, StorageValue<T>> =
+        keyPrefix: String,
+    ): StorageValue<T> =
         factory.custom(
             write = write,
-            read = read
+            read = read,
+            keyPrefix = keyPrefix,
         )
 }
