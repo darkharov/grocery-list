@@ -13,7 +13,7 @@ import javax.inject.Singleton
 import kotlinx.coroutines.flow.first
 
 @Singleton
-class FormatProductsForNotificationsUseCase @Inject internal constructor(
+class GetNotificationsUseCase @Inject internal constructor(
     private val productRepository: ProductRepository,
     private val settingsRepository: SettingsRepository,
 ) {
