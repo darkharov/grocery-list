@@ -2,7 +2,7 @@ package format
 
 import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
-import app.grocery.list.domain.format.SharingStringFormatter
+import app.grocery.list.domain.format.sharing.SharingStringFormatter
 import app.grocery.list.domain.search.EmojiAndCategoryId
 import kotlinx.coroutines.runBlocking
 import org.junit.Test

@@ -6,8 +6,8 @@ import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDi
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.Product
+import app.grocery.list.domain.format.FormatTemplateProductsUseCase
 import app.grocery.list.domain.format.ProductListSeparator
-import app.grocery.list.domain.list.preview.GetFormattedTemplateProductsUseCase
 import app.grocery.list.domain.list.preview.GetProductListPreviewUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 internal class ProductListPreviewViewModel @Inject constructor(
     getPreview: GetProductListPreviewUseCase,
     private val repository: AppRepository,
-    private val getFormattedTemplateProducts: GetFormattedTemplateProductsUseCase,
+    private val getFormattedTemplateProducts: FormatTemplateProductsUseCase,
 ) : ViewModel(),
     ProductListPreviewCallbacks {
 
@@ -81,7 +81,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
                 ConfirmPastedListDialogProps(
                     title = StringValue.StringWrapper(template.title),
                     text = products.formattedString,
-                    productList = products.items,
+                    productList = products.originalProducts,
                 )
             )
         }

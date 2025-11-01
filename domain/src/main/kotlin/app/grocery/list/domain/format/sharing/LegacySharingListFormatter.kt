@@ -1,4 +1,4 @@
-package app.grocery.list.domain.format
+package app.grocery.list.domain.format.sharing
 
 import app.grocery.list.domain.EmojiSearchResult
 import app.grocery.list.domain.Product
@@ -9,7 +9,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 
 @Deprecated("This format is not longer supported")
 @Singleton
-class LegacySharingStringFormatter @Inject internal constructor() {
+internal class LegacySharingStringFormatter @Inject internal constructor() {
 
     @OptIn(ExperimentalEncodingApi::class)
     fun parse(string: String): Result<List<Product>> {

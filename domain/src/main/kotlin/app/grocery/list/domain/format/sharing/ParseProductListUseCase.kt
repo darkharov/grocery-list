@@ -1,14 +1,17 @@
-package app.grocery.list.domain.format
+package app.grocery.list.domain.format.sharing
 
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.Product
+import app.grocery.list.domain.format.FormattedProducts
+import app.grocery.list.domain.format.ProductListSeparator
+import app.grocery.list.domain.format.printToString
 import app.grocery.list.storage.value.kotlin.get
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Suppress("DEPRECATION")
 @Singleton
-class ParseProductListUseCase @Inject constructor(
+class ParseProductListUseCase @Inject internal constructor(
     private val repository: AppRepository,
     private val formatter: SharingStringFormatter,
     private val legacyFormatter: LegacySharingStringFormatter,
@@ -16,7 +19,7 @@ class ParseProductListUseCase @Inject constructor(
     suspend fun execute(
         text: String,
         separator: ProductListSeparator,
-    ): Result<FormattedTemplateProducts> {
+    ): Result<FormattedProducts> {
         legacyFormatter.parse(text).onSuccess { products ->
             return result(products, separator)
         }
@@ -26,10 +29,10 @@ class ParseProductListUseCase @Inject constructor(
         return Result.failure(ProductsNotFoundException())
     }
 
-    private suspend fun result(products: List<Product>, separator: ProductListSeparator) =
+    private suspend fun result(products: List<Product>, separator: ProductListSeparator): Result<FormattedProducts> =
         Result.success(
-            FormattedTemplateProducts(
-                items = products,
+            FormattedProducts(
+                originalProducts = products,
                 formattedString = repository
                     .productTitleFormatter
                     .get()

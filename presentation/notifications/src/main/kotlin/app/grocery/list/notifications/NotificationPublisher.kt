@@ -15,8 +15,8 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import app.grocery.list.domain.HandleProductListPostedUseCase
-import app.grocery.list.domain.format.FormatProductsForNotificationsUseCase
-import app.grocery.list.domain.format.NotificationContent
+import app.grocery.list.domain.format.notification.FormatProductsForNotificationsUseCase
+import app.grocery.list.domain.format.notification.NotificationContent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton

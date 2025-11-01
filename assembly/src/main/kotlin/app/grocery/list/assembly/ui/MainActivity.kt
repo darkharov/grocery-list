@@ -19,7 +19,6 @@ import app.grocery.list.assembly.ui.content.AppContent
 import app.grocery.list.assembly.ui.content.AppContentDelegate
 import app.grocery.list.commons.compose.theme.ThemeUtil
 import app.grocery.list.domain.Product
-import app.grocery.list.domain.format.SharingStringFormatter
 import app.grocery.list.final_.steps.FinalSteps
 import app.grocery.list.notifications.NotificationPublisher
 import commons.android.PermissionUtil
@@ -37,7 +36,6 @@ class MainActivity :
 
     @Inject lateinit var themeUtil: ThemeUtil
     @Inject lateinit var notificationPublisher: NotificationPublisher
-    @Inject lateinit var sharingStringFormatter: SharingStringFormatter
 
     private val viewModel by viewModels<MainViewModel>()
     private val permissionUtil = PermissionUtil()

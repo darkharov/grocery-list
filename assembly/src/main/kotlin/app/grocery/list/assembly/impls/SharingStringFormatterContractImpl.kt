@@ -3,7 +3,7 @@ package app.grocery.list.assembly.impls
 import android.content.Context
 import app.grocery.list.assembly.R
 import app.grocery.list.domain.AppRepository
-import app.grocery.list.domain.format.SharingStringFormatter
+import app.grocery.list.domain.format.sharing.SharingStringFormatter
 import app.grocery.list.domain.search.EmojiAndCategoryId
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

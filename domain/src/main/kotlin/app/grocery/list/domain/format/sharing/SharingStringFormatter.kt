@@ -1,4 +1,4 @@
-package app.grocery.list.domain.format
+package app.grocery.list.domain.format.sharing
 
 import app.grocery.list.domain.Product
 import app.grocery.list.domain.search.EmojiAndCategoryId
@@ -6,7 +6,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SharingStringFormatter @Inject constructor(
+internal class SharingStringFormatter @Inject constructor(
     private val contract: Contract,
 ) {
     suspend fun parse(sharingString: String): Result<List<Product>> {

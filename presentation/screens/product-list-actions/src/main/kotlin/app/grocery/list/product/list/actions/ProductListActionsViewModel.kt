@@ -8,9 +8,9 @@ import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.EnabledAndDisabledProducts
 import app.grocery.list.domain.Product
-import app.grocery.list.domain.format.ParseProductListUseCase
 import app.grocery.list.domain.format.ProductListSeparator
-import app.grocery.list.domain.format.SharingStringFormatter
+import app.grocery.list.domain.format.sharing.ParseProductListUseCase
+import app.grocery.list.domain.format.sharing.ShareProductListUseCase
 import app.grocery.list.product.list.actions.dialog.ProductListActionsDialogProps
 import app.grocery.list.storage.value.kotlin.get
 import commons.android.stateIn
@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 internal class ProductListActionsViewModel @Inject constructor(
     private val repository: AppRepository,
-    private val sharingStringFormatter: SharingStringFormatter,
+    private val shareProductList: ShareProductListUseCase,
     private val parseProductList: ParseProductListUseCase,
 ) : ViewModel(),
     ProductListActionsCallbacks {
@@ -108,7 +108,7 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     override fun onSharingConfirmed(dialog: ProductListActionsDialogProps.ConfirmSharing) {
         this.dialog.value = null
-        val sharingString = sharingStringFormatter.toSharingString(
+        val sharingString = shareProductList.execute(
             products = dialog.payload,
             recommendUsingThisApp = dialog.recommendUsingThisApp,
         )
@@ -140,11 +140,11 @@ internal class ProductListActionsViewModel @Inject constructor(
                         ConfirmPastedListDialogProps(
                             title = StringValue.PluralResId(
                                 resId = R.plurals.pattern_products_found,
-                                count = products.items.size,
+                                count = products.originalProducts.size,
                                 useCountAsArgument = true,
                             ),
                             text = products.formattedString,
-                            productList = products.items,
+                            productList = products.originalProducts,
                         )
                     )
                 }

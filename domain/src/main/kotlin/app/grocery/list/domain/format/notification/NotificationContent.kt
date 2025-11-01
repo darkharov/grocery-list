@@ -1,4 +1,4 @@
-package app.grocery.list.domain.format
+package app.grocery.list.domain.format.notification
 
 data class NotificationContent(
     val groupKey: Int,

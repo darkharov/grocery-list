@@ -1,15 +1,18 @@
-package app.grocery.list.domain.format
+package app.grocery.list.domain.format.notification
 
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.CategoryAndProducts
 import app.grocery.list.domain.Product
+import app.grocery.list.domain.format.ProductListSeparator
+import app.grocery.list.domain.format.ProductTitleFormatter
+import app.grocery.list.domain.format.printToString
 import app.grocery.list.storage.value.kotlin.get
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.first
 
 @Singleton
-class FormatProductsForNotificationsUseCase @Inject constructor(
+class FormatProductsForNotificationsUseCase @Inject internal constructor(
     private val repository: AppRepository,
 ) {
     suspend fun execute(maxNumberOfItems: Int): List<NotificationContent> {
