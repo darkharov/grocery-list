@@ -16,7 +16,7 @@ class ParseProductListUseCase @Inject constructor(
     suspend fun execute(
         text: String,
         separator: ProductListSeparator,
-    ): Result<FormattedProducts> {
+    ): Result<FormattedTemplateProducts> {
         legacyFormatter.parse(text).onSuccess { products ->
             return result(products, separator)
         }
@@ -28,7 +28,7 @@ class ParseProductListUseCase @Inject constructor(
 
     private suspend fun result(products: List<Product>, separator: ProductListSeparator) =
         Result.success(
-            FormattedProducts(
+            FormattedTemplateProducts(
                 items = products,
                 formattedString = repository
                     .productTitleFormatter

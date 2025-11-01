@@ -1,7 +1,7 @@
 package app.grocery.list.domain.list.preview
 
 import app.grocery.list.domain.AppRepository
-import app.grocery.list.domain.format.FormattedProducts
+import app.grocery.list.domain.format.FormattedTemplateProducts
 import app.grocery.list.domain.format.ParseProductListUseCase
 import app.grocery.list.domain.format.ProductListSeparator
 import javax.inject.Inject
@@ -15,7 +15,7 @@ class GetFormattedTemplateProductsUseCase @Inject constructor(
     suspend fun execute(
         templateId: Int,
         separator: ProductListSeparator,
-    ): FormattedProducts {
+    ): FormattedTemplateProducts {
         val titles = repository
             .productTitles(templateId = templateId)
             .joinToString()

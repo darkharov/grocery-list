@@ -14,25 +14,20 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import app.grocery.list.domain.AppRepository
-import app.grocery.list.domain.CategoryAndProducts
 import app.grocery.list.domain.HandleProductListPostedUseCase
-import app.grocery.list.domain.format.ProductListSeparator
-import app.grocery.list.domain.format.ProductTitleFormatter
-import app.grocery.list.domain.format.printToString
-import app.grocery.list.storage.value.kotlin.get
+import app.grocery.list.domain.format.FormatProductsForNotificationsUseCase
+import app.grocery.list.domain.format.NotificationContent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @Singleton
 class NotificationPublisher @Inject internal constructor(
     @ApplicationContext
     private val context: Context,
-    private val repository: AppRepository,
+    private val formatProductsForNotifications: FormatProductsForNotificationsUseCase,
     private val notificationManager: NotificationManagerCompat,
     private val handleProductListPublished: HandleProductListPostedUseCase,
 ) {
@@ -68,57 +63,36 @@ class NotificationPublisher @Inject internal constructor(
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     private fun post() {
         ProcessLifecycleOwner.get().lifecycleScope.launch(Dispatchers.IO) {
-            post(
-                formatter = repository
-                    .productTitleFormatter
-                    .get(),
-                categorizedProducts = repository
-                    .categorizedProducts(
-                        criteria = AppRepository.CategorizedProductsCriteria.EnabledOnly,
-                    )
-                    .first(),
-            )
+            val content = formatProductsForNotifications()
+            post(content)
             handleProductListPublished.execute()
         }
     }
 
+    private suspend fun formatProductsForNotifications() =
+        formatProductsForNotifications
+            .execute(
+                maxNumberOfItems = MAX_VISIBLE_AT_THE_SAME_TIME,
+            )
+
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     private fun post(
-        formatter: ProductTitleFormatter,
-        categorizedProducts: List<CategoryAndProducts>,
+        content: List<NotificationContent>,
     ) {
-        val allProducts = categorizedProducts.flatMap { it.products }
-        val maxItemsPerNotification = 1 + (allProducts.size - 1) / MAX_VISIBLE_AT_THE_SAME_TIME
-
-        for (group in allProducts.chunked(maxItemsPerNotification).reversed()) {
-            val groupKey = group.first().id
-            val productIds = group.map { it.id }
-            val sortedGroup = group
-                .sortedBy { it.title.length }
-                .sortedBy { it.emojiSearchResult != null }
-            val notification = notification(
-                groupKey = groupKey,
-                productIds = productIds,
-                contentTitle = formatter.printToString(
-                    products = sortedGroup,
-                    separator = ProductListSeparator.Notifications,
-                ),
-            )
-            notificationManager.notify(TYPE_PRODUCT, groupKey, notification)
+        val reversed = content.reversed()   // the first notification will be the last
+        for (item in reversed) {
+            val notification = notification(item)
+            notificationManager.notify(TYPE_PRODUCT, item.groupKey, notification)
         }
     }
 
-    private fun notification(
-        groupKey: Int,
-        productIds: List<Int>,
-        contentTitle: String,
-    ): Notification =
+    private fun notification(item: NotificationContent): Notification =
         NotificationCompat
             .Builder(context, DEFAULT_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_stat_logo)
-            .setGroup(groupKey.toString())
-            .setContentTitle(contentTitle)
-            .setDeleteIntent(deleteIntent(productIds = productIds))
+            .setGroup(item.groupKey.toString())
+            .setContentTitle(item.formattedProductTitles)
+            .setDeleteIntent(deleteIntent(productIds = item.productIds))
             .build()
 
     private fun deleteIntent(productIds: List<Int>) =
