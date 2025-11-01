@@ -1,9 +1,10 @@
-package app.grocery.list.data
+package app.grocery.list.data.templates
 
 import android.content.Context
 import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
-import app.grocery.list.domain.list.preview.Template
+import app.grocery.list.data.R
+import app.grocery.list.domain.template.Template
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton

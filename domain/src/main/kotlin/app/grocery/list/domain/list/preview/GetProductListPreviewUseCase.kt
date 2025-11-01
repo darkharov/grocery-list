@@ -3,6 +3,7 @@ package app.grocery.list.domain.list.preview
 import app.grocery.list.domain.AppRepository
 import app.grocery.list.domain.CategoryAndProducts
 import app.grocery.list.domain.format.ProductTitleFormatter
+import app.grocery.list.domain.template.TemplateRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.map
 @Singleton
 class GetProductListPreviewUseCase @Inject constructor(
     private val repository: AppRepository,
+    private val templateRepository: TemplateRepository,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     fun execute(): Flow<ProductListPreview> =
@@ -22,7 +24,7 @@ class GetProductListPreviewUseCase @Inject constructor(
             .flatMapLatest { items ->
                 when {
                     items.isEmpty() -> {
-                        flowOf(ProductListPreview.Empty(repository.templates()))
+                        flowOf(ProductListPreview.Empty(templateRepository.all()))
                     }
                     else -> {
                         repository

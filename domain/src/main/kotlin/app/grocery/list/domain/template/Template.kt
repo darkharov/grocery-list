@@ -1,4 +1,4 @@
-package app.grocery.list.domain.list.preview
+package app.grocery.list.domain.template
 
 data class Template(
     val id: Int,
