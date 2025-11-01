@@ -11,7 +11,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class StorageValueDelegates @Inject internal constructor(
+class StorageValueFactory @Inject internal constructor(
     private val factory: PreferencesStorageValue.DelegatesFactory,
 ) {
     fun int(

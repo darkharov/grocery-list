@@ -3,35 +3,35 @@ package app.grocery.list.data
 import app.grocery.list.domain.BottomBarRoadmapStep
 import app.grocery.list.domain.SettingsRepository
 import app.grocery.list.domain.format.ProductTitleFormatter
-import app.grocery.list.storage.value.android.StorageValueDelegates
+import app.grocery.list.storage.value.android.StorageValueFactory
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 internal class SettingsRepositoryImpl @Inject constructor(
-    delegates: StorageValueDelegates,
+    factory: StorageValueFactory,
 ) : SettingsRepository {
 
     override val productTitleFormatter =
-        delegates.enum(
+        factory.enum(
             defaultValue = ProductTitleFormatter.EmojiAndFullText,
             keyPrefix = "$OLD_KEY_PREFIX\$productTitleFormatter",
         )
 
     override val clearNotificationsReminderEnabled =
-        delegates.boolean(
+        factory.boolean(
             defaultValue = true,
             key = "$OLD_KEY_PREFIX\$clearNotificationsReminderEnabled",
         )
 
     override val bottomBarRoadmapStep =
-        delegates.enum(
+        factory.enum(
             defaultValue = BottomBarRoadmapStep.Initial,
             keyPrefix = "$OLD_KEY_PREFIX\$bottomBarRoadmapStep",
         )
 
     override val recommendAppWhenSharingList =
-        delegates.boolean(
+        factory.boolean(
             defaultValue = true,
             key = "$OLD_KEY_PREFIX\$recommendAppWhenSharingList",
         )
