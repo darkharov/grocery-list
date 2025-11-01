@@ -11,6 +11,7 @@ interface ProductRepository {
     fun atLeastOneProductEnabled(): Flow<Boolean>
     fun sampleProducts(): Flow<List<Product>>
     fun enabledAndDisabledProducts(): Flow<EnabledAndDisabledProducts>
+    fun isThereAtLeastOne(): Flow<Boolean>
 
     suspend fun productTitleAndCategory(productId: Int): Product.TitleAndCategory
     suspend fun findCategory(search: String): Product.Category?

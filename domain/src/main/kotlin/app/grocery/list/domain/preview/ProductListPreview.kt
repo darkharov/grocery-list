@@ -1,4 +1,4 @@
-package app.grocery.list.domain.list.preview
+package app.grocery.list.domain.preview
 
 import app.grocery.list.domain.format.ProductTitleFormatter
 import app.grocery.list.domain.product.Product
@@ -11,7 +11,7 @@ sealed class ProductListPreview {
     ) : ProductListPreview()
 
     data class Items(
-        val items: List<Item>,
+        val categories: List<CategoryContent>,
         val enableAndDisableAllFeatures: EnableAndDisableAll?,
     ) : ProductListPreview() {
 
@@ -20,15 +20,15 @@ sealed class ProductListPreview {
             val disableAllAvailable: Boolean,
         )
 
-        data class Item(
+        data class CategoryContent(
             val category: Product.Category?,
             val products: List<FormattedProduct>,
         )
 
         data class FormattedProduct(
             val productId: Int,
+            val title: ProductTitleFormatter.Result,
             val enabled: Boolean,
-            val formattingResult: ProductTitleFormatter.Result,
         )
     }
 }

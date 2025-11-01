@@ -5,7 +5,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import app.grocery.list.domain.format.ProductTitleFormatter
-import app.grocery.list.domain.list.preview.ProductListPreview
+import app.grocery.list.domain.preview.ProductListPreview
 import kotlinx.collections.immutable.toImmutableList
 
 internal object ProductListPreviewMapper {
@@ -25,7 +25,7 @@ internal object ProductListPreviewMapper {
             is ProductListPreview.Items -> {
                 val enableAndDisableAllFeatures = preview.enableAndDisableAllFeatures
                 ProductListPreviewProps.Items(
-                    items = preview.items.map {
+                    items = preview.categories.map {
                         val category = it.category
                         ProductListPreviewProps.Items.CategoryAndFormattedProducts(
                             category = if (category == null) {
@@ -40,7 +40,7 @@ internal object ProductListPreviewMapper {
                                 ProductListPreviewProps.Items.Product(
                                     id = product.productId,
                                     enabled = product.enabled,
-                                    title = product.formattingResult.collectTitle(),
+                                    title = product.title.collectTitle(),
                                 )
                             }
                         )

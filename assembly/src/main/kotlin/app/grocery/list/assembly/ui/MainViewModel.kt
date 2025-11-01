@@ -76,7 +76,8 @@ class MainViewModel @Inject constructor(
         val event = AppSnackbar.UndoDeletionProduct(
             product = product,
             formattedTitle = ProductTitleFormatter.WithoutEmoji
-                .print(product)
+                .
+                print(product)
                 .collectStringTitle()
                 .ellipsize(maxLength = 10),
         )

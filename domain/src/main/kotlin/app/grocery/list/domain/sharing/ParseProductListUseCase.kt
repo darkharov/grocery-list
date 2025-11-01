@@ -1,7 +1,6 @@
-package app.grocery.list.domain.format.sharing
+package app.grocery.list.domain.sharing
 
 import app.grocery.list.domain.SettingsRepository
-import app.grocery.list.domain.format.FormattedProducts
 import app.grocery.list.domain.format.ProductListSeparator
 import app.grocery.list.domain.format.printToString
 import app.grocery.list.domain.product.Product
@@ -19,7 +18,7 @@ class ParseProductListUseCase @Inject internal constructor(
     suspend fun execute(
         text: String,
         separator: ProductListSeparator,
-    ): Result<FormattedProducts> {
+    ): Result<ParsedProducts> {
         legacyFormatter.parse(text).onSuccess { products ->
             return result(products, separator)
         }
@@ -29,9 +28,9 @@ class ParseProductListUseCase @Inject internal constructor(
         return Result.failure(ProductsNotFoundException())
     }
 
-    private suspend fun result(products: List<Product>, separator: ProductListSeparator): Result<FormattedProducts> =
+    private suspend fun result(products: List<Product>, separator: ProductListSeparator): Result<ParsedProducts> =
         Result.success(
-            FormattedProducts(
+            ParsedProducts(
                 originalProducts = products,
                 formattedString = settingsRepository
                     .productTitleFormatter

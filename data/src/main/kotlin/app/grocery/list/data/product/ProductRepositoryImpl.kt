@@ -143,4 +143,7 @@ internal class ProductRepositoryImpl @Inject constructor(
                     disabled = products.filterNot { it.enabled },
                 )
             }
+
+    override fun isThereAtLeastOne(): Flow<Boolean> =
+        productDao.isThereAtLeastOne()
 }

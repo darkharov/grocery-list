@@ -2,9 +2,9 @@ package app.grocery.list.assembly.impls
 
 import android.content.Context
 import app.grocery.list.assembly.R
-import app.grocery.list.domain.format.sharing.SharingStringFormatter
 import app.grocery.list.domain.product.EmojiAndCategoryId
 import app.grocery.list.domain.product.ProductRepository
+import app.grocery.list.domain.sharing.SharingStringFormatter
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton

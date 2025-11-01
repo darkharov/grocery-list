@@ -1,4 +1,4 @@
-package app.grocery.list.domain.list.preview
+package app.grocery.list.domain.preview
 
 import app.grocery.list.domain.SettingsRepository
 import app.grocery.list.domain.format.ProductTitleFormatter
@@ -47,8 +47,8 @@ class GetProductListPreviewUseCase @Inject constructor(
             acc + item.products.size
         }
         return ProductListPreview.Items(
-            items = items.map { (category, products) ->
-                ProductListPreview.Items.Item(
+            categories = items.map { (category, products) ->
+                ProductListPreview.Items.CategoryContent(
                     category = category.takeIf {
                         items.size >= CategoriesVisibilityCriteria.MIN_NUMBER &&
                         productCount >= CategoriesVisibilityCriteria.MIN_PRODUCT_NUMBER
@@ -58,7 +58,7 @@ class GetProductListPreviewUseCase @Inject constructor(
                             ProductListPreview.Items.FormattedProduct(
                                 productId = product.id,
                                 enabled = product.enabled,
-                                formattingResult = formatter.print(product),
+                                title = formatter.print(product),
                             )
                         },
                 )

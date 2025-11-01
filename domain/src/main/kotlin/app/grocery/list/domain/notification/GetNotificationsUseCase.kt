@@ -1,4 +1,4 @@
-package app.grocery.list.domain.format.notification
+package app.grocery.list.domain.notification
 
 import app.grocery.list.domain.SettingsRepository
 import app.grocery.list.domain.format.ProductListSeparator

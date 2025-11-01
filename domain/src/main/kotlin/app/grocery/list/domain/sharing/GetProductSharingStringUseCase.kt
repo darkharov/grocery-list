@@ -1,11 +1,11 @@
-package app.grocery.list.domain.format.sharing
+package app.grocery.list.domain.sharing
 
 import app.grocery.list.domain.product.Product
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ShareProductListUseCase @Inject internal constructor(
+class GetProductSharingStringUseCase @Inject internal constructor(
     private val sharingStringFormatter: SharingStringFormatter,
 ) {
     fun execute(

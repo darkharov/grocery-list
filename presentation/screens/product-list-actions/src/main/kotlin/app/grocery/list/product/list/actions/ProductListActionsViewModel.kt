@@ -7,11 +7,11 @@ import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDi
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.domain.SettingsRepository
 import app.grocery.list.domain.format.ProductListSeparator
-import app.grocery.list.domain.format.sharing.ParseProductListUseCase
-import app.grocery.list.domain.format.sharing.ShareProductListUseCase
 import app.grocery.list.domain.product.EnabledAndDisabledProducts
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
+import app.grocery.list.domain.sharing.GetProductSharingStringUseCase
+import app.grocery.list.domain.sharing.ParseProductListUseCase
 import app.grocery.list.product.list.actions.dialog.ProductListActionsDialogProps
 import app.grocery.list.storage.value.kotlin.get
 import commons.android.stateIn
@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 internal class ProductListActionsViewModel @Inject constructor(
     private val productRepository: ProductRepository,
     private val settingsRepository: SettingsRepository,
-    private val shareProductList: ShareProductListUseCase,
+    private val getProductSharingString: GetProductSharingStringUseCase,
     private val parseProductList: ParseProductListUseCase,
 ) : ViewModel(),
     ProductListActionsCallbacks {
@@ -110,7 +110,7 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     override fun onSharingConfirmed(dialog: ProductListActionsDialogProps.ConfirmSharing) {
         this.dialog.value = null
-        val sharingString = shareProductList.execute(
+        val sharingString = getProductSharingString.execute(
             products = dialog.payload,
             recommendUsingThisApp = dialog.recommendUsingThisApp,
         )

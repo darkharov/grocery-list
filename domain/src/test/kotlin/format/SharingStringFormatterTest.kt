@@ -1,9 +1,9 @@
 package format
 
-import app.grocery.list.domain.format.sharing.SharingStringFormatter
 import app.grocery.list.domain.product.EmojiAndCategoryId
 import app.grocery.list.domain.product.EmojiSearchResult
 import app.grocery.list.domain.product.Product
+import app.grocery.list.domain.sharing.SharingStringFormatter
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 

@@ -1,7 +1,7 @@
 package app.grocery.list.assembly.impls
 
 import app.grocery.list.domain.AppErrorLogger
-import app.grocery.list.domain.format.sharing.SharingStringFormatter
+import app.grocery.list.domain.sharing.SharingStringFormatter
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
