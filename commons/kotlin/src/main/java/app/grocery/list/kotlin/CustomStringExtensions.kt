@@ -1,4 +1,4 @@
-package app.grocery.list.domain
+package app.grocery.list.kotlin
 
 fun String.ellipsize(maxLength: Int): String =
     if (length <= maxLength) {

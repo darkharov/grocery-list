@@ -81,6 +81,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":commons:resources"))
     implementation(project(":commons:compose"))
+    implementation(project(":commons:kotlin"))
     implementation(project(":commons:android"))
     implementation(project(":presentation:notifications"))
     implementation(project(":presentation:screens:product-input-form"))
