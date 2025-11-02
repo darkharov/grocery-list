@@ -45,7 +45,7 @@ sealed class ProductTitleFormatter {
                 } else {
                     title
                 }
-                append(title)
+                append(title.trim())
             }
 
         data class AdditionalDetails(
