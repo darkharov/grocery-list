@@ -1,12 +1,10 @@
 package app.grocery.list.domain.notification
 
-import app.grocery.list.domain.SettingsRepository
-import app.grocery.list.domain.format.ProductListSeparator
-import app.grocery.list.domain.format.ProductTitleFormatter
+import app.grocery.list.domain.formatter.GetProductTitleFormatterUseCase
+import app.grocery.list.domain.formatter.ProductTitleFormatter
 import app.grocery.list.domain.product.CategoryAndProducts
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
-import app.grocery.list.storage.value.kotlin.get
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.first
@@ -14,10 +12,11 @@ import kotlinx.coroutines.flow.first
 @Singleton
 class GetNotificationsUseCase @Inject internal constructor(
     private val productRepository: ProductRepository,
-    private val settingsRepository: SettingsRepository,
+    private val getProductTitleFormatter: GetProductTitleFormatterUseCase,
+    private val formatNotificationTitle: FormatNotificationTitleUseCase,
 ) {
     suspend fun execute(maxNumberOfItems: Int): List<NotificationContent> {
-        val formatter = productTitleFormatter()
+        val formatter = getProductTitleFormatter.execute().first().formatter
         val products = enabledProducts()
         val groupedProducts = groupProducts(
             products = products,
@@ -28,9 +27,6 @@ class GetNotificationsUseCase @Inject internal constructor(
                 notificationContent(group, formatter)
             }
     }
-
-    private suspend fun productTitleFormatter(): ProductTitleFormatter =
-        settingsRepository.productTitleFormatter.get()
 
     private suspend fun enabledProducts() =
         productRepository
@@ -61,10 +57,11 @@ class GetNotificationsUseCase @Inject internal constructor(
         return NotificationContent(
             groupKey = groupKey,
             productIds = productIds,
-            formattedProductTitles = formatter.print(
-                products = sortedGroup,
-                separator = ProductListSeparator.Notifications,
-            ),
+            formattedProductTitles = formatNotificationTitle
+                .execute(
+                    formatter = formatter,
+                    products = sortedGroup,
+                ),
         )
     }
 }
