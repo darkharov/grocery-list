@@ -193,12 +193,12 @@
     </string-array>
 
     <string-array name="ceaser_salad_with_chicken">
-        <item>Chinese cabbage</item>
         <item>Tomatoes (Cherry)</item>
-        <item>Garlic</item>
         <item>Chicken breast</item>
-        <item>Cheese</item>
         <item>White bread</item>
+        <item>Chinese cabbage</item>
+        <item>Garlic</item>
+        <item>Cheese</item>
         <item>Salt</item>
         <item>Olive oil</item>
         <item>Black pepper</item>
