@@ -10,8 +10,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import app.grocery.list.domain.HandleProductListPostedUseCase
 import app.grocery.list.domain.notification.GetNotificationsUseCase
+import app.grocery.list.domain.notification.HandleProductListPostedUseCase
 import app.grocery.list.domain.notification.NotificationContent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

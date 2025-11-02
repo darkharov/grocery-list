@@ -1,4 +1,4 @@
-package app.grocery.list.domain
+package app.grocery.list.domain.notification
 
 import app.grocery.list.domain.settings.BottomBarRoadmapStep
 import app.grocery.list.domain.settings.SettingsRepository
