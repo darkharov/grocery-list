@@ -8,14 +8,4 @@ data class Product(
     val categoryId: Int,
 ) {
     val disabled = !(enabled)
-
-    data class Category(
-        val id: Int,
-        val title: String,
-    )
-
-    data class TitleAndCategory(
-        val productTitle: String,
-        val category: Category,
-    )
 }

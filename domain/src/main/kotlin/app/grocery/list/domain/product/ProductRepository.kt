@@ -4,8 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ProductRepository {
 
-    fun categories(): Flow<List<Product.Category>>
-    fun categorizedProducts(criteria: CategorizedProductsCriteria): Flow<List<CategoryAndProducts>>
+    fun categorizedProducts(criteria: CategorizedProductsCriteria): Flow<List<CategoryProducts>>
     fun numberOfProducts(): Flow<Int>
     fun numberOfEnabledProducts(): Flow<Int>
     fun atLeastOneProductEnabled(): Flow<Boolean>
@@ -13,9 +12,7 @@ interface ProductRepository {
     fun enabledAndDisabledProducts(): Flow<EnabledAndDisabledProducts>
     fun isThereAtLeastOne(): Flow<Boolean>
 
-    suspend fun productTitleAndCategory(productId: Int): Product.TitleAndCategory
-    suspend fun findCategory(search: String): Product.Category?
-    suspend fun category(id: Int): Product.Category
+    suspend fun productTitleAndCategoryId(productId: Int): ProductTitleAndCategoryId
     suspend fun findEmojiAndCategoryId(search: String): EmojiAndCategoryId
     suspend fun findEmoji(search: String): EmojiSearchResult?
     suspend fun clearProducts()

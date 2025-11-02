@@ -2,18 +2,19 @@ package app.grocery.list.data.product
 
 import android.content.Context
 import app.grocery.list.data.R
-import app.grocery.list.domain.product.CategoryAndProducts
+import app.grocery.list.data.category.CategoryDao
+import app.grocery.list.domain.product.CategoryProducts
 import app.grocery.list.domain.product.EmojiAndCategoryId
 import app.grocery.list.domain.product.EmojiSearchResult
 import app.grocery.list.domain.product.EnabledAndDisabledProducts
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.domain.product.ProductRepository.CategorizedProductsCriteria
+import app.grocery.list.domain.product.ProductTitleAndCategoryId
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
@@ -26,27 +27,16 @@ internal class ProductRepositoryImpl @Inject constructor(
     private val categoryDao: CategoryDao,
 ) : ProductRepository {
 
-    override fun categories(): Flow<List<Product.Category>> =
-        categoryDao.categories()
-
-    override suspend fun productTitleAndCategory(productId: Int): Product.TitleAndCategory {
+    override suspend fun productTitleAndCategoryId(productId: Int): ProductTitleAndCategoryId {
         val (title, categoryId) = productDao.selectTitleAndCategoryId(productId = productId)
-        return Product.TitleAndCategory(
+        return ProductTitleAndCategoryId(
             productTitle = title,
-            category = categoryDao.get(
-                id = categoryId,
-            ),
+            categoryId = categoryId,
         )
     }
 
-    override suspend fun findCategory(search: String): Product.Category? =
-        categoryDao.category(search = search)
-
     override suspend fun findEmojiAndCategoryId(search: String): EmojiAndCategoryId =
         categoryDao.emojiAndCategoryId(search = search)
-
-    override suspend fun category(id: Int): Product.Category =
-        categoryDao.get(id = id)
 
     override suspend fun findEmoji(search: String): EmojiSearchResult? =
         categoryDao.emoji(search = search)
@@ -79,7 +69,7 @@ internal class ProductRepositoryImpl @Inject constructor(
 
     override fun categorizedProducts(
         criteria: CategorizedProductsCriteria,
-    ): Flow<List<CategoryAndProducts>> =
+    ): Flow<List<CategoryProducts>> =
         productDao
             .select(
                 enabledOnly = when (criteria) {
@@ -89,8 +79,8 @@ internal class ProductRepositoryImpl @Inject constructor(
             )
             .map { categorizedProducts ->
                 categorizedProducts.map { (categoryId, products) ->
-                    CategoryAndProducts(
-                        category = categories().first().first { it.id == categoryId },
+                    CategoryProducts(
+                        categoryId = categoryId,
                         products = productMapper.toDomainModels(products),
                     )
                 }

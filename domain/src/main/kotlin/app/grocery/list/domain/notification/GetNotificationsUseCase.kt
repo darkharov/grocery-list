@@ -2,7 +2,7 @@ package app.grocery.list.domain.notification
 
 import app.grocery.list.domain.formatter.GetProductTitleFormatterUseCase
 import app.grocery.list.domain.formatter.ProductTitleFormatter
-import app.grocery.list.domain.product.CategoryAndProducts
+import app.grocery.list.domain.product.CategoryProducts
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
 import javax.inject.Inject
@@ -36,7 +36,7 @@ class GetNotificationsUseCase @Inject internal constructor(
             .first()
 
     private fun groupProducts(
-        products: List<CategoryAndProducts>,
+        products: List<CategoryProducts>,
         maxNumberOfNotifications: Int,
     ): List<List<Product>> {
         val allProducts = products.flatMap { it.products }

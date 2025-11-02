@@ -1,7 +1,7 @@
 package app.grocery.list.domain.preview
 
+import app.grocery.list.domain.category.Category
 import app.grocery.list.domain.formatter.ProductTitleFormatter
-import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.template.Template
 
 sealed class ProductListPreview {
@@ -21,7 +21,7 @@ sealed class ProductListPreview {
         )
 
         data class CategoryContent(
-            val category: Product.Category?,
+            val category: Category?,
             val formattedProducts: List<FormattedProduct>,
         )
 

@@ -4,6 +4,8 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.grocery.list.domain.GetProductTitleAndCategoryUseCase
+import app.grocery.list.domain.category.CategoryRepository
 import app.grocery.list.domain.product.AtLeastOneProductJustAddedUseCase
 import app.grocery.list.domain.product.EmojiSearchResult
 import app.grocery.list.domain.product.Product
@@ -35,9 +37,11 @@ import kotlinx.coroutines.launch
 internal class ProductInputFormViewModel @AssistedInject constructor(
     @Assisted
     private val productId: Int?,
-    private val repository: ProductRepository,
+    private val productRepository: ProductRepository,
+    private val categoryRepository: CategoryRepository,
     private val categoryMapper: CategoryMapper,
     private val emojiSearchResultMapper: EmojiSearchResultMapper,
+    private val getTitleAndCategory: GetProductTitleAndCategoryUseCase,
     atLeastOneProductJustAdded: AtLeastOneProductJustAddedUseCase,
 ) : ViewModel(),
     ProductInputFormCallbacks {
@@ -60,17 +64,16 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
         if (productId != null) {
             viewModelScope.launch(Dispatchers.IO) {
 
-                val (productTitle, category) = repository
-                    .productTitleAndCategory(productId = productId)
+                val initialValues = getTitleAndCategory.execute(productId = productId)
 
                 title.value = TextFieldValue(
-                    text = productTitle,
+                    text = initialValues.productTitle,
                     selection = TextRange(
-                        index = productTitle.length,
+                        index = initialValues.productTitle.length,
                     ),
                 )
 
-                explicitlySelectedCategory.value = categoryMapper.transform(category)
+                explicitlySelectedCategory.value = categoryMapper.transform(initialValues.category)
             }
         }
     }
@@ -79,7 +82,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
     private fun emoji(): Flow<EmojiProps?> =
         title
             .mapLatest { title ->
-                repository.findEmoji(search = title.text)
+                productRepository.findEmoji(search = title.text)
             }
             .map { result ->
                 emojiSearchResultMapper.transformNullable(result)
@@ -103,8 +106,8 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
         }
 
     private fun categories(): Flow<ImmutableList<CategoryProps>> =
-        repository
-            .categories()
+        categoryRepository
+            .all()
             .map(categoryMapper::transformList)
 
     private fun selectedCategory(): Flow<CategoryProps?> =
@@ -116,7 +119,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
         }
 
     private suspend fun findCategory(productTitle: String): CategoryProps? {
-        val defined = repository.findCategory(search = productTitle)
+        val defined = categoryRepository.find(search = productTitle)
         return categoryMapper.transformNullable(defined)
     }
 
@@ -164,7 +167,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
             enabled = true,
         )
         viewModelScope.launch(Dispatchers.IO) {
-            repository.putProduct(product)
+            productRepository.putProduct(product)
         }
     }
 

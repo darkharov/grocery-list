@@ -1,8 +1,9 @@
 package app.grocery.list.domain.preview
 
+import app.grocery.list.domain.category.CategoryRepository
 import app.grocery.list.domain.formatter.GetProductTitleFormatterUseCase
 import app.grocery.list.domain.formatter.ProductTitleFormatter
-import app.grocery.list.domain.product.CategoryAndProducts
+import app.grocery.list.domain.product.CategoryProducts
 import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.domain.template.TemplateRepository
 import javax.inject.Inject
@@ -18,6 +19,7 @@ class GetProductListPreviewUseCase @Inject internal constructor(
     private val getProductTitleFormatter: GetProductTitleFormatterUseCase,
     private val productRepository: ProductRepository,
     private val templateRepository: TemplateRepository,
+    private val categoryRepository: CategoryRepository,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     fun execute(): Flow<ProductListPreview> =
@@ -37,19 +39,23 @@ class GetProductListPreviewUseCase @Inject internal constructor(
                 }
             }
 
-    private fun items(
-        categoryAndProducts: List<CategoryAndProducts>,
+    private suspend fun items(
+        categoryProducts: List<CategoryProducts>,
         formatter: ProductTitleFormatter,
     ): ProductListPreview.Items {
-        val productCount = categoryAndProducts.fold(0) { acc, item ->
+        val productCount = categoryProducts.fold(0) { acc, item ->
             acc + item.products.size
         }
         return ProductListPreview.Items(
-            categories = categoryAndProducts.map { (category, products) ->
+            categories = categoryProducts.map { (categoryId, products) ->
                 ProductListPreview.Items.CategoryContent(
-                    category = category.takeIf {
-                        categoryAndProducts.size >= CategoriesVisibilityCriteria.MIN_NUMBER &&
+                    category = if (
+                        categoryProducts.size >= CategoriesVisibilityCriteria.MIN_NUMBER &&
                         productCount >= CategoriesVisibilityCriteria.MIN_PRODUCT_NUMBER
+                    ) {
+                        categoryRepository.get(categoryId)
+                    } else {
+                        null
                     },
                     formattedProducts = products
                         .map { product ->
@@ -65,8 +71,8 @@ class GetProductListPreviewUseCase @Inject internal constructor(
                 productCount >= DisableEnableAllVisibilityCriteria.MIN_PRODUCT_NUMBER
             ) {
                 ProductListPreview.Items.EnableAndDisableAll(
-                    enableAllAvailable = categoryAndProducts.any { it.hasDisabledProducts },
-                    disableAllAvailable = categoryAndProducts.any { it.hasEnabledProducts },
+                    enableAllAvailable = categoryProducts.any { it.hasDisabledProducts },
+                    disableAllAvailable = categoryProducts.any { it.hasEnabledProducts },
                 )
             } else {
                 null

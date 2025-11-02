@@ -1,7 +1,7 @@
 package app.grocery.list.domain.product
 
-data class CategoryAndProducts(
-    val category: Product.Category,
+data class CategoryProducts(
+    val categoryId: Int,
     val products: List<Product>,
 ) {
     val hasEnabledProducts get() = products.any { it.enabled }
