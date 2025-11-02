@@ -1,10 +1,9 @@
-package app.grocery.list.domain
+package app.grocery.list.domain.settings
 
-import app.grocery.list.domain.format.ProductTitleFormatter
 import app.grocery.list.storage.value.kotlin.StorageValue
 
 interface SettingsRepository {
-    val productTitleFormatter: StorageValue<ProductTitleFormatter>
+    val productTitleFormat: StorageValue<ProductTitleFormat>
     val clearNotificationsReminderEnabled: StorageValue<Boolean>
     val bottomBarRoadmapStep: StorageValue<BottomBarRoadmapStep>
     val recommendAppWhenSharingList: StorageValue<Boolean>

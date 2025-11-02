@@ -5,13 +5,12 @@ import androidx.lifecycle.viewModelScope
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogProps
 import app.grocery.list.commons.compose.values.StringValue
-import app.grocery.list.domain.SettingsRepository
-import app.grocery.list.domain.format.ProductListSeparator
 import app.grocery.list.domain.product.EnabledAndDisabledProducts
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
+import app.grocery.list.domain.settings.SettingsRepository
 import app.grocery.list.domain.sharing.GetProductSharingStringUseCase
-import app.grocery.list.domain.sharing.ParseProductListUseCase
+import app.grocery.list.domain.sharing.ParseAndFormatProductsUseCase
 import app.grocery.list.product.list.actions.dialog.ProductListActionsDialogProps
 import app.grocery.list.storage.value.kotlin.get
 import commons.android.stateIn
@@ -32,7 +31,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     private val productRepository: ProductRepository,
     private val settingsRepository: SettingsRepository,
     private val getProductSharingString: GetProductSharingStringUseCase,
-    private val parseProductList: ParseProductListUseCase,
+    private val parseProductList: ParseAndFormatProductsUseCase,
 ) : ViewModel(),
     ProductListActionsCallbacks {
 
@@ -133,10 +132,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     override fun onPasted(text: String) {
         viewModelScope.launch(Dispatchers.IO) {
             parseProductList
-                .execute(
-                    text = text,
-                    separator = ProductListSeparator.Dialog,
-                )
+                .execute(text = text)
                 .onSuccess { products ->
                     dialog.value = ProductListActionsDialogProps.ConfirmPastedListWrapper(
                         ConfirmPastedListDialogProps(

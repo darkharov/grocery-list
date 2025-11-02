@@ -2,8 +2,8 @@ package app.grocery.list.settings.use.icons.on.bottom.bar.switch_
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.grocery.list.domain.BottomBarRoadmapStep
-import app.grocery.list.domain.SettingsRepository
+import app.grocery.list.domain.settings.BottomBarRoadmapStep
+import app.grocery.list.domain.settings.SettingsRepository
 import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy.EmbeddedElement
 import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy.Screen
 import commons.android.stateIn

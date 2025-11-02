@@ -1,7 +1,7 @@
 package app.grocery.list.domain.preview
 
-import app.grocery.list.domain.SettingsRepository
-import app.grocery.list.domain.format.ProductTitleFormatter
+import app.grocery.list.domain.formatter.GetProductTitleFormatterUseCase
+import app.grocery.list.domain.formatter.ProductTitleFormatter
 import app.grocery.list.domain.product.CategoryAndProducts
 import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.domain.template.TemplateRepository
@@ -14,8 +14,8 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 @Singleton
-class GetProductListPreviewUseCase @Inject constructor(
-    private val settingsRepository: SettingsRepository,
+class GetProductListPreviewUseCase @Inject internal constructor(
+    private val getProductTitleFormatter: GetProductTitleFormatterUseCase,
     private val productRepository: ProductRepository,
     private val templateRepository: TemplateRepository,
 ) {
@@ -29,31 +29,29 @@ class GetProductListPreviewUseCase @Inject constructor(
                         flowOf(ProductListPreview.Empty(templateRepository.all()))
                     }
                     else -> {
-                        settingsRepository
-                            .productTitleFormatter
-                            .observe()
-                            .map { formatter ->
-                                items(items, formatter)
+                        getProductTitleFormatter.execute()
+                            .map { result ->
+                                items(items, result.formatter)
                             }
                     }
                 }
             }
 
     private fun items(
-        items: List<CategoryAndProducts>,
+        categoryAndProducts: List<CategoryAndProducts>,
         formatter: ProductTitleFormatter,
     ): ProductListPreview.Items {
-        val productCount = items.fold(0) { acc, item ->
+        val productCount = categoryAndProducts.fold(0) { acc, item ->
             acc + item.products.size
         }
         return ProductListPreview.Items(
-            categories = items.map { (category, products) ->
+            categories = categoryAndProducts.map { (category, products) ->
                 ProductListPreview.Items.CategoryContent(
                     category = category.takeIf {
-                        items.size >= CategoriesVisibilityCriteria.MIN_NUMBER &&
+                        categoryAndProducts.size >= CategoriesVisibilityCriteria.MIN_NUMBER &&
                         productCount >= CategoriesVisibilityCriteria.MIN_PRODUCT_NUMBER
                     },
-                    products = products
+                    formattedProducts = products
                         .map { product ->
                             ProductListPreview.Items.FormattedProduct(
                                 productId = product.id,
@@ -67,8 +65,8 @@ class GetProductListPreviewUseCase @Inject constructor(
                 productCount >= DisableEnableAllVisibilityCriteria.MIN_PRODUCT_NUMBER
             ) {
                 ProductListPreview.Items.EnableAndDisableAll(
-                    enableAllAvailable = items.any { it.hasDisabledProducts },
-                    disableAllAvailable = items.any { it.hasEnabledProducts },
+                    enableAllAvailable = categoryAndProducts.any { it.hasDisabledProducts },
+                    disableAllAvailable = categoryAndProducts.any { it.hasEnabledProducts },
                 )
             } else {
                 null

@@ -1,8 +1,8 @@
 package app.grocery.list.data
 
-import app.grocery.list.domain.BottomBarRoadmapStep
-import app.grocery.list.domain.SettingsRepository
-import app.grocery.list.domain.format.ProductTitleFormatter
+import app.grocery.list.domain.settings.BottomBarRoadmapStep
+import app.grocery.list.domain.settings.ProductTitleFormat
+import app.grocery.list.domain.settings.SettingsRepository
 import app.grocery.list.storage.value.android.StorageValueFactory
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,9 +12,9 @@ internal class SettingsRepositoryImpl @Inject constructor(
     factory: StorageValueFactory,
 ) : SettingsRepository {
 
-    override val productTitleFormatter =
+    override val productTitleFormat =
         factory.enum(
-            defaultValue = ProductTitleFormatter.EmojiAndFullText,
+            defaultValue = ProductTitleFormat.EmojiAndFullText,
             keyPrefix = "$OLD_KEY_PREFIX\$productTitleFormatter",
         )
 

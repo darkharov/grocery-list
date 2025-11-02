@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import app.grocery.list.domain.format.ProductTitleFormatter
+import app.grocery.list.domain.formatter.ProductTitleFormatter
 import app.grocery.list.domain.preview.ProductListPreview
 import kotlinx.collections.immutable.toImmutableList
 
@@ -36,7 +36,7 @@ internal object ProductListPreviewMapper {
                                     title = category.title,
                                 )
                             },
-                            products = it.products.map { product ->
+                            products = it.formattedProducts.map { product ->
                                 ProductListPreviewProps.Items.Product(
                                     id = product.productId,
                                     enabled = product.enabled,

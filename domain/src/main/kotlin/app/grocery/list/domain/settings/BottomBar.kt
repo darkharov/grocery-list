@@ -1,4 +1,4 @@
-package app.grocery.list.domain
+package app.grocery.list.domain.settings
 
 enum class BottomBarMode {
     Buttons,
