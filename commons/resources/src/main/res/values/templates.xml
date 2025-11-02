@@ -26,7 +26,7 @@
         <item>{🧅}Onion</item>
         <item>{🍑}Peach</item>
         <item>{🥔}Potato</item>
-        <item>{🍅}Tomato</item>
+        <item>{🍅}Tomato|Tomatoes</item>
         <item>{🍒}Cherry|Cherries</item>
         <item>{🍉}Watermelon</item>
         <item>{🍈}Melon</item>
@@ -194,7 +194,7 @@
 
     <string-array name="ceaser_salad_with_chicken">
         <item>Chinese cabbage</item>
-        <item>Cherry tomatoes</item>
+        <item>Tomatoes (Cherry)</item>
         <item>Garlic</item>
         <item>Chicken breast</item>
         <item>Cheese</item>
