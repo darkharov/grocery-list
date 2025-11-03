@@ -49,18 +49,13 @@ class GetNotificationsUseCase @Inject internal constructor(
         group: List<Product>,
         formatter: ProductTitleFormatter,
     ): NotificationContent {
-        val groupKey = group.first().id
-        val productIds = group.map { it.id }
-        val sortedGroup = group
-            .sortedBy { it.title.length }
-            .sortedBy { it.emojiSearchResult != null }
         return NotificationContent(
-            groupKey = groupKey,
-            productIds = productIds,
+            groupKey = group.first().id,
+            productIds = group.map { it.id },
             formattedProductTitles = formatNotificationTitle
                 .execute(
                     formatter = formatter,
-                    products = sortedGroup,
+                    products = group,
                 ),
         )
     }
