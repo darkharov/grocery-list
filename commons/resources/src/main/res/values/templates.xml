@@ -4,13 +4,13 @@
     <string-array name="fruits_and_vegetables">
         <item>{🍎}Apple</item>
         <item>{🍏}Green Apple|Apple Green</item>
-        <item>{🍌}Banana</item>
+        <item>{🍌}Banana|Bananas</item>
         <item>{🥦}Broccoli</item>
         <item>{🥕}Carrot</item>
         <item>{🌶️}Chili|Red pepper|Pepper red|Pepper chili|Chili pepper</item>
         <item>{🫑}Pepper|Capsicum</item>
         <item>{🥒}Cucumber</item>
-        <item>{🍆}Eggplant|Aubergine</item>
+        <item>{🍆}Eggplant|Eggplants|Aubergine|Aubergines</item>
         <item>{🧄}Garlic</item>
         <item>{🍇}Grape</item>
         <item>{🌽}Corn</item>
@@ -39,7 +39,7 @@
         <item>{🫚}Ginger</item>
         <item>{🫜}Root Vegetable</item>
         <item>{🎃}Pumpkin</item>
-        <item>{🍄‍🟫}Mushroom|Champignon</item>
+        <item>{🍄‍🟫}Mushroom|Mushrooms|Champignon|Champignons|Champignon mushroom|Champignon mushrooms</item>
         <item>{🫘}Bean</item>
         <item>{🥬}Leafy Green|Chinese cabbage|Cabbage chinese</item>
         <item>Cabbage</item>
@@ -70,6 +70,7 @@
     <string-array name="dairy_products">
         <item>{🥛}Milk</item>
         <item>{🧀}Cheese</item>
+        <item>Curd snack</item>
         <item>{🧈}Butter</item>
         <item>Cottage cheese|Cheese cottage</item>
         <item>Yogurt</item>
