@@ -57,11 +57,6 @@ class ScreenLockedReceiver private constructor(
             override fun onPause(owner: LifecycleOwner) {
                 handler.postDelayed(doUnregister, 1_000)
             }
-
-            override fun onDestroy(owner: LifecycleOwner) {
-                handler.removeCallbacks(doUnregister)
-                registerer.unregister()
-            }
         }
     }
 }
