@@ -13,7 +13,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface AppModule {
+class AppModule {
 
     @Provides
     @Named(SharingStringFormatter.RECOMMENDATION_TO_USE_APP)
