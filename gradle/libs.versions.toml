@@ -19,6 +19,7 @@ lifecycleProcess = "2.9.4"
 activityKtx = "1.11.0"
 composeBom = "2025.10.01"
 jetbrainsKotlinJvm = "2.0.0"
+mockk = "1.14.3"
 navigationComposeVersion = "2.9.4"
 roomRuntime = "2.8.3"
 
@@ -53,6 +54,7 @@ kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collec
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-metadata-jvm = { module = "org.jetbrains.kotlinx:kotlinx-metadata-jvm", version.ref = "kotlinxMetadataJvm" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

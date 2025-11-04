@@ -22,4 +22,5 @@ dependencies {
     implementation(libs.joda.time)
     api(project(":commons:storage-value:kotlin"))
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
 }

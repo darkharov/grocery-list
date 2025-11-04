@@ -14,6 +14,6 @@ class GetProductSharingStringUseCase @Inject internal constructor(
     ): String =
         sharingStringFormatter.toSharingString(
             products = products,
-            recommendUsingThisApp = recommendUsingThisApp,
+            includeRecommendationToUseApp = recommendUsingThisApp,
         )
 }
