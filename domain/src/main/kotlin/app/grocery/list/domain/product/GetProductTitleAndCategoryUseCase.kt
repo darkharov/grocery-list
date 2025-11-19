@@ -1,7 +1,6 @@
-package app.grocery.list.domain
+package app.grocery.list.domain.product
 
 import app.grocery.list.domain.category.CategoryRepository
-import app.grocery.list.domain.product.ProductRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 

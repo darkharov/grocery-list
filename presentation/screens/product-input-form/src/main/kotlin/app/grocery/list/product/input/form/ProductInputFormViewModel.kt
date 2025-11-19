@@ -4,10 +4,10 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.grocery.list.domain.GetProductTitleAndCategoryUseCase
 import app.grocery.list.domain.category.CategoryRepository
 import app.grocery.list.domain.product.AtLeastOneProductJustAddedUseCase
 import app.grocery.list.domain.product.EmojiAndKeyword
+import app.grocery.list.domain.product.GetProductTitleAndCategoryUseCase
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.product.input.form.elements.category.picker.CategoryMapper

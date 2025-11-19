@@ -1,4 +1,4 @@
-package app.grocery.list.domain
+package app.grocery.list.domain.product
 
 import app.grocery.list.domain.category.Category
 
