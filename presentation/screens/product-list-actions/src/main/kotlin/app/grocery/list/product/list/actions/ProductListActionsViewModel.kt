@@ -138,11 +138,11 @@ internal class ProductListActionsViewModel @Inject constructor(
                         ConfirmPastedListDialogProps(
                             title = StringValue.PluralResId(
                                 resId = R.plurals.pattern_products_found,
-                                count = products.originalProducts.size,
+                                count = products.products.size,
                                 useCountAsArgument = true,
                             ),
-                            text = products.formattedString,
-                            productList = products.originalProducts,
+                            text = products.formattedTitles,
+                            productList = products.products,
                         )
                     )
                 }

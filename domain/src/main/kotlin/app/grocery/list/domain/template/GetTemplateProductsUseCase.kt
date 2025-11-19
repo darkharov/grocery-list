@@ -1,7 +1,7 @@
 package app.grocery.list.domain.template
 
 import app.grocery.list.domain.sharing.ParseAndFormatProductsUseCase
-import app.grocery.list.domain.sharing.ParsedProducts
+import app.grocery.list.domain.sharing.ProductsAndFormattedTitles
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -10,7 +10,7 @@ class GetTemplateProductsUseCase @Inject constructor(
     private val templateRepository: TemplateRepository,
     private val parseProducts: ParseAndFormatProductsUseCase,
 ) {
-    suspend fun execute(templateId: Int): ParsedProducts {
+    suspend fun execute(templateId: Int): ProductsAndFormattedTitles {
         val titles = templateRepository
             .productTitles(templateId = templateId)
             .joinToString()

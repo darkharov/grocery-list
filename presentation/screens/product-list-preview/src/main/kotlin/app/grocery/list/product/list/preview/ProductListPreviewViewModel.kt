@@ -76,8 +76,8 @@ internal class ProductListPreviewViewModel @Inject constructor(
             dialog.value = ProductListPreviewDialogProps.ConfirmPastedProductsWrapper(
                 ConfirmPastedListDialogProps(
                     title = StringValue.StringWrapper(template.title),
-                    text = products.formattedString,
-                    productList = products.originalProducts,
+                    text = products.formattedTitles,
+                    productList = products.products,
                 )
             )
         }

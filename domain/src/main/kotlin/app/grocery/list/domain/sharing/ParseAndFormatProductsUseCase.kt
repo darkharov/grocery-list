@@ -13,7 +13,7 @@ class ParseAndFormatProductsUseCase @Inject internal constructor(
     private val legacyFormatter: LegacySharingStringFormatter,
     private val getProductTitleFormatter: GetProductTitleFormatterUseCase,
 ) {
-    suspend fun execute(text: String): Result<ParsedProducts> {
+    suspend fun execute(text: String): Result<ProductsAndFormattedTitles> {
         legacyFormatter.parse(text).onSuccess { products ->
             return result(products)
         }
@@ -23,11 +23,11 @@ class ParseAndFormatProductsUseCase @Inject internal constructor(
         return Result.failure(ProductsNotFoundException())
     }
 
-    private suspend fun result(products: List<Product>): Result<ParsedProducts> =
+    private suspend fun result(products: List<Product>): Result<ProductsAndFormattedTitles> =
         Result.success(
-            ParsedProducts(
-                originalProducts = products,
-                formattedString = getProductTitleFormatter
+            ProductsAndFormattedTitles(
+                products = products,
+                formattedTitles = getProductTitleFormatter
                     .execute()
                     .first()
                     .formatter
