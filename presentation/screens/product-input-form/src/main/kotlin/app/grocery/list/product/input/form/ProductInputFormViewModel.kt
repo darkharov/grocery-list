@@ -167,7 +167,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
             enabled = true,
         )
         viewModelScope.launch(Dispatchers.IO) {
-            productRepository.putProduct(product)
+            productRepository.put(product)
         }
     }
 

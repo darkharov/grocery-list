@@ -24,7 +24,7 @@ class GetProductListPreviewUseCase @Inject internal constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     fun execute(): Flow<ProductListPreview> =
         productRepository
-            .categorizedProducts(ProductRepository.CategorizedProductsCriteria.All)
+            .all()
             .flatMapLatest { items ->
                 when {
                     items.isEmpty() -> {

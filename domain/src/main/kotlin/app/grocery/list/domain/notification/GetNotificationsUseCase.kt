@@ -17,9 +17,9 @@ class GetNotificationsUseCase @Inject internal constructor(
 ) {
     suspend fun execute(maxNumberOfItems: Int): List<NotificationContent> {
         val formatter = getProductTitleFormatter.execute().first().formatter
-        val products = enabledProducts()
+        val enabledOnly = productRepository.enabledOnly().first()
         val groupedProducts = groupProducts(
-            products = products,
+            products = enabledOnly,
             maxNumberOfNotifications = maxNumberOfItems,
         )
         return groupedProducts
@@ -27,13 +27,6 @@ class GetNotificationsUseCase @Inject internal constructor(
                 notificationContent(group, formatter)
             }
     }
-
-    private suspend fun enabledProducts() =
-        productRepository
-            .categorizedProducts(
-                criteria = ProductRepository.CategorizedProductsCriteria.EnabledOnly,
-            )
-            .first()
 
     private fun groupProducts(
         products: List<CategoryProducts>,

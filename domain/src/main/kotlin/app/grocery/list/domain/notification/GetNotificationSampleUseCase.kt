@@ -17,7 +17,7 @@ class GetNotificationSampleUseCase @Inject internal constructor(
     fun execute(): Flow<Result> =
         combine(
             getTitleFormatter.execute(),
-            productRepository.sampleProducts(),
+            productRepository.samples(),
         ) { formatterResult, products ->
             Result(
                 format = formatterResult

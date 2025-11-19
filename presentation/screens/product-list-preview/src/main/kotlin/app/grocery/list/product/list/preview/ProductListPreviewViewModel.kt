@@ -39,7 +39,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
 
     override fun onDelete(productId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val deletedProduct = repository.deleteProduct(productId = productId)
+            val deletedProduct = repository.delete(productId = productId)
             val event = Event.OnProductDeleted(deletedProduct)
             events.trySend(event)
         }
@@ -47,7 +47,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
 
     override fun onProductEnabledChange(productId: Int, newValue: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.setProductEnabled(
+            repository.setEnabled(
                 productId = productId,
                 enabled = newValue,
             )
@@ -60,13 +60,13 @@ internal class ProductListPreviewViewModel @Inject constructor(
 
     override fun onEnableAll() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.enableAllProducts()
+            repository.enableAll()
         }
     }
 
     override fun onDisableEnableAll() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.disableAllProducts()
+            repository.disableAll()
         }
     }
 
@@ -90,7 +90,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
     override fun onPasteProductsConfirmed(products: List<Product>) {
         removeDialog()
         viewModelScope.launch(Dispatchers.IO) {
-            repository.putProducts(products)
+            repository.put(products)
         }
     }
 

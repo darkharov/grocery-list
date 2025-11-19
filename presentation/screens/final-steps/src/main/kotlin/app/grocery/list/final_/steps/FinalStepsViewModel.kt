@@ -26,7 +26,7 @@ class FinalStepsViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             repository
-                .numberOfEnabledProducts()
+                .numberOfEnabled()
                 .filter { it == 0 }
                 .flowOn(Dispatchers.IO)
                 .collect {

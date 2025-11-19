@@ -22,7 +22,7 @@ internal class NotificationDismissReceiver : BroadcastReceiver() {
             .lifecycleScope
             .launch(Dispatchers.IO) {
                 val productIds = intent.getIntArrayExtra(EXTRA_PRODUCT_IDS)!!
-                repository.setProductsEnabled(productIds.toList(), false)
+                repository.setEnabled(productIds.toList(), false)
             }
     }
 

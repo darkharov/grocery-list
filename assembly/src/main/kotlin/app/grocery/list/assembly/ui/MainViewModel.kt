@@ -33,7 +33,7 @@ class MainViewModel @Inject constructor(
 
     val numberOfEnabledProducts =
         productRepository
-            .numberOfEnabledProducts()
+            .numberOfEnabled()
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     val hasEmojiIfEnoughSpace =
@@ -86,7 +86,7 @@ class MainViewModel @Inject constructor(
 
     fun undoProductDeletion(product: Product) {
         viewModelScope.launch(Dispatchers.IO) {
-            productRepository.putProduct(product)
+            productRepository.put(product)
         }
     }
 }
