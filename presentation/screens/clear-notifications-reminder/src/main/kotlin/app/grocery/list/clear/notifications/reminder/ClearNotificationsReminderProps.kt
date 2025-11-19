@@ -9,9 +9,10 @@ internal data class ClearNotificationsReminderProps(
     val doNotShowAgain: Boolean = false,
 )
 
-internal class ClearNotificationsReminderMock : PreviewParameterProvider<ClearNotificationsReminderProps> {
+internal class ClearNotificationsReminderMock : PreviewParameterProvider<ClearNotificationsReminderProps?> {
+
     override val values = sequenceOf(
-        ClearNotificationsReminderProps(),
+        null,
         ClearNotificationsReminderProps(
             progress = true,
             doNotShowAgain = true,

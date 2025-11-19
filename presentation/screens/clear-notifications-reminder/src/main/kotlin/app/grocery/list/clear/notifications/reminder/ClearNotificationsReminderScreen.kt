@@ -25,6 +25,7 @@ import androidx.navigation.compose.composable
 import app.grocery.list.clear.notifications.reminder.ClearNotificationsReminderViewModel.Event
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppContentToRead
+import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.button.AppButtonNext
 import app.grocery.list.commons.compose.elements.button.AppButtonStateProps
 import app.grocery.list.commons.compose.elements.titled.switch_.AppSwitch
@@ -57,15 +58,29 @@ private fun ClearNotificationsReminderScreen(
             }
         }
     }
-
-    ClearNotificationsReminderScreen(
+    PreloaderOrContent(
         props = props,
         callbacks = viewModel,
     )
 }
 
 @Composable
-private fun ClearNotificationsReminderScreen(
+private fun PreloaderOrContent(
+    props: ClearNotificationsReminderProps?,
+    callbacks: ClearNotificationsReminderCallbacks,
+) {
+    if (props == null) {
+        AppPreloader()
+    } else {
+        Content(
+            props = props,
+            callbacks = callbacks,
+        )
+    }
+}
+
+@Composable
+private fun Content(
     props: ClearNotificationsReminderProps,
     callbacks: ClearNotificationsReminderCallbacks,
     modifier: Modifier = Modifier,
@@ -124,7 +139,7 @@ private fun ClearNotificationsReminderScreenPreview(
 ) {
     GroceryListTheme {
         Scaffold { padding ->
-            ClearNotificationsReminderScreen(
+            Content(
                 props = props,
                 callbacks = ClearNotificationsReminderCallbacksMock,
                 modifier = Modifier
