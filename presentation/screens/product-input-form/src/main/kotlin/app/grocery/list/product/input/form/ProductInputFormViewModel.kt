@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import app.grocery.list.domain.GetProductTitleAndCategoryUseCase
 import app.grocery.list.domain.category.CategoryRepository
 import app.grocery.list.domain.product.AtLeastOneProductJustAddedUseCase
-import app.grocery.list.domain.product.EmojiSearchResult
+import app.grocery.list.domain.product.EmojiAndKeyword
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.product.input.form.elements.category.picker.CategoryMapper
@@ -40,7 +40,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
     private val productRepository: ProductRepository,
     private val categoryRepository: CategoryRepository,
     private val categoryMapper: CategoryMapper,
-    private val emojiSearchResultMapper: EmojiSearchResultMapper,
+    private val emojiAndKeywordMapper: EmojiAndKeywordMapper,
     private val getTitleAndCategory: GetProductTitleAndCategoryUseCase,
     atLeastOneProductJustAdded: AtLeastOneProductJustAddedUseCase,
 ) : ViewModel(),
@@ -85,7 +85,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
                 productRepository.findEmoji(search = title.text)
             }
             .map { result ->
-                emojiSearchResultMapper.transformNullable(result)
+                emojiAndKeywordMapper.transformNullable(result)
             }
 
     private fun categoryPicker(): Flow<CategoryPickerProps> =
@@ -138,7 +138,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
                 putProduct(
                     productTitle = productTitle,
                     categoryId = selectedCategoryId,
-                    emojiSearchResult = emoji?.payload as EmojiSearchResult?,
+                    emojiAndKeyword = emoji?.payload as EmojiAndKeyword?,
                 )
                 finalizeInput()
             } else {
@@ -157,12 +157,12 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
     private fun putProduct(
         productTitle: String,
         categoryId: Int,
-        emojiSearchResult: EmojiSearchResult?,
+        emojiAndKeyword: EmojiAndKeyword?,
     ) {
         val product = Product(
             id = productId ?: 0,
             title = productTitle.replaceFirstChar { it.uppercaseChar() },
-            emojiSearchResult = emojiSearchResult,
+            emojiAndKeyword = emojiAndKeyword,
             categoryId = categoryId,
             enabled = true,
         )

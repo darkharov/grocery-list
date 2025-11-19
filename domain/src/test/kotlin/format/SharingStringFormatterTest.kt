@@ -1,7 +1,7 @@
 package format
 
 import app.grocery.list.domain.product.EmojiAndCategoryId
-import app.grocery.list.domain.product.EmojiSearchResult
+import app.grocery.list.domain.product.EmojiAndKeyword
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.domain.sharing.SharingStringFormatter
@@ -17,7 +17,7 @@ internal class SharingStringFormatterTest {
 
     private val emojiAndCategoryId =
         EmojiAndCategoryId(
-            emoji = EmojiSearchResult(
+            emoji = EmojiAndKeyword(
                 emoji = "🍎",
                 keyword = "Apple",
             ),
@@ -27,7 +27,7 @@ internal class SharingStringFormatterTest {
     private val prototype = Product(
         id = 0,
         title = productTitle,
-        emojiSearchResult = emojiAndCategoryId.emoji,
+        emojiAndKeyword = emojiAndCategoryId.emoji,
         categoryId = emojiAndCategoryId.categoryId,
         enabled = true,
     )
@@ -35,7 +35,7 @@ internal class SharingStringFormatterTest {
     @Test
     fun `product with no emoji is correct`() {
         `one product formatted and parsed correctly`(
-            prototype = prototype.copy(emojiSearchResult = null),
+            prototype = prototype.copy(emojiAndKeyword = null),
         )
     }
 
@@ -50,7 +50,7 @@ internal class SharingStringFormatterTest {
 
         val repository = mockk<ProductRepository>()
         val emojiAndCategoryId = EmojiAndCategoryId(
-            emoji = prototype.emojiSearchResult,
+            emoji = prototype.emojiAndKeyword,
             categoryId = prototype.categoryId,
         )
         coEvery { repository.findEmojiAndCategoryId(any()) } returns emojiAndCategoryId

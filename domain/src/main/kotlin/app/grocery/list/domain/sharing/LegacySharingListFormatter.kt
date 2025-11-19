@@ -1,6 +1,6 @@
 package app.grocery.list.domain.sharing
 
-import app.grocery.list.domain.product.EmojiSearchResult
+import app.grocery.list.domain.product.EmojiAndKeyword
 import app.grocery.list.domain.product.Product
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -32,8 +32,8 @@ internal class LegacySharingStringFormatter @Inject internal constructor() {
             id = 0,
             title = parts.next(),
             categoryId = parts.next().toInt(),
-            emojiSearchResult = if (parts.hasNext()) {
-                EmojiSearchResult(
+            emojiAndKeyword = if (parts.hasNext()) {
+                EmojiAndKeyword(
                     emoji = parts.next(),
                     keyword = parts.next(),
                 )

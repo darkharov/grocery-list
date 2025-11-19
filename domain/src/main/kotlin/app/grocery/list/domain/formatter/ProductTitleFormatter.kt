@@ -61,7 +61,7 @@ data object ProductEmojiAndFullTextFormatter : ProductTitleFormatter() {
 
     override fun print(product: Product): Result =
         Result(
-            emoji = product.emojiSearchResult?.emoji,
+            emoji = product.emojiAndKeyword?.emoji,
             title = product.title,
             additionalDetails = null,
         )
@@ -70,13 +70,13 @@ data object ProductEmojiAndFullTextFormatter : ProductTitleFormatter() {
 data object ProductEmojiAndAdditionalDetailsFormatter : ProductTitleFormatter() {
 
     override fun print(product: Product): Result {
-        val emojiSearchResult = product.emojiSearchResult
+        val emojiAndKeyword = product.emojiAndKeyword
         val title = product.title
-        return if (emojiSearchResult == null) {
+        return if (emojiAndKeyword == null) {
             ProductTitleWithoutEmojiFormatter.print(product)
         } else {
-            val emoji = emojiSearchResult.emoji
-            val keyword = emojiSearchResult.keyword
+            val emoji = emojiAndKeyword.emoji
+            val keyword = emojiAndKeyword.keyword
 
             val index = title.indexOf(keyword, ignoreCase = true)
             if (index == -1) {

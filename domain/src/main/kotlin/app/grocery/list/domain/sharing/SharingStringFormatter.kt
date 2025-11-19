@@ -25,7 +25,7 @@ class SharingStringFormatter @Inject constructor(
                     val product = Product(
                         id = 0,
                         title = title.replaceFirstChar { it.titlecaseChar() },
-                        emojiSearchResult = emojiAndCategoryId.emoji,
+                        emojiAndKeyword = emojiAndCategoryId.emoji,
                         enabled = true,
                         categoryId = emojiAndCategoryId.categoryId,
                     )

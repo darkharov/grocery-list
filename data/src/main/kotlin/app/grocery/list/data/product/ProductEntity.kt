@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import app.grocery.list.data.db.SqlAffixes
-import app.grocery.list.domain.product.EmojiSearchResult
+import app.grocery.list.domain.product.EmojiAndKeyword
 import app.grocery.list.domain.product.Product
 import javax.inject.Inject
 import javax.inject.Named
@@ -60,8 +60,8 @@ internal class ProductEntity(
             ProductEntity(
                 id = product.id.takeIf { it != 0 },
                 title = product.title,
-                emoji = product.emojiSearchResult?.emoji,
-                keyword = product.emojiSearchResult?.keyword,
+                emoji = product.emojiAndKeyword?.emoji,
+                keyword = product.emojiAndKeyword?.keyword,
                 enabled = product.enabled,
                 nonFkCategoryId = product.categoryId,
             )
@@ -75,11 +75,11 @@ internal class ProductEntity(
             return Product(
                 id = entity.id ?: throw IllegalStateException("ProductEntity must be queried from DB"),
                 title = entity.title,
-                emojiSearchResult = if (
+                emojiAndKeyword = if (
                     !(emoji.isNullOrBlank()) &&
                     !(keyword.isNullOrBlank())
                 ) {
-                    EmojiSearchResult(
+                    EmojiAndKeyword(
                         emoji = emoji,
                         keyword = keyword
                     )

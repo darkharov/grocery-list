@@ -5,7 +5,7 @@ import androidx.annotation.ArrayRes
 import app.grocery.list.data.R
 import app.grocery.list.domain.category.Category
 import app.grocery.list.domain.product.EmojiAndCategoryId
-import app.grocery.list.domain.product.EmojiSearchResult
+import app.grocery.list.domain.product.EmojiAndKeyword
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -94,22 +94,22 @@ internal class CategoryDao @Inject constructor(
             .maxByOrNull { it.key.length }
     }
 
-    fun emoji(search: String): EmojiSearchResult? =
+    fun emoji(search: String): EmojiAndKeyword? =
         findKeywordAndCategoryWithOptionalEmoji(search)
-            ?.emojiSearchResult()
+            ?.emojiAndKeyword()
 
     fun emojiAndCategoryId(search: String): EmojiAndCategoryId {
         val entry = findKeywordAndCategoryWithOptionalEmoji(search)
         return EmojiAndCategoryId(
-            emoji = entry?.emojiSearchResult(),
+            emoji = entry?.emojiAndKeyword(),
             categoryId = entry?.value?.category?.id ?: defaultCategoryId,
         )
     }
 
-    private fun Map.Entry<String, CategoryWithOptionalEmoji>.emojiSearchResult(): EmojiSearchResult? {
+    private fun Map.Entry<String, CategoryWithOptionalEmoji>.emojiAndKeyword(): EmojiAndKeyword? {
         val emoji = value.emoji
         return if (!(emoji.isNullOrBlank())) {
-            EmojiSearchResult(
+            EmojiAndKeyword(
                 emoji = emoji,
                 keyword = key,
             )

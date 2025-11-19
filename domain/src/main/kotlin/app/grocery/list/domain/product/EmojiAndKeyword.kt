@@ -1,6 +1,6 @@
 package app.grocery.list.domain.product
 
-data class EmojiSearchResult(
+data class EmojiAndKeyword(
     val emoji: String,
     val keyword: String,
 ) {

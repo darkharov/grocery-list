@@ -14,7 +14,7 @@ interface ProductRepository {
 
     suspend fun productTitleAndCategoryId(productId: Int): ProductTitleAndCategoryId
     suspend fun findEmojiAndCategoryId(search: String): EmojiAndCategoryId
-    suspend fun findEmoji(search: String): EmojiSearchResult?
+    suspend fun findEmoji(search: String): EmojiAndKeyword?
     suspend fun clearProducts()
     suspend fun deleteProduct(productId: Int): Product
     suspend fun putProduct(product: Product)

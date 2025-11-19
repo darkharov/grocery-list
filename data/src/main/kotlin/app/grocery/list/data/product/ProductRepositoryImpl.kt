@@ -5,7 +5,7 @@ import app.grocery.list.data.R
 import app.grocery.list.data.category.CategoryDao
 import app.grocery.list.domain.product.CategoryProducts
 import app.grocery.list.domain.product.EmojiAndCategoryId
-import app.grocery.list.domain.product.EmojiSearchResult
+import app.grocery.list.domain.product.EmojiAndKeyword
 import app.grocery.list.domain.product.EnabledAndDisabledProducts
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
@@ -38,7 +38,7 @@ internal class ProductRepositoryImpl @Inject constructor(
     override suspend fun findEmojiAndCategoryId(search: String): EmojiAndCategoryId =
         categoryDao.emojiAndCategoryId(search = search)
 
-    override suspend fun findEmoji(search: String): EmojiSearchResult? =
+    override suspend fun findEmoji(search: String): EmojiAndKeyword? =
         categoryDao.emoji(search = search)
 
     override suspend fun clearProducts() {
@@ -105,7 +105,7 @@ internal class ProductRepositoryImpl @Inject constructor(
                         id = 0,
                         title = parts.next(),
                         categoryId = parts.next().toInt(),
-                        emojiSearchResult = EmojiSearchResult(
+                        emojiAndKeyword = EmojiAndKeyword(
                             emoji = parts.next(),
                             keyword = parts.next(),
                         ),

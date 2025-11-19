@@ -14,7 +14,7 @@ internal class FormatNotificationTitleUseCase @Inject constructor() {
     ): String {
         val sorted = products
             .sortedBy { it.title.length }
-            .sortedBy { it.emojiSearchResult != null }
+            .sortedBy { it.emojiAndKeyword != null }
         return formatter
             .withCommas()
             .print(sorted)
