@@ -64,16 +64,16 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
         if (productId != null) {
             viewModelScope.launch(Dispatchers.IO) {
 
-                val initialValues = getTitleAndCategory.execute(productId = productId)
+                val (productTitle, category) = getTitleAndCategory.execute(productId = productId)
 
                 title.value = TextFieldValue(
-                    text = initialValues.productTitle,
+                    text = productTitle,
                     selection = TextRange(
-                        index = initialValues.productTitle.length,
+                        index = productTitle.length,
                     ),
                 )
 
-                explicitlySelectedCategory.value = categoryMapper.transform(initialValues.category)
+                explicitlySelectedCategory.value = categoryMapper.transform(category)
             }
         }
     }
