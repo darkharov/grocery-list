@@ -56,7 +56,7 @@ fun NavGraphBuilder.productListPreviewScreen(
     bottomBar: @Composable () -> Unit,
 ) {
     composable<ProductListPreviewScreen> {
-        ProductListPreviewScreen(
+        PreloaderOrContent(
             delegate = delegate,
             bottomBar = bottomBar,
             navigation = navigation,
@@ -65,7 +65,7 @@ fun NavGraphBuilder.productListPreviewScreen(
 }
 
 @Composable
-private fun ProductListPreviewScreen(
+private fun PreloaderOrContent(
     navigation: ProductListPreviewNavigation,
     delegate: ProductListPreviewDelegate,
     bottomBar: @Composable () -> Unit,
@@ -78,7 +78,7 @@ private fun ProductListPreviewScreen(
         navigation = navigation,
         delegate = delegate,
     )
-    ProductListPreviewScreen(
+    PreloaderOrContent(
         props = props,
         bottomBar = bottomBar,
         callbacks = viewModel,
@@ -87,23 +87,6 @@ private fun ProductListPreviewScreen(
         props = dialog,
         callbacks = viewModel,
     )
-}
-
-@Composable
-private fun OptionalDialog(
-    props: ProductListPreviewDialogProps?,
-    callbacks: ProductListPreviewCallbacks,
-) {
-    if (props != null) {
-        when (props) {
-            is ProductListPreviewDialogProps.ConfirmPastedProductsWrapper -> {
-                ConfirmPastedListDialog(
-                    props = props.dialog,
-                    callbacks = callbacks,
-                )
-            }
-        }
-    }
 }
 
 @Composable
@@ -127,7 +110,7 @@ private fun EventConsumer(
 }
 
 @Composable
-private fun ProductListPreviewScreen(
+private fun PreloaderOrContent(
     props: ProductListPreviewProps?,
     callbacks: ProductListPreviewCallbacks,
     bottomBar: @Composable () -> Unit,
@@ -372,6 +355,23 @@ private fun LazyListScope.enableAndDisableAll(
 }
 
 @Composable
+private fun OptionalDialog(
+    props: ProductListPreviewDialogProps?,
+    callbacks: ProductListPreviewCallbacks,
+) {
+    if (props != null) {
+        when (props) {
+            is ProductListPreviewDialogProps.ConfirmPastedProductsWrapper -> {
+                ConfirmPastedListDialog(
+                    props = props.dialog,
+                    callbacks = callbacks,
+                )
+            }
+        }
+    }
+}
+
+@Composable
 @PreviewLightDark
 private fun ProductListPreviewPreview(
     @PreviewParameter(
@@ -381,7 +381,7 @@ private fun ProductListPreviewPreview(
 ) {
     GroceryListTheme {
         Scaffold { padding ->
-            ProductListPreviewScreen(
+            PreloaderOrContent(
                 props = props,
                 callbacks = ProductListPreviewCallbacksMock,
                 modifier = Modifier
