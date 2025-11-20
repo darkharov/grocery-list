@@ -16,7 +16,6 @@ import app.grocery.list.storage.value.kotlin.get
 import commons.android.stateIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -60,7 +59,7 @@ internal class ProductListActionsViewModel @Inject constructor(
         }.stateIn(this)
 
     override fun onClearListConfirmed() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             dialog.value = null
             productRepository.deleteAll()
         }
@@ -79,7 +78,7 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     override fun onEnableAllAndStartShopping() {
         dialog.value = null
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             productRepository.enableAll()
             events.trySend(Event.OnStartShopping)
         }
@@ -98,7 +97,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     }
 
     private fun showConfirmSharingDialog(products: List<Product>) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             dialog.value = ProductListActionsDialogProps.ConfirmSharing(
                 numberOfProducts = products.size,
                 recommendUsingThisApp = settingsRepository.recommendAppWhenSharingList.get(),
@@ -120,7 +119,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     override fun onRecommendThisAppCheckedClick(dialog: ProductListActionsDialogProps.ConfirmSharing) {
         val recommendUsingThisApp = !(dialog.recommendUsingThisApp)
         this.dialog.value = dialog.copy(recommendUsingThisApp = recommendUsingThisApp)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             settingsRepository.recommendAppWhenSharingList.set(recommendUsingThisApp)
         }
     }
@@ -130,7 +129,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     }
 
     override fun onPasted(text: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             parseProductList
                 .execute(text = text)
                 .onSuccess { products ->
@@ -153,7 +152,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     }
 
     override fun onPasteProductsConfirmed(products: List<Product>) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val numberOfAddedProducts = productRepository.count().first()
             if (numberOfAddedProducts == 0) {
                 addProducts(products)
@@ -166,7 +165,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     }
 
     private fun addProducts(products: List<Product>) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             productRepository.put(products)
             dialog.value = ProductListActionsDialogProps.ProductSuccessfullyAdded(
                 count = products.size,
@@ -175,7 +174,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     }
 
     override fun onReplaceProductsBy(productList: List<Product>) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             productRepository.deleteAll()
             productRepository.put(productList)
             dialog.value = ProductListActionsDialogProps.ProductSuccessfullyAdded(
@@ -221,7 +220,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     private fun handleShareCurrentListAction() {
         loadingListToShare.value = true
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
 
             val products = productRepository
                 .groupEnabledAndDisabled()

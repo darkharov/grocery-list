@@ -30,7 +30,7 @@ internal fun ProductListActionsEventsConsumer(
                 delegate.startShopping()
             }
             is ProductListActionsViewModel.Event.OnPasteCopiedList -> {
-                clipboardScope.launch(Dispatchers.IO) {
+                clipboardScope.launch {
                     val clipEntry = clipboard.getClipEntry()
                     withContext(Dispatchers.Main) {
                         val text = clipEntry

@@ -13,7 +13,6 @@ import app.grocery.list.kotlin.ellipsize
 import app.grocery.list.storage.value.kotlin.get
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -62,7 +61,7 @@ class MainViewModel @Inject constructor(
         snackbars
 
     fun notifyPushNotificationsGranted() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             progress.value = true
             val enabled = settingsRepository.clearNotificationsReminderEnabled.get()
             val event = AppEvent.PushNotificationsGranted(
@@ -85,7 +84,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun undoProductDeletion(product: Product) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             productRepository.put(product)
         }
     }

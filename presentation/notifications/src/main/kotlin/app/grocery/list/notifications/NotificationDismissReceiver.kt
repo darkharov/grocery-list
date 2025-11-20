@@ -8,7 +8,6 @@ import androidx.lifecycle.lifecycleScope
 import app.grocery.list.domain.product.ProductRepository
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -20,7 +19,7 @@ internal class NotificationDismissReceiver : BroadcastReceiver() {
         ProcessLifecycleOwner
             .get()
             .lifecycleScope
-            .launch(Dispatchers.IO) {
+            .launch {
                 val productIds = intent.getIntArrayExtra(EXTRA_PRODUCT_IDS)!!
                 repository.setEnabled(productIds.toList(), false)
             }

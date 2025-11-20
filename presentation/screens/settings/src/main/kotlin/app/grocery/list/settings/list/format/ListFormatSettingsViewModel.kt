@@ -6,7 +6,6 @@ import app.grocery.list.domain.notification.GetNotificationSampleUseCase
 import app.grocery.list.domain.settings.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -36,7 +35,7 @@ internal class ListFormatSettingsViewModel @Inject constructor(
             )
 
     override fun onProductTitleFormatSelected(option: ListFormatSettingsProps.ProductTitleFormat) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             settingsRepository.productTitleFormat.set(
                 productTitleFormatMapper.toDomain(option)
             )

@@ -28,6 +28,7 @@ internal class DbModule {
             AppDatabase::class.java,
             "app_database"
         ).fallbackToDestructiveMigration(dropAllTables = false)
+            .allowMainThreadQueries()
             .build()
 
     @Provides

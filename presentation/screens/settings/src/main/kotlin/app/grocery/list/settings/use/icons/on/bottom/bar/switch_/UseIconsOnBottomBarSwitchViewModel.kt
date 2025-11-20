@@ -11,11 +11,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -64,7 +62,6 @@ internal class UseIconsOnBottomBarSwitchViewModel @AssistedInject constructor(
                 repository
                     .bottomBarRoadmapStep
                     .observe()
-                    .flowOn(Dispatchers.IO)
                     .first { it.useIcons }
                 events.trySend(Event.OnGoBack)
             }
@@ -72,13 +69,13 @@ internal class UseIconsOnBottomBarSwitchViewModel @AssistedInject constructor(
     }
 
     override fun onClose() {    // user rejected the offer to switch to icons
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             repository.bottomBarRoadmapStep.set(BottomBarRoadmapStep.ButtonsIsExplicitlySelected)
         }
     }
 
     override fun onUseIconsOnBottomBarCheckedChange(newValue: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             repository.bottomBarRoadmapStep.set(
                 if (newValue) {
                     BottomBarRoadmapStep.IconsModeIsExplicitlySelected

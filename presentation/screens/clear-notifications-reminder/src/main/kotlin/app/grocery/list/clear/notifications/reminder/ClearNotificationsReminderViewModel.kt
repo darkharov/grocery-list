@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import app.grocery.list.domain.settings.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.SharingStarted
@@ -36,7 +35,7 @@ internal class ClearNotificationsReminderViewModel @Inject constructor(
     private val events = Channel<Event>(capacity = Channel.UNLIMITED)
 
     override fun onDoNotShowAgainCheckedChange(newValue: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             settingsRepository
                 .clearNotificationsReminderEnabled
                 .set(!(newValue))

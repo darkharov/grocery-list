@@ -19,7 +19,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
@@ -62,7 +61,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
 
     init {
         if (productId != null) {
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch {
 
                 val (productTitle, category) = getTitleAndCategory.execute(productId = productId)
 
@@ -166,7 +165,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
             categoryId = categoryId,
             enabled = true,
         )
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             productRepository.put(product)
         }
     }

@@ -5,12 +5,10 @@ import androidx.lifecycle.viewModelScope
 import app.grocery.list.domain.product.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -28,7 +26,6 @@ class FinalStepsViewModel @Inject constructor(
             repository
                 .numberOfEnabled()
                 .filter { it == 0 }
-                .flowOn(Dispatchers.IO)
                 .collect {
                     events.trySend(Event.OnNoEnabledProductsAnymore)
                 }

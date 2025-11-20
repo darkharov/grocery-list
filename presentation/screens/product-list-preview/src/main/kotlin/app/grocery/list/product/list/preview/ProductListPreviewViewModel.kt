@@ -10,7 +10,6 @@ import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.domain.template.GetTemplateProductsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,7 +37,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
     private val events = Channel<Event>(Channel.UNLIMITED)
 
     override fun onDelete(productId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val deletedProduct = repository.delete(productId = productId)
             val event = Event.OnProductDeleted(deletedProduct)
             events.trySend(event)
@@ -46,7 +45,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
     }
 
     override fun onProductEnabledChange(productId: Int, newValue: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             repository.setEnabled(
                 productId = productId,
                 enabled = newValue,
@@ -59,19 +58,19 @@ internal class ProductListPreviewViewModel @Inject constructor(
     }
 
     override fun onEnableAll() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             repository.enableAll()
         }
     }
 
     override fun onDisableEnableAll() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             repository.disableAll()
         }
     }
 
     override fun onTemplateClick(template: ProductListPreviewProps.Empty.Template) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val products = getFormattedTemplateProducts.execute(templateId = template.id)
             dialog.value = ProductListPreviewDialogProps.ConfirmPastedProductsWrapper(
                 ConfirmPastedListDialogProps(
@@ -89,7 +88,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
 
     override fun onPasteProductsConfirmed(products: List<Product>) {
         removeDialog()
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             repository.put(products)
         }
     }

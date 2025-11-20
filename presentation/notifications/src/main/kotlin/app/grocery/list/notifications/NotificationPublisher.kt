@@ -16,7 +16,6 @@ import app.grocery.list.domain.notification.NotificationContent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Singleton
@@ -59,7 +58,7 @@ class NotificationPublisher @Inject internal constructor(
 
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     private fun post() {
-        ProcessLifecycleOwner.get().lifecycleScope.launch(Dispatchers.IO) {
+        ProcessLifecycleOwner.get().lifecycleScope.launch {
             val maxNumberOfItems = NotificationConfigs.MAX_VISIBLE_AT_THE_SAME_TIME
             val notifications = getNotifications.execute(maxNumberOfItems = maxNumberOfItems)
             post(notifications)
