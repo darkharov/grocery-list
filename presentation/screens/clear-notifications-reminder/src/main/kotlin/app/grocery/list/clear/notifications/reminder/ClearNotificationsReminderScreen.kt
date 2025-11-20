@@ -27,7 +27,6 @@ import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppContentToRead
 import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.button.AppButtonNext
-import app.grocery.list.commons.compose.elements.button.AppButtonStateProps
 import app.grocery.list.commons.compose.elements.titled.switch_.AppSwitch
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
@@ -50,7 +49,6 @@ private fun ClearNotificationsReminderScreen(
 ) {
     val viewModel = hiltViewModel<ClearNotificationsReminderViewModel>()
     val props by viewModel.props.collectAsState()
-
     EventConsumer(viewModel.events()) { event ->
         when (event) {
             Event.Next -> {
@@ -116,9 +114,6 @@ private fun Content(
                     onClick = {
                         callbacks.onNext()
                     },
-                    state = AppButtonStateProps.progress(
-                        progress = props.progress,
-                    ),
                 )
                 Spacer(
                     modifier = Modifier

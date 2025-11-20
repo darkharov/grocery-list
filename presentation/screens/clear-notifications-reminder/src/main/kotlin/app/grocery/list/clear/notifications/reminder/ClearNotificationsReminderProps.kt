@@ -5,8 +5,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
 @Immutable
 internal data class ClearNotificationsReminderProps(
-    val progress: Boolean = false,
-    val doNotShowAgain: Boolean = false,
+    val doNotShowAgain: Boolean,
 )
 
 internal class ClearNotificationsReminderMock : PreviewParameterProvider<ClearNotificationsReminderProps?> {
@@ -14,7 +13,6 @@ internal class ClearNotificationsReminderMock : PreviewParameterProvider<ClearNo
     override val values = sequenceOf(
         null,
         ClearNotificationsReminderProps(
-            progress = true,
             doNotShowAgain = true,
         ),
     )
