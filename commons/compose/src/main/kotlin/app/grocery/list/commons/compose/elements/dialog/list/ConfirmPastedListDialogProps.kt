@@ -13,7 +13,7 @@ data class ConfirmPastedListDialogProps(
 
 object ConfirmPastedListMock {
     val prototype = ConfirmPastedListDialogProps(
-        title = StringValue.StringWrapper(""),
+        title = StringValue.StringWrapper("Title"),
         text = "Broccoli,\nCoffee",
         productList = emptyList(),
     )
