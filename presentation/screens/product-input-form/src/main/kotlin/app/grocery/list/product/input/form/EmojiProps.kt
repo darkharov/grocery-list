@@ -5,5 +5,5 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class EmojiProps(
     val value: String,
-    val payload: Any? = null
+    val payload: Any? = null,
 )
