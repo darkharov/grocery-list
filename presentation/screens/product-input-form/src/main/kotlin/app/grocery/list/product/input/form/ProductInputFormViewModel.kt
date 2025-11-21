@@ -13,7 +13,7 @@ import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.product.input.form.elements.category.picker.CategoryMapper
 import app.grocery.list.product.input.form.elements.category.picker.CategoryPickerProps
 import app.grocery.list.product.input.form.elements.category.picker.CategoryProps
-import commons.android.stateIn
+import commons.android.customStateIn
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -51,13 +51,13 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
     private val explicitlySelectedCategory = MutableStateFlow<CategoryProps?>(null)
     private val categoryPickerExpanded = MutableStateFlow(false)
 
-    val emoji = emoji().stateIn(this)
-    val categoryPicker = categoryPicker().stateIn(this, CategoryPickerProps())
+    val emoji = emoji().customStateIn(this)
+    val categoryPicker = categoryPicker().customStateIn(this, CategoryPickerProps())
 
     val atLeastOneProductJustAdded =
         atLeastOneProductJustAdded
             .execute()
-            .stateIn(this, defaultValue = false)
+            .customStateIn(this, defaultValue = false)
 
     init {
         if (productId != null) {

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 
-fun <T : Any> Flow<T?>.stateIn(
+fun <T : Any> Flow<T?>.customStateIn(
     viewModel: ViewModel,
 ): StateFlow<T?> =
     stateIn(
@@ -16,7 +16,7 @@ fun <T : Any> Flow<T?>.stateIn(
         initialValue = null,
     )
 
-fun <T : Any> Flow<T>.stateIn(
+fun <T : Any> Flow<T>.customStateIn(
     viewModel: ViewModel,
     defaultValue: T,
 ): StateFlow<T> =

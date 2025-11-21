@@ -8,33 +8,33 @@ import app.grocery.list.domain.preview.GetProductListPreviewUseCase
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.domain.template.GetTemplateProductsUseCase
+import commons.android.customStateIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 internal class ProductListPreviewViewModel @Inject constructor(
-    getPreview: GetProductListPreviewUseCase,
+    private val getPreview: GetProductListPreviewUseCase,
     private val repository: ProductRepository,
     private val getFormattedTemplateProducts: GetTemplateProductsUseCase,
 ) : ViewModel(),
     ProductListPreviewCallbacks {
 
-    val props: StateFlow<ProductListPreviewProps?> =
+    val props = createPropsStateFlow()
+    private val dialog = MutableStateFlow<ProductListPreviewDialogProps?>(null)
+    private val events = Channel<Event>(Channel.UNLIMITED)
+
+    private fun createPropsStateFlow() =
         getPreview
             .execute()
             .map(ProductListPreviewMapper::transform)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
-
-    private val dialog = MutableStateFlow<ProductListPreviewDialogProps?>(null)
-    private val events = Channel<Event>(Channel.UNLIMITED)
+            .customStateIn(this)
 
     override fun onDelete(productId: Int) {
         viewModelScope.launch {

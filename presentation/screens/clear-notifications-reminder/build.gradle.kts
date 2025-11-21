@@ -35,6 +35,7 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":commons:android"))
     implementation(project(":commons:compose"))
     implementation(project(":commons:resources"))
     implementation(libs.hilt.android)

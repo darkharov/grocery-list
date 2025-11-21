@@ -13,7 +13,7 @@ import app.grocery.list.domain.sharing.GetProductSharingStringUseCase
 import app.grocery.list.domain.sharing.ParseAndFormatProductsUseCase
 import app.grocery.list.product.list.actions.dialog.ProductListActionsDialogProps
 import app.grocery.list.storage.value.kotlin.get
-import commons.android.stateIn
+import commons.android.customStateIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
@@ -56,7 +56,7 @@ internal class ProductListActionsViewModel @Inject constructor(
                 loadingListToShare = loadingListToShare,
                 atLeastOneProductEnabled = atLeastOneProductEnabled,
             )
-        }.stateIn(this)
+        }.customStateIn(this)
 
     override fun onClearListConfirmed() {
         viewModelScope.launch {

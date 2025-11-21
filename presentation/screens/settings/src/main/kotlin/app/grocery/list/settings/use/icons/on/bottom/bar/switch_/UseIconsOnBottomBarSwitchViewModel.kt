@@ -6,7 +6,7 @@ import app.grocery.list.domain.settings.BottomBarRoadmapStep
 import app.grocery.list.domain.settings.SettingsRepository
 import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy.EmbeddedElement
 import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy.Screen
-import commons.android.stateIn
+import commons.android.customStateIn
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -47,7 +47,7 @@ internal class UseIconsOnBottomBarSwitchViewModel @AssistedInject constructor(
                     strategy = strategy,
                 )
             }
-            .stateIn(
+            .customStateIn(
                 viewModel = this,
                 defaultValue = UseIconsOnBottomBarSwitchProps(
                     checked = null,
