@@ -1,4 +1,4 @@
-package app.grocery.list.assembly.impls
+package app.grocery.list.assembly.internal.di
 
 import android.content.Context
 import app.grocery.list.assembly.R
