@@ -1,4 +1,4 @@
-package app.grocery.list.assembly.ui
+package app.grocery.list.main.activity.ui
 
 import android.graphics.Color
 import android.os.Build
@@ -14,12 +14,11 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
-import app.grocery.list.assembly.BuildConfig
-import app.grocery.list.assembly.ui.content.AppContent
-import app.grocery.list.assembly.ui.content.AppContentDelegate
 import app.grocery.list.commons.compose.theme.ThemeUtil
 import app.grocery.list.domain.product.Product
 import app.grocery.list.final_.steps.FinalSteps
+import app.grocery.list.main.activity.ui.content.AppContent
+import app.grocery.list.main.activity.ui.content.AppContentDelegate
 import app.grocery.list.notifications.NotificationPublisher
 import commons.android.PermissionUtil
 import commons.android.ScreenLockedReceiver
@@ -34,6 +33,7 @@ class MainActivity :
     AppContentDelegate,
     PermissionUtil.Contract {
 
+    @Inject lateinit var contract: Contract
     @Inject lateinit var themeUtil: ThemeUtil
     @Inject lateinit var notificationPublisher: NotificationPublisher
 
@@ -41,7 +41,7 @@ class MainActivity :
     private val permissionUtil = PermissionUtil()
     private var currentDestination: NavDestination? = null
 
-    override val appVersionName: String = BuildConfig.VERSION_NAME
+    override val appVersionName get() = contract.versionName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -123,8 +123,8 @@ class MainActivity :
                 "\n\n\n\n" +
                 "\nAndroid version: ${Build.VERSION.RELEASE} " +
                 "(API level ${Build.VERSION.SDK_INT})" +
-                "\nVersion Code: ${BuildConfig.VERSION_CODE}" +
-                "\nVersion Name: ${BuildConfig.VERSION_NAME}" +
+                "\nVersion Code: ${contract.versionCode}" +
+                "\nVersion Name: ${contract.versionName}" +
                 "\nBrand: ${Build.BRAND}" +
                 "\nModel: ${Build.MODEL}",
         )
@@ -136,5 +136,10 @@ class MainActivity :
 
     override fun undoProductDeletion(product: Product) {
         viewModel.undoProductDeletion(product)
+    }
+
+    interface Contract {
+        val versionName: String
+        val versionCode: Int
     }
 }

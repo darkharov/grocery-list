@@ -1,4 +1,4 @@
-package app.grocery.list.assembly.ui.content
+package app.grocery.list.main.activity.ui.content
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -28,7 +28,6 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import app.grocery.list.assembly.R
 import app.grocery.list.clear.notifications.reminder.ClearNotificationsReminder
 import app.grocery.list.clear.notifications.reminder.clearNotificationsReminder
 import app.grocery.list.commons.compose.EventConsumer
@@ -37,6 +36,7 @@ import app.grocery.list.commons.compose.elements.toolbar.AppToolbarProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.final_.steps.FinalSteps
 import app.grocery.list.final_.steps.finalSteps
+import app.grocery.list.main.activity.R
 import app.grocery.list.product.input.form.productInputFormScreen
 import app.grocery.list.product.list.actions.bar.ProductListActionsBar
 import app.grocery.list.product.list.actions.screen.productListActionsScreen

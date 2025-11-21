@@ -1,15 +1,15 @@
-package app.grocery.list.assembly.ui
+package app.grocery.list.main.activity.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.grocery.list.assembly.ui.content.AppEvent
-import app.grocery.list.assembly.ui.content.AppSnackbar
 import app.grocery.list.domain.formatter.ProductTitleWithoutEmojiFormatter
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.domain.settings.ProductTitleFormat
 import app.grocery.list.domain.settings.SettingsRepository
 import app.grocery.list.kotlin.ellipsize
+import app.grocery.list.main.activity.ui.content.AppEvent
+import app.grocery.list.main.activity.ui.content.AppSnackbar
 import app.grocery.list.storage.value.kotlin.get
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

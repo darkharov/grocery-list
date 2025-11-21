@@ -1,4 +1,4 @@
-package app.grocery.list.assembly.ui.content
+package app.grocery.list.main.activity.ui.content
 
 import androidx.compose.runtime.Immutable
 
