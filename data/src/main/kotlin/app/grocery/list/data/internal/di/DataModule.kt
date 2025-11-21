@@ -16,17 +16,17 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal class DbModule {
+internal class DataModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(
+    fun database(
         @ApplicationContext context: Context,
     ): AppDatabase =
         Room.databaseBuilder(
             context.applicationContext,
             AppDatabase::class.java,
-            "app_database"
+            "app_database",
         ).fallbackToDestructiveMigration(dropAllTables = false)
             .allowMainThreadQueries()
             .build()
@@ -41,6 +41,6 @@ internal class DbModule {
     @Provides
     @Named(DEFAULT_CATEGORY_ID)
     @Singleton
-    fun provides(categoryDao: CategoryDao): Int =
+    fun categoryDao(categoryDao: CategoryDao): Int =
         categoryDao.defaultCategoryId
 }
