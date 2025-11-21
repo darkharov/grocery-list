@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import app.grocery.list.commons.compose.LocalToolbarEmojiProvider
 import app.grocery.list.commons.compose.ToolbarEmojiProvider
-import app.grocery.list.commons.compose.ToolbarEmojiProviderImpl
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -43,7 +42,7 @@ private fun GroceryListTheme(
 
 @Singleton
 class ThemeUtil @Inject constructor(
-    private val emojiProvider: ToolbarEmojiProviderImpl,
+    private val emojiProvider: ToolbarEmojiProvider,
 ) {
     @Composable
     fun GroceryListTheme(

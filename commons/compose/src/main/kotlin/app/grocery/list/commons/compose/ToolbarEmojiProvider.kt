@@ -1,6 +1,7 @@
 package app.grocery.list.commons.compose
 
 import android.content.Context
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.staticCompositionLocalOf
 import app.grocery.list.domain.Holiday
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -11,6 +12,7 @@ val LocalToolbarEmojiProvider = staticCompositionLocalOf<ToolbarEmojiProvider> {
     ToolbarEmojiProviderMock
 }
 
+@Stable
 interface ToolbarEmojiProvider {
     fun get(number: Int): String
 }
@@ -20,7 +22,7 @@ private object ToolbarEmojiProviderMock : ToolbarEmojiProvider {
 }
 
 @Singleton
-class ToolbarEmojiProviderImpl @Inject internal constructor(
+internal class ToolbarEmojiProviderImpl @Inject internal constructor(
     @ApplicationContext
     private val context: Context,
 ) : ToolbarEmojiProvider {
