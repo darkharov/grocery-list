@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 @Singleton
 class NotificationMapper @Inject constructor(
-    @ApplicationContext
+    @param:ApplicationContext
     private val context: Context,
 ) {
     fun transform(item: NotificationContent): Notification =

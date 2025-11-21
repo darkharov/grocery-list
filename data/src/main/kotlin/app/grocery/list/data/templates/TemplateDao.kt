@@ -11,7 +11,7 @@ import javax.inject.Singleton
 
 @Singleton
 class TemplateDao @Inject constructor(
-    @ApplicationContext
+    @param:ApplicationContext
     private val context: Context,
 ) {
     fun templates(): List<Template> =

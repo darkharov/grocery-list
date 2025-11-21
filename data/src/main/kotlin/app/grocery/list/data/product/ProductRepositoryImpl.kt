@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.map
 
 @Singleton
 internal class ProductRepositoryImpl @Inject constructor(
-    @ApplicationContext
+    @param:ApplicationContext
     private val context: Context,
     private val productDao: ProductDao,
     private val productMapper: ProductEntity.Mapper,

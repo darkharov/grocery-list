@@ -23,7 +23,7 @@ private object ToolbarEmojiProviderMock : ToolbarEmojiProvider {
 
 @Singleton
 internal class ToolbarEmojiProviderImpl @Inject internal constructor(
-    @ApplicationContext
+    @param:ApplicationContext
     private val context: Context,
 ) : ToolbarEmojiProvider {
 

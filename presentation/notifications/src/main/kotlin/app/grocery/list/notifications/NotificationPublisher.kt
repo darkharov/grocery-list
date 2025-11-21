@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 
 @Singleton
 class NotificationPublisher @Inject internal constructor(
-    @ApplicationContext
+    @param:ApplicationContext
     private val context: Context,
     private val mapper: NotificationMapper,
     private val getNotifications: GetNotificationsUseCase,

@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.flowOf
 
 @Singleton
 internal class CategoryDao @Inject constructor(
-    @ApplicationContext
+    @param:ApplicationContext
     private val context: Context,
 ) {
     private val categoriesKeywordFamilyArrayIds = categoriesAndKeywordFamiliesIds()
