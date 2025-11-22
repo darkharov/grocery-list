@@ -47,7 +47,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object ProductListActions
 
-fun NavGraphBuilder.productListActionsScreen(
+fun NavGraphBuilder.productListActions(
     delegate: ProductListActionsDelegate,
     navigation: ProductListActionsNavigation,
     bottomElement: @Composable () -> Unit,

@@ -8,8 +8,8 @@ import app.grocery.list.product.input.form.ProductInputForm
 import app.grocery.list.product.input.form.ProductInputFormNavigation
 import app.grocery.list.product.list.actions.ProductListActionsNavigation
 import app.grocery.list.product.list.actions.screen.ProductListActions
+import app.grocery.list.product.list.preview.ProductListPreview
 import app.grocery.list.product.list.preview.ProductListPreviewNavigation
-import app.grocery.list.product.list.preview.ProductListPreviewScreen
 
 internal class AppNavigationFacade(
     private val navController: NavHostController,
@@ -41,7 +41,7 @@ internal class AppNavigationFacade(
 
     override fun backToActionsOrListPreview() {
         if (!(navController.popBackStack(ProductListActions, inclusive = false))) {
-            navController.popBackStack(ProductListPreviewScreen, inclusive = false)
+            navController.popBackStack(ProductListPreview, inclusive = false)
         }
     }
 }

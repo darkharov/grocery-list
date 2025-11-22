@@ -37,11 +37,11 @@ import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.final_.steps.FinalSteps
 import app.grocery.list.final_.steps.finalSteps
 import app.grocery.list.main.activity.R
-import app.grocery.list.product.input.form.productInputFormScreen
+import app.grocery.list.product.input.form.productInputForm
 import app.grocery.list.product.list.actions.bar.ProductListActionsBar
-import app.grocery.list.product.list.actions.screen.productListActionsScreen
-import app.grocery.list.product.list.preview.ProductListPreviewScreen
-import app.grocery.list.product.list.preview.productListPreviewScreen
+import app.grocery.list.product.list.actions.screen.productListActions
+import app.grocery.list.product.list.preview.ProductListPreview
+import app.grocery.list.product.list.preview.productListPreview
 import app.grocery.list.settings.Settings
 import app.grocery.list.settings.settingsAndChildScreens
 import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitch
@@ -59,7 +59,7 @@ internal fun AppContent(
     snackbars: ReceiveChannel<AppSnackbar>,
     modifier: Modifier = Modifier,
 ) {
-    val startRoute = ProductListPreviewScreen
+    val startRoute = ProductListPreview
     val navController = rememberNavController()
     val currentDestination by navController.currentBackStackEntryAsState()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -164,7 +164,7 @@ internal fun AppContent(
             sizeTransform = null,
         ) {
             val navigation = AppNavigationFacade(navController)
-            productListPreviewScreen(
+            productListPreview(
                 delegate = delegates,
                 navigation = navigation,
                 bottomBar = {
@@ -174,8 +174,8 @@ internal fun AppContent(
                     )
                 },
             )
-            productInputFormScreen(navigation)
-            productListActionsScreen(
+            productInputForm(navigation)
+            productListActions(
                 delegate = delegates,
                 navigation = navigation,
                 bottomElement = {

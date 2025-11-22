@@ -53,7 +53,7 @@ data class ProductInputForm(
     val productId: Int? = null,
 )
 
-fun NavGraphBuilder.productInputFormScreen(
+fun NavGraphBuilder.productInputForm(
     navigation: ProductInputFormNavigation,
 ) {
     composable<ProductInputForm> { navBackStackEntry ->

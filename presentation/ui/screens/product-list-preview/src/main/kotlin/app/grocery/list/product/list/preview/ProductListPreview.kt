@@ -48,14 +48,14 @@ import app.grocery.list.product.list.preview.elements.ProductItem
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ProductListPreviewScreen
+data object ProductListPreview
 
-fun NavGraphBuilder.productListPreviewScreen(
+fun NavGraphBuilder.productListPreview(
     delegate: ProductListPreviewDelegate,
     navigation: ProductListPreviewNavigation,
     bottomBar: @Composable () -> Unit,
 ) {
-    composable<ProductListPreviewScreen> {
+    composable<ProductListPreview> {
         PreloaderOrContent(
             delegate = delegate,
             bottomBar = bottomBar,
