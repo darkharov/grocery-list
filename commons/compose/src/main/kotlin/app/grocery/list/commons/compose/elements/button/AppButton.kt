@@ -26,6 +26,7 @@ import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
+import app.grocery.list.commons.compose.values.value
 
 private val TrailingElementSize = 24.dp
 private val TrailingElementOffset = 8.dp

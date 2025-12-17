@@ -29,6 +29,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.values.StringValue
+import app.grocery.list.commons.compose.values.value
 
 val APP_DIALOG_PADDING = 16.dp
 

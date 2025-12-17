@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
+import app.grocery.list.commons.compose.values.value
 
 @Composable
 fun AppTextField(

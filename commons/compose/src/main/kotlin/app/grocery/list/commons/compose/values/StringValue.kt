@@ -1,78 +1,65 @@
 package app.grocery.list.commons.compose.values
 
+import android.content.res.Resources
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalResources
 
 @Immutable
 sealed class StringValue {
 
-    @Composable
-    @ReadOnlyComposable
-    abstract fun value(): String
-
-    @Deprecated(
-        "It is probably a mistake. Use value() to convert this instance to String",
-        ReplaceWith("this.value()")
-    )
-    override fun toString(): String {
-        return super.toString()
-    }
+    abstract fun value(resources: Resources): String
 
     @Immutable
     data class StringWrapper(
         private val value: String,
     ) : StringValue() {
 
-        @Composable
-        @ReadOnlyComposable
-        override fun value(): String =
+        override fun value(resources: Resources): String =
             value
     }
 
     @Immutable
     data class ResId(
-        @StringRes
+        @param:StringRes
         val resId: Int,
         private val prefix: String = "",
         private val postfix: String = "",
         private val arguments: List<Any>? = null,
     ) : StringValue() {
 
-        @Composable
-        @ReadOnlyComposable
-        override fun value(): String =
-            "$prefix${unboxResource()}$postfix"
+        override fun value(resources: Resources): String =
+            "$prefix${pureValue(resources)}$postfix"
 
-        @Composable
-        @ReadOnlyComposable
-        private fun unboxResource() =
+        private fun pureValue(resources: Resources) =
             if (arguments == null) {
-                stringResource(resId)
+                resources.getString(resId)
             } else {
-                stringResource(resId, *arguments.toTypedArray())
+                resources.getString(resId, *arguments.toTypedArray())
             }
     }
 
     @Immutable
     data class PluralResId(
-        @PluralsRes
+        @param:PluralsRes
         val resId: Int,
         val count: Int,
         val useCountAsArgument: Boolean = false,
     ) : StringValue() {
 
-        @Composable
-        @ReadOnlyComposable
-        override fun value(): String =
+        override fun value(resources: Resources): String =
             if (useCountAsArgument) {
-                pluralStringResource(resId, count, count)
+                resources.getQuantityString(resId, count, count)
             } else {
-                pluralStringResource(resId, count)
+                resources.getQuantityString(resId, count)
             }
     }
 }
+
+@Composable
+@ReadOnlyComposable
+fun StringValue.value(): String =
+    value(LocalResources.current)

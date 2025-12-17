@@ -26,6 +26,7 @@ import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.blackOrWhite
 import app.grocery.list.commons.compose.values.StringValue
+import app.grocery.list.commons.compose.values.value
 
 private enum class AppIconButtonType(
     val size: Dp,
