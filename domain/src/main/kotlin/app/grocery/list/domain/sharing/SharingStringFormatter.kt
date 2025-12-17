@@ -8,7 +8,7 @@ import javax.inject.Singleton
 
 @Singleton
 class SharingStringFormatter @Inject constructor(
-    @Named(RECOMMENDATION_TO_USE_APP)
+    @param:Named(RECOMMENDATION_TO_USE_APP)
     private val recommendationToUseApp: String,
     private val repository: ProductRepository,
 ) {
