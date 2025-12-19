@@ -47,7 +47,11 @@ class ScreenLockedReceiver private constructor(
 
             private fun tryToUnregister() {
                 if (registered) {
-                    activity.unregisterReceiver(receiver)
+                    try {
+                        activity.unregisterReceiver(receiver)
+                    } catch (_: Throwable) {
+                        // nothing to do
+                    }
                     registered = false
                 }
             }
