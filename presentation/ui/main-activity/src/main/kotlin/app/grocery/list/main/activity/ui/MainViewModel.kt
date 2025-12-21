@@ -9,6 +9,7 @@ import app.grocery.list.domain.settings.ProductTitleFormat
 import app.grocery.list.domain.settings.SettingsRepository
 import app.grocery.list.kotlin.ellipsize
 import app.grocery.list.main.activity.ui.content.AppEvent
+import app.grocery.list.main.activity.ui.content.AppLevelDialog
 import app.grocery.list.main.activity.ui.content.AppSnackbar
 import app.grocery.list.storage.value.kotlin.get
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +18,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -29,6 +31,7 @@ class MainViewModel @Inject constructor(
 
     private val appEvents = Channel<AppEvent>(capacity = Channel.UNLIMITED)
     private val snackbars = Channel<AppSnackbar>(capacity = Channel.UNLIMITED)
+    private val dialog = MutableStateFlow<AppLevelDialog?>(null)
 
     val numberOfEnabledProducts =
         productRepository
@@ -88,4 +91,15 @@ class MainViewModel @Inject constructor(
             productRepository.put(product)
         }
     }
+
+    fun notifyPostNotificationsDenied() {
+        dialog.value = AppLevelDialog.AppPushNotificationsDenied
+    }
+
+    fun notifyDialogDismiss() {
+        dialog.value = null
+    }
+
+    fun dialog(): StateFlow<AppLevelDialog?> =
+        dialog
 }

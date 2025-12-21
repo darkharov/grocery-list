@@ -64,6 +64,8 @@
     <string name="fingerprint_location_answer">Щоб уникнути спрацьовування сканеру відбитку, натискайте на нижню частину кнопки блокування.\nУ вас все вийде!</string>
     <string name="recommend_using_the_app">Запропонувати цей застосунок</string>
     <string name="share">Поділитися</string>
+    <string name="notification_permission_explanation">Щоб опублікувати список продуктів у вигляді сповіщень, застосунок потребує дозволу на надсилання сповіщень.</string>
+    <string name="give_permission">Надати дозвіл</string>
 
     <string-array name="final_steps">
         <item>Заблокуйте екран</item>

@@ -1,8 +1,10 @@
 package app.grocery.list.main.activity.ui
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -12,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import app.grocery.list.commons.compose.theme.ThemeUtil
@@ -69,11 +72,13 @@ class MainActivity :
             val numberOfEnabledProducts by viewModel.numberOfEnabledProducts.collectAsState()
             val progress by viewModel.progress.collectAsState()
             val hasEmojiIfEnoughSpace by viewModel.hasEmojiIfEnoughSpace.collectAsState()
+            val dialog by viewModel.dialog().collectAsStateWithLifecycle()
             themeUtil.GroceryListTheme {
                 AppContent(
                     numberOfEnabledProducts = numberOfEnabledProducts,
                     progress = progress,
                     hasEmojiIfEnoughSpace = hasEmojiIfEnoughSpace,
+                    dialog = dialog,
                     delegates = this,
                     appEvents = viewModel.appEvents(),
                     snackbars = viewModel.snackbars(),
@@ -107,6 +112,10 @@ class MainActivity :
         viewModel.notifyPushNotificationsGranted()
     }
 
+    override fun onPostNotificationsRefused() {
+        viewModel.notifyPostNotificationsDenied()
+    }
+
     override fun handleCurrentDestinationChange(newValue: NavDestination) {
         currentDestination = newValue
     }
@@ -136,6 +145,22 @@ class MainActivity :
 
     override fun undoProductDeletion(product: Product) {
         viewModel.undoProductDeletion(product)
+    }
+
+    override fun onGivePermissionOnSettings() {
+        viewModel.notifyDialogDismiss()
+        openNotificationSettings()
+    }
+
+    private fun openNotificationSettings() {
+        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+        startActivity(intent)
+    }
+
+    override fun onDialogDismiss() {
+        viewModel.notifyDialogDismiss()
     }
 
     interface Contract {

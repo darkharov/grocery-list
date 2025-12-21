@@ -21,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
@@ -31,9 +32,12 @@ import androidx.navigation.compose.rememberNavController
 import app.grocery.list.clear.notifications.reminder.ClearNotificationsReminder
 import app.grocery.list.clear.notifications.reminder.clearNotificationsReminder
 import app.grocery.list.commons.compose.EventConsumer
+import app.grocery.list.commons.compose.elements.dialog.AppSimpleDialog
 import app.grocery.list.commons.compose.elements.toolbar.AppToolbar
 import app.grocery.list.commons.compose.elements.toolbar.AppToolbarProps
+import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.final_.steps.FinalSteps
 import app.grocery.list.final_.steps.finalSteps
 import app.grocery.list.main.activity.R
@@ -54,6 +58,7 @@ internal fun AppContent(
     numberOfEnabledProducts: Int?,
     progress: Boolean,
     hasEmojiIfEnoughSpace: Boolean,
+    dialog: AppLevelDialog?,
     delegates: AppContentDelegate,
     appEvents: ReceiveChannel<AppEvent>,
     snackbars: ReceiveChannel<AppSnackbar>,
@@ -190,6 +195,23 @@ internal fun AppContent(
             settingsAndChildScreens(delegates, navController)
         }
     }
+
+    if (dialog != null) {
+        AppSimpleDialog(
+            icon = rememberVectorPainter(AppIcons.notifications),
+            text = StringValue.ResId(R.string.notification_permission_explanation),
+            onDismiss = {
+                delegates.onDialogDismiss()
+            },
+            onCancel = {
+                delegates.onDialogDismiss()
+            },
+            confirmButtonText = StringValue.ResId(R.string.give_permission),
+            onConfirm = {
+                delegates.onGivePermissionOnSettings()
+            },
+        )
+    }
 }
 
 @Composable
@@ -200,6 +222,7 @@ private fun AppContentPreview() {
             numberOfEnabledProducts = 42,
             progress = false,
             hasEmojiIfEnoughSpace = true,
+            dialog = null,
             delegates = AppContentDelegateMock,
             appEvents = Channel(),
             snackbars = Channel(),

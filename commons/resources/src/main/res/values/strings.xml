@@ -64,6 +64,8 @@
     <string name="fingerprint_location_answer">To avoid triggering the fingerprint scanner, press on the lowest part of the lock button.\nYou will succeed!</string>
     <string name="recommend_using_the_app">Recommend using this app</string>
     <string name="share">Share</string>
+    <string name="notification_permission_explanation">To publish a product list as a notification list, the app requires permission to send notifications.</string>
+    <string name="give_permission">Give permission</string>
 
     <string-array name="final_steps">
         <item>Lock the screen</item>
