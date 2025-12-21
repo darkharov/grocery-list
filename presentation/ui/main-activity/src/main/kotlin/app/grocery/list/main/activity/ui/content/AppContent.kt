@@ -197,20 +197,24 @@ internal fun AppContent(
     }
 
     if (dialog != null) {
-        AppSimpleDialog(
-            icon = rememberVectorPainter(AppIcons.notifications),
-            text = StringValue.ResId(R.string.notification_permission_explanation),
-            onDismiss = {
-                delegate.onDialogDismiss()
-            },
-            onCancel = {
-                delegate.onDialogDismiss()
-            },
-            confirmButtonText = StringValue.ResId(R.string.give_permission),
-            onConfirm = {
-                delegate.onGivePermissionOnSettings()
-            },
-        )
+        when (dialog) {
+            AppLevelDialog.AppPushNotificationsDenied -> {
+                AppSimpleDialog(
+                    icon = rememberVectorPainter(AppIcons.notifications),
+                    text = StringValue.ResId(R.string.notification_permission_explanation),
+                    onDismiss = {
+                        delegate.onDialogDismiss()
+                    },
+                    onCancel = {
+                        delegate.onDialogDismiss()
+                    },
+                    confirmButtonText = StringValue.ResId(R.string.give_permission),
+                    onConfirm = {
+                        delegate.onGivePermissionOnSettings()
+                    },
+                )
+            }
+        }
     }
 }
 
