@@ -23,7 +23,7 @@ import androidx.annotation.RequiresApi
  *      override fun onPostNotificationsGranted() {
  *          ...
  *      }
- *      override fun onPostNotificationsRefused() {
+ *      override fun onPostNotificationsDenied() {
  *          ...
  *      }
  *  }
@@ -49,19 +49,19 @@ class PermissionUtil<T> internal constructor(
 
     interface Contract {
         fun onPostNotificationsGranted() {}
-        fun onPostNotificationsRefused() {}
+        fun onPostNotificationsDenied() {}
     }
 
     private open inner class LauncherHolder(
         private val permission: String,
         private val onGranted: () -> Unit,
-        private val onRefused: () -> Unit,
+        private val onDenied: () -> Unit,
     ) {
         private val launcher = activity.registerForActivityResult(RequestPermission()) { granted ->
             if (granted) {
                 onGranted()
             } else {
-                onRefused()
+                onDenied()
             }
         }
 
@@ -76,8 +76,8 @@ class PermissionUtil<T> internal constructor(
         onGranted = {
             contract.onPostNotificationsGranted()
         },
-        onRefused = {
-            contract.onPostNotificationsRefused()
+        onDenied = {
+            contract.onPostNotificationsDenied()
         },
     )
 }

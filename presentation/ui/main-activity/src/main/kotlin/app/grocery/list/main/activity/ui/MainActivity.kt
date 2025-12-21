@@ -112,7 +112,7 @@ class MainActivity :
         viewModel.notifyPushNotificationsGranted()
     }
 
-    override fun onPostNotificationsRefused() {
+    override fun onPostNotificationsDenied() {
         viewModel.notifyPostNotificationsDenied()
     }
 
