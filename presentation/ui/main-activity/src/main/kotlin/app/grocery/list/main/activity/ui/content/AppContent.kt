@@ -59,7 +59,7 @@ internal fun AppContent(
     progress: Boolean,
     hasEmojiIfEnoughSpace: Boolean,
     dialog: AppLevelDialog?,
-    delegates: AppContentDelegate,
+    delegate: AppContentDelegate,
     appEvents: ReceiveChannel<AppEvent>,
     snackbars: ReceiveChannel<AppSnackbar>,
     modifier: Modifier = Modifier,
@@ -72,7 +72,7 @@ internal fun AppContent(
     LaunchedEffect(navController) {
         navController.currentBackStackEntryFlow.collect { navBackStackEntry ->
             val destination = navBackStackEntry.destination
-            delegates.handleCurrentDestinationChange(destination)
+            delegate.handleCurrentDestinationChange(destination)
         }
     }
 
@@ -104,7 +104,7 @@ internal fun AppContent(
                         duration = SnackbarDuration.Short,
                     )
                     if (result == SnackbarResult.ActionPerformed) {
-                        delegates.undoProductDeletion(snackbar.product)
+                        delegate.undoProductDeletion(snackbar.product)
                     }
                 }
             }
@@ -170,18 +170,18 @@ internal fun AppContent(
         ) {
             val navigation = AppNavigationFacade(navController)
             productListPreview(
-                delegate = delegates,
+                delegate = delegate,
                 navigation = navigation,
                 bottomBar = {
                     ProductListActionsBar(
                         navigation = navigation,
-                        delegate = delegates,
+                        delegate = delegate,
                     )
                 },
             )
             productInputForm(navigation)
             productListActions(
-                delegate = delegates,
+                delegate = delegate,
                 navigation = navigation,
                 bottomElement = {
                     UseIconsOnBottomBarSwitch(
@@ -192,7 +192,7 @@ internal fun AppContent(
             )
             clearNotificationsReminder(navigation)
             finalSteps(navigation)
-            settingsAndChildScreens(delegates, navController)
+            settingsAndChildScreens(delegate, navController)
         }
     }
 
@@ -201,14 +201,14 @@ internal fun AppContent(
             icon = rememberVectorPainter(AppIcons.notifications),
             text = StringValue.ResId(R.string.notification_permission_explanation),
             onDismiss = {
-                delegates.onDialogDismiss()
+                delegate.onDialogDismiss()
             },
             onCancel = {
-                delegates.onDialogDismiss()
+                delegate.onDialogDismiss()
             },
             confirmButtonText = StringValue.ResId(R.string.give_permission),
             onConfirm = {
-                delegates.onGivePermissionOnSettings()
+                delegate.onGivePermissionOnSettings()
             },
         )
     }
@@ -223,7 +223,7 @@ private fun AppContentPreview() {
             progress = false,
             hasEmojiIfEnoughSpace = true,
             dialog = null,
-            delegates = AppContentDelegateMock,
+            delegate = AppContentDelegateMock,
             appEvents = Channel(),
             snackbars = Channel(),
         )

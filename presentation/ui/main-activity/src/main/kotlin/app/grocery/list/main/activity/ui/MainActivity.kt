@@ -79,7 +79,7 @@ class MainActivity :
                     progress = progress,
                     hasEmojiIfEnoughSpace = hasEmojiIfEnoughSpace,
                     dialog = dialog,
-                    delegates = this,
+                    delegate = this,
                     appEvents = viewModel.appEvents(),
                     snackbars = viewModel.snackbars(),
                 )
