@@ -12,8 +12,8 @@ internal interface AppContentDelegate :
     ProductListPreviewDelegate {
     fun handleCurrentDestinationChange(newValue: NavDestination)
     fun undoProductDeletion(product: Product)
-    fun onGivePermissionOnSettings()
-    fun onDialogDismiss()
+    fun openNotificationSettings()
+    fun handleDialogDismiss()
 }
 
 internal object AppContentDelegateMock : AppContentDelegate {
@@ -25,6 +25,6 @@ internal object AppContentDelegateMock : AppContentDelegate {
     override fun contactSupport() {}
     override fun showUndoProductDeletionSnackbar(product: Product) {}
     override fun undoProductDeletion(product: Product) {}
-    override fun onGivePermissionOnSettings() {}
-    override fun onDialogDismiss() {}
+    override fun openNotificationSettings() {}
+    override fun handleDialogDismiss() {}
 }

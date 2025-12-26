@@ -147,19 +147,14 @@ class MainActivity :
         viewModel.undoProductDeletion(product)
     }
 
-    override fun onGivePermissionOnSettings() {
-        viewModel.notifyDialogDismiss()
-        openNotificationSettings()
-    }
-
-    private fun openNotificationSettings() {
+    override fun openNotificationSettings() {
         val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
         startActivity(intent)
     }
 
-    override fun onDialogDismiss() {
+    override fun handleDialogDismiss() {
         viewModel.notifyDialogDismiss()
     }
 

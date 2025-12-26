@@ -203,14 +203,15 @@ internal fun AppContent(
                     icon = rememberVectorPainter(AppIcons.notifications),
                     text = StringValue.ResId(R.string.notification_permission_explanation),
                     onDismiss = {
-                        delegate.onDialogDismiss()
+                        delegate.handleDialogDismiss()
                     },
                     onCancel = {
-                        delegate.onDialogDismiss()
+                        delegate.handleDialogDismiss()
                     },
                     confirmButtonText = StringValue.ResId(R.string.give_permission),
                     onConfirm = {
-                        delegate.onGivePermissionOnSettings()
+                        delegate.handleDialogDismiss()
+                        delegate.openNotificationSettings()
                     },
                 )
             }
