@@ -12,7 +12,6 @@ object Configs {
 
     object Java {
         val ENUM_ENTRY = JavaVersion.VERSION_17
-        val JVM_TARGET = "JVM_17"
-        const val STRING_VALUE = "17"
+        const val JVM_TARGET = "JVM_17"
     }
 }
