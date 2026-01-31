@@ -20,8 +20,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
 import app.grocery.list.clear.notifications.reminder.ClearNotificationsReminderViewModel.Event
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppContentToRead
@@ -30,21 +28,9 @@ import app.grocery.list.commons.compose.elements.button.AppButtonNext
 import app.grocery.list.commons.compose.elements.titled.switch_.AppSwitch
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object ClearNotificationsReminder
-
-fun NavGraphBuilder.clearNotificationsReminder(
-    navigation: ClearNotificationsReminderNavigation,
-) {
-    composable<ClearNotificationsReminder> {
-        ClearNotificationsReminderScreen(navigation)
-    }
-}
 
 @Composable
-private fun ClearNotificationsReminderScreen(
+fun ClearNotificationsReminderScreen(
     navigation: ClearNotificationsReminderNavigation,
 ) {
     val viewModel = hiltViewModel<ClearNotificationsReminderViewModel>()

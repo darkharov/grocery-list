@@ -1,47 +1,52 @@
 package app.grocery.list.main.activity.ui.content
 
-import androidx.navigation.NavHostController
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
 import app.grocery.list.clear.notifications.reminder.ClearNotificationsReminderNavigation
-import app.grocery.list.final_.steps.FinalSteps
 import app.grocery.list.final_.steps.FinalStepsNavigation
-import app.grocery.list.product.input.form.ProductInputForm
 import app.grocery.list.product.input.form.ProductInputFormNavigation
 import app.grocery.list.product.list.actions.ProductListActionsNavigation
-import app.grocery.list.product.list.actions.screen.ProductListActions
-import app.grocery.list.product.list.preview.ProductListPreview
 import app.grocery.list.product.list.preview.ProductListPreviewNavigation
+import app.grocery.list.settings.SettingsNavigation
 
 internal class AppNavigationFacade(
-    private val navController: NavHostController,
+    private val backStack: NavBackStack<NavKey>,
 ) : ProductInputFormNavigation,
     ClearNotificationsReminderNavigation,
     ProductListPreviewNavigation,
     ProductListActionsNavigation,
-    FinalStepsNavigation {
+    FinalStepsNavigation,
+    SettingsNavigation {
 
     override fun goToProductListActions() {
-        navController.navigate(ProductListActions)
+        backStack.add(ProductListActions)
     }
 
     override fun goToProductEditingForm(productId: Int) {
-        navController.navigate(ProductInputForm(productId = productId))
+        backStack.add(ProductInputForm(productId = productId))
     }
 
     override fun goToFinalSteps() {
-        navController.navigate(FinalSteps)
+        backStack.add(FinalSteps)
     }
 
     override fun goToNewProductInputForm() {
-        navController.navigate(ProductInputForm())
+        backStack.add(ProductInputForm())
     }
 
     override fun goBack() {
-        navController.popBackStack()
+        backStack.removeLastOrNull()
     }
 
-    override fun backToActionsOrListPreview() {
-        if (!(navController.popBackStack(ProductListActions, inclusive = false))) {
-            navController.popBackStack(ProductListPreview, inclusive = false)
-        }
+    override fun backToListPreview() {
+        backStack.retainAll { key -> key is ProductListPreview }
+    }
+
+    override fun goToListFormatSettings() {
+        backStack.add(ListFormatSettings)
+    }
+
+    override fun goToBottomBarSettings() {
+        backStack.add(BottomBarSettings)
     }
 }

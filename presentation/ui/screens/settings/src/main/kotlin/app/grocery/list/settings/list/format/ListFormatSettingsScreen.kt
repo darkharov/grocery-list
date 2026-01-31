@@ -42,36 +42,24 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.settings.R
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object ListFormatSettings
-
-internal fun NavGraphBuilder.listFormatSettings() {
-    composable<ListFormatSettings> {
-        ListFormatSettings()
-    }
-}
 
 @Composable
-private fun ListFormatSettings() {
+fun ListFormatSettingsScreen() {
     val viewModel = hiltViewModel<ListFormatSettingsViewModel>()
     val props by viewModel.props.collectAsState()
-    ListFormatSettings(
+    ListFormatSettingsScreen(
         props = props,
         callbacks = viewModel,
     )
 }
 
 @Composable
-private fun ListFormatSettings(
+private fun ListFormatSettingsScreen(
     props: ListFormatSettingsProps?,
     callbacks: ListFormatSettingsCallbacks,
     modifier: Modifier = Modifier,
@@ -254,7 +242,7 @@ private fun SampleNotification(
 private fun ListFormatSettingsScreenPreview() {
     GroceryListTheme {
         Scaffold { padding ->
-            ListFormatSettings(
+            ListFormatSettingsScreen(
                 props = ListFormatSettingsProps(
                     productTitleFormat = ListFormatSettingsProps.ProductTitleFormat.EmojiAndFullText,
                     sampleOfNotificationTitle = "🍅 Tomato (cherry, 1 container), 🧀 Cheese 500g, 🥛  Milk 2l",

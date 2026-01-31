@@ -1,5 +1,6 @@
 package app.grocery.list.main.activity.ui.content
 
+import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.WindowInsets
@@ -18,19 +19,18 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import app.grocery.list.clear.notifications.reminder.ClearNotificationsReminder
-import app.grocery.list.clear.notifications.reminder.clearNotificationsReminder
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.ui.NavDisplay
+import app.grocery.list.clear.notifications.reminder.ClearNotificationsReminderScreen
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.dialog.AppSimpleDialog
 import app.grocery.list.commons.compose.elements.toolbar.AppToolbar
@@ -38,20 +38,26 @@ import app.grocery.list.commons.compose.elements.toolbar.AppToolbarProps
 import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
-import app.grocery.list.final_.steps.FinalSteps
-import app.grocery.list.final_.steps.finalSteps
+import app.grocery.list.final_.steps.FinalStepsScreen
 import app.grocery.list.main.activity.R
-import app.grocery.list.product.input.form.productInputForm
+import app.grocery.list.product.input.form.ProductInputFormScreen
+import app.grocery.list.product.list.actions.ProductListActionsScreen
 import app.grocery.list.product.list.actions.bar.ProductListActionsBar
-import app.grocery.list.product.list.actions.screen.productListActions
-import app.grocery.list.product.list.preview.ProductListPreview
-import app.grocery.list.product.list.preview.productListPreview
-import app.grocery.list.settings.Settings
-import app.grocery.list.settings.settingsAndChildScreens
+import app.grocery.list.product.list.preview.ProductListPreviewScreen
+import app.grocery.list.settings.SettingsScreen
+import app.grocery.list.settings.bottom.bar.settings.BottomBarSettingsScreen
+import app.grocery.list.settings.list.format.ListFormatSettingsScreen
 import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitch
 import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
+
+private val ScreenSpecificToolbarProps = persistentMapOf(
+    Settings to AppToolbarProps.Title(R.string.settings),
+    ListFormatSettings to AppToolbarProps.Title(R.string.list_format),
+    BottomBarSettings to AppToolbarProps.Title(R.string.bottom_bar),
+)
 
 @Composable
 internal fun AppContent(
@@ -64,28 +70,24 @@ internal fun AppContent(
     snackbars: ReceiveChannel<AppSnackbar>,
     modifier: Modifier = Modifier,
 ) {
-    val startRoute = ProductListPreview
-    val navController = rememberNavController()
-    val currentDestination by navController.currentBackStackEntryAsState()
+    val backStack = rememberNavBackStack(ProductListPreview)
     val snackbarHostState = remember { SnackbarHostState() }
+    val navigation = remember { AppNavigationFacade(backStack) }
 
-    LaunchedEffect(navController) {
-        navController.currentBackStackEntryFlow.collect { navBackStackEntry ->
-            val destination = navBackStackEntry.destination
-            delegate.handleCurrentDestinationChange(destination)
-        }
+    LaunchedEffect(backStack.last()) {
+        delegate.handleCurrentScreenChange(backStack.last())
     }
 
     EventConsumer(appEvents) { event ->
         when (event) {
             is AppEvent.PushNotificationsGranted -> {
                 val reminderEnabled = event.clearNotificationsReminderEnabled
-                val route: Any = if (reminderEnabled) {
+                val key = if (reminderEnabled) {
                     ClearNotificationsReminder
                 } else {
                     FinalSteps
                 }
-                navController.navigate(route)
+                backStack.add(key)
             }
         }
     }
@@ -115,26 +117,24 @@ internal fun AppContent(
         modifier = modifier,
         contentWindowInsets = WindowInsets(0.dp),
         topBar = {
+            val currentScreen = backStack.last()
             AppToolbar(
                 props = AppToolbarProps(
-                    content = AppToolbarContentCollection
-                        .Instance
-                        .getOrDefault(currentDestination?.destination) {
+                    content = ScreenSpecificToolbarProps
+                        .getOrElse(currentScreen) {
                             AppToolbarProps.Content.Default(
                                 counter = numberOfEnabledProducts,
-                                onStart = currentDestination
-                                    ?.destination
-                                    ?.hasRoute(startRoute::class) == true,
+                                onStart = backStack.size == 1,
                                 hasEmojiIfEnoughSpace = hasEmojiIfEnoughSpace,
                             )
                         },
                     progress = progress,
                 ),
                 onUpClick = {
-                    navController.popBackStack()
+                    backStack.removeLastOrNull()
                 },
                 onTrailingIconClick = {
-                    navController.navigate(Settings)
+                    backStack.add(Settings)
                 },
             )
         },
@@ -151,9 +151,8 @@ internal fun AppContent(
             )
         },
     ) { padding ->
-        NavHost(
-            navController = navController,
-            startDestination = startRoute,
+        NavDisplay(
+            backStack = backStack,
             modifier = Modifier
                 .windowInsetsPadding(
                     WindowInsets
@@ -162,38 +161,86 @@ internal fun AppContent(
                         .only(WindowInsetsSides.Horizontal),
                 )
                 .padding(padding),
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None },
-            popEnterTransition = { EnterTransition.None },
-            popExitTransition = { ExitTransition.None },
+            entryDecorators = listOf(
+                rememberSaveableStateHolderNavEntryDecorator(),
+                rememberViewModelStoreNavEntryDecorator(),
+            ),
             sizeTransform = null,
-        ) {
-            val navigation = AppNavigationFacade(navController)
-            productListPreview(
-                delegate = delegate,
-                navigation = navigation,
-                bottomBar = {
-                    ProductListActionsBar(
+            transitionSpec = {
+                ContentTransform(
+                    EnterTransition.None,
+                    ExitTransition.None,
+                )
+            },
+            popTransitionSpec = {
+                ContentTransform(
+                    EnterTransition.None,
+                    ExitTransition.None,
+                )
+            },
+            predictivePopTransitionSpec = {
+                ContentTransform(
+                    EnterTransition.None,
+                    ExitTransition.None,
+                )
+            },
+            entryProvider = entryProvider {
+                entry<ClearNotificationsReminder> {
+                    ClearNotificationsReminderScreen(
+                        navigation = navigation,
+                    )
+                }
+                entry<FinalSteps> {
+                    FinalStepsScreen(
+                        navigation = navigation,
+                    )
+                }
+                entry<ProductInputForm> { key ->
+                    ProductInputFormScreen(
+                        productId = key.productId,
+                        navigation = navigation,
+                    )
+                }
+                entry<ProductListActions> {
+                    ProductListActionsScreen(
+                        delegate = delegate,
+                        navigation = navigation,
+                        bottomElement = {
+                            UseIconsOnBottomBarSwitch(
+                                strategy = UseIconsOnBottomBarSwitchStrategy.EmbeddedElement,
+                                navigation = navigation,
+                            )
+                        },
+                    )
+                }
+                entry<ProductListPreview> {
+                    ProductListPreviewScreen(
                         navigation = navigation,
                         delegate = delegate,
+                        bottomBar = {
+                            ProductListActionsBar(
+                                navigation = navigation,
+                                delegate = delegate,
+                            )
+                        },
                     )
-                },
-            )
-            productInputForm(navigation)
-            productListActions(
-                delegate = delegate,
-                navigation = navigation,
-                bottomElement = {
-                    UseIconsOnBottomBarSwitch(
-                        strategy = UseIconsOnBottomBarSwitchStrategy.EmbeddedElement,
+                }
+                entry<Settings> {
+                    SettingsScreen(
+                        delegate = delegate,
                         navigation = navigation,
                     )
-                },
-            )
-            clearNotificationsReminder(navigation)
-            finalSteps(navigation)
-            settingsAndChildScreens(delegate, navController)
-        }
+                }
+                entry<ListFormatSettings> {
+                    ListFormatSettingsScreen()
+                }
+                entry<BottomBarSettings> {
+                    BottomBarSettingsScreen(
+                        navigation = navigation,
+                    )
+                }
+            },
+        )
     }
 
     if (dialog != null) {

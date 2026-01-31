@@ -32,8 +32,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
@@ -45,27 +43,9 @@ import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.product.list.preview.ProductListPreviewViewModel.Event
 import app.grocery.list.product.list.preview.elements.ProductItem
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object ProductListPreview
-
-fun NavGraphBuilder.productListPreview(
-    delegate: ProductListPreviewDelegate,
-    navigation: ProductListPreviewNavigation,
-    bottomBar: @Composable () -> Unit,
-) {
-    composable<ProductListPreview> {
-        PreloaderOrContent(
-            delegate = delegate,
-            bottomBar = bottomBar,
-            navigation = navigation,
-        )
-    }
-}
 
 @Composable
-private fun PreloaderOrContent(
+fun ProductListPreviewScreen(
     navigation: ProductListPreviewNavigation,
     delegate: ProductListPreviewDelegate,
     bottomBar: @Composable () -> Unit,

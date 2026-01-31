@@ -15,13 +15,12 @@ import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation3.runtime.NavKey
 import app.grocery.list.commons.compose.theme.ThemeUtil
 import app.grocery.list.domain.product.Product
-import app.grocery.list.final_.steps.FinalSteps
 import app.grocery.list.main.activity.ui.content.AppContent
 import app.grocery.list.main.activity.ui.content.AppContentDelegate
+import app.grocery.list.main.activity.ui.content.FinalSteps
 import app.grocery.list.notifications.NotificationPublisher
 import commons.android.PermissionUtil
 import commons.android.ScreenLockedReceiver
@@ -42,7 +41,7 @@ class MainActivity :
 
     private val viewModel by viewModels<MainViewModel>()
     private val permissionUtil = PermissionUtil()
-    private var currentDestination: NavDestination? = null
+    private var currentScreenKey: NavKey? = null
 
     override val appVersionName get() = contract.versionName
 
@@ -89,7 +88,7 @@ class MainActivity :
 
     private fun observeScreenLock() {
         ScreenLockedReceiver.register(this) {
-            if (currentDestination?.hasRoute(FinalSteps::class) == true) {
+            if (currentScreenKey is FinalSteps) {
                 notificationPublisher.tryToPost()
             }
         }
@@ -116,8 +115,8 @@ class MainActivity :
         viewModel.notifyPostNotificationsDenied()
     }
 
-    override fun handleCurrentDestinationChange(newValue: NavDestination) {
-        currentDestination = newValue
+    override fun handleCurrentScreenChange(newValue: NavKey) {
+        currentScreenKey = newValue
     }
 
     override fun shareProducts(sharingString: String) {

@@ -42,6 +42,12 @@ dependencies {
     implementation(project(":presentation:ui:screens:clear-notifications-reminder"))
     implementation(project(":presentation:ui:screens:final-steps"))
     implementation(project(":presentation:ui:screens:settings"))
+
+    // Navigation
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.core.ktx)
@@ -52,9 +58,6 @@ dependencies {
     implementation(libs.androidx.material3)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.kotlinx.collections.immutable)
     implementation(platform(libs.firebase.bom))

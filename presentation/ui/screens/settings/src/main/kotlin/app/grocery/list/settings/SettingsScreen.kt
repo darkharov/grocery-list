@@ -23,68 +23,41 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.button.text.AppTextButton
 import app.grocery.list.commons.compose.elements.button.text.AppTextButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
-import app.grocery.list.settings.bottom.bar.BottomBarSettings
-import app.grocery.list.settings.bottom.bar.bottomBarSettings
-import app.grocery.list.settings.list.format.ListFormatSettings
-import app.grocery.list.settings.list.format.listFormatSettings
-import kotlinx.serialization.Serializable
 
-@Serializable
-data object Settings
-
-fun NavGraphBuilder.settingsAndChildScreens(
+@Composable
+fun SettingsScreen(
     delegate: SettingsDelegate,
-    navController: NavHostController,
+    navigation: SettingsNavigation,
 ) {
-    settings(
+    val viewModel = hiltViewModel<SettingsViewModel, SettingsViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(
+                appVersionName = delegate.appVersionName,
+            )
+        }
+    )
+    val props by viewModel.props.collectAsState()
+    EventConsumer(
+        viewModel = viewModel,
+        navigation = navigation,
         delegate = delegate,
-        navController = navController,
     )
-    listFormatSettings()
-    bottomBarSettings(
-        ableToGoBack = navController::popBackStack,
+    SettingsScreen(
+        props = props,
+        navigation = navigation,
+        callbacks = viewModel,
     )
-}
-
-private fun NavGraphBuilder.settings(
-    delegate: SettingsDelegate,
-    navController: NavHostController,
-) {
-    composable<Settings> {
-        val viewModel = hiltViewModel<SettingsViewModel, SettingsViewModel.Factory>(
-            creationCallback = { factory ->
-                factory.create(
-                    appVersionName = delegate.appVersionName,
-                )
-            }
-        )
-        val props by viewModel.props.collectAsState()
-        EventConsumer(
-            viewModel = viewModel,
-            navController = navController,
-            delegate = delegate,
-        )
-        SettingsScreen(
-            props = props,
-            navController = navController,
-            callbacks = viewModel,
-        )
-    }
 }
 
 @Composable
 private fun EventConsumer(
     viewModel: SettingsViewModel,
-    navController: NavHostController,
+    navigation: SettingsNavigation,
     delegate: SettingsDelegate,
 ) {
     EventConsumer(viewModel.events()) { event ->
@@ -93,7 +66,7 @@ private fun EventConsumer(
                 delegate.contactSupport()
             }
             SettingsViewModel.Event.OnGoToListFormatSettings -> {
-                navController.navigate(ListFormatSettings)
+                navigation.goToListFormatSettings()
             }
         }
     }
@@ -103,7 +76,7 @@ private fun EventConsumer(
 private fun SettingsScreen(
     props: SettingsProps,
     callbacks: SettingsCallbacks,
-    navController: NavHostController,
+    navigation: SettingsNavigation,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -130,7 +103,7 @@ private fun SettingsScreen(
                 leadingIconId = R.drawable.ic_bottom_bar,
             ),
             onClick = {
-                navController.navigate(BottomBarSettings)
+                navigation.goToBottomBarSettings()
             },
         )
         AppTextButton(
@@ -172,7 +145,7 @@ private fun SettingsScreenPreview() {
             SettingsScreen(
                 props = SettingsProps(appVersionName = "1.0.0"),
                 callbacks = SettingsCallbacksMock,
-                navController = rememberNavController(),
+                navigation = SettingsNavigationMock,
                 modifier = Modifier
                     .padding(padding),
             )

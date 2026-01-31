@@ -1,4 +1,4 @@
-package app.grocery.list.product.list.actions.screen
+package app.grocery.list.product.list.actions
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,8 +22,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
 import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.elements.button.AppButton
@@ -32,37 +30,10 @@ import app.grocery.list.commons.compose.elements.button.AppButtonStateProps
 import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
-import app.grocery.list.product.list.actions.ProductListActionsCallbacks
-import app.grocery.list.product.list.actions.ProductListActionsCallbacksMock
-import app.grocery.list.product.list.actions.ProductListActionsDelegate
-import app.grocery.list.product.list.actions.ProductListActionsEventsConsumer
-import app.grocery.list.product.list.actions.ProductListActionsMocks
-import app.grocery.list.product.list.actions.ProductListActionsNavigation
-import app.grocery.list.product.list.actions.ProductListActionsProps
-import app.grocery.list.product.list.actions.ProductListActionsViewModel
-import app.grocery.list.product.list.actions.R
 import app.grocery.list.product.list.actions.dialog.ProductListActionsOptionalDialog
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object ProductListActions
-
-fun NavGraphBuilder.productListActions(
-    delegate: ProductListActionsDelegate,
-    navigation: ProductListActionsNavigation,
-    bottomElement: @Composable () -> Unit,
-) {
-    composable<ProductListActions> {
-        ProductListActionsScreen(
-            delegate = delegate,
-            navigation = navigation,
-            bottomElement = bottomElement,
-        )
-    }
-}
 
 @Composable
-private fun ProductListActionsScreen(
+fun ProductListActionsScreen(
     delegate: ProductListActionsDelegate,
     navigation: ProductListActionsNavigation,
     bottomElement: @Composable () -> Unit,

@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.google.hilt.android)
 }
@@ -40,5 +39,4 @@ dependencies {
     ksp(libs.hilt.compiler)
     ksp(libs.kotlinx.metadata.jvm)
     implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.navigation.compose)
 }

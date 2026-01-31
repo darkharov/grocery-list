@@ -42,5 +42,4 @@ dependencies {
     ksp(libs.hilt.compiler)
     ksp(libs.kotlinx.metadata.jvm)
     implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.navigation.compose)
 }

@@ -32,9 +32,6 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.KeyboardOnComposition
 import app.grocery.list.commons.compose.elements.AppTextField
@@ -46,30 +43,13 @@ import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.product.input.form.elements.category.picker.CategoryPicker
 import app.grocery.list.product.input.form.elements.category.picker.CategoryPickerProps
 import app.grocery.list.product.input.form.elements.category.picker.CategoryProps
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class ProductInputForm(
-    val productId: Int? = null,
-)
-
-fun NavGraphBuilder.productInputForm(
-    navigation: ProductInputFormNavigation,
-) {
-    composable<ProductInputForm> { navBackStackEntry ->
-        ProductInputFormScreen(
-            arguments = navBackStackEntry.toRoute<ProductInputForm>(),
-            navigation = navigation,
-        )
-    }
-}
 
 @Composable
-internal fun ProductInputFormScreen(
-    arguments: ProductInputForm,
+fun ProductInputFormScreen(
+    productId: Int?,
     navigation: ProductInputFormNavigation,
 ) {
-    val productId = arguments.productId
+    val productId = productId
     val viewModel = hiltViewModel<ProductInputFormViewModel, ProductInputFormViewModel.Factory>(
         creationCallback = { factory ->
             factory.create(productId = productId)
