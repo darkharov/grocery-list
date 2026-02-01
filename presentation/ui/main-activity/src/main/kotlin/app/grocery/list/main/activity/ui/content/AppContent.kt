@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -74,11 +75,10 @@ internal fun AppContent(
     val snackbarHostState = remember { SnackbarHostState() }
     val navigation = remember { AppNavigationFacade(backStack) }
 
-    LaunchedEffect(backStack.last()) {
-        delegate.handleCurrentScreenChange(backStack.last())
-    }
-
-    EventConsumer(appEvents) { event ->
+    EventConsumer(
+        events = appEvents,
+        lifecycleState = Lifecycle.State.CREATED,
+    ) { event ->
         when (event) {
             is AppEvent.PushNotificationsGranted -> {
                 val reminderEnabled = event.clearNotificationsReminderEnabled
@@ -88,6 +88,11 @@ internal fun AppContent(
                     FinalSteps
                 }
                 backStack.add(key)
+            }
+            is AppEvent.ScreenLocked -> {
+                if (backStack.last() is FinalSteps) {
+                    delegate.notificationPublisher.tryToPost()
+                }
             }
         }
     }

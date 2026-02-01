@@ -75,6 +75,10 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun notifyScreenLocked() {
+        appEvents.trySend(AppEvent.ScreenLocked)
+    }
+
     fun showUndoProductDeletionSnackbar(product: Product) {
         val event = AppSnackbar.UndoDeletionProduct(
             product = product,

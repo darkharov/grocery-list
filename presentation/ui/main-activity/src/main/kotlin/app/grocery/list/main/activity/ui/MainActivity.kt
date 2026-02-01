@@ -15,12 +15,10 @@ import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation3.runtime.NavKey
 import app.grocery.list.commons.compose.theme.ThemeUtil
 import app.grocery.list.domain.product.Product
 import app.grocery.list.main.activity.ui.content.AppContent
 import app.grocery.list.main.activity.ui.content.AppContentDelegate
-import app.grocery.list.main.activity.ui.content.FinalSteps
 import app.grocery.list.notifications.NotificationPublisher
 import commons.android.PermissionUtil
 import commons.android.ScreenLockedReceiver
@@ -35,11 +33,10 @@ class MainActivity :
 
     @Inject lateinit var contract: Contract
     @Inject lateinit var themeUtil: ThemeUtil
-    @Inject lateinit var notificationPublisher: NotificationPublisher
+    @Inject override lateinit var notificationPublisher: NotificationPublisher
 
     private val viewModel by viewModels<MainViewModel>()
     private val permissionUtil = PermissionUtil()
-    private var currentScreenKey: NavKey? = null
 
     override val appVersionName get() = contract.versionName
     override val appVersionCode get() = contract.versionCode
@@ -87,9 +84,7 @@ class MainActivity :
 
     private fun observeScreenLock() {
         ScreenLockedReceiver.register(this) {
-            if (currentScreenKey is FinalSteps) {
-                notificationPublisher.tryToPost()
-            }
+            viewModel.notifyScreenLocked()
         }
     }
 
@@ -112,10 +107,6 @@ class MainActivity :
 
     override fun onPostNotificationsDenied() {
         viewModel.notifyPostNotificationsDenied()
-    }
-
-    override fun handleCurrentScreenChange(newValue: NavKey) {
-        currentScreenKey = newValue
     }
 
     override fun showUndoProductDeletionSnackbar(product: Product) {

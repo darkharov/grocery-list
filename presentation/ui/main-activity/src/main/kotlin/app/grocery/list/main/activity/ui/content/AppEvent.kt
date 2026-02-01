@@ -5,4 +5,6 @@ sealed class AppEvent {
     data class PushNotificationsGranted(
         val clearNotificationsReminderEnabled: Boolean,
     ) : AppEvent()
+
+    data object ScreenLocked : AppEvent()
 }
