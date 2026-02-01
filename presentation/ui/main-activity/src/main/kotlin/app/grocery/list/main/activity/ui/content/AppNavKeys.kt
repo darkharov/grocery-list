@@ -3,7 +3,6 @@ package app.grocery.list.main.activity.ui.content
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data object ClearNotificationsReminder : NavKey
 
