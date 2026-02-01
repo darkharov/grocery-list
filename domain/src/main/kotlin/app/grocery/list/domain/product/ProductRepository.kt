@@ -13,9 +13,9 @@ interface ProductRepository {
     fun samples(): Flow<List<Product>>
     fun isThereAtLeastOne(): Flow<Boolean>
 
-    suspend fun productTitleAndCategoryId(productId: Int): ProductTitleAndCategoryId
+    suspend fun get(id: Int): Product
     suspend fun findEmojiAndCategoryId(search: String): EmojiAndCategoryId
-    suspend fun findEmoji(search: String): EmojiAndKeyword?
+    suspend fun findEmoji(search: CharSequence): EmojiAndKeyword?
     suspend fun deleteAll()
     suspend fun delete(productId: Int): Product
     suspend fun put(product: Product)

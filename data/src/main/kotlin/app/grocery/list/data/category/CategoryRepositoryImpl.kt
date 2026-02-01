@@ -17,6 +17,6 @@ class CategoryRepositoryImpl @Inject internal constructor(
     override suspend fun get(id: Int): Category =
         dao.get(id = id)
 
-    override suspend fun find(search: String): Category? =
-        dao.category(search = search)
+    override suspend fun find(search: CharSequence): Category? =
+        dao.find(search = search)
 }

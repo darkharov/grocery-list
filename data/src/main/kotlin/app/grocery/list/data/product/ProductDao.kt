@@ -46,16 +46,6 @@ internal interface ProductDao {
     @Query("SELECT * FROM product WHERE product_id == :productId")
     fun select(productId: Int): ProductEntity
 
-    @Query(
-        """
-            SELECT title,
-                   non_fk_category_id
-              FROM product
-             WHERE product_id == :productId
-        """
-    )
-    fun selectTitleAndCategoryId(productId: Int): ProductEntity.TitleAndCategoryId
-
     @Query("SELECT COUNT(*) FROM product")
     fun count(): Flow<Int>
 

@@ -1,13 +1,15 @@
 package app.grocery.list.product.input.form
 
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.delete
+import androidx.compose.foundation.text.input.placeCursorAtEnd
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.grocery.list.domain.category.Category
 import app.grocery.list.domain.category.CategoryRepository
 import app.grocery.list.domain.product.AtLeastOneProductJustAddedUseCase
 import app.grocery.list.domain.product.EmojiAndKeyword
-import app.grocery.list.domain.product.GetProductTitleAndCategoryUseCase
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.product.input.form.elements.category.picker.CategoryMapper
@@ -18,18 +20,21 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel(
     assistedFactory = ProductInputFormViewModel.Factory::class,
 )
@@ -39,68 +44,65 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
     private val productRepository: ProductRepository,
     private val categoryRepository: CategoryRepository,
     private val categoryMapper: CategoryMapper,
-    private val emojiAndKeywordMapper: EmojiAndKeywordMapper,
-    private val getTitleAndCategory: GetProductTitleAndCategoryUseCase,
-    atLeastOneProductJustAdded: AtLeastOneProductJustAddedUseCase,
+    private val emojiMapper: EmojiMapper,
+    private val atLeastOneProductJustAdded: AtLeastOneProductJustAddedUseCase,
 ) : ViewModel(),
     ProductInputFormCallbacks {
 
     private val events = Channel<Event>(Channel.UNLIMITED)
-
-    private val title = MutableStateFlow(TextFieldValue(""))
-    private val explicitlySelectedCategory = MutableStateFlow<CategoryProps?>(null)
+    private val enabled = MutableStateFlow(true)
+    private val currentEmoji = MutableStateFlow<EmojiProps?>(null)
+    private val selectedCategoryId = MutableStateFlow<Int?>(null)
     private val categoryPickerExpanded = MutableStateFlow(false)
 
-    val emoji = emoji().customStateIn(this)
-    val categoryPicker = categoryPicker().customStateIn(this, CategoryPickerProps())
+    val title = TextFieldState()
+    val props = props().customStateIn(this, ProductInputFormProps())
 
-    val atLeastOneProductJustAdded =
-        atLeastOneProductJustAdded
-            .execute()
-            .customStateIn(this, defaultValue = false)
-
-    init {
-        if (productId != null) {
-            viewModelScope.launch {
-
-                val (productTitle, category) = getTitleAndCategory.execute(productId = productId)
-
-                title.value = TextFieldValue(
-                    text = productTitle,
-                    selection = TextRange(
-                        index = productTitle.length,
-                    ),
-                )
-
-                explicitlySelectedCategory.value = categoryMapper.transform(category)
-            }
+    private fun props(): Flow<ProductInputFormProps> =
+        combine(
+            enabled,
+            currentOrSuggestedEmoji(),
+            categoryPicker(),
+            atLeastOneProductJustAdded.execute(),
+        ) {
+                enabled,
+                emoji,
+                categoryPicker,
+                atLeastOneProductJustAdded,
+            ->
+            ProductInputFormProps(
+                productId = productId,
+                emoji = emoji,
+                enabled = enabled,
+                categoryPicker = categoryPicker,
+                atLeastOneProductJustAdded = atLeastOneProductJustAdded,
+            )
         }
-    }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private fun emoji(): Flow<EmojiProps?> =
-        title
-            .mapLatest { title ->
-                productRepository.findEmoji(search = title.text)
-            }
-            .map { result ->
-                emojiAndKeywordMapper.transformNullable(result)
+    private fun currentOrSuggestedEmoji(): Flow<EmojiProps?> =
+        currentEmoji
+            .flatMapLatest { current ->
+                if (current != null) {
+                    flowOf(current)
+                } else {
+                    snapshotFlow { title.text }
+                        .mapLatest { title ->
+                            val emoji = productRepository.findEmoji(title)
+                            emojiMapper.toPresentationNullable(emoji)
+                        }
+                }
             }
 
     private fun categoryPicker(): Flow<CategoryPickerProps> =
         combine(
             categories(),
-            selectedCategory(),
+            selectedOrSuggestedCategory(),
             categoryPickerExpanded,
-        ) {
-                categories,
-                selectedCategory,
-                expanded,
-            ->
+        ) { items, selectedOne, expanded ->
             CategoryPickerProps(
-                categories = categories,
-                selectedCategory = selectedCategory,
+                items = items,
                 expanded = expanded,
+                selectedOne = categoryMapper.transformNullable(selectedOne),
             )
         }
 
@@ -109,35 +111,46 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
             .all()
             .map(categoryMapper::transformList)
 
-    private fun selectedCategory(): Flow<CategoryProps?> =
-        combine(
-            explicitlySelectedCategory,
-            title,
-        ) { explicitlySelected, productTitle ->
-            explicitlySelected ?: findCategory(productTitle = productTitle.text)
+    private fun selectedOrSuggestedCategory(): Flow<Category?> =
+        selectedCategoryId
+            .flatMapLatest { id ->
+                if (id != null) {
+                    flowOf(categoryRepository.get(id = id))
+                } else {
+                    snapshotFlow { title.text }
+                        .mapLatest(categoryRepository::find)
+                }
+            }
+
+    @Inject
+    fun assignInitialValues() {
+        viewModelScope.launch {
+            if (productId != null) {
+                val product = productRepository.get(id = productId)
+                title.edit {
+                    append(product.title)
+                    placeCursorAtEnd()
+                }
+                enabled.value = product.enabled
+                currentEmoji.value = emojiMapper.toPresentationNullable(product.emojiAndKeyword)
+                selectedCategoryId.value = product.categoryId
+            }
         }
-
-    private suspend fun findCategory(productTitle: String): CategoryProps? {
-        val defined = categoryRepository.find(search = productTitle)
-        return categoryMapper.transformNullable(defined)
-    }
-
-    override fun onProductTitleChange(newValue: TextFieldValue) {
-        title.value = newValue
     }
 
     override fun onAttemptToCompleteProductInput(
         productTitle: String,
-        selectedCategoryId: Int?,
-        emoji: EmojiProps?,
-        atLeastOneProductJustAdded: Boolean,
+        props: ProductInputFormProps,
     ) {
+        val selectedCategoryId = props.selectedCategoryId
         if (productTitle.isNotBlank()) {
             if (selectedCategoryId != null) {
                 putProduct(
+                    productId = props.productId ?: 0,
                     productTitle = productTitle,
+                    emoji = emojiMapper.toDomainNullable(props.emoji),
                     categoryId = selectedCategoryId,
-                    emojiAndKeyword = emoji?.payload as EmojiAndKeyword?,
+                    enabled = props.enabled,
                 )
                 finalizeInput()
             } else {
@@ -147,23 +160,25 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
         } else {
             if (selectedCategoryId != null) {
                 events.trySend(Event.TitleNotSpecified)
-            } else if (atLeastOneProductJustAdded) {
+            } else if (props.atLeastOneProductJustAdded) {
                 events.trySend(Event.Completed)
             } // else form is completely empty, so there's nothing to do
         }
     }
 
     private fun putProduct(
+        productId: Int,
         productTitle: String,
+        emoji: EmojiAndKeyword?,
         categoryId: Int,
-        emojiAndKeyword: EmojiAndKeyword?,
+        enabled: Boolean,
     ) {
         val product = Product(
-            id = productId ?: 0,
+            id = productId,
             title = productTitle.replaceFirstChar { it.uppercaseChar() },
-            emojiAndKeyword = emojiAndKeyword,
+            emojiAndKeyword = emoji,
             categoryId = categoryId,
-            enabled = true,
+            enabled = enabled,
         )
         viewModelScope.launch {
             productRepository.put(product)
@@ -172,8 +187,10 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
 
     private fun finalizeInput() {
         if (productId == null) {
-            title.value = TextFieldValue()
-            explicitlySelectedCategory.value = null
+            title.edit {
+                delete(0, length)
+            }
+            selectedCategoryId.value = null
             events.trySend(Event.ProductAdded)
         } else {
             events.trySend(Event.Completed)
@@ -184,8 +201,8 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
         categoryPickerExpanded.value = expanded
     }
 
-    override fun onCategorySelected(category: CategoryProps) {
-        explicitlySelectedCategory.value = category
+    override fun onCategorySelected(categoryId: Int) {
+        selectedCategoryId.value = categoryId
         categoryPickerExpanded.value = false
         events.trySend(Event.CategoryExplicitlySelected)
     }
@@ -193,9 +210,6 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
     override fun onComplete() {
         events.trySend(Event.Completed)
     }
-
-    fun title(): StateFlow<TextFieldValue> =
-        title
 
     fun events(): ReceiveChannel<Event> =
         events

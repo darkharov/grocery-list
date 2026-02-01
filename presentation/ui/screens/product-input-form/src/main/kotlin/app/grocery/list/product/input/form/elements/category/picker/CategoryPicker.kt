@@ -45,7 +45,7 @@ internal fun CategoryPicker(
         modifier = modifier,
     ) {
         AppTextField(
-            value = props.selectedCategory?.title.orEmpty(),
+            value = props.selectedOne?.title.orEmpty(),
             onValueChange = {},
             modifier = Modifier
                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
@@ -81,7 +81,7 @@ internal fun CategoryPicker(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background),
         ) {
-            for (category in props.categories) {
+            for (category in props.items) {
                 DropdownMenuItem(
                     text = {
                         Text(
@@ -90,7 +90,7 @@ internal fun CategoryPicker(
                     },
                     onClick = {
                         callbacks.onCategorySelected(
-                            category = category,
+                            categoryId = category.id,
                         )
                     },
                     contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
@@ -118,8 +118,10 @@ private fun CategoryPickerPreview(
                     props = props.copy(expanded = expanded)
                 }
 
-                override fun onCategorySelected(category: CategoryProps) {
-                    props = props.copy(selectedCategory = category)
+                override fun onCategorySelected(categoryId: Int) {
+                    props = props.copy(
+                        selectedOne = props.items.find { it.id == categoryId },
+                    )
                 }
             },
             focusRequester = remember { FocusRequester() },

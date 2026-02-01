@@ -9,7 +9,6 @@ import app.grocery.list.domain.product.EmojiAndKeyword
 import app.grocery.list.domain.product.EnabledAndDisabledProducts
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
-import app.grocery.list.domain.product.ProductTitleAndCategoryId
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -59,18 +58,15 @@ internal class ProductRepositoryImpl @Inject constructor(
                 )
             }
 
-    override suspend fun productTitleAndCategoryId(productId: Int): ProductTitleAndCategoryId {
-        val (title, categoryId) = productDao.selectTitleAndCategoryId(productId = productId)
-        return ProductTitleAndCategoryId(
-            productTitle = title,
-            categoryId = categoryId,
-        )
+    override suspend fun get(id: Int): Product {
+        val entity = productDao.select(productId = id)
+        return productMapper.toDomainModel(entity)
     }
 
     override suspend fun findEmojiAndCategoryId(search: String): EmojiAndCategoryId =
         categoryDao.emojiAndCategoryId(search = search)
 
-    override suspend fun findEmoji(search: String): EmojiAndKeyword? =
+    override suspend fun findEmoji(search: CharSequence): EmojiAndKeyword? =
         categoryDao.emoji(search = search)
 
     override suspend fun deleteAll() {

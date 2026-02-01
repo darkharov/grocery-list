@@ -7,9 +7,9 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 internal data class CategoryPickerProps(
+    val items: ImmutableList<CategoryProps> = persistentListOf(),
     val expanded: Boolean = false,
-    val categories: ImmutableList<CategoryProps> = persistentListOf(),
-    val selectedCategory: CategoryProps? = null,
+    val selectedOne: CategoryProps? = null,
 )
 
 internal class CategoryPickerMocks : PreviewParameterProvider<CategoryPickerProps> {
@@ -19,7 +19,7 @@ internal class CategoryPickerMocks : PreviewParameterProvider<CategoryPickerProp
     companion object {
         val prototype = CategoryPickerProps(
             expanded = true,
-            categories = persistentListOf(
+            items = persistentListOf(
                 CategoryProps(
                     id = 1,
                     title = "Fruits",
@@ -29,7 +29,7 @@ internal class CategoryPickerMocks : PreviewParameterProvider<CategoryPickerProp
                     title = "Fish",
                 ),
             ),
-            selectedCategory = null,
+            selectedOne = null,
         )
     }
 }

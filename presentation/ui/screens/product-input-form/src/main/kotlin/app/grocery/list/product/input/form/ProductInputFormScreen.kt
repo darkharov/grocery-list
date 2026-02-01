@@ -12,8 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,7 +28,6 @@ import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -42,7 +42,6 @@ import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.product.input.form.elements.category.picker.CategoryPicker
 import app.grocery.list.product.input.form.elements.category.picker.CategoryPickerProps
-import app.grocery.list.product.input.form.elements.category.picker.CategoryProps
 
 @Composable
 fun ProductInputFormScreen(
@@ -55,10 +54,7 @@ fun ProductInputFormScreen(
             factory.create(productId = productId)
         }
     )
-    val title by viewModel.title().collectAsStateWithLifecycle()
-    val emoji by viewModel.emoji.collectAsStateWithLifecycle()
-    val categoryPicker by viewModel.categoryPicker.collectAsStateWithLifecycle()
-    val atLeastOneProductJustAdded by viewModel.atLeastOneProductJustAdded.collectAsStateWithLifecycle()
+    val props by viewModel.props.collectAsStateWithLifecycle()
     val titleFocusRequester = remember { FocusRequester() }
     val categoryFocusRequester = remember { FocusRequester() }
     val softwareKeyboardController = LocalSoftwareKeyboardController.current
@@ -72,12 +68,9 @@ fun ProductInputFormScreen(
         softwareKeyboardController = softwareKeyboardController,
         categoryFocusRequester = categoryFocusRequester
     )
-    ProductInputFormScreen(
-        title = title,
-        emoji = emoji,
-        categoryPicker = categoryPicker,
-        atLeastOneProductJustAdded = atLeastOneProductJustAdded,
-        editingMode = (productId != null),
+    Content(
+        title = viewModel.title,
+        props = props,
         titleFocusRequester = titleFocusRequester,
         categoryFocusRequester = categoryFocusRequester,
         callbacks = viewModel,
@@ -117,12 +110,9 @@ private fun EventConsumer(
 }
 
 @Composable
-internal fun ProductInputFormScreen(
-    title: TextFieldValue,
-    emoji: EmojiProps?,
-    categoryPicker: CategoryPickerProps,
-    atLeastOneProductJustAdded: Boolean,
-    editingMode: Boolean,
+internal fun Content(
+    title: TextFieldState,
+    props: ProductInputFormProps,
     callbacks: ProductInputFormCallbacks,
     categoryFocusRequester: FocusRequester,
     titleFocusRequester: FocusRequester,
@@ -140,7 +130,6 @@ internal fun ProductInputFormScreen(
                 horizontal = horizontalOffset,
             ),
     ) {
-        val selectedCategory = categoryPicker.selectedCategory
         val topOffset = dimensionResource(R.dimen.margin_80_land_0)
         Spacer(
             modifier = Modifier
@@ -148,14 +137,12 @@ internal fun ProductInputFormScreen(
         )
         TitleAndEmoji(
             title = title,
-            emoji = emoji,
-            selectedCategory = selectedCategory,
-            atLeastOneProductJustAdded = atLeastOneProductJustAdded,
+            props = props,
             callbacks = callbacks,
             titleFocusRequester = titleFocusRequester,
         )
         CategoryPicker(
-            props = categoryPicker,
+            props = props.categoryPicker,
             callbacks = callbacks,
             focusRequester = categoryFocusRequester,
         )
@@ -164,11 +151,8 @@ internal fun ProductInputFormScreen(
                 .height(32.dp),
         )
         Buttons(
-            editingMode = editingMode,
-            title = title.text,
-            emoji = emoji,
-            selectedCategory = selectedCategory,
-            atLeastOneProductJustAdded = atLeastOneProductJustAdded,
+            title = title,
+            props = props,
             callbacks = callbacks,
         )
     }
@@ -176,10 +160,8 @@ internal fun ProductInputFormScreen(
 
 @Composable
 private fun TitleAndEmoji(
-    title: TextFieldValue,
-    emoji: EmojiProps?,
-    selectedCategory: CategoryProps?,
-    atLeastOneProductJustAdded: Boolean,
+    title: TextFieldState,
+    props: ProductInputFormProps,
     callbacks: ProductInputFormCallbacks,
     titleFocusRequester: FocusRequester,
     modifier: Modifier = Modifier,
@@ -189,10 +171,7 @@ private fun TitleAndEmoji(
         verticalAlignment = Alignment.Bottom,
     ) {
         AppTextField(
-            value = title,
-            onValueChange = { newValue ->
-                callbacks.onProductTitleChange(newValue)
-            },
+            state = title,
             modifier = Modifier
                 .weight(5f)
                 .focusRequester(titleFocusRequester),
@@ -202,22 +181,20 @@ private fun TitleAndEmoji(
                 capitalization = KeyboardCapitalization.Sentences,
                 imeAction = ImeAction.Done,
             ),
-            keyboardActions = KeyboardActions {
+            onKeyboardAction = {
                 callbacks.onAttemptToCompleteProductInput(
-                    productTitle = title.text,
-                    selectedCategoryId = selectedCategory?.id,
-                    emoji = emoji,
-                    atLeastOneProductJustAdded = atLeastOneProductJustAdded,
+                    productTitle = title.text.toString(),
+                    props = props,
                 )
             },
-            singleLine = true,
+            lineLimits = TextFieldLineLimits.SingleLine,
         )
         Spacer(
             modifier = Modifier
                 .width(16.dp),
         )
         AppTextField(
-            value = emoji
+            value = props.emoji
                 ?.value
                 ?: " ",    // Hack to keep label raised
             onValueChange = {},
@@ -232,53 +209,52 @@ private fun TitleAndEmoji(
 
 @Composable
 private fun Buttons(
-    editingMode: Boolean,
-    title: String,
-    emoji: EmojiProps?,
-    selectedCategory: CategoryProps?,
-    atLeastOneProductJustAdded: Boolean,
+    title: TextFieldState,
+    props: ProductInputFormProps,
     callbacks: ProductInputFormCallbacks,
     modifier: Modifier = Modifier,
 ) {
-    if (editingMode) {
-        AppButtonDone(
-            onClick = {
-                callbacks.onAttemptToCompleteProductInput(
-                    productTitle = title,
-                    selectedCategoryId = selectedCategory?.id,
-                    emoji = emoji,
-                    atLeastOneProductJustAdded = atLeastOneProductJustAdded,
+    when (props.state) {
+        is ProductInputFormProps.State.Initial -> {
+            // no ui elements
+        }
+        is ProductInputFormProps.State.Adding -> {
+            Row(
+                modifier = modifier,
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                AppButtonAdd(
+                    onClick = {
+                        callbacks.onAttemptToCompleteProductInput(
+                            productTitle = title.text.toString(),
+                            props = props,
+                        )
+                    },
+                    modifier = Modifier
+                        .weight(1f),
+                    state = AppButtonStateProps.enabled(title.text.isNotBlank()),
                 )
-            },
-            modifier = modifier,
-        )
-    } else {
-        Row(
-            modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            AppButtonAdd(
-                onClick = {
-                    callbacks.onAttemptToCompleteProductInput(
-                        productTitle = title,
-                        selectedCategoryId = selectedCategory?.id,
-                        emoji = emoji,
-                        atLeastOneProductJustAdded = atLeastOneProductJustAdded,
-                    )
-                },
-                modifier = Modifier
-                    .weight(1f),
-                state = AppButtonStateProps.enabled(title.isNotBlank()),
-            )
+                AppButtonDone(
+                    onClick = {
+                        callbacks.onComplete()
+                    },
+                    modifier = Modifier
+                        .weight(1f),
+                    state = AppButtonStateProps.enabled(
+                        enabled = props.atLeastOneProductJustAdded && title.text.isBlank(),
+                    ),
+                )
+            }
+        }
+        is ProductInputFormProps.State.Editing -> {
             AppButtonDone(
                 onClick = {
-                    callbacks.onComplete()
+                    callbacks.onAttemptToCompleteProductInput(
+                        productTitle = title.text.toString(),
+                        props = props,
+                    )
                 },
-                modifier = Modifier
-                    .weight(1f),
-                state = AppButtonStateProps.enabled(
-                    enabled = atLeastOneProductJustAdded && title.isBlank(),
-                ),
+                modifier = modifier,
             )
         }
     }
@@ -289,14 +265,17 @@ private fun Buttons(
 private fun ProductInputScreenInitialStatePreview() {
     GroceryListTheme {
         Scaffold { padding ->
-            ProductInputFormScreen(
-                title = TextFieldValue(""),
-                emoji = EmojiProps(
-                    value = "🍎",
+            Content(
+                title = TextFieldState(),
+                props = ProductInputFormProps(
+                    productId = null,
+                    emoji = EmojiProps(
+                        value = "🍎",
+                    ),
+                    categoryPicker = CategoryPickerProps(),
+                    enabled = true,
+                    atLeastOneProductJustAdded = false,
                 ),
-                categoryPicker = CategoryPickerProps(),
-                atLeastOneProductJustAdded = false,
-                editingMode = false,
                 callbacks = ProductInputFormCallbacksMock,
                 titleFocusRequester = remember { FocusRequester() },
                 categoryFocusRequester = remember { FocusRequester() },
@@ -312,14 +291,17 @@ private fun ProductInputScreenInitialStatePreview() {
 private fun ProductInputScreenPreview() {
     GroceryListTheme {
         Scaffold { padding ->
-            ProductInputFormScreen(
-                title = TextFieldValue(""),
-                emoji = EmojiProps(
-                    value = "🍎",
+            Content(
+                title = TextFieldState(),
+                props = ProductInputFormProps(
+                    productId = null,
+                    emoji = EmojiProps(
+                        value = "🍎",
+                    ),
+                    categoryPicker = CategoryPickerProps(),
+                    enabled = true,
+                    atLeastOneProductJustAdded = false,
                 ),
-                categoryPicker = CategoryPickerProps(),
-                atLeastOneProductJustAdded = false,
-                editingMode = false,
                 callbacks = ProductInputFormCallbacksMock,
                 titleFocusRequester = remember { FocusRequester() },
                 categoryFocusRequester = remember { FocusRequester() },
