@@ -3,7 +3,9 @@ package app.grocery.list.product.list.actions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.LocalContext
 import app.grocery.list.commons.compose.EventConsumer
+import commons.android.share
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.launch
@@ -16,6 +18,7 @@ internal fun ProductListActionsEventsConsumer(
     delegate: ProductListActionsDelegate,
     navigation: ProductListActionsNavigation,
 ) {
+    val context = LocalContext.current
     val clipboard = LocalClipboard.current
     val clipboardScope = rememberCoroutineScope()
     EventConsumer(events) { event ->
@@ -24,7 +27,7 @@ internal fun ProductListActionsEventsConsumer(
                 delegate.exitFromApp()
             }
             is ProductListActionsViewModel.Event.OnShare -> {
-                delegate.shareProducts(sharingString = event.sharingString)
+                context.share(text = event.sharingString)
             }
             is ProductListActionsViewModel.Event.OnStartShopping -> {
                 delegate.startShopping()

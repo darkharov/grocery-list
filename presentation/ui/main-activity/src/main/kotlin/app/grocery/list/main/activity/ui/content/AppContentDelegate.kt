@@ -18,11 +18,10 @@ internal interface AppContentDelegate :
 
 internal object AppContentDelegateMock : AppContentDelegate {
     override val appVersionName: String = ""
+    override val appVersionCode = 1
     override fun exitFromApp() {}
     override fun startShopping() {}
     override fun handleCurrentScreenChange(newValue: NavKey) {}
-    override fun shareProducts(sharingString: String) {}
-    override fun contactSupport() {}
     override fun showUndoProductDeletionSnackbar(product: Product) {}
     override fun undoProductDeletion(product: Product) {}
     override fun openNotificationSettings() {}

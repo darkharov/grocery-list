@@ -24,8 +24,6 @@ import app.grocery.list.main.activity.ui.content.FinalSteps
 import app.grocery.list.notifications.NotificationPublisher
 import commons.android.PermissionUtil
 import commons.android.ScreenLockedReceiver
-import commons.android.email
-import commons.android.share
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -44,6 +42,7 @@ class MainActivity :
     private var currentScreenKey: NavKey? = null
 
     override val appVersionName get() = contract.versionName
+    override val appVersionCode get() = contract.versionCode
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -117,25 +116,6 @@ class MainActivity :
 
     override fun handleCurrentScreenChange(newValue: NavKey) {
         currentScreenKey = newValue
-    }
-
-    override fun shareProducts(sharingString: String) {
-        share(text = sharingString)
-    }
-
-    override fun contactSupport() {
-        email(
-            email = "product.list.supp@gmail.com",
-            subject = "Android, app.grocery.list",
-            text =
-                "\n\n\n\n" +
-                "\nAndroid version: ${Build.VERSION.RELEASE} " +
-                "(API level ${Build.VERSION.SDK_INT})" +
-                "\nVersion Code: ${contract.versionCode}" +
-                "\nVersion Name: ${contract.versionName}" +
-                "\nBrand: ${Build.BRAND}" +
-                "\nModel: ${Build.MODEL}",
-        )
     }
 
     override fun showUndoProductDeletionSnackbar(product: Product) {

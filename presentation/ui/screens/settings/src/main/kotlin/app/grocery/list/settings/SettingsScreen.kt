@@ -1,5 +1,6 @@
 package app.grocery.list.settings
 
+import android.os.Build
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -17,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -28,6 +30,7 @@ import app.grocery.list.commons.compose.elements.button.text.AppTextButton
 import app.grocery.list.commons.compose.elements.button.text.AppTextButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
+import commons.android.email
 
 @Composable
 fun SettingsScreen(
@@ -60,10 +63,22 @@ private fun EventConsumer(
     navigation: SettingsNavigation,
     delegate: SettingsDelegate,
 ) {
+    val context = LocalContext.current
     EventConsumer(viewModel.events()) { event ->
         when (event) {
             SettingsViewModel.Event.OnContactSupport -> {
-                delegate.contactSupport()
+                context.email(
+                    email = "product.list.supp@gmail.com",
+                    subject = "Android, app.grocery.list",
+                    text =
+                        "\n\n\n\n" +
+                        "\nAndroid version: ${Build.VERSION.RELEASE} " +
+                        "(API level ${Build.VERSION.SDK_INT})" +
+                        "\nVersion Code: ${delegate.appVersionCode}" +
+                        "\nVersion Name: ${delegate.appVersionName}" +
+                        "\nBrand: ${Build.BRAND}" +
+                        "\nModel: ${Build.MODEL}",
+                )
             }
             SettingsViewModel.Event.OnGoToListFormatSettings -> {
                 navigation.goToListFormatSettings()
