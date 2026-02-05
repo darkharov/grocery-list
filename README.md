@@ -11,6 +11,7 @@ A simple grocery list app. Items are displayed as a list of notifications, so th
 ## Tech stack
 - Kotlin programming language
 - Jetpack Compose
+- Navigation 3
 - Hilt
 - The Room persistence library
 - Preferences DataStore
