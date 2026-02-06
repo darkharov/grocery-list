@@ -65,6 +65,9 @@
         <item>Hazelnuts</item>
         <item>Cashews</item>
         <item>Pistachio</item>
+        <item>Dill</item>
+        <item>Parsley</item>
+        <item>Cilantro|Coriander</item>
     </string-array>
 
     <string-array name="dairy_products">
@@ -102,6 +105,8 @@
         <item>Hake</item>
         <item>Mussel</item>
         <item>Caviar</item>
+        <item>Meet</item>
+        <item>{🐟}Fish</item>
     </string-array>
 
     <string-array name="flour_products_and_sweets">
