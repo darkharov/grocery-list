@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.R
-import app.grocery.list.commons.compose.elements.AppHorizontalDividerWithOffset
+import app.grocery.list.commons.compose.elements.AppHorizontalDivider
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.theme.blackOrWhite
@@ -93,7 +93,7 @@ fun AppTextButton(
             }
         }
         if (props.hasDivider) {
-            AppHorizontalDividerWithOffset()
+            AppHorizontalDivider()
         }
     }
 }
