@@ -50,15 +50,8 @@ import app.grocery.list.settings.bottom.bar.settings.BottomBarSettingsScreen
 import app.grocery.list.settings.list.format.ListFormatSettingsScreen
 import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitch
 import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy
-import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
-
-private val ScreenSpecificToolbarProps = persistentMapOf(
-    Settings to AppToolbarProps.Title(R.string.settings),
-    ListFormatSettings to AppToolbarProps.Title(R.string.list_format),
-    BottomBarSettings to AppToolbarProps.Title(R.string.bottom_bar),
-)
 
 @Composable
 internal fun AppContent(
@@ -122,17 +115,15 @@ internal fun AppContent(
         modifier = modifier,
         contentWindowInsets = WindowInsets(0.dp),
         topBar = {
-            val currentScreen = backStack.last()
             AppToolbar(
                 props = AppToolbarProps(
-                    content = ScreenSpecificToolbarProps
-                        .getOrElse(currentScreen) {
-                            AppToolbarProps.Content.Default(
-                                counter = numberOfEnabledProducts,
-                                onStart = backStack.size == 1,
-                                hasEmojiIfEnoughSpace = hasEmojiIfEnoughSpace,
-                            )
-                        },
+                    content = ToolbarContentUtil
+                        .customContentOrNull(navKey = backStack.last())
+                        ?: AppToolbarProps.Content.Default(
+                            counter = numberOfEnabledProducts,
+                            onStart = backStack.size == 1,
+                            hasEmojiIfEnoughSpace = hasEmojiIfEnoughSpace,
+                        ),
                     progress = progress,
                 ),
                 onUpClick = {

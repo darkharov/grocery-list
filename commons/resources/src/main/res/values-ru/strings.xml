@@ -66,6 +66,7 @@
     <string name="share">Поделиться</string>
     <string name="notification_permission_explanation">Чтобы опубликовать список продуктов в виде списка уведмолений, приложению требуется разрешение на отправку уведомлений.</string>
     <string name="give_permission">Дать разрешение</string>
+    <string name="editing">Редактирование</string>
 
     <string-array name="final_steps">
         <item>Заблокируйте экран</item>

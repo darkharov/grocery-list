@@ -66,6 +66,7 @@
     <string name="share">Поділитися</string>
     <string name="notification_permission_explanation">Щоб опублікувати список продуктів у вигляді сповіщень, застосунок потребує дозволу на надсилання сповіщень.</string>
     <string name="give_permission">Надати дозвіл</string>
+    <string name="editing">Редагування</string>
 
     <string-array name="final_steps">
         <item>Заблокуйте екран</item>

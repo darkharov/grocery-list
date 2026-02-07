@@ -66,6 +66,7 @@
     <string name="share">Share</string>
     <string name="notification_permission_explanation">To publish a product list as a notification list, the app requires permission to send notifications.</string>
     <string name="give_permission">Give permission</string>
+    <string name="editing">Editing</string>
 
     <string-array name="final_steps">
         <item>Lock the screen</item>
