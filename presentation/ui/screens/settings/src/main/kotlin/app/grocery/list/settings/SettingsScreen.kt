@@ -84,6 +84,9 @@ private fun EventConsumer(
             SettingsViewModel.Event.OnGoToListFormatSettings -> {
                 navigation.goToListFormatSettings()
             }
+            SettingsViewModel.Event.OnFaqClick -> {
+                navigation.goToFaq()
+            }
         }
     }
 }
@@ -121,6 +124,17 @@ private fun SettingsScreen(
             ),
             onClick = {
                 navigation.goToBottomBarSettings()
+            },
+        )
+        AppTextButton(
+            props = AppTextButtonProps.SettingsCategory(
+                text = StringValue.StringWrapper(
+                    value = stringResource(R.string.faq),
+                ),
+                leadingIconId = R.drawable.ic_question_mark,
+            ),
+            onClick = {
+                callbacks.onFaqClick()
             },
         )
         AppTextButton(

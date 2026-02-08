@@ -49,4 +49,8 @@ internal class AppNavigationFacade(
     override fun goToBottomBarSettings() {
         backStack.add(BottomBarSettings)
     }
+
+    override fun goToFaq() {
+        backStack.add(Faq)
+    }
 }

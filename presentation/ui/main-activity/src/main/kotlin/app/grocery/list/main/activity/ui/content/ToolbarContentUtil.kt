@@ -13,6 +13,7 @@ object ToolbarContentUtil {
         Settings to AppToolbarProps.Title(R.string.settings),
         ListFormatSettings to AppToolbarProps.Title(R.string.list_format),
         BottomBarSettings to AppToolbarProps.Title(R.string.bottom_bar),
+        Faq to AppToolbarProps.Title(R.string.faq),
     )
 
     @Stable

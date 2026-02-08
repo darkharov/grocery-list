@@ -67,11 +67,20 @@
     <string name="notification_permission_explanation">To publish a product list as a notification list, the app requires permission to send notifications.</string>
     <string name="give_permission">Give permission</string>
     <string name="editing">Editing</string>
+    <string name="faq">FAQ</string>
 
     <string-array name="final_steps">
         <item>Lock the screen</item>
         <item>Wait about three seconds</item>
         <item>Press the screen lock button again</item>
+    </string-array>
+
+    <string-array name="faq">
+        <item>How to edit a list item?|Tap and hold the list item you want to edit</item>
+        <item>How do I remove one item from the list?|Swipe left on the list items you want to delete.</item>
+        <item>Notifications disappeared after unlocking/relocking the screen|If you unlock your screen and then want to continue working, just return to this app, tap "I am at the shop" and follow the instructions.</item>
+        <item>I swiped a list item on the lock screen, can I get it back?|Yes, unlock your phone, go back to this app, tap on the item you want to enable, then tap "I am at the shop" and follow the instructions</item>
+        <item>Why did some items turn off by themselves?|Items you swipe on the lock screen are automatically disabled within the app.</item>
     </string-array>
 
     <plurals name="products_successfully_added">

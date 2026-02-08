@@ -28,3 +28,6 @@ data object ListFormatSettings : NavKey
 
 @Serializable
 data object BottomBarSettings : NavKey
+
+@Serializable
+data object Faq : NavKey

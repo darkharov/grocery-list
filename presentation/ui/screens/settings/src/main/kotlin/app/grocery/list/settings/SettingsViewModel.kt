@@ -30,12 +30,17 @@ internal class SettingsViewModel @AssistedInject constructor(
         events.trySend(Event.OnContactSupport)
     }
 
+    override fun onFaqClick() {
+        events.trySend(Event.OnFaqClick)
+    }
+
     fun events(): ReceiveChannel<Event> =
         events
 
     sealed class Event {
         data object OnGoToListFormatSettings: Event()
         data object OnContactSupport: Event()
+        data object OnFaqClick: Event()
     }
 
     @AssistedFactory

@@ -39,6 +39,7 @@ import app.grocery.list.commons.compose.elements.toolbar.AppToolbarProps
 import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
+import app.grocery.list.faq.FaqScreen
 import app.grocery.list.final_.steps.FinalStepsScreen
 import app.grocery.list.main.activity.R
 import app.grocery.list.product.input.form.ProductInputFormScreen
@@ -234,6 +235,9 @@ internal fun AppContent(
                     BottomBarSettingsScreen(
                         navigation = navigation,
                     )
+                }
+                entry<Faq> {
+                    FaqScreen()
                 }
             },
         )
