@@ -131,9 +131,7 @@ fun AppToolbar(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     onTextLayout = { result ->
-                        if (result.lineCount > 1) {
-                            shouldEmojiBeSkipped = true
-                        }
+                        shouldEmojiBeSkipped = result.lineCount > 1
                     },
                     style = LocalAppTypography.current.toolbarTitle,
                 )
