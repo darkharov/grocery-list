@@ -2,7 +2,6 @@ package app.grocery.list.settings
 
 import android.os.Build
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +9,8 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +32,11 @@ import app.grocery.list.commons.compose.elements.button.text.AppTextButton
 import app.grocery.list.commons.compose.elements.button.text.AppTextButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
+import app.grocery.list.settings.dialog.SettingsDialog
+import app.grocery.list.settings.dialog.SettingsDialogProps
+import commons.android.browse
 import commons.android.email
+import kotlinx.coroutines.channels.ReceiveChannel
 
 @Composable
 fun SettingsScreen(
@@ -46,8 +51,10 @@ fun SettingsScreen(
         }
     )
     val props by viewModel.props.collectAsState()
+    val dialog by viewModel.dialog.collectAsState()
     EventConsumer(
-        viewModel = viewModel,
+        events = viewModel.events(),
+        callbacks = viewModel,
         navigation = navigation,
         delegate = delegate,
     )
@@ -56,16 +63,21 @@ fun SettingsScreen(
         navigation = navigation,
         callbacks = viewModel,
     )
+    OptionalSettingsDialog(
+        dialog = dialog,
+        callbacks = viewModel,
+    )
 }
 
 @Composable
 private fun EventConsumer(
-    viewModel: SettingsViewModel,
+    events: ReceiveChannel<SettingsViewModel.Event>,
     navigation: SettingsNavigation,
     delegate: SettingsDelegate,
+    callbacks: SettingsCallbacks,
 ) {
     val context = LocalContext.current
-    EventConsumer(viewModel.events()) { event ->
+    EventConsumer(events) { event ->
         when (event) {
             SettingsViewModel.Event.OnContactSupport -> {
                 context.email(
@@ -87,6 +99,14 @@ private fun EventConsumer(
             SettingsViewModel.Event.OnFaqClick -> {
                 navigation.goToFaq()
             }
+            SettingsViewModel.Event.OnPrivacyPolicyClick -> {
+                context.browse(
+                    url = "https://darkharov.github.io/grocery-list-privacy-policy/",
+                    onBrowserAppNotFound = {
+                        callbacks.onBrowserAppNotFound()
+                    },
+                )
+            }
         }
     }
 }
@@ -100,6 +120,7 @@ private fun SettingsScreen(
 ) {
     Column(
         modifier = modifier
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = dimensionResource(R.dimen.margin_0_16_48))
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -148,9 +169,14 @@ private fun SettingsScreen(
                 callbacks.onContactSupportClick()
             },
         )
-        Spacer(
-            modifier = Modifier
-                .weight(1f),
+        AppTextButton(
+            props = AppTextButtonProps.SettingsCategory(
+                text = StringValue.ResId(R.string.privacy_policy),
+                leadingIconId = R.drawable.ic_privacy_policy,
+            ),
+            onClick = {
+                callbacks.onPrivacyPolicyClick()
+            },
         )
         Text(
             text = props.appVersionName,
@@ -162,8 +188,21 @@ private fun SettingsScreen(
                         .systemBars
                         .only(WindowInsetsSides.Bottom),
                 )
-                .padding(bottom = 12.dp)
+                .padding(vertical = 24.dp)
                 .alpha(0.8f),
+        )
+    }
+}
+
+@Composable
+private fun OptionalSettingsDialog(
+    dialog: SettingsDialogProps?,
+    callbacks: SettingsCallbacks,
+) {
+    if (dialog != null) {
+        SettingsDialog(
+            props = dialog,
+            callbacks = callbacks,
         )
     }
 }

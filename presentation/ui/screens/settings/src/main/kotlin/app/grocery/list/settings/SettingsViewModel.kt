@@ -1,6 +1,7 @@
 package app.grocery.list.settings
 
 import androidx.lifecycle.ViewModel
+import app.grocery.list.settings.dialog.SettingsDialogProps
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -19,6 +20,7 @@ internal class SettingsViewModel @AssistedInject constructor(
     SettingsCallbacks {
 
     val props = MutableStateFlow(SettingsProps(appVersionName = appVersionName))
+    val dialog = MutableStateFlow<SettingsDialogProps?>(null)
 
     private val events = Channel<Event>(Channel.UNLIMITED)
 
@@ -34,6 +36,18 @@ internal class SettingsViewModel @AssistedInject constructor(
         events.trySend(Event.OnFaqClick)
     }
 
+    override fun onPrivacyPolicyClick() {
+        events.trySend(Event.OnPrivacyPolicyClick)
+    }
+
+    override fun onBrowserAppNotFound() {
+        dialog.value = SettingsDialogProps.BrowserNotFound
+    }
+
+    override fun onDismiss() {
+        dialog.value = null
+    }
+
     fun events(): ReceiveChannel<Event> =
         events
 
@@ -41,6 +55,7 @@ internal class SettingsViewModel @AssistedInject constructor(
         data object OnGoToListFormatSettings: Event()
         data object OnContactSupport: Event()
         data object OnFaqClick: Event()
+        data object OnPrivacyPolicyClick : Event()
     }
 
     @AssistedFactory

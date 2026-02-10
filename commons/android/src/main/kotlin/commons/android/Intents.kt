@@ -38,3 +38,16 @@ fun Context.email(
 
     startActivity(Intent.createChooser(intent, "Email"))
 }
+
+fun Context.browse(
+    url: String,
+    onBrowserAppNotFound: (e: Exception) -> Unit,
+) {
+    val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+    intent.addCategory(Intent.CATEGORY_BROWSABLE)
+    try {
+        startActivity(intent)
+    } catch (e: Exception) {
+        onBrowserAppNotFound(e)
+    }
+}

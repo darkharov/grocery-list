@@ -68,6 +68,8 @@
     <string name="give_permission">Надати дозвіл</string>
     <string name="editing">Редагування</string>
     <string name="faq">Часті питання</string>
+    <string name="privacy_policy">Політика конфіденційності</string>
+    <string name="browser_app_not_found">Додаток браузера на жаль не знайдено</string>
 
     <string-array name="final_steps">
         <item>Заблокуйте екран</item>

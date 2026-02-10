@@ -68,6 +68,8 @@
     <string name="give_permission">Дать разрешение</string>
     <string name="editing">Редактирование</string>
     <string name="faq">Часто задаваемые вопросы</string>
+    <string name="privacy_policy">Политика конфиденциальности</string>
+    <string name="browser_app_not_found">Приложение браузера к сожалению не найдено</string>
 
     <string-array name="final_steps">
         <item>Заблокируйте экран</item>

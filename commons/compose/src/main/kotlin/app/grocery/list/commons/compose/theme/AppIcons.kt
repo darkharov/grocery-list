@@ -2,6 +2,7 @@ package app.grocery.list.commons.compose.theme
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Logout
+import androidx.compose.material.icons.outlined.BrowserNotSupported
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.ContentPaste
 import androidx.compose.material.icons.outlined.DeleteOutline
@@ -27,4 +28,5 @@ object AppIcons {
     val fingerprint = Icons.Outlined.Fingerprint
     val notifications = Icons.Outlined.Notifications
     val expandMore = Icons.Outlined.ExpandMore
+    val browserNotSupported = Icons.Outlined.BrowserNotSupported
 }
