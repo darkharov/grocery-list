@@ -2,9 +2,11 @@ package app.grocery.list.settings
 
 import android.os.Build
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
@@ -28,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import app.grocery.list.commons.compose.EventConsumer
+import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.elements.button.text.AppTextButton
 import app.grocery.list.commons.compose.elements.button.text.AppTextButtonProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
@@ -118,79 +121,92 @@ private fun SettingsScreen(
     navigation: SettingsNavigation,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = dimensionResource(R.dimen.margin_0_16_48))
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    val scrollState = rememberScrollState()
+    ScrollableContentWithShadows(
+        scrollableState = scrollState,
+        modifier = modifier,
     ) {
-        AppTextButton(
-            props = AppTextButtonProps.SettingsCategory(
-                text = StringValue.StringWrapper(
-                    value = stringResource(R.string.list_format),
-                ),
-                leadingIconId = R.drawable.ic_list_item_format,
-            ),
-            onClick = {
-                callbacks.onListFormatClick()
-            },
-        )
-        AppTextButton(
-            props = AppTextButtonProps.SettingsCategory(
-                text = StringValue.StringWrapper(
-                    value = stringResource(R.string.bottom_bar),
-                ),
-                leadingIconId = R.drawable.ic_bottom_bar,
-            ),
-            onClick = {
-                navigation.goToBottomBarSettings()
-            },
-        )
-        AppTextButton(
-            props = AppTextButtonProps.SettingsCategory(
-                text = StringValue.StringWrapper(
-                    value = stringResource(R.string.faq),
-                ),
-                leadingIconId = R.drawable.ic_question_mark,
-            ),
-            onClick = {
-                callbacks.onFaqClick()
-            },
-        )
-        AppTextButton(
-            props = AppTextButtonProps.SettingsCategory(
-                text = StringValue.StringWrapper(
-                    value = stringResource(R.string.contact_support),
-                ),
-                leadingIconId = R.drawable.ic_support,
-            ),
-            onClick = {
-                callbacks.onContactSupportClick()
-            },
-        )
-        AppTextButton(
-            props = AppTextButtonProps.SettingsCategory(
-                text = StringValue.ResId(R.string.privacy_policy),
-                leadingIconId = R.drawable.ic_privacy_policy,
-            ),
-            onClick = {
-                callbacks.onPrivacyPolicyClick()
-            },
-        )
-        Text(
-            text = props.appVersionName,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Bold,
+        Column(
             modifier = Modifier
-                .windowInsetsPadding(
-                    WindowInsets
-                        .systemBars
-                        .only(WindowInsetsSides.Bottom),
-                )
-                .padding(vertical = 24.dp)
-                .alpha(0.8f),
-        )
+                .verticalScroll(scrollState)
+                .padding(horizontal = dimensionResource(R.dimen.margin_0_16_48))
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Spacer(
+                modifier = Modifier
+                    .height(16.dp)
+            )
+            AppTextButton(
+                props = AppTextButtonProps.SettingsCategory(
+                    text = StringValue.StringWrapper(
+                        value = stringResource(R.string.list_format),
+                    ),
+                    leadingIconId = R.drawable.ic_list_item_format,
+                ),
+                onClick = {
+                    callbacks.onListFormatClick()
+                },
+            )
+            AppTextButton(
+                props = AppTextButtonProps.SettingsCategory(
+                    text = StringValue.StringWrapper(
+                        value = stringResource(R.string.bottom_bar),
+                    ),
+                    leadingIconId = R.drawable.ic_bottom_bar,
+                ),
+                onClick = {
+                    navigation.goToBottomBarSettings()
+                },
+            )
+            AppTextButton(
+                props = AppTextButtonProps.SettingsCategory(
+                    text = StringValue.StringWrapper(
+                        value = stringResource(R.string.faq),
+                    ),
+                    leadingIconId = R.drawable.ic_question_mark,
+                ),
+                onClick = {
+                    callbacks.onFaqClick()
+                },
+            )
+            AppTextButton(
+                props = AppTextButtonProps.SettingsCategory(
+                    text = StringValue.StringWrapper(
+                        value = stringResource(R.string.contact_support),
+                    ),
+                    leadingIconId = R.drawable.ic_support,
+                ),
+                onClick = {
+                    callbacks.onContactSupportClick()
+                },
+            )
+            AppTextButton(
+                props = AppTextButtonProps.SettingsCategory(
+                    text = StringValue.ResId(R.string.privacy_policy),
+                    leadingIconId = R.drawable.ic_privacy_policy,
+                ),
+                onClick = {
+                    callbacks.onPrivacyPolicyClick()
+                },
+            )
+            Text(
+                text = props.appVersionName,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .windowInsetsPadding(
+                        WindowInsets
+                            .systemBars
+                            .only(WindowInsetsSides.Bottom),
+                    )
+                    .padding(
+                        top = 80.dp,
+                        bottom = 12.dp,
+                    )
+                    .alpha(0.8f),
+            )
+        }
     }
 }
 

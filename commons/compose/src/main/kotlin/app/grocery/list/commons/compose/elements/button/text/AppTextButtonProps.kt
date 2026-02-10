@@ -81,7 +81,7 @@ sealed class AppTextButtonProps {
     object Defaults {
         val Padding = PaddingValues(
             vertical = 12.dp,
-            horizontal = 16.dp,
+            horizontal = 24.dp,
         )
     }
 }

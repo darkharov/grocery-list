@@ -70,7 +70,7 @@ fun AppTextButton(
                 )
                 Spacer(
                     modifier = Modifier
-                        .padding(8.dp),
+                        .padding(4.dp),
                 )
             }
             Text(
@@ -78,13 +78,11 @@ fun AppTextButton(
                 color = props.textColor,
                 textAlign = props.textAlign,
                 style = LocalAppTypography.current.textButton,
+                modifier = Modifier
+                    .weight(1f),
             )
             val trailingIconId = props.trailingIconId
             if (trailingIconId != null) {
-                Spacer(
-                    modifier = Modifier
-                        .weight(1f),
-                )
                 Icon(
                     painter = painterResource(R.drawable.ic_forward),
                     contentDescription = null,
@@ -93,7 +91,10 @@ fun AppTextButton(
             }
         }
         if (props.hasDivider) {
-            AppHorizontalDivider()
+            AppHorizontalDivider(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp),
+            )
         }
     }
 }
