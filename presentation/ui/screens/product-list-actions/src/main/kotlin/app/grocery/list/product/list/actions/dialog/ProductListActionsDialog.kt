@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.elements.AppTitledCheckbox
-import app.grocery.list.commons.compose.elements.button.text.AppTextButton2
+import app.grocery.list.commons.compose.elements.button.text.AppTextButton
 import app.grocery.list.commons.compose.elements.dialog.APP_DIALOG_PADDING
 import app.grocery.list.commons.compose.elements.dialog.AppBaseDialog
 import app.grocery.list.commons.compose.elements.dialog.AppSimpleDialog
@@ -118,7 +118,7 @@ private fun ProductListActionsDialog(
                     callbacks.onDialogDismiss()
                 },
             ) {
-                AppTextButton2(
+                AppTextButton(
                     text = StringValue.ResId(
                         resId = R.string.pattern_disabled_to_send,
                         arguments = listOf(dialog.disabledItemsCount),
@@ -127,7 +127,7 @@ private fun ProductListActionsDialog(
                         callbacks.onShareDisabledOnly(dialog)
                     },
                 )
-                AppTextButton2(
+                AppTextButton(
                     text = StringValue.ResId(
                         resId = R.string.pattern_enabled_to_send,
                         arguments = listOf(dialog.enabledItemsCount),
@@ -137,7 +137,7 @@ private fun ProductListActionsDialog(
                     },
                     modifier = Modifier,
                 )
-                AppTextButton2(
+                AppTextButton(
                     text = StringValue.ResId(
                         resId = R.string.pattern_all,
                         arguments = listOf(dialog.productListSize),
@@ -212,13 +212,13 @@ private fun ProductListActionsDialog(
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(APP_DIALOG_PADDING),
                     ) {
-                        AppTextButton2(
+                        AppTextButton(
                             text = StringValue.ResId(android.R.string.cancel),
                             onClick = {
                                 callbacks.onDialogDismiss()
                             },
                         )
-                        AppTextButton2(
+                        AppTextButton(
                             text = StringValue.ResId(R.string.share),
                             onClick = {
                                 callbacks.onSharingConfirmed(dialog)

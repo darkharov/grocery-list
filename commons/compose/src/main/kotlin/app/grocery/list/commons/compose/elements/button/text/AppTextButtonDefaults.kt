@@ -3,7 +3,7 @@ package app.grocery.list.commons.compose.elements.button.text
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.unit.dp
 
-internal object AppTextButton2Defaults {
+internal object AppTextButtonDefaults {
 
     const val DANGEROUS = false
 

@@ -9,7 +9,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.R
-import app.grocery.list.commons.compose.elements.button.text.AppTextButton2
+import app.grocery.list.commons.compose.elements.button.text.AppTextButton
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
 
@@ -29,7 +29,7 @@ fun AppTwoOptionsDialog(
         text = text,
         onDismiss = onDismiss,
     ) {
-        AppTextButton2(
+        AppTextButton(
             text = firstOption,
             dangerous = isFirstOptionSensitive,
             onClick = onFirstOption,
@@ -38,7 +38,7 @@ fun AppTwoOptionsDialog(
             modifier = Modifier
                 .width(8.dp)
         )
-        AppTextButton2(
+        AppTextButton(
             text = secondOption,
             onClick = onSecondOption,
         )

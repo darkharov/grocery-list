@@ -9,7 +9,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.R
-import app.grocery.list.commons.compose.elements.button.text.AppTextButton2
+import app.grocery.list.commons.compose.elements.button.text.AppTextButton
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
 
@@ -28,7 +28,7 @@ fun AppSimpleDialog(
         onDismiss = onDismiss,
         buttons = {
             if (onCancel != null) {
-                AppTextButton2(
+                AppTextButton(
                     text = StringValue.ResId(android.R.string.cancel),
                     onClick = onCancel,
                 )
@@ -37,7 +37,7 @@ fun AppSimpleDialog(
                         .width(8.dp)
                 )
             }
-            AppTextButton2(
+            AppTextButton(
                 text = confirmButtonText,
                 onClick = onConfirm,
             )

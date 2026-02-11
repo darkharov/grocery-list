@@ -35,7 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
-import app.grocery.list.commons.compose.elements.button.text.AppTextButton2
+import app.grocery.list.commons.compose.elements.button.text.AppTextButton
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialog
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
@@ -304,7 +304,7 @@ private fun LazyListScope.enableAndDisableAll(
                 ),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            AppTextButton2(
+            AppTextButton(
                 text = StringValue.ResId(R.string.disable_all),
                 onClick = {
                     callbacks.onDisableEnableAll()
@@ -314,7 +314,7 @@ private fun LazyListScope.enableAndDisableAll(
                 modifier = Modifier
                     .widthIn(max = maxWidth),
             )
-            AppTextButton2(
+            AppTextButton(
                 text = StringValue.ResId(R.string.enable_all),
                 enabled = enableAndDisableAll.enableAllAvailable,
                 padding = buttonPaddingValues,

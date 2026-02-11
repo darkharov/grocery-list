@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.times
 import app.grocery.list.commons.compose.AppGradientDirection
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.drawGradient
-import app.grocery.list.commons.compose.elements.button.text.AppTextButton2
+import app.grocery.list.commons.compose.elements.button.text.AppTextButton
 import app.grocery.list.commons.compose.elements.dialog.APP_DIALOG_PADDING
 import app.grocery.list.commons.compose.elements.dialog.AppBaseDialog
 import app.grocery.list.commons.compose.theme.AppIcons
@@ -77,13 +77,13 @@ fun ConfirmPastedListDialog(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(APP_DIALOG_PADDING),
             ) {
-                AppTextButton2(
+                AppTextButton(
                     text = StringValue.ResId(android.R.string.cancel),
                     onClick = {
                         callbacks.onDialogDismiss()
                     },
                 )
-                AppTextButton2(
+                AppTextButton(
                     text = StringValue.ResId(R.string.add),
                     onClick = {
                         callbacks.onPasteProductsConfirmed(props.productList)

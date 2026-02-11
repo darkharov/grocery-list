@@ -21,13 +21,13 @@ import app.grocery.list.commons.compose.values.value
 
 @Suppress("KotlinConstantConditions")
 @Composable
-fun AppTextButton2(
+fun AppTextButton(
     text: StringValue,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    padding: PaddingValues = AppTextButton2Defaults.Padding,
-    dangerous: Boolean = AppTextButton2Defaults.DANGEROUS,
+    padding: PaddingValues = AppTextButtonDefaults.Padding,
+    dangerous: Boolean = AppTextButtonDefaults.DANGEROUS,
 ) {
     Text(
         text = text.value(),
@@ -56,9 +56,9 @@ fun AppTextButton2(
 
 @PreviewLightDark
 @Composable
-private fun AppTextButton2Preview() {
+private fun AppTextButtonPreview() {
     GroceryListTheme {
-        AppTextButton2(
+        AppTextButton(
             text = StringValue.StringWrapper("Text"),
             dangerous = false,
             enabled = true,
@@ -69,9 +69,9 @@ private fun AppTextButton2Preview() {
 
 @PreviewLightDark
 @Composable
-private fun AppTextButton2DangerousPreview() {
+private fun AppTextButtonDangerousPreview() {
     GroceryListTheme {
-        AppTextButton2(
+        AppTextButton(
             text = StringValue.StringWrapper("Text"),
             dangerous = true,
             enabled = true,
