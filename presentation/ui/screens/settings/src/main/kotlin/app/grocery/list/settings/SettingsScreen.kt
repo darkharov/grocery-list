@@ -176,8 +176,8 @@ private fun SettingsScreen(
                 },
             )
             SettingsMenuItem(
-                text = StringValue.ResId(R.string.privacy_policy),
                 leadingIcon = rememberVectorPainter(AppIcons.privacy),
+                text = StringValue.ResId(R.string.privacy_policy),
                 onClick = {
                     callbacks.onPrivacyPolicyClick()
                 },
