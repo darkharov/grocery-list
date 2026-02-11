@@ -1,4 +1,4 @@
-package app.grocery.list.settings.list.format
+package app.grocery.list.settings.child.screens.list.format
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

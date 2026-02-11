@@ -1,4 +1,4 @@
-package app.grocery.list.settings.use.icons.on.bottom.bar.switch_
+package app.grocery.list.settings.child.screens.use.icons.on.bottom.bar.switch_
 
 import androidx.compose.runtime.Stable
 

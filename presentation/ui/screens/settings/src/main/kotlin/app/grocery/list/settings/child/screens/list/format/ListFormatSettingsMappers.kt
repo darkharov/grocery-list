@@ -1,4 +1,4 @@
-package app.grocery.list.settings.list.format
+package app.grocery.list.settings.child.screens.list.format
 
 import app.grocery.list.domain.settings.ProductTitleFormat
 import javax.inject.Inject

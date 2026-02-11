@@ -1,4 +1,4 @@
-package app.grocery.list.settings.bottom.bar.settings
+package app.grocery.list.settings.child.screens.bottom.bar.settings
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,8 +10,8 @@ import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.AbleToGoBack
 import app.grocery.list.commons.compose.AbleToGoBackMock
 import app.grocery.list.commons.compose.R
-import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitch
-import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy
+import app.grocery.list.settings.child.screens.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitch
+import app.grocery.list.settings.child.screens.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy
 
 @Composable
 fun BottomBarSettingsScreen(

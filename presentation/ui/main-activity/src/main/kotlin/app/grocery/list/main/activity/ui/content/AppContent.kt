@@ -47,10 +47,10 @@ import app.grocery.list.product.list.actions.ProductListActionsScreen
 import app.grocery.list.product.list.actions.bar.ProductListActionsBar
 import app.grocery.list.product.list.preview.ProductListPreviewScreen
 import app.grocery.list.settings.SettingsScreen
-import app.grocery.list.settings.bottom.bar.settings.BottomBarSettingsScreen
-import app.grocery.list.settings.list.format.ListFormatSettingsScreen
-import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitch
-import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy
+import app.grocery.list.settings.child.screens.bottom.bar.settings.BottomBarSettingsScreen
+import app.grocery.list.settings.child.screens.list.format.ListFormatSettingsScreen
+import app.grocery.list.settings.child.screens.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitch
+import app.grocery.list.settings.child.screens.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 

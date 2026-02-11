@@ -1,11 +1,11 @@
-package app.grocery.list.settings.use.icons.on.bottom.bar.switch_
+package app.grocery.list.settings.child.screens.use.icons.on.bottom.bar.switch_
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.domain.settings.BottomBarRoadmapStep
 import app.grocery.list.domain.settings.SettingsRepository
-import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy.EmbeddedElement
-import app.grocery.list.settings.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy.Screen
+import app.grocery.list.settings.child.screens.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy.EmbeddedElement
+import app.grocery.list.settings.child.screens.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy.Screen
 import commons.android.customStateIn
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
