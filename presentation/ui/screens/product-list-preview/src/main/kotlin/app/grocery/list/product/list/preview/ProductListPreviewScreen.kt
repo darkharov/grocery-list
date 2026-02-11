@@ -35,8 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
-import app.grocery.list.commons.compose.elements.button.text.AppTextButton
-import app.grocery.list.commons.compose.elements.button.text.AppTextButtonProps
+import app.grocery.list.commons.compose.elements.button.text.AppTextButton2
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialog
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppTypography
@@ -305,25 +304,20 @@ private fun LazyListScope.enableAndDisableAll(
                 ),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            AppTextButton(
-                props = AppTextButtonProps.TextOnly(
-                    text = StringValue.ResId(R.string.disable_all),
-                    enabled = enableAndDisableAll.disableAllAvailable,
-                    padding = buttonPaddingValues,
-                ),
+            AppTextButton2(
+                text = StringValue.ResId(R.string.disable_all),
                 onClick = {
                     callbacks.onDisableEnableAll()
                 },
+                enabled = enableAndDisableAll.disableAllAvailable,
+                padding = buttonPaddingValues,
                 modifier = Modifier
                     .widthIn(max = maxWidth),
             )
-            AppTextButton(
-                props = AppTextButtonProps.TextOnly(
-                    text = StringValue.ResId(R.string.enable_all),
-                    enabled = enableAndDisableAll.enableAllAvailable,
-                    padding = buttonPaddingValues,
-
-                ),
+            AppTextButton2(
+                text = StringValue.ResId(R.string.enable_all),
+                enabled = enableAndDisableAll.enableAllAvailable,
+                padding = buttonPaddingValues,
                 onClick = {
                     callbacks.onEnableAll()
                 },

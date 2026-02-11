@@ -21,8 +21,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -31,12 +33,12 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
-import app.grocery.list.commons.compose.elements.button.text.AppTextButton
-import app.grocery.list.commons.compose.elements.button.text.AppTextButtonProps
+import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.settings.dialog.SettingsDialog
 import app.grocery.list.settings.dialog.SettingsDialogProps
+import app.grocery.list.settings.elements.menu.item.SettingsMenuItem
 import commons.android.browse
 import commons.android.email
 import kotlinx.coroutines.channels.ReceiveChannel
@@ -137,55 +139,45 @@ private fun SettingsScreen(
                 modifier = Modifier
                     .height(16.dp)
             )
-            AppTextButton(
-                props = AppTextButtonProps.SettingsCategory(
-                    text = StringValue.StringWrapper(
-                        value = stringResource(R.string.list_format),
-                    ),
-                    leadingIconId = R.drawable.ic_list_item_format,
+            SettingsMenuItem(
+                leadingIcon = painterResource(R.drawable.ic_list_item_format),
+                text = StringValue.StringWrapper(
+                    value = stringResource(R.string.list_format),
                 ),
                 onClick = {
                     callbacks.onListFormatClick()
                 },
             )
-            AppTextButton(
-                props = AppTextButtonProps.SettingsCategory(
-                    text = StringValue.StringWrapper(
-                        value = stringResource(R.string.bottom_bar),
-                    ),
-                    leadingIconId = R.drawable.ic_bottom_bar,
+            SettingsMenuItem(
+                leadingIcon = painterResource(R.drawable.ic_bottom_bar),
+                text = StringValue.StringWrapper(
+                    value = stringResource(R.string.bottom_bar),
                 ),
                 onClick = {
                     navigation.goToBottomBarSettings()
                 },
             )
-            AppTextButton(
-                props = AppTextButtonProps.SettingsCategory(
-                    text = StringValue.StringWrapper(
-                        value = stringResource(R.string.faq),
-                    ),
-                    leadingIconId = R.drawable.ic_question_mark,
+            SettingsMenuItem(
+                leadingIcon = rememberVectorPainter(AppIcons.questionMark),
+                text = StringValue.StringWrapper(
+                    value = stringResource(R.string.faq),
                 ),
                 onClick = {
                     callbacks.onFaqClick()
                 },
             )
-            AppTextButton(
-                props = AppTextButtonProps.SettingsCategory(
-                    text = StringValue.StringWrapper(
-                        value = stringResource(R.string.contact_support),
-                    ),
-                    leadingIconId = R.drawable.ic_support,
+            SettingsMenuItem(
+                leadingIcon = rememberVectorPainter(AppIcons.support),
+                text = StringValue.StringWrapper(
+                    value = stringResource(R.string.contact_support),
                 ),
                 onClick = {
                     callbacks.onContactSupportClick()
                 },
             )
-            AppTextButton(
-                props = AppTextButtonProps.SettingsCategory(
-                    text = StringValue.ResId(R.string.privacy_policy),
-                    leadingIconId = R.drawable.ic_privacy_policy,
-                ),
+            SettingsMenuItem(
+                text = StringValue.ResId(R.string.privacy_policy),
+                leadingIcon = rememberVectorPainter(AppIcons.privacy),
                 onClick = {
                     callbacks.onPrivacyPolicyClick()
                 },

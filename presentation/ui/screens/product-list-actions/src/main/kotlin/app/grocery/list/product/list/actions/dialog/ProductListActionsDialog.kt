@@ -14,8 +14,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.elements.AppTitledCheckbox
-import app.grocery.list.commons.compose.elements.button.text.AppTextButton
-import app.grocery.list.commons.compose.elements.button.text.AppTextButtonProps
+import app.grocery.list.commons.compose.elements.button.text.AppTextButton2
 import app.grocery.list.commons.compose.elements.dialog.APP_DIALOG_PADDING
 import app.grocery.list.commons.compose.elements.dialog.AppBaseDialog
 import app.grocery.list.commons.compose.elements.dialog.AppSimpleDialog
@@ -119,42 +118,29 @@ private fun ProductListActionsDialog(
                     callbacks.onDialogDismiss()
                 },
             ) {
-                AppTextButton(
-                    props = AppTextButtonProps.TextOnly(
-                        text = StringValue.StringWrapper(
-                            stringResource(
-                                R.string.pattern_disabled_to_send,
-                                dialog.disabledItemsCount,
-                            )
-                        )
+                AppTextButton2(
+                    text = StringValue.ResId(
+                        resId = R.string.pattern_disabled_to_send,
+                        arguments = listOf(dialog.disabledItemsCount),
                     ),
                     onClick = {
                         callbacks.onShareDisabledOnly(dialog)
                     },
-                    modifier = Modifier,
                 )
-                AppTextButton(
-                    props = AppTextButtonProps.TextOnly(
-                        text = StringValue.StringWrapper(
-                            stringResource(
-                                R.string.pattern_enabled_to_send,
-                                dialog.enabledItemsCount,
-                            )
-                        )
+                AppTextButton2(
+                    text = StringValue.ResId(
+                        resId = R.string.pattern_enabled_to_send,
+                        arguments = listOf(dialog.enabledItemsCount),
                     ),
                     onClick = {
                         callbacks.onShareEnabledOnly(dialog)
                     },
                     modifier = Modifier,
                 )
-                AppTextButton(
-                    props = AppTextButtonProps.TextOnly(
-                        text = StringValue.StringWrapper(
-                            stringResource(
-                                R.string.pattern_all,
-                                dialog.productListSize,
-                            )
-                        )
+                AppTextButton2(
+                    text = StringValue.ResId(
+                        resId = R.string.pattern_all,
+                        arguments = listOf(dialog.productListSize),
                     ),
                     onClick = {
                         callbacks.onShareAll(dialog)
@@ -226,18 +212,14 @@ private fun ProductListActionsDialog(
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(APP_DIALOG_PADDING),
                     ) {
-                        AppTextButton(
-                            props = AppTextButtonProps.TextOnly(
-                                text = StringValue.ResId(android.R.string.cancel),
-                            ),
+                        AppTextButton2(
+                            text = StringValue.ResId(android.R.string.cancel),
                             onClick = {
                                 callbacks.onDialogDismiss()
                             },
                         )
-                        AppTextButton(
-                            props = AppTextButtonProps.TextOnly(
-                                text = StringValue.ResId(R.string.share),
-                            ),
+                        AppTextButton2(
+                            text = StringValue.ResId(R.string.share),
                             onClick = {
                                 callbacks.onSharingConfirmed(dialog)
                             },
