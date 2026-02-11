@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.grocery.list.commons.compose.elements.AppPreloader
+import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.faq.item.FaqItem
 
@@ -55,12 +56,16 @@ private fun Content(
     callbacks: FaqCallbacks,
 ) {
     val listState = rememberLazyListState()
-    LazyColumn(
-        state = listState,
+    ScrollableContentWithShadows(
+        scrollableState = listState,
     ) {
-        topOffset()
-        items(props, callbacks)
-        bottomOffset()
+        LazyColumn(
+            state = listState,
+        ) {
+            topOffset()
+            items(props, callbacks)
+            bottomOffset()
+        }
     }
 }
 
