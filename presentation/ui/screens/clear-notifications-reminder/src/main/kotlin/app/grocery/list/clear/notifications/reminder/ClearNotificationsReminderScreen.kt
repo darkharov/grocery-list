@@ -31,14 +31,14 @@ import app.grocery.list.commons.compose.values.StringValue
 
 @Composable
 fun ClearNotificationsReminderScreen(
-    navigation: ClearNotificationsReminderNavigation,
+    contract: ClearNotificationsReminderContract,
 ) {
     val viewModel = hiltViewModel<ClearNotificationsReminderViewModel>()
     val props by viewModel.props.collectAsState()
     EventConsumer(viewModel.events()) { event ->
         when (event) {
             Event.Next -> {
-                navigation.goToFinalSteps()
+                contract.goToFinalSteps()
             }
         }
     }

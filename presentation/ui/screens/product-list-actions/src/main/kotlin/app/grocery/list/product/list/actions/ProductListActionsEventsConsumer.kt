@@ -15,8 +15,7 @@ import kotlinx.coroutines.withContext
 internal fun ProductListActionsEventsConsumer(
     events: ReceiveChannel<ProductListActionsViewModel.Event>,
     callbacks: ProductListActionsCallbacks,
-    delegate: ProductListActionsDelegate,
-    navigation: ProductListActionsNavigation,
+    contract: ProductListActionsContract,
 ) {
     val context = LocalContext.current
     val clipboard = LocalClipboard.current
@@ -24,13 +23,13 @@ internal fun ProductListActionsEventsConsumer(
     EventConsumer(events) { event ->
         when (event) {
             is ProductListActionsViewModel.Event.OnExitFromApp -> {
-                delegate.exitFromApp()
+                contract.exitFromApp()
             }
             is ProductListActionsViewModel.Event.OnShare -> {
                 context.share(text = event.sharingString)
             }
             is ProductListActionsViewModel.Event.OnStartShopping -> {
-                delegate.startShopping()
+                contract.startShopping()
             }
             is ProductListActionsViewModel.Event.OnPasteCopiedList -> {
                 clipboardScope.launch {
@@ -47,13 +46,13 @@ internal fun ProductListActionsEventsConsumer(
                 }
             }
             is ProductListActionsViewModel.Event.OnGoToProductInputForm -> {
-                navigation.goToNewProductInputForm()
+                contract.goToNewProductInputForm()
             }
             is ProductListActionsViewModel.Event.OnGoToActions -> {
-                navigation.goToProductListActions()
+                contract.goToProductListActions()
             }
             is ProductListActionsViewModel.Event.OnGoBack -> {
-                navigation.goBack()
+                contract.goBack()
             }
         }
     }

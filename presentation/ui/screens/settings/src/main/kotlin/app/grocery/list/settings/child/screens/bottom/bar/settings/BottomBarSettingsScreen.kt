@@ -15,11 +15,11 @@ import app.grocery.list.settings.child.screens.use.icons.on.bottom.bar.switch_.U
 
 @Composable
 fun BottomBarSettingsScreen(
-    navigation: AbleToGoBack,
+    contract: AbleToGoBack,
 ) {
     UseIconsOnBottomBarSwitch(
         strategy = UseIconsOnBottomBarSwitchStrategy.Screen,
-        navigation = navigation,
+        contract = contract,
         modifier = Modifier
             .padding(
                 top = 16.dp,
@@ -35,6 +35,6 @@ fun BottomBarSettingsScreen(
 @Composable
 private fun BottomBarSettingsScreenPreview() {
     BottomBarSettingsScreen(
-        navigation = AbleToGoBackMock,
+        contract = AbleToGoBackMock,
     )
 }

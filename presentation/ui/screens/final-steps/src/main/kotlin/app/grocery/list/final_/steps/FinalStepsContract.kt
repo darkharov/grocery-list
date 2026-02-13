@@ -1,5 +1,5 @@
 package app.grocery.list.final_.steps
 
-interface FinalStepsNavigation {
+interface FinalStepsContract {
     fun backToListPreview()
 }

@@ -1,5 +1,5 @@
 package app.grocery.list.clear.notifications.reminder
 
-interface ClearNotificationsReminderNavigation {
+interface ClearNotificationsReminderContract {
     fun goToFinalSteps()
 }

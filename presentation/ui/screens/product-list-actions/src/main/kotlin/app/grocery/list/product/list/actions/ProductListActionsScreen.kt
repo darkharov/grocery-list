@@ -34,8 +34,7 @@ import app.grocery.list.product.list.actions.dialog.ProductListActionsOptionalDi
 
 @Composable
 fun ProductListActionsScreen(
-    delegate: ProductListActionsDelegate,
-    navigation: ProductListActionsNavigation,
+    contract: ProductListActionsContract,
     bottomElement: @Composable () -> Unit,
 ) {
     val viewModel = hiltViewModel<ProductListActionsViewModel>()
@@ -44,8 +43,7 @@ fun ProductListActionsScreen(
     ProductListActionsEventsConsumer(
         events = viewModel.events(),
         callbacks = viewModel,
-        delegate = delegate,
-        navigation = navigation,
+        contract = contract,
     )
     ProductListActionsScreen(
         props = items,

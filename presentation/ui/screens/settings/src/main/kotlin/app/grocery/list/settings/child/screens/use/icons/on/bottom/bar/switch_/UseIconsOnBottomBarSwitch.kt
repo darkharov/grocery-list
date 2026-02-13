@@ -37,7 +37,7 @@ private typealias VMF = UseIconsOnBottomBarSwitchViewModel.Factory
 @Composable
 fun UseIconsOnBottomBarSwitch(
     strategy: UseIconsOnBottomBarSwitchStrategy,
-    navigation: AbleToGoBack,
+    contract: AbleToGoBack,
     modifier: Modifier = Modifier,
 ) {
     val viewModel = hiltViewModel<VM, VMF>(
@@ -48,7 +48,7 @@ fun UseIconsOnBottomBarSwitch(
     val props by viewModel.props.collectAsStateWithLifecycle()
     EventConsumer(
         events = viewModel.events(),
-        navigation = navigation,
+        contract = contract,
     )
     UseIconsOnBottomBarSwitch(
         props = props,
@@ -60,12 +60,12 @@ fun UseIconsOnBottomBarSwitch(
 @Composable
 private fun EventConsumer(
     events: ReceiveChannel<UseIconsOnBottomBarSwitchViewModel.Event>,
-    navigation: AbleToGoBack,
+    contract: AbleToGoBack,
 ) {
     EventConsumer(events) { event ->
         when (event) {
             is UseIconsOnBottomBarSwitchViewModel.Event.OnGoBack -> {
-                navigation.goBack()
+                contract.goBack()
             }
         }
     }

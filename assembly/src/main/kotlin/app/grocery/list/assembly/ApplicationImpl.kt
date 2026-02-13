@@ -8,8 +8,7 @@ import javax.inject.Inject
 @HiltAndroidApp
 class ApplicationImpl : Application() {
 
-    @Inject
-    internal lateinit var screenLockReceiver: ScreenLockReceiver
+    @Inject internal lateinit var screenLockReceiver: ScreenLockReceiver
 
     override fun onCreate() {
         super.onCreate()

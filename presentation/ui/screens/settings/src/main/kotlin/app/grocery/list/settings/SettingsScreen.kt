@@ -45,27 +45,19 @@ import kotlinx.coroutines.channels.ReceiveChannel
 
 @Composable
 fun SettingsScreen(
-    delegate: SettingsDelegate,
-    navigation: SettingsNavigation,
+    contract: SettingsContract,
 ) {
-    val viewModel = hiltViewModel<SettingsViewModel, SettingsViewModel.Factory>(
-        creationCallback = { factory ->
-            factory.create(
-                appVersionName = delegate.appVersionName,
-            )
-        }
-    )
+    val viewModel = hiltViewModel<SettingsViewModel>()
     val props by viewModel.props.collectAsState()
     val dialog by viewModel.dialog.collectAsState()
     EventConsumer(
+        props = props,
         events = viewModel.events(),
         callbacks = viewModel,
-        navigation = navigation,
-        delegate = delegate,
+        contract = contract
     )
     SettingsScreen(
         props = props,
-        navigation = navigation,
         callbacks = viewModel,
     )
     OptionalSettingsDialog(
@@ -76,9 +68,9 @@ fun SettingsScreen(
 
 @Composable
 private fun EventConsumer(
+    props: SettingsProps,
     events: ReceiveChannel<SettingsViewModel.Event>,
-    navigation: SettingsNavigation,
-    delegate: SettingsDelegate,
+    contract: SettingsContract,
     callbacks: SettingsCallbacks,
 ) {
     val context = LocalContext.current
@@ -92,17 +84,17 @@ private fun EventConsumer(
                         "\n\n\n\n" +
                         "\nAndroid version: ${Build.VERSION.RELEASE} " +
                         "(API level ${Build.VERSION.SDK_INT})" +
-                        "\nVersion Code: ${delegate.appVersionCode}" +
-                        "\nVersion Name: ${delegate.appVersionName}" +
+                        "\nVersion Code: ${props.appVersionCode}" +
+                        "\nVersion Name: ${props.appVersionName}" +
                         "\nBrand: ${Build.BRAND}" +
                         "\nModel: ${Build.MODEL}",
                 )
             }
             SettingsViewModel.Event.OnGoToListFormatSettings -> {
-                navigation.goToListFormatSettings()
+                contract.goToListFormatSettings()
             }
             SettingsViewModel.Event.OnFaqClick -> {
-                navigation.goToFaq()
+                contract.goToFaq()
             }
             SettingsViewModel.Event.OnPrivacyPolicyClick -> {
                 context.browse(
@@ -112,6 +104,9 @@ private fun EventConsumer(
                     },
                 )
             }
+            SettingsViewModel.Event.OnBottomBarItemClick -> {
+                contract.goToBottomBarSettings()
+            }
         }
     }
 }
@@ -120,7 +115,6 @@ private fun EventConsumer(
 private fun SettingsScreen(
     props: SettingsProps,
     callbacks: SettingsCallbacks,
-    navigation: SettingsNavigation,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -154,7 +148,7 @@ private fun SettingsScreen(
                     value = stringResource(R.string.bottom_bar),
                 ),
                 onClick = {
-                    navigation.goToBottomBarSettings()
+                    callbacks.onBottomBarItemClick()
                 },
             )
             SettingsMenuItem(
@@ -221,9 +215,11 @@ private fun SettingsScreenPreview() {
     GroceryListTheme {
         Scaffold { padding ->
             SettingsScreen(
-                props = SettingsProps(appVersionName = "1.0.0"),
+                props = SettingsProps(
+                    appVersionCode = 1,
+                    appVersionName = "1.0.0",
+                ),
                 callbacks = SettingsCallbacksMock,
-                navigation = SettingsNavigationMock,
                 modifier = Modifier
                     .padding(padding),
             )

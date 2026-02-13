@@ -25,14 +25,12 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import app.grocery.list.clear.notifications.reminder.ClearNotificationsReminderScreen
-import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.dialog.AppSimpleDialog
 import app.grocery.list.commons.compose.elements.toolbar.AppToolbar
 import app.grocery.list.commons.compose.elements.toolbar.AppToolbarProps
@@ -51,54 +49,23 @@ import app.grocery.list.settings.child.screens.bottom.bar.settings.BottomBarSett
 import app.grocery.list.settings.child.screens.list.format.ListFormatSettingsScreen
 import app.grocery.list.settings.child.screens.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitch
 import app.grocery.list.settings.child.screens.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.ReceiveChannel
 
 @Composable
 internal fun AppContent(
+    backStack: List<NavKey>,
     numberOfEnabledProducts: Int?,
     progress: Boolean,
     hasEmojiIfEnoughSpace: Boolean,
     dialog: AppLevelDialog?,
-    delegate: AppContentDelegate,
-    appEvents: ReceiveChannel<AppEvent>,
-    snackbars: ReceiveChannel<AppSnackbar>,
+    contract: AppContentContract,
     modifier: Modifier = Modifier,
 ) {
-    val backStack = rememberNavBackStack(ProductListPreview)
     val snackbarHostState = remember { SnackbarHostState() }
-    val navigation = remember { AppNavigationFacade(backStack) }
-
-    EventConsumer(
-        events = appEvents,
-        lifecycleState = Lifecycle.State.CREATED,
-    ) { event ->
-        when (event) {
-            is AppEvent.PushNotificationsGranted -> {
-                val reminderEnabled = event.clearNotificationsReminderEnabled
-                val key = if (reminderEnabled) {
-                    ClearNotificationsReminder
-                } else {
-                    FinalSteps
-                }
-                backStack.add(key)
-            }
-            is AppEvent.ActivityResumed -> {
-                delegate.notificationPublisher.cancelAllNotifications()
-            }
-            is AppEvent.ScreenLocked -> {
-                if (backStack.last() is FinalSteps) {
-                    delegate.notificationPublisher.tryToPost()
-                }
-            }
-        }
-    }
-
     val undo = stringResource(R.string.undo)
     val productWasDeletedPattern = stringResource(R.string.pattern_product_was_deleted)
 
     LaunchedEffect(Unit) {
-        for (snackbar in snackbars) {
+        for (snackbar in contract.snackbars()) {
             when (snackbar) {
                 is AppSnackbar.UndoDeletionProduct -> {
                     val result = snackbarHostState.showSnackbar(
@@ -108,7 +75,7 @@ internal fun AppContent(
                         duration = SnackbarDuration.Short,
                     )
                     if (result == SnackbarResult.ActionPerformed) {
-                        delegate.undoProductDeletion(snackbar.product)
+                        contract.undoProductDeletion(snackbar.product)
                     }
                 }
             }
@@ -131,10 +98,10 @@ internal fun AppContent(
                     progress = progress,
                 ),
                 onUpClick = {
-                    backStack.removeLastOrNull()
+                    contract.handleUpClick()
                 },
                 onTrailingIconClick = {
-                    backStack.add(Settings)
+                    contract.handleTrailingIconClick()
                 },
             )
         },
@@ -187,48 +154,44 @@ internal fun AppContent(
             entryProvider = entryProvider {
                 entry<ClearNotificationsReminder> {
                     ClearNotificationsReminderScreen(
-                        navigation = navigation,
+                        contract = contract,
                     )
                 }
                 entry<FinalSteps> {
                     FinalStepsScreen(
-                        navigation = navigation,
+                        contract = contract,
                     )
                 }
                 entry<ProductInputForm> { key ->
                     ProductInputFormScreen(
                         productId = key.productId,
-                        navigation = navigation,
+                        contract = contract,
                     )
                 }
                 entry<ProductListActions> {
                     ProductListActionsScreen(
-                        delegate = delegate,
-                        navigation = navigation,
+                        contract = contract,
                         bottomElement = {
                             UseIconsOnBottomBarSwitch(
                                 strategy = UseIconsOnBottomBarSwitchStrategy.EmbeddedElement,
-                                navigation = navigation,
+                                contract = contract,
                             )
                         },
                     )
                 }
                 entry<ProductListPreview> {
                     ProductListPreviewScreen(
-                        navigation = navigation,
-                        delegate = delegate,
+                        contract = contract,
                         bottomBar = {
                             ProductListActionsBar(
-                                navigation = navigation,
-                                delegate = delegate,
+                                contract = contract,
                             )
                         },
                     )
                 }
                 entry<Settings> {
                     SettingsScreen(
-                        delegate = delegate,
-                        navigation = navigation,
+                        contract = contract,
                     )
                 }
                 entry<ListFormatSettings> {
@@ -236,7 +199,7 @@ internal fun AppContent(
                 }
                 entry<BottomBarSettings> {
                     BottomBarSettingsScreen(
-                        navigation = navigation,
+                        contract = contract,
                     )
                 }
                 entry<Faq> {
@@ -253,15 +216,15 @@ internal fun AppContent(
                     icon = rememberVectorPainter(AppIcons.notifications),
                     text = StringValue.ResId(R.string.notification_permission_explanation),
                     onDismiss = {
-                        delegate.handleDialogDismiss()
+                        contract.dismissDialog()
                     },
                     onCancel = {
-                        delegate.handleDialogDismiss()
+                        contract.dismissDialog()
                     },
                     confirmButtonText = StringValue.ResId(R.string.give_permission),
                     onConfirm = {
-                        delegate.handleDialogDismiss()
-                        delegate.openNotificationSettings()
+                        contract.dismissDialog()
+                        contract.openNotificationSettings()
                     },
                 )
             }
@@ -278,9 +241,8 @@ private fun AppContentPreview() {
             progress = false,
             hasEmojiIfEnoughSpace = true,
             dialog = null,
-            delegate = AppContentDelegateMock,
-            appEvents = Channel(),
-            snackbars = Channel(),
+            contract = AppContentContractMock,
+            backStack = remember { mutableListOf(ProductListPreview) },
         )
     }
 }

@@ -1,7 +1,9 @@
 package app.grocery.list.assembly.internal.di
 
 import android.content.Context
+import app.grocery.list.assembly.BuildConfig
 import app.grocery.list.assembly.R
+import app.grocery.list.domain.AppInfo
 import app.grocery.list.domain.sharing.SharingStringFormatter
 import dagger.Module
 import dagger.Provides
@@ -30,4 +32,12 @@ class AppModule {
                 "https://play.google.com/store/apps/details?id=app.grocery.list",
             )
         }
+
+    @Provides
+    @Singleton
+    fun providesAppInfo(): AppInfo =
+        AppInfo(
+            versionName = BuildConfig.VERSION_NAME,
+            versionCode = BuildConfig.VERSION_CODE,
+        )
 }
