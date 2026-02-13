@@ -2,6 +2,7 @@ package app.grocery.list.main.activity.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.grocery.list.domain.ScreenLockEventBuffer
 import app.grocery.list.domain.formatter.ProductTitleWithoutEmojiFormatter
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
@@ -14,6 +15,7 @@ import app.grocery.list.main.activity.ui.content.AppSnackbar
 import app.grocery.list.storage.value.kotlin.get
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,11 +29,14 @@ import kotlinx.coroutines.launch
 class MainViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val productRepository: ProductRepository,
+    private val screenLockEventBuffer: ScreenLockEventBuffer,
 ) : ViewModel() {
 
     private val appEvents = Channel<AppEvent>(capacity = Channel.UNLIMITED)
     private val snackbars = Channel<AppSnackbar>(capacity = Channel.UNLIMITED)
     private val dialog = MutableStateFlow<AppLevelDialog?>(null)
+
+    private var waitingForScreenLock: Job? = null
 
     val numberOfEnabledProducts =
         productRepository
@@ -57,6 +62,19 @@ class MainViewModel @Inject constructor(
 
     val progress = MutableStateFlow(false)
 
+    fun notifyActivityResumed() {
+        appEvents.trySend(AppEvent.ActivityResumed)
+        waitForOneScreenLockEvent()
+    }
+
+    private fun waitForOneScreenLockEvent() {
+        waitingForScreenLock?.cancel()
+        waitingForScreenLock = viewModelScope.launch {
+            screenLockEventBuffer.events().receive()
+            appEvents.send(AppEvent.ScreenLocked)
+        }
+    }
+
     fun appEvents(): ReceiveChannel<AppEvent> =
         appEvents
 
@@ -73,10 +91,6 @@ class MainViewModel @Inject constructor(
             appEvents.trySend(event)
             progress.value = false
         }
-    }
-
-    fun notifyScreenLocked() {
-        appEvents.trySend(AppEvent.ScreenLocked)
     }
 
     fun showUndoProductDeletionSnackbar(product: Product) {

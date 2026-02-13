@@ -6,5 +6,6 @@ sealed class AppEvent {
         val clearNotificationsReminderEnabled: Boolean,
     ) : AppEvent()
 
+    data object ActivityResumed : AppEvent()
     data object ScreenLocked : AppEvent()
 }

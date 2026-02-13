@@ -83,6 +83,9 @@ internal fun AppContent(
                 }
                 backStack.add(key)
             }
+            is AppEvent.ActivityResumed -> {
+                delegate.notificationPublisher.cancelAllNotifications()
+            }
             is AppEvent.ScreenLocked -> {
                 if (backStack.last() is FinalSteps) {
                     delegate.notificationPublisher.tryToPost()

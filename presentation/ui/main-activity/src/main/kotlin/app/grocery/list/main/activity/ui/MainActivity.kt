@@ -21,7 +21,6 @@ import app.grocery.list.main.activity.ui.content.AppContent
 import app.grocery.list.main.activity.ui.content.AppContentDelegate
 import app.grocery.list.notifications.NotificationPublisher
 import commons.android.PermissionUtil
-import commons.android.ScreenLockedReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -46,7 +45,6 @@ class MainActivity :
         super.onCreate(savedInstanceState)
         setupEdgeToEdge()
         setupContent()
-        observeScreenLock()
     }
 
     private fun setupEdgeToEdge() {
@@ -82,15 +80,9 @@ class MainActivity :
         }
     }
 
-    private fun observeScreenLock() {
-        ScreenLockedReceiver.register(this) {
-            viewModel.notifyScreenLocked()
-        }
-    }
-
     override fun onResume() {
         super.onResume()
-        notificationPublisher.cancelAllNotifications()
+        viewModel.notifyActivityResumed()
     }
 
     override fun exitFromApp() {
