@@ -27,5 +27,4 @@ android {
 dependencies {
     // It is a cross-project module, so do not add any modules
     implementation(libs.androidx.activity.ktx)
-    implementation(libs.androidx.lifecycle.process)
 }
