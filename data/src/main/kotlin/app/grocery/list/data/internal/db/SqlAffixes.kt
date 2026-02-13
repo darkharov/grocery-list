@@ -1,4 +1,4 @@
-package app.grocery.list.data.db
+package app.grocery.list.data.internal.db
 
 @Suppress("ConstPropertyName")
 internal object SqlAffixes {

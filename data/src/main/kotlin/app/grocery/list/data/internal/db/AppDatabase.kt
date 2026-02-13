@@ -1,4 +1,4 @@
-package app.grocery.list.data.db
+package app.grocery.list.data.internal.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

@@ -1,4 +1,4 @@
-package app.grocery.list.data
+package app.grocery.list.data.settings
 
 import app.grocery.list.domain.settings.BottomBarRoadmapStep
 import app.grocery.list.domain.settings.ProductTitleFormat

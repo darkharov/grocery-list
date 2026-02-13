@@ -3,7 +3,7 @@ package app.grocery.list.data.product
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import app.grocery.list.data.db.SqlAffixes
+import app.grocery.list.data.internal.db.SqlAffixes
 import app.grocery.list.domain.product.EmojiAndKeyword
 import app.grocery.list.domain.product.Product
 import javax.inject.Inject
