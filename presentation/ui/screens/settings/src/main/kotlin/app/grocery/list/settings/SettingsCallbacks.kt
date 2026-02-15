@@ -12,6 +12,7 @@ internal interface SettingsCallbacks :
     fun onFaqClick()
     fun onPrivacyPolicyClick()
     fun onBrowserAppNotFound()
+    fun onBottomBarItemClick()
 }
 
 internal object SettingsCallbacksMock :
@@ -22,4 +23,5 @@ internal object SettingsCallbacksMock :
     override fun onFaqClick() {}
     override fun onPrivacyPolicyClick() {}
     override fun onBrowserAppNotFound() {}
+    override fun onBottomBarItemClick() {}
 }

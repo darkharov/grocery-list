@@ -45,8 +45,7 @@ import app.grocery.list.product.list.preview.elements.ProductItem
 
 @Composable
 fun ProductListPreviewScreen(
-    navigation: ProductListPreviewNavigation,
-    delegate: ProductListPreviewDelegate,
+    contract: ProductListPreviewContract,
     bottomBar: @Composable () -> Unit,
 ) {
     val viewModel = hiltViewModel<ProductListPreviewViewModel>()
@@ -54,8 +53,7 @@ fun ProductListPreviewScreen(
     val dialog by viewModel.dialog().collectAsStateWithLifecycle()
     EventConsumer(
         viewModel = viewModel,
-        navigation = navigation,
-        delegate = delegate,
+        contract = contract,
     )
     PreloaderOrContent(
         props = props,
@@ -71,16 +69,15 @@ fun ProductListPreviewScreen(
 @Composable
 private fun EventConsumer(
     viewModel: ProductListPreviewViewModel,
-    navigation: ProductListPreviewNavigation,
-    delegate: ProductListPreviewDelegate,
+    contract: ProductListPreviewContract,
 ) {
     EventConsumer(viewModel.events()) { event ->
         when (event) {
             is Event.OnProductDeleted -> {
-                delegate.showUndoProductDeletionSnackbar(event.product)
+                contract.showUndoProductDeletionSnackbar(event.product)
             }
             is Event.OnEditProduct -> {
-                navigation.goToProductEditingForm(
+                contract.goToProductEditingForm(
                     productId = event.productId,
                 )
             }

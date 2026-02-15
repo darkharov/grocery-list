@@ -1,25 +1,26 @@
 package app.grocery.list.settings
 
 import androidx.lifecycle.ViewModel
+import app.grocery.list.domain.AppInfo
 import app.grocery.list.settings.dialog.SettingsDialogProps
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.MutableStateFlow
 
-@HiltViewModel(
-    assistedFactory = SettingsViewModel.Factory::class,
-)
-internal class SettingsViewModel @AssistedInject constructor(
-    @Assisted
-    appVersionName: String,
+@HiltViewModel
+internal class SettingsViewModel @Inject constructor(
+    appInfo: AppInfo,
 ) : ViewModel(),
     SettingsCallbacks {
 
-    val props = MutableStateFlow(SettingsProps(appVersionName = appVersionName))
+    val props = MutableStateFlow(
+        SettingsProps(
+            appVersionName = appInfo.versionName,
+            appVersionCode = appInfo.versionCode,
+        )
+    )
     val dialog = MutableStateFlow<SettingsDialogProps?>(null)
 
     private val events = Channel<Event>(Channel.UNLIMITED)
@@ -44,6 +45,10 @@ internal class SettingsViewModel @AssistedInject constructor(
         dialog.value = SettingsDialogProps.BrowserNotFound
     }
 
+    override fun onBottomBarItemClick() {
+        events.trySend(Event.OnBottomBarItemClick)
+    }
+
     override fun onDismiss() {
         dialog.value = null
     }
@@ -56,10 +61,6 @@ internal class SettingsViewModel @AssistedInject constructor(
         data object OnContactSupport: Event()
         data object OnFaqClick: Event()
         data object OnPrivacyPolicyClick : Event()
-    }
-
-    @AssistedFactory
-    fun interface Factory {
-        fun create(appVersionName: String): SettingsViewModel
+        data object OnBottomBarItemClick : Event()
     }
 }

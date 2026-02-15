@@ -10,35 +10,34 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.theme.ThemeUtil
-import app.grocery.list.domain.product.Product
+import app.grocery.list.main.activity.ui.MainViewModel.Event
 import app.grocery.list.main.activity.ui.content.AppContent
-import app.grocery.list.main.activity.ui.content.AppContentDelegate
+import app.grocery.list.main.activity.ui.content.FinalSteps
 import app.grocery.list.notifications.NotificationPublisher
 import commons.android.PermissionUtil
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class MainActivity :
     ComponentActivity(),
-    AppContentDelegate,
     PermissionUtil.Contract {
 
-    @Inject lateinit var contract: Contract
     @Inject lateinit var themeUtil: ThemeUtil
-    @Inject override lateinit var notificationPublisher: NotificationPublisher
+    @Inject lateinit var notificationPublisher: NotificationPublisher
 
     private val viewModel by viewModels<MainViewModel>()
     private val permissionUtil = PermissionUtil()
-
-    override val appVersionName get() = contract.versionName
-    override val appVersionCode get() = contract.versionCode
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -68,29 +67,42 @@ class MainActivity :
             val dialog by viewModel.dialog().collectAsStateWithLifecycle()
             themeUtil.GroceryListTheme {
                 AppContent(
+                    backStack = viewModel.backStack,
                     numberOfEnabledProducts = numberOfEnabledProducts,
                     progress = progress,
                     hasEmojiIfEnoughSpace = hasEmojiIfEnoughSpace,
                     dialog = dialog,
-                    delegate = this,
-                    appEvents = viewModel.appEvents(),
-                    snackbars = viewModel.snackbars(),
+                    contract = viewModel,
                 )
+                LaunchedEffect(Unit) {
+                    snapshotFlow {
+                        viewModel.backStack.last() is FinalSteps
+                    }.collectLatest {
+                        notificationPublisher.notifyIsUserOnFinalScreenChange(it)
+                    }
+                }
+                EventConsumer(viewModel.events()) { event ->
+                    when (event) {
+                        is Event.OnExitFromAppSelected -> {
+                            finish()
+                        }
+                        is Event.OnNotificationSettingsRequired -> {
+                            openNotificationSettings()
+                        }
+                        is Event.OnStartShopping -> {
+                            permissionUtil.requestPostNotifications()
+                        }
+                    }
+                }
             }
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.notifyActivityResumed()
-    }
-
-    override fun exitFromApp() {
-        finish()
-    }
-
-    override fun startShopping() {
-        permissionUtil.requestPostNotifications()
+    private fun openNotificationSettings() {
+        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+        startActivity(intent)
     }
 
     override fun onPostNotificationsGranted() {
@@ -99,29 +111,5 @@ class MainActivity :
 
     override fun onPostNotificationsDenied() {
         viewModel.notifyPostNotificationsDenied()
-    }
-
-    override fun showUndoProductDeletionSnackbar(product: Product) {
-        viewModel.showUndoProductDeletionSnackbar(product)
-    }
-
-    override fun undoProductDeletion(product: Product) {
-        viewModel.undoProductDeletion(product)
-    }
-
-    override fun openNotificationSettings() {
-        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-        startActivity(intent)
-    }
-
-    override fun handleDialogDismiss() {
-        viewModel.notifyDialogDismiss()
-    }
-
-    interface Contract {
-        val versionName: String
-        val versionCode: Int
     }
 }

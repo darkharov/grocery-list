@@ -39,7 +39,7 @@ private val BulletOffset = 8.dp
 
 @Composable
 fun FinalStepsScreen(
-    navigation: FinalStepsNavigation,
+    contract: FinalStepsContract,
 ) {
     val viewModel = hiltViewModel<FinalStepsViewModel>()
     EventConsumer(
@@ -47,7 +47,7 @@ fun FinalStepsScreen(
     ) { event ->
         when (event) {
             is Event.OnNoEnabledProductsAnymore -> {
-                navigation.backToListPreview()
+                contract.backToListPreview()
             }
         }
     }

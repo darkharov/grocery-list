@@ -12,18 +12,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.product.list.actions.ProductListActionsCallbacks
 import app.grocery.list.product.list.actions.ProductListActionsCallbacksMock
-import app.grocery.list.product.list.actions.ProductListActionsDelegate
+import app.grocery.list.product.list.actions.ProductListActionsContract
 import app.grocery.list.product.list.actions.ProductListActionsEventsConsumer
 import app.grocery.list.product.list.actions.ProductListActionsMocks
-import app.grocery.list.product.list.actions.ProductListActionsNavigation
 import app.grocery.list.product.list.actions.ProductListActionsProps
 import app.grocery.list.product.list.actions.ProductListActionsViewModel
 import app.grocery.list.product.list.actions.dialog.ProductListActionsOptionalDialog
 
 @Composable
 fun ProductListActionsBar(
-    delegate: ProductListActionsDelegate,
-    navigation: ProductListActionsNavigation,
+    contract: ProductListActionsContract,
 ) {
     val viewModel = hiltViewModel<ProductListActionsViewModel>()
     val events = viewModel.events()
@@ -32,8 +30,7 @@ fun ProductListActionsBar(
     ProductListActionsEventsConsumer(
         events = events,
         callbacks = viewModel,
-        delegate = delegate,
-        navigation = navigation,
+        contract = contract,
     )
     ProductListActionsOptionalBar(
         props = props,

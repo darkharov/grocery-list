@@ -46,7 +46,7 @@ import app.grocery.list.product.input.form.elements.category.picker.CategoryPick
 @Composable
 fun ProductInputFormScreen(
     productId: Int?,
-    navigation: ProductInputFormNavigation,
+    contract: ProductInputFormContract,
 ) {
     val productId = productId
     val viewModel = hiltViewModel<ProductInputFormViewModel, ProductInputFormViewModel.Factory>(
@@ -63,7 +63,7 @@ fun ProductInputFormScreen(
     )
     EventConsumer(
         viewModel = viewModel,
-        navigation = navigation,
+        contract = contract,
         titleFocusRequester = titleFocusRequester,
         softwareKeyboardController = softwareKeyboardController,
         categoryFocusRequester = categoryFocusRequester
@@ -80,7 +80,7 @@ fun ProductInputFormScreen(
 @Composable
 private fun EventConsumer(
     viewModel: ProductInputFormViewModel,
-    navigation: ProductInputFormNavigation,
+    contract: ProductInputFormContract,
     titleFocusRequester: FocusRequester,
     softwareKeyboardController: SoftwareKeyboardController?,
     categoryFocusRequester: FocusRequester,
@@ -92,7 +92,7 @@ private fun EventConsumer(
                 softwareKeyboardController?.show()
             }
             ProductInputFormViewModel.Event.Completed -> {
-                navigation.goBack()
+                contract.goBack()
             }
             ProductInputFormViewModel.Event.TitleNotSpecified -> {
                 titleFocusRequester.requestFocus()

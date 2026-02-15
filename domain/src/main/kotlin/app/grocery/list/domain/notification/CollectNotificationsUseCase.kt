@@ -7,26 +7,28 @@ import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 
 @Singleton
-class GetNotificationsUseCase @Inject internal constructor(
+internal class CollectNotificationsUseCase @Inject constructor(
     private val productRepository: ProductRepository,
     private val getProductTitleFormatter: GetProductTitleFormatterUseCase,
     private val formatNotificationTitle: FormatNotificationTitleUseCase,
 ) {
-    suspend fun execute(maxNumberOfItems: Int): List<NotificationContent> {
-        val formatter = getProductTitleFormatter.execute().first().formatter
-        val enabledOnly = productRepository.enabledOnly().first()
-        val groupedProducts = groupProducts(
-            products = enabledOnly,
-            maxNumberOfNotifications = maxNumberOfItems,
-        )
-        return groupedProducts
-            .map { group ->
+    fun execute(maxNumberOfItems: Int): Flow<List<NotificationContent>> =
+        combine(
+            getProductTitleFormatter.execute().map { it.formatter },
+            productRepository.enabledOnly(),
+        ) { formatter, products ->
+            groupProducts(
+                products = products,
+                maxNumberOfNotifications = maxNumberOfItems,
+            ).map { group ->
                 notificationContent(group, formatter)
             }
-    }
+        }
 
     private fun groupProducts(
         products: List<CategoryProducts>,
