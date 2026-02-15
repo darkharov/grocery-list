@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "commons.android"   // It is a cross-project module, so without ${Configs.APPLICATION_ID} prefix
+    namespace = "commons.android"   // This is a cross-project module, so without ${Configs.APPLICATION_ID} prefix
     compileSdk = Configs.Sdk.COMPILE
 
     defaultConfig {
@@ -25,6 +25,6 @@ android {
 }
 
 dependencies {
-    // It is a cross-project module, so do not add any modules
+    // This is a cross-project module, so do not add any modules
     implementation(libs.androidx.activity.ktx)
 }
