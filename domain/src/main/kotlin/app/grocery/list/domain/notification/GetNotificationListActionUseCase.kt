@@ -2,9 +2,9 @@ package app.grocery.list.domain.notification
 
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.math.abs
 import kotlinx.coroutines.flow.first
 import org.joda.time.DateTime
-import org.joda.time.Seconds
 
 @Singleton
 class GetNotificationListActionUseCase @Inject internal constructor(
@@ -40,10 +40,7 @@ class GetNotificationListActionUseCase @Inject internal constructor(
         }
 
     fun happenedRecently(timeMs: Long): Boolean =
-        Seconds.secondsBetween(
-            DateTime(timeMs),
-            DateTime.now(),
-        ).seconds <= THRESHOLD_DURATION_SECONDS
+        abs(DateTime().millis - timeMs) < THRESHOLD_DURATION_MS
 
     sealed class AppState {
         data object Resumed : AppState()
@@ -59,6 +56,6 @@ class GetNotificationListActionUseCase @Inject internal constructor(
     }
 
     companion object {
-        private const val THRESHOLD_DURATION_SECONDS = 3
+        private const val THRESHOLD_DURATION_MS = 500
     }
 }
