@@ -76,9 +76,9 @@ class MainActivity :
                 )
                 LaunchedEffect(Unit) {
                     snapshotFlow {
-                        viewModel.backStack.last() is FinalSteps
+                        viewModel.backStack.last()
                     }.collectLatest {
-                        notificationPublisher.notifyIsUserOnFinalScreenChange(it)
+                        notificationPublisher.notifyIsUserOnFinalScreenChange(it is FinalSteps)
                     }
                 }
                 EventConsumer(viewModel.events()) { event ->
