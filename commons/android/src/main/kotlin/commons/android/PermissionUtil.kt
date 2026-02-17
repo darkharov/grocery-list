@@ -1,7 +1,9 @@
 package commons.android
 
 import android.Manifest
+import android.content.Intent
 import android.os.Build
+import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.annotation.RequiresApi
@@ -16,15 +18,22 @@ import androidx.annotation.RequiresApi
  *
  *      val permissionUtil = PermissionUtil()
  *
- *      private fun itIsTimeToCheckAbilityToPostNotifications() {
+ *      fun myMethod() {
  *          permissionUtil.requestPostNotifications()
  *      }
  *
  *      override fun onPostNotificationsGranted() {
  *          ...
  *      }
+ *
  *      override fun onPostNotificationsDenied() {
  *          ...
+ *          MyDialog(
+ *              ...
+ *              onGoToSettings = {
+ *                   permissionUtil.openNotificationSettings()
+ *              }
+ *          )
  *      }
  *  }
  * ```
@@ -47,9 +56,18 @@ class PermissionUtil<T> internal constructor(
         }
     }
 
+    fun openNotificationSettings() {
+        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .putExtra(Settings.EXTRA_APP_PACKAGE, activity.packageName)
+        activity.startActivity(intent)
+    }
+
     interface Contract {
         fun onPostNotificationsGranted() {}
-        fun onPostNotificationsDenied() {}
+        fun onPostNotificationsDenied() {
+            throw UnsupportedOperationException("onPostNotificationsDenied() is not implemented")
+        }
     }
 
     private open inner class LauncherHolder(
