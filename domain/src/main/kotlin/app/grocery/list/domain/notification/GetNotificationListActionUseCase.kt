@@ -56,6 +56,6 @@ class GetNotificationListActionUseCase @Inject internal constructor(
     }
 
     companion object {
-        private const val THRESHOLD_DURATION_MS = 500
+        private const val THRESHOLD_DURATION_MS = 850
     }
 }
