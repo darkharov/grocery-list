@@ -19,15 +19,17 @@ import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.commons.compose.values.value
 
-@Suppress("KotlinConstantConditions")
 @Composable
 fun AppTextButton(
     text: StringValue,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    padding: PaddingValues = AppTextButtonDefaults.Padding,
-    dangerous: Boolean = AppTextButtonDefaults.DANGEROUS,
+    padding: PaddingValues = PaddingValues(
+        vertical = 12.dp,
+        horizontal = 16.dp,
+    ),
+    dangerous: Boolean = false,
 ) {
     Text(
         text = text.value(),
