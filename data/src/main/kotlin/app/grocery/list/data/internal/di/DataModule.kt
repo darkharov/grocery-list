@@ -2,16 +2,13 @@ package app.grocery.list.data.internal.di
 
 import android.content.Context
 import androidx.room.Room
-import app.grocery.list.data.category.CategoryDao
 import app.grocery.list.data.internal.db.AppDatabase
-import app.grocery.list.data.product.DEFAULT_CATEGORY_ID
 import app.grocery.list.data.product.ProductDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -37,10 +34,4 @@ internal class DataModule {
         appDatabase: AppDatabase,
     ): ProductDao =
         appDatabase.productDao()
-
-    @Provides
-    @Named(DEFAULT_CATEGORY_ID)
-    @Singleton
-    fun categoryDao(categoryDao: CategoryDao): Int =
-        categoryDao.defaultCategoryId
 }

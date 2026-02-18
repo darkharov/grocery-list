@@ -21,7 +21,7 @@ internal class CategoryDao @Inject constructor(
     private val categories = categoriesKeywordFamilyArrayIds.keys.toList()
     private val keywordAndCategoryWithOptionalEmojiMap = keywordAndCategoryWithOptionalEmojiMap()
 
-    val defaultCategoryId = categories.last().id
+    private val defaultCategoryId = categories.last().id
 
     private fun categoriesAndKeywordFamiliesIds() =
         // DO NOT REORDER!

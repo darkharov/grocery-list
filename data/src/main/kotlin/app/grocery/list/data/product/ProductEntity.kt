@@ -7,10 +7,7 @@ import app.grocery.list.data.internal.db.SqlAffixes
 import app.grocery.list.domain.product.EmojiAndKeyword
 import app.grocery.list.domain.product.Product
 import javax.inject.Inject
-import javax.inject.Named
 import javax.inject.Singleton
-
-internal const val DEFAULT_CATEGORY_ID = "app.grocery.list.data.db.DEFAULT_CATEGORY_ID"
 
 @Entity(
     tableName = ProductEntity.Table.NAME,
@@ -52,10 +49,8 @@ internal class ProductEntity(
     }
 
     @Singleton
-    class Mapper @Inject constructor(
-        @Named(DEFAULT_CATEGORY_ID)
-        val defaultCategoryId: Int,
-    ) {
+    class Mapper @Inject constructor() {
+
         fun toDataEntity(product: Product): ProductEntity =
             ProductEntity(
                 id = product.id.takeIf { it != 0 },
