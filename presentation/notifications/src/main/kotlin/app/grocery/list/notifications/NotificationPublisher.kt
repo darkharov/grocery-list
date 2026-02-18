@@ -25,7 +25,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
@@ -75,7 +74,7 @@ class NotificationPublisher @Inject internal constructor(
                         isUserOnFinalScreen = isUserOnFinalScreen,
                         maxNumberOfItems = NotificationConfigs.MAX_VISIBLE_AT_THE_SAME_TIME,
                     )
-                }.collectLatest { action ->
+                }.collect { action ->
                     Log.e(TAG, "action: $action")
                     when (action) {
                         is GetNotificationListActionUseCase.Result.Repost -> {
