@@ -26,10 +26,6 @@ sealed class ProductTitleFormatter {
         val title: String,
         val additionalDetails: AdditionalDetails?,
     ) {
-        @Deprecated("It is probably a mistake", ReplaceWith("this.collectStringTitle()"))
-        override fun toString() =
-            super.toString()
-
         fun collectStringTitle(): String =
             buildString {
                 if (!(emoji.isNullOrBlank())) {
