@@ -71,6 +71,18 @@ class MainViewModel @Inject constructor(
 
     val progress = MutableStateFlow(false)
 
+    override fun onUpIconClick() {
+        backStack.removeLastOrNull()
+    }
+
+    override fun onAllListsClick() {
+        // todo
+    }
+
+    override fun onSettingsClick() {
+        backStack.add(Settings)
+    }
+
     override fun snackbars(): ReceiveChannel<AppSnackbar> =
         snackbars
 
@@ -105,14 +117,6 @@ class MainViewModel @Inject constructor(
 
     override fun dismissDialog() {
         dialog.value = null
-    }
-
-    override fun handleUpClick() {
-        backStack.removeLastOrNull()
-    }
-
-    override fun handleTrailingIconClick() {
-        backStack.add(Settings)
     }
 
     override fun goToNewProductInputForm() {

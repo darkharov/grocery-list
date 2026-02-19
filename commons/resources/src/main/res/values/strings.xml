@@ -70,6 +70,7 @@
     <string name="faq">FAQ</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="browser_app_not_found">Unfortunately, the browser application was not found.</string>
+    <string name="all_lists">All lists</string>
 
     <string-array name="final_steps">
         <item>Lock the screen</item>

@@ -92,17 +92,12 @@ internal fun AppContent(
                         .customContentOrNull(navKey = backStack.last())
                         ?: AppToolbarProps.Content.Default(
                             counter = numberOfEnabledProducts,
-                            onStart = backStack.size == 1,
+                            isOnStart = backStack.size == 1,
                             hasEmojiIfEnoughSpace = hasEmojiIfEnoughSpace,
                         ),
                     progress = progress,
                 ),
-                onUpClick = {
-                    contract.handleUpClick()
-                },
-                onTrailingIconClick = {
-                    contract.handleTrailingIconClick()
-                },
+                callbacks = contract,
             )
         },
         snackbarHost = {

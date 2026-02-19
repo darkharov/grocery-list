@@ -56,9 +56,8 @@ private val CounterSizeSp = 32.sp
 @Composable
 fun AppToolbar(
     props: AppToolbarProps,
+    callbacks: AppToolbarCallbacks,
     modifier: Modifier = Modifier,
-    onUpClick: (() -> Unit),
-    onTrailingIconClick: (() -> Unit),
 ) {
     val screenHorizontalPadding = dimensionResource(R.dimen.margin_16_32_64)
     val counterSize = with(LocalDensity.current) { CounterSizeSp.toDp() }
@@ -94,9 +93,9 @@ fun AppToolbar(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
             ) {
-                OptionalIcon(
+                AppToolbarIconOrSpace(
                     props = props.leadingIcon,
-                    onClick = onUpClick,
+                    callbacks = callbacks,
                 )
                 Spacer(
                     modifier = Modifier
@@ -149,9 +148,9 @@ fun AppToolbar(
                     modifier = Modifier
                         .weight(1f),
                 )
-                OptionalIcon(
+                AppToolbarIconOrSpace(
                     props = props.trailingIcon,
-                    onClick = onTrailingIconClick,
+                    callbacks = callbacks,
                 )
             }
             if (props.progress) {
@@ -229,9 +228,8 @@ private fun AppToolbarWithCounterPreview(
     GroceryListTheme {
         AppToolbar(
             props = props,
+            callbacks = AppToolbarCallbacksMock,
             modifier = Modifier,
-            onUpClick = {},
-            onTrailingIconClick = {},
         )
     }
 }

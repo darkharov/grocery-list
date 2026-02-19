@@ -1,6 +1,8 @@
 package app.grocery.list.main.activity.ui.content
 
 import app.grocery.list.clear.notifications.reminder.ClearNotificationsReminderContract
+import app.grocery.list.commons.compose.elements.toolbar.AppToolbarCallbacks
+import app.grocery.list.commons.compose.elements.toolbar.AppToolbarCallbacksMock
 import app.grocery.list.domain.product.Product
 import app.grocery.list.final_.steps.FinalStepsContract
 import app.grocery.list.product.input.form.ProductInputFormContract
@@ -11,6 +13,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 
 internal interface AppContentContract :
+    AppToolbarCallbacks,
     ProductListActionsContract,
     SettingsContract,
     ProductListPreviewContract,
@@ -21,11 +24,11 @@ internal interface AppContentContract :
     fun undoProductDeletion(product: Product)
     fun openNotificationSettings()
     fun dismissDialog()
-    fun handleUpClick()
-    fun handleTrailingIconClick()
 }
 
-internal object AppContentContractMock : AppContentContract {
+internal object AppContentContractMock :
+    AppContentContract,
+    AppToolbarCallbacks by AppToolbarCallbacksMock {
     override fun snackbars(): ReceiveChannel<AppSnackbar> = Channel()
     override fun exitFromApp() {}
     override fun startShopping() {}
@@ -42,6 +45,4 @@ internal object AppContentContractMock : AppContentContract {
     override fun goToProductEditingForm(productId: Int) {}
     override fun goToFinalSteps() {}
     override fun backToListPreview() {}
-    override fun handleUpClick() {}
-    override fun handleTrailingIconClick() {}
 }
