@@ -31,8 +31,8 @@ internal class ProductRepositoryImpl @Inject constructor(
     override fun all(): Flow<List<CategoryProducts>> =
         select(enabledOnly = false)
 
-    private fun select(enabledOnly: Boolean): Flow<List<CategoryProducts>> {
-        return productDao
+    private fun select(enabledOnly: Boolean): Flow<List<CategoryProducts>> =
+        productDao
             .select(enabledOnly = enabledOnly)
             .flowOn(Dispatchers.IO)
             .map { categorizedProducts ->
@@ -43,7 +43,6 @@ internal class ProductRepositoryImpl @Inject constructor(
                     )
                 }
             }
-    }
 
     override fun enabledOnly(): Flow<List<CategoryProducts>> =
         select(enabledOnly = true)
