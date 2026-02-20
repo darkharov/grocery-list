@@ -24,8 +24,7 @@ internal class DataModule {
             context.applicationContext,
             AppDatabase::class.java,
             "app_database",
-        ).fallbackToDestructiveMigration(dropAllTables = false)
-            .build()
+        ).build()
 
     @Provides
     @Singleton
