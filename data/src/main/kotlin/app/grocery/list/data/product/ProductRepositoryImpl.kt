@@ -12,9 +12,12 @@ import app.grocery.list.domain.product.ProductRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 @Singleton
 internal class ProductRepositoryImpl @Inject constructor(
@@ -30,9 +33,8 @@ internal class ProductRepositoryImpl @Inject constructor(
 
     private fun select(enabledOnly: Boolean): Flow<List<CategoryProducts>> {
         return productDao
-            .select(
-                enabledOnly = enabledOnly,
-            )
+            .select(enabledOnly = enabledOnly)
+            .flowOn(Dispatchers.IO)
             .map { categorizedProducts ->
                 categorizedProducts.map { (categoryId, products) ->
                     CategoryProducts(
@@ -49,6 +51,7 @@ internal class ProductRepositoryImpl @Inject constructor(
     override fun groupEnabledAndDisabled(): Flow<EnabledAndDisabledProducts> =
         productDao
             .select(enabledOnly = false)
+            .flowOn(Dispatchers.IO)
             .map { productMapper.toDomainModels(it.values.flatten()) }
             .map { products ->
                 EnabledAndDisabledProducts(
@@ -59,50 +62,69 @@ internal class ProductRepositoryImpl @Inject constructor(
             }
 
     override suspend fun get(id: Int): Product {
-        val entity = productDao.select(productId = id)
+        val entity = withContext(Dispatchers.IO) {
+            productDao.select(productId = id)
+        }
         return productMapper.toDomainModel(entity)
     }
 
     override suspend fun findEmojiAndCategoryId(search: String): EmojiAndCategoryId =
-        categoryDao.emojiAndCategoryId(search = search)
+        withContext(Dispatchers.IO) {
+            categoryDao.emojiAndCategoryId(search = search)
+        }
 
     override suspend fun findEmoji(search: CharSequence): EmojiAndKeyword? =
-        categoryDao.emoji(search = search)
+        withContext(Dispatchers.IO) {
+            categoryDao.emoji(search = search)
+        }
 
     override suspend fun deleteAll() {
-        productDao.deleteAll()
+        withContext(Dispatchers.IO) {
+            productDao.deleteAll()
+        }
     }
 
     override suspend fun delete(productId: Int) =
-        productMapper.toDomainModel(
-            productDao.selectAndDelete(productId = productId),
-        )
+        withContext(Dispatchers.IO) {
+            productMapper.toDomainModel(
+                productDao.selectAndDelete(productId = productId),
+            )
+        }
 
     override suspend fun put(product: Product) {
-        val entity = productMapper.toDataEntity(product)
-        productDao.insertOrReplace(entity)
+        withContext(Dispatchers.IO) {
+            val entity = productMapper.toDataEntity(product)
+            productDao.insertOrReplace(entity)
+        }
     }
 
     override suspend fun put(products: List<Product>) {
-        productDao.insertOrReplace(productMapper.toDataEntities(products))
+        withContext(Dispatchers.IO) {
+            productDao.insertOrReplace(productMapper.toDataEntities(products))
+        }
     }
 
     override suspend fun setEnabled(productId: Int, enabled: Boolean) {
-        productDao.setProductsEnabled(productIds = listOf(productId), enabled = enabled)
+        withContext(Dispatchers.IO) {
+            productDao.setProductsEnabled(productIds = listOf(productId), enabled = enabled)
+        }
     }
 
     override suspend fun setEnabled(productIds: List<Int>, enabled: Boolean) {
-        productDao.setProductsEnabled(productIds = productIds, enabled = enabled)
+        withContext(Dispatchers.IO) {
+            productDao.setProductsEnabled(productIds = productIds, enabled = enabled)
+        }
     }
 
     override fun count(): Flow<Int> =
-        productDao.count()
+        productDao.count().flowOn(Dispatchers.IO)
 
     override fun numberOfEnabled(): Flow<Int> =
-        productDao.countOfEnabled()
+        productDao.countOfEnabled().flowOn(Dispatchers.IO)
+
 
     override fun atLeastOneEnabled(): Flow<Boolean> =
-        productDao.atLeastOneProductEnabled()
+        productDao.atLeastOneProductEnabled().flowOn(Dispatchers.IO)
 
     override fun samples(): Flow<List<Product>> =
         flowOf(
@@ -124,13 +146,18 @@ internal class ProductRepositoryImpl @Inject constructor(
         )
 
     override suspend fun enableAll() {
-        productDao.setEnabledFlagForAll(enabled = true)
+        withContext(Dispatchers.IO) {
+            productDao.setEnabledFlagForAll(enabled = true)
+        }
     }
 
     override suspend fun disableAll() {
-        productDao.setEnabledFlagForAll(enabled = false)
+        withContext(Dispatchers.IO) {
+            productDao.setEnabledFlagForAll(enabled = false)
+        }
     }
 
     override fun isThereAtLeastOne(): Flow<Boolean> =
         productDao.isThereAtLeastOne()
+            .flowOn(Dispatchers.IO)
 }
