@@ -140,6 +140,7 @@ internal class ProductRepositoryImpl @Inject constructor(
                             keyword = parts.next(),
                         ),
                         enabled = true,
+                        customListId = null,
                     )
                 }
         )

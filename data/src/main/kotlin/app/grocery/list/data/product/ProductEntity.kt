@@ -2,8 +2,10 @@ package app.grocery.list.data.product
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import app.grocery.list.data.internal.db.SqlAffixes
+import app.grocery.list.data.product.list.CustomProductListEntity
 import app.grocery.list.domain.product.EmojiAndKeyword
 import app.grocery.list.domain.product.Product
 import javax.inject.Inject
@@ -11,6 +13,14 @@ import javax.inject.Singleton
 
 @Entity(
     tableName = ProductEntity.Table.NAME,
+    foreignKeys = [
+        ForeignKey(
+            entity = CustomProductListEntity::class,
+            parentColumns = [CustomProductListEntity.Table.Columns.ID],
+            childColumns = [ProductEntity.Table.Columns.FK_CUSTOM_LIST_ID],
+            onDelete = ForeignKey.CASCADE,
+        )
+    ],
 )
 internal class ProductEntity(
 
@@ -32,6 +42,12 @@ internal class ProductEntity(
 
     @ColumnInfo(Table.Columns.NON_FK_CATEGORY_ID)
     val nonFkCategoryId: Int,
+
+    @ColumnInfo(
+        Table.Columns.FK_CUSTOM_LIST_ID,
+        defaultValue = "NULL",
+    )
+    val customListId: Int?,
 ) {
 
     object Table {
@@ -45,6 +61,7 @@ internal class ProductEntity(
             const val KEYWORD = "keyword"
             const val ENABLED = "enabled"
             const val NON_FK_CATEGORY_ID = "non_fk_category_id" // categories are not stored in db
+            const val FK_CUSTOM_LIST_ID = "fk_custom_list_id"
         }
     }
 
@@ -59,6 +76,7 @@ internal class ProductEntity(
                 keyword = product.emojiAndKeyword?.keyword,
                 enabled = product.enabled,
                 nonFkCategoryId = product.categoryId,
+                customListId = product.customListId,
             )
 
         fun toDataEntities(products: List<Product>): List<ProductEntity> =
@@ -83,6 +101,7 @@ internal class ProductEntity(
                 },
                 enabled = entity.enabled,
                 categoryId = entity.nonFkCategoryId,
+                customListId = entity.customListId,
             )
         }
 

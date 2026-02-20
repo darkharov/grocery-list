@@ -179,6 +179,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
             emojiAndKeyword = emoji,
             categoryId = categoryId,
             enabled = enabled,
+            customListId = null,
         )
         viewModelScope.launch {
             productRepository.put(product)

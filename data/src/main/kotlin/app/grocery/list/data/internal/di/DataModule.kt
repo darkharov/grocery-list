@@ -3,7 +3,9 @@ package app.grocery.list.data.internal.di
 import android.content.Context
 import androidx.room.Room
 import app.grocery.list.data.internal.db.AppDatabase
+import app.grocery.list.data.internal.di.migrations.MigrationFrom4To5
 import app.grocery.list.data.product.ProductDao
+import app.grocery.list.data.product.list.CustomProductListDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,6 +26,8 @@ internal class DataModule {
             context.applicationContext,
             AppDatabase::class.java,
             "app_database",
+        ).addMigrations(
+            MigrationFrom4To5,
         ).build()
 
     @Provides
@@ -32,4 +36,11 @@ internal class DataModule {
         appDatabase: AppDatabase,
     ): ProductDao =
         appDatabase.productDao()
+
+    @Provides
+    @Singleton
+    fun customProductListDao(
+        appDatabase: AppDatabase,
+    ): CustomProductListDao =
+        appDatabase.customProductListDao()
 }
