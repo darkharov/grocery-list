@@ -25,7 +25,7 @@ import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppContentToRead
 import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.button.AppButtonNext
-import app.grocery.list.commons.compose.elements.titled.switch_.AppSwitch
+import app.grocery.list.commons.compose.elements.titled.switch_.AppTitledSwitch
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
 
@@ -85,7 +85,7 @@ private fun Content(
                     .padding(horizontal = dimensionResource(R.dimen.margin_16_32_64))
                     .windowInsetsPadding(WindowInsets.navigationBars)
             ) {
-                AppSwitch(
+                AppTitledSwitch(
                     text = StringValue.ResId(R.string.do_not_show_this_screen_again),
                     checked = props.doNotShowAgain,
                     onCheckedChange = { newValue ->

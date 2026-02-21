@@ -25,7 +25,7 @@ import app.grocery.list.commons.compose.AppGradientDirection
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppExplanationImage
 import app.grocery.list.commons.compose.elements.button.icon.AppCloseButton
-import app.grocery.list.commons.compose.elements.titled.switch_.AppSwitch
+import app.grocery.list.commons.compose.elements.titled.switch_.AppTitledSwitch
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.settings.R
@@ -131,7 +131,7 @@ private fun UseIconsOnBottomBarSwitch(
                         .align(Alignment.End)
                 )
             }
-            AppSwitch(
+            AppTitledSwitch(
                 checked = props.checked,
                 text = StringValue.ResId(R.string.use_icons_instead_of_buttons),
                 description = props.strategy.description,
