@@ -36,7 +36,7 @@ import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.commons.compose.values.value
 
 @Composable
-fun AppSwitch(
+fun AppTitledSwitch(
     text: StringValue,
     checked: Boolean?,
     onCheckedChange: (newValue: Boolean) -> Unit,
@@ -115,10 +115,10 @@ fun AppSwitch(
 
 @Composable
 @PreviewLightDark
-private fun AppSwitchPreview() {
+private fun AppTitledSwitchPreview() {
     GroceryListTheme {
         var checked by remember { mutableStateOf(true) }
-        AppSwitch(
+        AppTitledSwitch(
             text = StringValue.StringWrapper("Title"),
             description = StringValue.StringWrapper(LoremIpsum.substring(0, 100)),
             checked = checked,
@@ -133,9 +133,9 @@ private fun AppSwitchPreview() {
 
 @Composable
 @PreviewLightDark
-private fun AppSwitchNullPreview() {
+private fun AppTitledSwitchNullPreview() {
     GroceryListTheme {
-        AppSwitch(
+        AppTitledSwitch(
             text = StringValue.StringWrapper("Title"),
             description = StringValue.StringWrapper(LoremIpsum.substring(0, 100)),
             checked = null,
