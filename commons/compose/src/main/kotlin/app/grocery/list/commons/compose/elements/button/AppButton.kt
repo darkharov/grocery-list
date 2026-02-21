@@ -5,11 +5,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.commons.compose.values.value
@@ -43,10 +44,13 @@ fun AppButton(
     Button(
         onClick = onClick,
         modifier = modifier,
-        shape = MaterialTheme.shapes.small,
+        shape = RoundedCornerShape(8.dp),
         enabled = state.enabled,
         colors = ButtonDefaults.buttonColors(
+            contentColor = Color.Black,
             containerColor = background.toColor(),
+            disabledContainerColor = LocalAppColors.current.inactive1,
+            disabledContentColor = LocalAppColors.current.inactive2,
         ),
     ) {
         Box(
@@ -81,6 +85,7 @@ fun AppButton(
                 Icon(
                     painter = endIcon,
                     contentDescription = null,
+                    tint = Color.Black,
                     modifier = Modifier
                         .padding(start = TrailingElementOffset)
                         .width(TrailingElementSize)

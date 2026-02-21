@@ -16,7 +16,6 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,6 +37,7 @@ import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.elements.button.text.AppTextButton
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialog
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.product.list.preview.ProductListPreviewViewModel.Event
@@ -171,7 +171,7 @@ private fun ListEmptyAndTemplates(
                 for (template in props.templates) {
                     Text(
                         text = "+ ${template.title}",
-                        color = MaterialTheme.colorScheme.secondary,
+                        color = LocalAppColors.current.brand_40,
                         textAlign = TextAlign.Start,
                         modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))

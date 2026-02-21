@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,6 +33,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.faq.R
 
@@ -53,7 +53,7 @@ internal fun FaqItem(
             )
             .border(
                 width = 1.5.dp,
-                color = MaterialTheme.colorScheme.primary,
+                color = LocalAppColors.current.border,
                 shape = shape,
             )
             .clip(shape)

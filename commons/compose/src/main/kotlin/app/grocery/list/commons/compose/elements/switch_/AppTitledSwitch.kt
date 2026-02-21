@@ -1,4 +1,4 @@
-package app.grocery.list.commons.compose.elements.titled.switch_
+package app.grocery.list.commons.compose.elements.switch_
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,9 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,10 +26,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import app.grocery.list.commons.compose.elements.AppCircularProgressIndicator
 import app.grocery.list.commons.compose.elements.LoremIpsum
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
-import app.grocery.list.commons.compose.theme.blackOrWhite
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.commons.compose.values.value
 
@@ -59,7 +58,7 @@ fun AppTitledSwitch(
                 }
                 .border(
                     width = strokeWidth,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = LocalAppColors.current.border,
                     shape = shape,
                 )
                 .padding(vertical = 8.dp)
@@ -69,9 +68,7 @@ fun AppTitledSwitch(
             Text(
                 text = text.value(),
                 fontSize = 13.sp,
-                color = MaterialTheme
-                    .colorScheme
-                    .blackOrWhite,
+                color = LocalAppColors.current.blackOrWhite,
                 modifier = Modifier
                     .weight(1f),
             )
@@ -82,14 +79,14 @@ fun AppTitledSwitch(
             val height = 32.dp
             Box {
                 if (checked == null) {
-                    CircularProgressIndicator(
+                    AppCircularProgressIndicator(
                         modifier = Modifier
                             .size(height)
                             .padding(4.dp),
                         strokeWidth = strokeWidth,
                     )
                 } else {
-                    Switch(
+                    AppSwitch(
                         checked = checked,
                         onCheckedChange = null,
                         modifier = Modifier
@@ -105,7 +102,7 @@ fun AppTitledSwitch(
                     .fillMaxWidth()
                     .padding(top = 4.dp)
                     .padding(horizontal = 16.dp),
-                color = MaterialTheme.colorScheme.blackOrWhite,
+                color = LocalAppColors.current.blackOrWhite,
                 textAlign = TextAlign.Center,
                 style = LocalAppTypography.current.explanation,
             )
@@ -126,7 +123,7 @@ private fun AppTitledSwitchPreview() {
                 checked = newValue
             },
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.background),
+                .background(LocalAppColors.current.background),
         )
     }
 }
@@ -141,7 +138,7 @@ private fun AppTitledSwitchNullPreview() {
             checked = null,
             onCheckedChange = {},
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.background),
+                .background(LocalAppColors.current.background),
         )
     }
 }

@@ -5,8 +5,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 
 @Composable
 fun AppTitledCheckbox(
@@ -24,10 +26,9 @@ fun AppTitledCheckbox(
     onCheckedChange: (newValue: Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val shape = MaterialTheme.shapes.small
     Box(
         modifier = modifier
-            .clip(shape)
+            .clip(RoundedCornerShape(8.dp))
             .clickable {
                 onCheckedChange(!(checked))
             }
@@ -45,6 +46,9 @@ fun AppTitledCheckbox(
         Checkbox(
             checked = checked,
             onCheckedChange = null,
+            colors = CheckboxDefaults.colors(
+                checkedColor = LocalAppColors.current.brand_60_50,
+            ),
             modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .requiredSize(checkboxSize),
@@ -61,7 +65,7 @@ private fun AppTitledCheckboxPreview() {
             checked = true,
             onCheckedChange = {},
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
+                .background(LocalAppColors.current.background)
                 .padding(16.dp),
         )
     }

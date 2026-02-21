@@ -3,13 +3,10 @@ package app.grocery.list.product.input.form.elements.category.picker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,8 +21,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import app.grocery.list.commons.compose.elements.AppDropdownMenuItem
 import app.grocery.list.commons.compose.elements.AppTextField
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.product.input.form.R
 
@@ -79,21 +78,16 @@ internal fun CategoryPicker(
                 )
             },
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.background),
+                .background(LocalAppColors.current.background),
         ) {
             for (category in props.items) {
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = category.title,
-                        )
-                    },
+                AppDropdownMenuItem(
+                    text = category.title,
                     onClick = {
                         callbacks.onCategorySelected(
                             categoryId = category.id,
                         )
-                    },
-                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                    }
                 )
             }
         }

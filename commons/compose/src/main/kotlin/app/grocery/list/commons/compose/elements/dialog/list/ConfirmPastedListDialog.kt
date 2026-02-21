@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,6 +26,7 @@ import app.grocery.list.commons.compose.elements.dialog.APP_DIALOG_PADDING
 import app.grocery.list.commons.compose.elements.dialog.AppBaseDialog
 import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
 
@@ -52,13 +52,13 @@ fun ConfirmPastedListDialog(
                     .fillMaxWidth()
                     .drawGradient(
                         direction = AppGradientDirection.Upward,
-                        color = MaterialTheme.colorScheme.surface,
+                        color = LocalAppColors.current.brand_80_20,
                         height = offset,
                         visible = state.canScrollForward,
                     )
                     .drawGradient(
                         direction = AppGradientDirection.Downward,
-                        color = MaterialTheme.colorScheme.surface,
+                        color = LocalAppColors.current.brand_80_20,
                         height = offset,
                         visible = state.canScrollBackward,
                     )

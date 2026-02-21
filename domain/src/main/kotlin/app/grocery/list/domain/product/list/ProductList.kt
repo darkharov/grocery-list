@@ -13,4 +13,9 @@ sealed class ProductList {
             val title: String,
         )
     }
+
+    data class Summary(
+        val itemCount: Int,
+        val stub: String,
+    )
 }

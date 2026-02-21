@@ -19,8 +19,6 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,8 +41,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import app.grocery.list.commons.compose.elements.AppPreloader
+import app.grocery.list.commons.compose.elements.AppRadioButton
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.settings.R
 
@@ -178,9 +178,8 @@ private fun Option(
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        RadioButton(
+        AppRadioButton(
             selected = selected,
-            onClick = null, // copied from https://developer.android.com/develop/ui/compose/components/radio-button#create-basic
         )
         Text(
             text = stringResource(option.titleId),
@@ -196,7 +195,7 @@ private fun SampleNotification(
     modifier: Modifier = Modifier,
 ) {
     val borderWidth = 2.dp
-    val color = MaterialTheme.colorScheme.primary
+    val color = LocalAppColors.current.brand_60_50
     val innerPadding = 12.dp
     Row(
         modifier = modifier

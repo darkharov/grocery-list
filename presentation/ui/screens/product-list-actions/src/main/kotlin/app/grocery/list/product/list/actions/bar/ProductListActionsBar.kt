@@ -1,11 +1,9 @@
 package app.grocery.list.product.list.actions.bar
 
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -76,7 +74,7 @@ internal fun ProductListActionsBar(
 }
 
 @Composable
-@PreviewLightDark
+@Preview
 private fun ProductListActionsBarPreview(
     @PreviewParameter(
         provider = ProductListActionsMocks::class,
@@ -84,14 +82,10 @@ private fun ProductListActionsBarPreview(
     props: ProductListActionsProps,
 ) {
     GroceryListTheme {
-        Surface(
-            color = MaterialTheme.colorScheme.background,
-        ) {
-            ProductListActionsBar(
-                props = props,
-                callbacks = ProductListActionsCallbacksMock,
-                modifier = Modifier,
-            )
-        }
+        ProductListActionsBar(
+            props = props,
+            callbacks = ProductListActionsCallbacksMock,
+            modifier = Modifier,
+        )
     }
 }

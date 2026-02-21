@@ -14,24 +14,25 @@ import javax.inject.Singleton
 fun GroceryListTheme(
     content: @Composable () -> Unit,
 ) {
-    val colorScheme = when {
-        isSystemInDarkTheme() -> DarkColorScheme
-        else -> LightColorScheme
+    val colors = if (isSystemInDarkTheme()) {
+        DarkColors
+    } else {
+        LightColors
     }
-    MaterialTheme(
-        colorScheme = colorScheme,
-        content = {
-            CompositionLocalProvider(LocalTextStyle provides LocalAppTypography.current.plainText) {
-                content()
-            }
-        },
-    )
+    MaterialTheme {
+        CompositionLocalProvider(
+            LocalTextStyle provides LocalAppTypography.current.plainText,
+            LocalAppColors provides colors,
+        ) {
+            content()
+        }
+    }
 }
 
 @Composable
 private fun GroceryListTheme(
     toolbarEmojiProvider: ToolbarEmojiProvider,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
         LocalToolbarEmojiProvider provides toolbarEmojiProvider,
@@ -46,7 +47,7 @@ class ThemeUtil @Inject constructor(
 ) {
     @Composable
     fun GroceryListTheme(
-        content: @Composable () -> Unit
+        content: @Composable () -> Unit,
     ) {
         GroceryListTheme(
             toolbarEmojiProvider = emojiProvider,

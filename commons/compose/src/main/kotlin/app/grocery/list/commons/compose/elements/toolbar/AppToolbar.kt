@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,6 +47,7 @@ import androidx.compose.ui.unit.times
 import app.grocery.list.commons.compose.LocalToolbarEmojiProvider
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 
 private val CounterPaddingSp = 4.sp
@@ -70,7 +70,7 @@ fun AppToolbar(
     ) { emojiWidth ->
         BoxWithConstraints(
             modifier = modifier
-                .background(MaterialTheme.colorScheme.inverseSurface)
+                .background(LocalAppColors.current.brand_70_30)
                 .windowInsetsPadding(
                     WindowInsets
                         .systemBars
@@ -125,7 +125,7 @@ fun AppToolbar(
                         .widthIn(
                             max = titleMaxWidth,
                         ),
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = LocalAppColors.current.blackOrWhite,
                     textAlign = TextAlign.Center,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
@@ -155,7 +155,7 @@ fun AppToolbar(
             }
             if (props.progress) {
                 LinearProgressIndicator(
-                    color = MaterialTheme.colorScheme.inverseOnSurface,
+                    color = LocalAppColors.current.brand_00_50,
                     trackColor = Color.Transparent,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -211,7 +211,7 @@ private fun Emoji(
     Text(
         text = emoji,
         modifier = modifier,
-        color = MaterialTheme.colorScheme.onSurface,
+        color = LocalAppColors.current.blackOrWhite,
         style = LocalAppTypography.current.toolbarTitle,
     )
 }
