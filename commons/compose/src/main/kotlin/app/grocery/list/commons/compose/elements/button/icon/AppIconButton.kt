@@ -6,8 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,11 +18,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.R
+import app.grocery.list.commons.compose.elements.AppCircularProgressIndicator
 import app.grocery.list.commons.compose.elements.button.AppButtonStateMocks
 import app.grocery.list.commons.compose.elements.button.AppButtonStateProps
 import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
-import app.grocery.list.commons.compose.theme.blackOrWhite
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.commons.compose.values.value
 
@@ -70,7 +69,7 @@ private fun Content(
     onClick: () -> Unit,
 ) {
     if (state == AppButtonStateProps.Loading) {
-        CircularProgressIndicator(
+        AppCircularProgressIndicator(
             modifier = modifier
                 .requiredSize(
                     size = type.size,
@@ -92,9 +91,7 @@ private fun Content(
                 .padding(type.padding),
             colorFilter = ColorFilter
                 .tint(
-                    color = MaterialTheme
-                        .colorScheme
-                        .blackOrWhite
+                    color = LocalAppColors.current.blackOrWhite
                         .copy(
                             alpha = if (state.enabled) {
                                 1f
@@ -139,7 +136,7 @@ private fun AppIconButtonPreview(
             onClick = {},
             state = state,
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
+                .background(LocalAppColors.current.background)
                 .padding(12.dp),
         )
     }

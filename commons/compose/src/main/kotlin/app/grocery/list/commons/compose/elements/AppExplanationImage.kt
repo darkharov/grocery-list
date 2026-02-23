@@ -4,7 +4,6 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,6 +18,7 @@ import app.grocery.list.commons.compose.AppGradientDirection
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.drawGradient
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import kotlin.math.min
 
 @Composable
@@ -38,13 +38,13 @@ fun AppExplanationImage(
         painter = painterResource(imageId),
         contentDescription = null,
         colorFilter = ColorFilter.tint(
-            MaterialTheme.colorScheme.primary,
+            LocalAppColors.current.brand_60_50,
         ),
         modifier = modifier
             .width(width)
             .drawGradient(
                 direction = direction,
-                color = MaterialTheme.colorScheme.background,
+                color = LocalAppColors.current.background,
                 height = gradientHeight,
             ),
     )

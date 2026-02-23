@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,6 +29,7 @@ import app.grocery.list.commons.compose.elements.AppContentToRead
 import app.grocery.list.commons.compose.elements.dialog.AppSimpleDialog
 import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.final_.steps.FinalStepsViewModel.Event
@@ -108,6 +107,7 @@ private fun Item(text: String) {
         )
         Text(
             text = text,
+            color = LocalAppColors.current.blackOrWhite,
             style = LocalAppTypography.current.plainText,
         )
     }
@@ -153,7 +153,7 @@ private fun BulletOrOffset(
     Text(
         text = "•",
         fontWeight = FontWeight.Bold,
-        color = MaterialTheme.colorScheme.primary,
+        color = LocalAppColors.current.brand_60_50,
         style = LocalAppTypography.current.plainText,
         modifier = Modifier
             .alpha(
@@ -177,11 +177,8 @@ private fun BulletOrOffset(
 @Composable
 private fun FinalStepsPreview() {
     GroceryListTheme {
-        Scaffold { padding ->
-            FinalSteps(
-                modifier = Modifier
-                    .padding(padding),
-            )
-        }
+        FinalSteps(
+            modifier = Modifier,
+        )
     }
 }

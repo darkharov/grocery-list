@@ -25,7 +25,7 @@ import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppContentToRead
 import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.button.AppButtonNext
-import app.grocery.list.commons.compose.elements.titled.switch_.AppTitledSwitch
+import app.grocery.list.commons.compose.elements.switch_.AppTitledSwitch
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
 

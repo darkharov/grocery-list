@@ -13,12 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 
 @Composable
@@ -114,6 +114,7 @@ private fun Main(
             )
             Text(
                 text = title,
+                color = LocalAppColors.current.blackOrWhite,
                 style = LocalAppTypography.current.header,
                 modifier = Modifier,
             )
@@ -141,28 +142,30 @@ private fun AppContentToReadPreview(
     text: String,
 ) {
     GroceryListTheme {
-        Scaffold { padding ->
-            AppContentToRead(
-                modifier = Modifier
-                    .padding(padding),
-                content = {
-                    Text(text = text)
-                },
-                title = "Title",
-                imageId = R.drawable.ic_android_200,
-                footer = {
-                    Text(
-                        text = "Footer",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.primary)
-                            .padding(24.dp),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp
-                    )
-                },
-            )
-        }
+        AppContentToRead(
+            modifier = Modifier
+                .background(LocalAppColors.current.background),
+            content = {
+                Text(
+                    text = text,
+                    color = LocalAppColors.current.blackOrWhite,
+                )
+            },
+            title = "Title",
+            imageId = R.drawable.ic_android_200,
+            footer = {
+                Text(
+                    text = "Footer",
+                    color = Color.Black,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(LocalAppColors.current.brand_60_50)
+                        .padding(24.dp),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp
+                )
+            },
+        )
     }
 }
 

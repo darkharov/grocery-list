@@ -1,13 +1,12 @@
 package app.grocery.list.commons.compose.elements
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -24,6 +23,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.commons.compose.values.value
@@ -118,22 +118,28 @@ private fun AppPlaceholder(placeholder: StringValue) {
         text = placeholder.value(),
         style = LocalAppTypography.current.plainText,
         modifier = Modifier
-            .alpha(0.2f),
+            .alpha(0.5f),
     )
 }
 
 @Composable
 private fun appTextFieldColors() =
     TextFieldDefaults.colors(
-        focusedLabelColor = if (isSystemInDarkTheme()) {
-            MaterialTheme.colorScheme.primary
-        } else {
-            MaterialTheme.colorScheme.secondary
-        },
+        focusedLabelColor = LocalAppColors.current.brand_40_50,
         focusedContainerColor = Color.Transparent,
         unfocusedContainerColor = Color.Transparent,
         disabledContainerColor = Color.Transparent,
         errorContainerColor = Color.Transparent,
+        focusedIndicatorColor = LocalAppColors.current.brand_40_50,
+        cursorColor = LocalAppColors.current.brand_40_50,
+        focusedTextColor = LocalAppColors.current.blackOrWhite,
+        unfocusedTextColor = LocalAppColors.current.blackOrWhite,
+        unfocusedIndicatorColor = LocalAppColors.current.inactive3,
+        unfocusedLabelColor = LocalAppColors.current.inactive3,
+        selectionColors = TextSelectionColors(
+            handleColor = LocalAppColors.current.brand_40_50,
+            backgroundColor = LocalAppColors.current.brand_40_50.copy(alpha = 0.33f),
+        ),
     )
 
 @PreviewLightDark
@@ -141,7 +147,7 @@ private fun appTextFieldColors() =
 private fun AppTextFieldPreview() {
     GroceryListTheme {
         Surface(
-            color = MaterialTheme.colorScheme.background,
+            color = LocalAppColors.current.background,
         ) {
             AppTextField(
                 value = "Text",
@@ -160,7 +166,7 @@ private fun AppTextFieldPreview() {
 private fun EmptyAppTextFieldPreview() {
     GroceryListTheme {
         Surface(
-            color = MaterialTheme.colorScheme.background,
+            color = LocalAppColors.current.background,
         ) {
             var text by remember { mutableStateOf("") }
             AppTextField(

@@ -9,11 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,12 +20,14 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.elements.AppSwipeToDismissBox
+import app.grocery.list.commons.compose.elements.switch_.AppSwitch
 import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.product.list.preview.ProductListPreviewProps
 import app.grocery.list.product.list.preview.R
 
@@ -117,7 +116,7 @@ private fun Content(
     val checked = product.enabled
     Row(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
+            .background(LocalAppColors.current.background)
             .padding(
                 horizontal = horizontalPadding,
             ),
@@ -127,12 +126,13 @@ private fun Content(
             text = product.title,
             modifier = Modifier
                 .weight(1f),
+            color = LocalAppColors.current.blackOrWhite,
         )
         Spacer(
             modifier = Modifier
                 .padding(8.dp),
         )
-        Switch(
+        AppSwitch(
             checked = checked,
             onCheckedChange = { newValue ->
                 callbacks.onProductEnabledChange(
@@ -145,20 +145,17 @@ private fun Content(
 }
 
 @Composable
-@PreviewLightDark
+@Preview
 private fun ProductItemPreview() {
     GroceryListTheme {
-        Scaffold { padding ->
-            ProductItem(
-                product = ProductListPreviewProps.Items.Product(
-                    id = 1,
-                    title = AnnotatedString("🍅 Tomato"),
-                    enabled = true,
-                ),
-                callbacks = ProductItemCallbacksMock,
-                modifier = Modifier
-                    .padding(padding),
-            )
-        }
+        ProductItem(
+            product = ProductListPreviewProps.Items.Product(
+                id = 1,
+                title = AnnotatedString("🍅 Tomato"),
+                enabled = true,
+            ),
+            callbacks = ProductItemCallbacksMock,
+            modifier = Modifier,
+        )
     }
 }

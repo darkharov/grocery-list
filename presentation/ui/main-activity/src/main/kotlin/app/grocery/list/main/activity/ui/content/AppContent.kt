@@ -36,6 +36,7 @@ import app.grocery.list.commons.compose.elements.toolbar.AppToolbar
 import app.grocery.list.commons.compose.elements.toolbar.AppToolbarProps
 import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.faq.FaqScreen
 import app.grocery.list.final_.steps.FinalStepsScreen
@@ -84,6 +85,8 @@ internal fun AppContent(
 
     Scaffold(
         modifier = modifier,
+        containerColor = LocalAppColors.current.background,
+        contentColor = LocalAppColors.current.blackOrWhite,
         contentWindowInsets = WindowInsets(0.dp),
         topBar = {
             AppToolbar(

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,6 +21,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 
 internal val IconSize = 48.dp
 internal val IconInnerPadding = 12.dp
@@ -59,7 +59,7 @@ internal fun AppToolbarIconOrSpace(
                 painter = painterResource(props.iconId),
                 contentDescription = stringResource(props.descriptionId),
                 colorFilter = ColorFilter.tint(
-                    MaterialTheme.colorScheme.onSurface,
+                    LocalAppColors.current.blackOrWhite,
                 ),
                 modifier = Modifier
                     .clip(CircleShape)

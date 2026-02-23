@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.commons.compose.values.value
 
@@ -54,6 +55,7 @@ fun AppBaseDialog(
                     max = 560.dp,
                 ),
             shape = MaterialTheme.shapes.large,
+            color = LocalAppColors.current.brand_80_20,
             tonalElevation = AlertDialogDefaults.TonalElevation,
         ) {
             Column(
@@ -66,7 +68,7 @@ fun AppBaseDialog(
                     Icon(
                         painter = icon,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.secondary,
+                        tint = LocalAppColors.current.brand_40_40,
                         modifier = Modifier
                             .size(24.dp)
                             .align(Alignment.CenterHorizontally),
@@ -78,6 +80,7 @@ fun AppBaseDialog(
                 )
                 Text(
                     text = text.value(),
+                    color = LocalAppColors.current.blackOrWhite,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally),

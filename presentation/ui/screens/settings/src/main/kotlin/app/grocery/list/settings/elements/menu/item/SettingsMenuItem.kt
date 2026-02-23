@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,8 +22,8 @@ import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.elements.AppHorizontalDivider
 import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
-import app.grocery.list.commons.compose.theme.blackOrWhite
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.commons.compose.values.value
 
@@ -52,7 +51,7 @@ internal fun SettingsMenuItem(
             Icon(
                 painter = leadingIcon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.secondary,
+                tint = LocalAppColors.current.brand_40_40,
             )
             Spacer(
                 modifier = Modifier
@@ -60,8 +59,8 @@ internal fun SettingsMenuItem(
             )
             Text(
                 text = text.value(),
-                color = MaterialTheme
-                    .colorScheme
+                color = LocalAppColors
+                    .current
                     .blackOrWhite
                     .copy(alpha = 0.88f),
                 textAlign = TextAlign.Start,
@@ -72,7 +71,7 @@ internal fun SettingsMenuItem(
             Icon(
                 painter = rememberVectorPainter(AppIcons.arrowForward),
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.blackOrWhite,
+                tint = LocalAppColors.current.blackOrWhite,
                 modifier = Modifier
                     .size(16.dp),
             )
