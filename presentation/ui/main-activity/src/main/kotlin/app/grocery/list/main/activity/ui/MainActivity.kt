@@ -9,7 +9,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -59,16 +58,12 @@ class MainActivity :
 
     private fun setupContent() {
         setContent {
-            val numberOfEnabledProducts by viewModel.numberOfEnabledProducts.collectAsState()
-            val progress by viewModel.progress.collectAsState()
-            val hasEmojiIfEnoughSpace by viewModel.hasEmojiIfEnoughSpace.collectAsState()
+            val toolbarProps by viewModel.toolbarProps.collectAsStateWithLifecycle()
             val dialog by viewModel.dialog().collectAsStateWithLifecycle()
             themeUtil.GroceryListTheme {
                 AppContent(
+                    toolbarProps = toolbarProps,
                     backStack = viewModel.backStack,
-                    numberOfEnabledProducts = numberOfEnabledProducts,
-                    progress = progress,
-                    hasEmojiIfEnoughSpace = hasEmojiIfEnoughSpace,
                     dialog = dialog,
                     contract = viewModel,
                 )

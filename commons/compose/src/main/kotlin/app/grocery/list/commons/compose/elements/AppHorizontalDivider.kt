@@ -26,6 +26,7 @@ import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.elements.AppHorizontalDividerMode.Shadow.Downward
 import app.grocery.list.commons.compose.elements.AppHorizontalDividerMode.Shadow.Upward
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 
 private val colors = listOf(
     Color.Transparent,
@@ -153,7 +154,7 @@ private fun NativeDivider(modifier: Modifier) {
     HorizontalDivider(
         modifier = modifier,
         thickness = 1.dp,
-        color = Color.Gray.copy(alpha = 0.2f),
+        color = LocalAppColors.current.brand_30_40.copy(alpha = 0.1f),
     )
 }
 

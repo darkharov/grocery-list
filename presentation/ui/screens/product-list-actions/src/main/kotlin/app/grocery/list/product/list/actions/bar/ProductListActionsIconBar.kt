@@ -15,7 +15,6 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.elements.AppBottomBarContainer
-import app.grocery.list.commons.compose.elements.button.AppButtonStateProps
 import app.grocery.list.commons.compose.elements.button.icon.AppIconButton
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
@@ -50,18 +49,15 @@ internal fun ProductListActionsIconBar(
             onClick = {
                 callbacks.onAttemptToClearList()
             },
-            state = AppButtonStateProps.enabled(props.clearListAvailable),
+            state = props.listActionButtonsState,
         )
         AppIconButton(
             painter = rememberVectorPainter(Icons.Outlined.ShoppingCart),
             contentDescription = StringValue.ResId(R.string.i_am_at_shop),
             onClick = {
-                callbacks.onAttemptToStartShopping(
-                    atLeastOneProductEnabled = props.atLeastOneProductEnabled,
-                    numberOfProducts = props.numberOfProducts,
-                )
+                callbacks.onAttemptToStartShopping()
             },
-            state = AppButtonStateProps.enabled(props.shoppingAvailable),
+            state = props.listActionButtonsState,
         )
         AppIconButton(
             painter = rememberVectorPainter(Icons.Outlined.Share),
@@ -69,7 +65,7 @@ internal fun ProductListActionsIconBar(
             onClick = {
                 callbacks.onAttemptToShareCurrentList()
             },
-            state = props.shareButtonState,
+            state = props.listActionButtonsState,
         )
         AppIconButton(
             painter = rememberVectorPainter(Icons.Outlined.ContentPaste),

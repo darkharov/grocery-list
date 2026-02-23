@@ -1,11 +1,9 @@
 package app.grocery.list.final_.steps
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,18 +12,17 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppContentToRead
+import app.grocery.list.commons.compose.elements.button.text.AppUnderlinedTextButton
 import app.grocery.list.commons.compose.elements.dialog.AppSimpleDialog
 import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
@@ -127,18 +124,9 @@ private fun ClickableLabel(
         BulletOrOffset(
             isBullet = false,
         )
-        Text(
-            text = text,
-            style = LocalAppTypography.current.plainText,
-            textDecoration = TextDecoration.Underline,
-            modifier = Modifier
-                .clip(RoundedCornerShape(8.dp))
-                .clickable { onClick() }
-                .padding(horizontal = BulletOffset)
-                .padding(
-                    top = 6.dp,
-                    bottom = 12.dp,
-                ),
+        AppUnderlinedTextButton(
+            text = StringValue.StringWrapper(text),
+            onClick = onClick,
         )
         BulletOrOffset(
             isBullet = false,

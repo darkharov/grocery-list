@@ -1,16 +1,13 @@
 package app.grocery.list.product.input.form
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
@@ -26,7 +23,7 @@ import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -35,10 +32,11 @@ import app.grocery.list.commons.compose.KeyboardOnComposition
 import app.grocery.list.commons.compose.elements.AppAddAndDoneButtonPanel
 import app.grocery.list.commons.compose.elements.AppTextField
 import app.grocery.list.commons.compose.elements.button.AppButtonStateProps
+import app.grocery.list.commons.compose.elements.dropdown.menu.AppDropdownMenu
+import app.grocery.list.commons.compose.elements.dropdown.menu.AppDropdownMenuMocks
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.values.StringValue
-import app.grocery.list.product.input.form.elements.category.picker.CategoryPicker
-import app.grocery.list.product.input.form.elements.category.picker.CategoryPickerProps
 
 @Composable
 fun ProductInputFormScreen(
@@ -98,7 +96,7 @@ private fun EventConsumer(
             ProductInputFormViewModel.Event.CategoryNotSpecified -> {
                 categoryFocusRequester.requestFocus()
             }
-            ProductInputFormViewModel.Event.CategoryExplicitlySelected -> {
+            ProductInputFormViewModel.Event.FocusOnTitle -> {
                 titleFocusRequester.requestFocus()
                 softwareKeyboardController?.show()
             }
@@ -118,11 +116,7 @@ internal fun Content(
     val horizontalOffset = dimensionResource(R.dimen.margin_16_32_64)
     Column(
         modifier = modifier
-            .windowInsetsPadding(
-                WindowInsets
-                    .systemBars
-                    .only(WindowInsetsSides.Bottom)
-            )
+            .fillMaxSize()
             .padding(
                 horizontal = horizontalOffset,
             ),
@@ -138,10 +132,24 @@ internal fun Content(
             callbacks = callbacks,
             titleFocusRequester = titleFocusRequester,
         )
-        CategoryPicker(
-            props = props.categoryPicker,
-            callbacks = callbacks,
+        AppDropdownMenu(
+            props = props.categoriesDropdown,
+            onExpandedChange = { newValue ->
+                callbacks.onCategoriesExpandedChange(newValue)
+            },
+            onSelectionChange = { item ->
+                callbacks.onCategorySelected(item)
+            },
             focusRequester = categoryFocusRequester,
+        )
+        AppDropdownMenu(
+            props = props.productListsDropdown,
+            onExpandedChange = { newValue ->
+                callbacks.onProductListsExpandedChange(newValue)
+            },
+            onSelectionChange = { item ->
+                callbacks.onProductListSelected(item)
+            },
         )
         Spacer(
             modifier = Modifier
@@ -157,7 +165,10 @@ internal fun Content(
                 )
             },
             onDoneClick = {
-                callbacks.onComplete()
+                callbacks.onDone(
+                    productTitle = title.text.toString(),
+                    props = props,
+                )
             },
         )
     }
@@ -212,31 +223,7 @@ private fun TitleAndEmoji(
     }
 }
 
-@Preview
-@Composable
-private fun ProductInputScreenInitialStatePreview() {
-    GroceryListTheme {
-        Content(
-            title = TextFieldState(),
-            props = ProductInputFormProps(
-                productId = 1,
-                emoji = EmojiProps(
-                    value = "🍎",
-                ),
-                categoryPicker = CategoryPickerProps(),
-                enabled = true,
-                addButtonState = AppButtonStateProps.Normal,
-                doneButtonState = AppButtonStateProps.Disabled,
-            ),
-            callbacks = ProductInputFormCallbacksMock,
-            titleFocusRequester = remember { FocusRequester() },
-            categoryFocusRequester = remember { FocusRequester() },
-            modifier = Modifier,
-        )
-    }
-}
-
-@Preview
+@PreviewLightDark
 @Composable
 private fun ProductInputScreenPreview() {
     GroceryListTheme {
@@ -247,15 +234,16 @@ private fun ProductInputScreenPreview() {
                 emoji = EmojiProps(
                     value = "🍎",
                 ),
-                categoryPicker = CategoryPickerProps(),
+                categoriesDropdown = AppDropdownMenuMocks.prototype,
                 enabled = true,
                 addButtonState = AppButtonStateProps.Normal,
-                doneButtonState = AppButtonStateProps.Gone,
+                doneButtonState = AppButtonStateProps.Disabled,
             ),
             callbacks = ProductInputFormCallbacksMock,
             titleFocusRequester = remember { FocusRequester() },
             categoryFocusRequester = remember { FocusRequester() },
-            modifier = Modifier,
+            modifier = Modifier
+                .background(LocalAppColors.current.background),
         )
     }
 }

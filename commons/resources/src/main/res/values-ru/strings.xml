@@ -32,6 +32,7 @@
     <string name="delete">Удалить</string>
     <string name="next">Далее</string>
     <string name="list_is_empty">Список пуст…</string>
+    <string name="template_no_products_in_custom_list_yet">В списке \'%s\' пока нет товаров…</string>
     <string name="ceaser_salad_with_chicken">Салат \"Цезарь\" с курицей</string>
     <string name="greek_salad">Салат Греческий</string>
     <string name="berries_fruits_and_honey">Ягоды, фрукты и мёд</string>
@@ -71,6 +72,17 @@
     <string name="privacy_policy">Политика конфиденциальности</string>
     <string name="browser_app_not_found">Приложение браузера к сожалению не найдено</string>
     <string name="all_lists">Все списки</string>
+    <string name="need_more_lists">Нужно больше списков?</string>
+    <string name="additional_lists">Дополнительные списки</string>
+    <string name="enable_multiple_lists">Включить возможность использовать несколько списков</string>
+    <string name="multiple_lists_icon_explanation">Чтобы переключаться между списками, используйте иконку в левом верхнем углу на начальном экране приложения</string>
+    <string name="default_list">Список по умолчанию</string>
+    <string name="add_another_one">Добавить ещё один</string>
+    <string name="product_list_picker_item_empty">(пуст)</string>
+    <string name="product_list">Список продуктов</string>
+    <string name="new_product_list">Новый список</string>
+    <string name="product_list_title">Название списка</string>
+    <string name="color_scheme">Цветовая схема</string>
 
     <string-array name="final_steps">
         <item>Заблокируйте экран</item>

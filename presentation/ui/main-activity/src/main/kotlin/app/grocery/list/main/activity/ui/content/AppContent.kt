@@ -26,7 +26,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
-import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
@@ -38,6 +37,9 @@ import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.values.StringValue
+import app.grocery.list.custom.product.lists.input.form.CustomListInputFormScreen
+import app.grocery.list.custom.product.lists.picker.ProductListPickerScreen
+import app.grocery.list.custom.product.lists.settings.CustomListsSettingsScreen
 import app.grocery.list.faq.FaqScreen
 import app.grocery.list.final_.steps.FinalStepsScreen
 import app.grocery.list.main.activity.R
@@ -53,10 +55,8 @@ import app.grocery.list.settings.child.screens.use.icons.on.bottom.bar.switch_.U
 
 @Composable
 internal fun AppContent(
-    backStack: List<NavKey>,
-    numberOfEnabledProducts: Int?,
-    progress: Boolean,
-    hasEmojiIfEnoughSpace: Boolean,
+    toolbarProps: AppToolbarProps,
+    backStack: List<AppNavKey>,
     dialog: AppLevelDialog?,
     contract: AppContentContract,
     modifier: Modifier = Modifier,
@@ -90,16 +90,7 @@ internal fun AppContent(
         contentWindowInsets = WindowInsets(0.dp),
         topBar = {
             AppToolbar(
-                props = AppToolbarProps(
-                    content = ToolbarContentUtil
-                        .customContentOrNull(navKey = backStack.last())
-                        ?: AppToolbarProps.Content.Default(
-                            counter = numberOfEnabledProducts,
-                            isOnStart = backStack.size == 1,
-                            hasEmojiIfEnoughSpace = hasEmojiIfEnoughSpace,
-                        ),
-                    progress = progress,
-                ),
+                props = toolbarProps,
                 callbacks = contract,
             )
         },
@@ -203,6 +194,20 @@ internal fun AppContent(
                 entry<Faq> {
                     FaqScreen()
                 }
+                entry<ProductListPicker> {
+                    ProductListPickerScreen(
+                        contract = contract,
+                    )
+                }
+                entry<CustomListsSettings> {
+                    CustomListsSettingsScreen()
+                }
+                entry<CustomListInputForm> { screenKey ->
+                    CustomListInputFormScreen(
+                        contract = contract,
+                        customListId = screenKey.customListId,
+                    )
+                }
             },
         )
     }
@@ -235,12 +240,10 @@ internal fun AppContent(
 private fun AppContentPreview() {
     GroceryListTheme {
         AppContent(
-            numberOfEnabledProducts = 42,
-            progress = false,
-            hasEmojiIfEnoughSpace = true,
+            toolbarProps = AppToolbarProps(),
+            backStack = remember { mutableListOf(ProductListPreview) },
             dialog = null,
             contract = AppContentContractMock,
-            backStack = remember { mutableListOf(ProductListPreview) },
         )
     }
 }

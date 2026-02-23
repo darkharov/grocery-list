@@ -33,7 +33,6 @@ import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.layout.SubcomposeMeasureScope
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -49,6 +48,7 @@ import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
+import app.grocery.list.commons.compose.values.value
 
 private val CounterPaddingSp = 4.sp
 private val CounterSizeSp = 32.sp
@@ -94,7 +94,7 @@ fun AppToolbar(
                 horizontalArrangement = Arrangement.Center,
             ) {
                 AppToolbarIconOrSpace(
-                    props = props.leadingIcon,
+                    props = props.icons.leading,
                     callbacks = callbacks,
                 )
                 Spacer(
@@ -105,7 +105,7 @@ fun AppToolbar(
                     modifier = Modifier
                         .width(sideItemOffset - emojiWithOffsetWidth),
                 )
-                if (props.hasEmojiIfEnoughSpace && !(shouldEmojiBeSkipped)) {
+                if (props.mightHaveEmoji && !(shouldEmojiBeSkipped)) {
                     Emoji(
                         emoji = emoji,
                     )
@@ -120,7 +120,7 @@ fun AppToolbar(
                         .width(emojiTitleOffset),
                 )
                 Text(
-                    text = stringResource(props.titleId),
+                    text = props.title.value(),
                     modifier = Modifier
                         .widthIn(
                             max = titleMaxWidth,
@@ -149,7 +149,7 @@ fun AppToolbar(
                         .weight(1f),
                 )
                 AppToolbarIconOrSpace(
-                    props = props.trailingIcon,
+                    props = props.icons.trailing,
                     callbacks = callbacks,
                 )
             }

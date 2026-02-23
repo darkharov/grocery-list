@@ -13,6 +13,8 @@ internal interface ProductListPreviewCallbacks :
     fun onEnableAll()
     fun onDisableEnableAll()
     fun onTemplateClick(template: ProductListPreviewProps.Empty.Template)
+    fun onNeedMoreListsClick()
+    fun onNeedMoreListsClose()
 }
 
 internal object ProductListPreviewCallbacksMock :
@@ -22,4 +24,6 @@ internal object ProductListPreviewCallbacksMock :
     override fun onEnableAll() {}
     override fun onDisableEnableAll() {}
     override fun onTemplateClick(template: ProductListPreviewProps.Empty.Template) {}
+    override fun onNeedMoreListsClick() {}
+    override fun onNeedMoreListsClose() {}
 }

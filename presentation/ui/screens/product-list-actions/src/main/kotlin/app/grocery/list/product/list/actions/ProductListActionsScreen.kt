@@ -26,7 +26,6 @@ import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.elements.button.AppButton
 import app.grocery.list.commons.compose.elements.button.AppButtonBackgroundProps
-import app.grocery.list.commons.compose.elements.button.AppButtonStateProps
 import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
@@ -113,7 +112,7 @@ private fun Buttons(
             title = StringValue.ResId(R.string.clear_list),
             endIcon = rememberVectorPainter(AppIcons.delete),
             background = AppButtonBackgroundProps.Negative,
-            state = AppButtonStateProps.enabled(props.clearListAvailable),
+            state = props.listActionButtonsState,
             onClick = {
                 callbacks.onAttemptToClearList()
             },
@@ -122,18 +121,15 @@ private fun Buttons(
             title = StringValue.ResId(R.string.i_am_at_shop),
             endIcon = rememberVectorPainter(AppIcons.cart),
             background = AppButtonBackgroundProps.Positive,
-            state = AppButtonStateProps.enabled(props.shoppingAvailable),
+            state = props.listActionButtonsState,
             onClick = {
-                callbacks.onAttemptToStartShopping(
-                    atLeastOneProductEnabled = props.atLeastOneProductEnabled,
-                    numberOfProducts = props.numberOfProducts,
-                )
+                callbacks.onAttemptToStartShopping()
             },
         )
         AppButton(
             title = StringValue.ResId(R.string.share_current_list),
             endIcon = rememberVectorPainter(AppIcons.share),
-            state = props.shareButtonState,
+            state = props.listActionButtonsState,
             onClick = {
                 callbacks.onAttemptToShareCurrentList()
             },
@@ -146,13 +142,7 @@ private fun Buttons(
             },
         )
         AppButton(
-            title = StringValue.ResId(
-                if (props.listEmpty) {
-                    R.string.exit
-                } else {
-                    R.string.save_and_exit
-                }
-            ),
+            title = props.exitButtonTitle,
             endIcon = rememberVectorPainter(AppIcons.exit),
             onClick = {
                 callbacks.onExitFromApp()

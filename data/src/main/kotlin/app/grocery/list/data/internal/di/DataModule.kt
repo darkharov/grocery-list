@@ -5,7 +5,7 @@ import androidx.room.Room
 import app.grocery.list.data.internal.db.AppDatabase
 import app.grocery.list.data.internal.di.migrations.MigrationFrom4To5
 import app.grocery.list.data.product.ProductDao
-import app.grocery.list.data.product.list.CustomProductListDao
+import app.grocery.list.data.product.list.ProductListDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,8 +39,8 @@ internal class DataModule {
 
     @Provides
     @Singleton
-    fun customProductListDao(
+    fun productListDao(
         appDatabase: AppDatabase,
-    ): CustomProductListDao =
-        appDatabase.customProductListDao()
+    ): ProductListDao =
+        appDatabase.productListDao()
 }

@@ -3,9 +3,14 @@ package app.grocery.list.product.list.actions
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.commons.compose.R
+import app.grocery.list.commons.compose.elements.button.AppButtonStateProps
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogProps
 import app.grocery.list.commons.compose.values.StringValue
+import app.grocery.list.domain.product.AtLeastOneProductInCurrentListUseCase
+import app.grocery.list.domain.product.ClearCurrentListUseCase
 import app.grocery.list.domain.product.EnabledAndDisabledProducts
+import app.grocery.list.domain.product.GetNumberOfProductsUseCase
+import app.grocery.list.domain.product.GroupEnabledAndDisabledProductsUseCase
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.domain.settings.SettingsRepository
@@ -28,40 +33,43 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 internal class ProductListActionsViewModel @Inject constructor(
     private val productRepository: ProductRepository,
+    private val groupEnabledAndDisabled: GroupEnabledAndDisabledProductsUseCase,
     private val settingsRepository: SettingsRepository,
     private val getProductSharingString: GetProductSharingStringUseCase,
     private val parseProductList: ParseAndFormatProductsUseCase,
+    private val atLeastOneProductInCurrentList: AtLeastOneProductInCurrentListUseCase,
+    private val getNumberOfProducts: GetNumberOfProductsUseCase,
+    private val clearCurrentList: ClearCurrentListUseCase,
 ) : ViewModel(),
     ProductListActionsCallbacks {
 
     private val dialog = MutableStateFlow<ProductListActionsDialogProps?>(null)
     private val events = Channel<Event>(Channel.UNLIMITED)
-    private val loadingListToShare = MutableStateFlow(false)
 
     val props =
         combine(
             settingsRepository.bottomBarRoadmapStep.observe(),
-            productRepository.count(),
-            productRepository.atLeastOneEnabled(),
-            loadingListToShare,
+            atLeastOneProductInCurrentList.execute(enabledOnly = false),
         ) {
                 bottomBarRoadMapStep,
-                numberOfProducts,
-                atLeastOneProductEnabled,
-                loadingListToShare,
+                atLeastOneProduct,
             ->
             ProductListActionsProps(
                 useIconsOnBottomBar = bottomBarRoadMapStep.useIcons,
-                numberOfProducts = numberOfProducts,
-                loadingListToShare = loadingListToShare,
-                atLeastOneProductEnabled = atLeastOneProductEnabled,
+                exitButtonTitle = if (atLeastOneProduct) {
+                    StringValue.ResId(R.string.save_and_exit)
+                } else {
+                    StringValue.ResId(R.string.exit)
+                },
+                listActionButtonsState = AppButtonStateProps
+                    .enabled(atLeastOneProduct),
             )
         }.customStateIn(this)
 
     override fun onClearListConfirmed() {
         viewModelScope.launch {
             dialog.value = null
-            productRepository.deleteAll()
+            clearCurrentList.execute()
         }
     }
 
@@ -175,7 +183,7 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     override fun onReplaceProductsBy(productList: List<Product>) {
         viewModelScope.launch {
-            productRepository.deleteAll()
+            clearCurrentList.execute()
             productRepository.put(productList)
             dialog.value = ProductListActionsDialogProps.ProductSuccessfullyAdded(
                 count = productList.size,
@@ -203,13 +211,16 @@ internal class ProductListActionsViewModel @Inject constructor(
         events.trySend(Event.OnExitFromApp)
     }
 
-    override fun onAttemptToStartShopping(atLeastOneProductEnabled: Boolean, numberOfProducts: Int) {
-        if (atLeastOneProductEnabled) {
-            events.trySend(Event.OnStartShopping)
-        } else {
-            dialog.value = ProductListActionsDialogProps.EnableAllAndStartShopping(
-                totalProductCount = numberOfProducts,
-            )
+    override fun onAttemptToStartShopping() {
+        viewModelScope.launch {
+            val atLeastOneProductEnabled = atLeastOneProductInCurrentList.execute(enabledOnly = true).first()
+            if (atLeastOneProductEnabled) {
+                events.trySend(Event.OnStartShopping)
+            } else {
+                dialog.value = ProductListActionsDialogProps.EnableAllAndStartShopping(
+                    totalProductCount = getNumberOfProducts.execute(enabledOnly = false).first(),
+                )
+            }
         }
     }
 
@@ -218,15 +229,10 @@ internal class ProductListActionsViewModel @Inject constructor(
     }
 
     private fun handleShareCurrentListAction() {
-        loadingListToShare.value = true
 
         viewModelScope.launch {
 
-            val products = productRepository
-                .groupEnabledAndDisabled()
-                .first()
-
-            loadingListToShare.value = false
+            val products = groupEnabledAndDisabled.execute()
 
             val all = products.all
 

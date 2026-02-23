@@ -2,6 +2,11 @@ package app.grocery.list.commons.compose.elements
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -20,7 +25,12 @@ fun AppAddAndDoneButtonPanel(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier
+            .windowInsetsPadding(
+                WindowInsets
+                    .systemBars
+                    .only(WindowInsetsSides.Bottom)
+            ),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         AppButtonAdd(

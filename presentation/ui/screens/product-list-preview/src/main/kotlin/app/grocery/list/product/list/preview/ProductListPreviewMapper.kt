@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.domain.formatter.ProductTitleFormatter
 import app.grocery.list.domain.preview.ProductListPreview
 import kotlinx.collections.immutable.toImmutableList
@@ -12,14 +13,24 @@ internal object ProductListPreviewMapper {
 
     fun transform(preview: ProductListPreview): ProductListPreviewProps =
         when (preview) {
-            is ProductListPreview.Empty -> {
+            is ProductListPreview.Empty.Default -> {
                 ProductListPreviewProps.Empty(
+                    text = StringValue.ResId(R.string.list_is_empty),
                     templates = preview.templates.map {
                         ProductListPreviewProps.Empty.Template(
                             id = it.id,
                             title = it.title,
                         )
                     },
+                )
+            }
+            is ProductListPreview.Empty.CustomList -> {
+                ProductListPreviewProps.Empty(
+                    text = StringValue.ResId(
+                        resId = R.string.template_no_products_in_custom_list_yet,
+                        arguments = listOf(preview.title),
+                    ),
+                    templates = null,
                 )
             }
             is ProductListPreview.Items -> {
@@ -53,6 +64,7 @@ internal object ProductListPreviewMapper {
                             disableAllAvailable = enableAndDisableAllFeatures.disableAllAvailable,
                         )
                     },
+                    needMoreListsButtonVisible = preview.needMoreListsQuestion,
                 )
             }
         }

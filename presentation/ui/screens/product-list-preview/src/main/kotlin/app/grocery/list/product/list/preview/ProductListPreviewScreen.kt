@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -24,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -34,12 +34,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
+import app.grocery.list.commons.compose.elements.button.icon.AppCloseButton
 import app.grocery.list.commons.compose.elements.button.text.AppTextButton
+import app.grocery.list.commons.compose.elements.button.text.AppUnderlinedTextButton
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialog
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
+import app.grocery.list.commons.compose.values.value
 import app.grocery.list.product.list.preview.ProductListPreviewViewModel.Event
 import app.grocery.list.product.list.preview.elements.ProductItem
 
@@ -80,6 +83,9 @@ private fun EventConsumer(
                 contract.goToProductEditingForm(
                     productId = event.productId,
                 )
+            }
+            is Event.OnNeedMoreListsClick -> {
+                contract.goToCustomProductListsSettings()
             }
         }
     }
@@ -156,7 +162,7 @@ private fun ListEmptyAndTemplates(
         Column {
             val startPadding = 8.dp
             Text(
-                text = stringResource(R.string.list_is_empty),
+                text = props.text.value(),
                 style = LocalAppTypography.current.label,
                 modifier = Modifier
                     .padding(start = startPadding),
@@ -165,25 +171,28 @@ private fun ListEmptyAndTemplates(
                 modifier = Modifier
                     .height(16.dp),
             )
-            Column(
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-            ) {
-                for (template in props.templates) {
-                    Text(
-                        text = "+ ${template.title}",
-                        color = LocalAppColors.current.brand_40_40,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
-                            .clickable {
-                                callbacks.onTemplateClick(template)
-                            }
-                            .padding(vertical = 6.dp)
-                            .padding(
-                                end = 12.dp,
-                                start = startPadding,
-                            ),
-                    )
+            val templates = props.templates
+            if (templates != null) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    for (template in templates) {
+                        Text(
+                            text = "+ ${template.title}",
+                            color = LocalAppColors.current.brand_40_40,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .clickable {
+                                    callbacks.onTemplateClick(template)
+                                }
+                                .padding(vertical = 6.dp)
+                                .padding(
+                                    end = 12.dp,
+                                    start = startPadding,
+                                ),
+                        )
+                    }
                 }
             }
         }
@@ -275,6 +284,41 @@ private fun LazyListScope.items(
                 modifier = Modifier
                     .animateItem(),
             )
+        }
+    }
+    if (props.needMoreListsButtonVisible) {
+        item(
+            key = "Need more lists",
+            contentType = "Need more lists",
+        ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 12.dp,
+                    )
+                    .padding(
+                        horizontal = dimensionResource(R.dimen.margin_16_32_64),
+                    )
+                    .animateItem(),
+            ) {
+                AppUnderlinedTextButton(
+                    text = StringValue.ResId(R.string.need_more_lists),
+                    onClick = {
+                        callbacks.onNeedMoreListsClick()
+                    },
+                    modifier = Modifier
+                        .padding(horizontal = 52.dp)
+                )
+                AppCloseButton(
+                    onClick = {
+                        callbacks.onNeedMoreListsClose()
+                    },
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd),
+                )
+            }
         }
     }
 }
