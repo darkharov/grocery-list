@@ -1,12 +1,10 @@
 package app.grocery.list.domain.formatter
 
-import app.grocery.list.domain.product.Product
-
 class ProductTitlesFormatter(
     private val separator: Separator,
     private val formatter: ProductTitleFormatter,
 ) {
-    fun print(products: List<Product>): String =
+    fun print(products: List<ProductTitleFormatter.Params>): String =
         products.joinToString(
             separator = separator.value,
             transform = formatter::printToString,

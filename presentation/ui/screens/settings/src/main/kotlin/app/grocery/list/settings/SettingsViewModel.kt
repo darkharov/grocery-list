@@ -49,6 +49,10 @@ internal class SettingsViewModel @Inject constructor(
         events.trySend(Event.OnBottomBarItemClick)
     }
 
+    override fun onAdditionalListsClick() {
+        events.trySend(Event.OnAdditionalListsClick)
+    }
+
     override fun onDismiss() {
         dialog.value = null
     }
@@ -62,5 +66,6 @@ internal class SettingsViewModel @Inject constructor(
         data object OnFaqClick: Event()
         data object OnPrivacyPolicyClick : Event()
         data object OnBottomBarItemClick : Event()
+        data object OnAdditionalListsClick : Event()
     }
 }

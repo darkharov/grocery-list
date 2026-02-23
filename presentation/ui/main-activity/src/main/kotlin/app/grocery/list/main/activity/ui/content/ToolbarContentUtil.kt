@@ -10,10 +10,11 @@ import app.grocery.list.main.activity.R
 object ToolbarContentUtil {
 
     private val customTitles = mapOf(
-        Settings to AppToolbarProps.Title(R.string.settings),
-        ListFormatSettings to AppToolbarProps.Title(R.string.list_format),
-        BottomBarSettings to AppToolbarProps.Title(R.string.bottom_bar),
-        Faq to AppToolbarProps.Title(R.string.faq),
+        Settings to AppToolbarProps.InnerScreenWithCustomTitle(R.string.settings),
+        ListFormatSettings to AppToolbarProps.InnerScreenWithCustomTitle(R.string.list_format),
+        BottomBarSettings to AppToolbarProps.InnerScreenWithCustomTitle(R.string.bottom_bar),
+        Faq to AppToolbarProps.InnerScreenWithCustomTitle(R.string.faq),
+        CustomListsSettings to AppToolbarProps.InnerScreenWithCustomTitle(R.string.additional_lists),
     )
 
     @Stable
@@ -31,7 +32,7 @@ object ToolbarContentUtil {
             navKey is ProductInputForm &&
             navKey.productId != null
         ) {
-            return AppToolbarProps.Title(R.string.editing)
+            return AppToolbarProps.InnerScreenWithCustomTitle(R.string.editing)
         }
 
         return null

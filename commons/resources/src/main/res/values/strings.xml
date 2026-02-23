@@ -71,6 +71,10 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="browser_app_not_found">Unfortunately, the browser application was not found.</string>
     <string name="all_lists">All lists</string>
+    <string name="need_more_lists">Need more lists?</string>
+    <string name="additional_lists">Additional Lists</string>
+    <string name="enable_multiple_lists">Enable the ability to use multiple lists</string>
+    <string name="multiple_lists_icon_explanation">To switch between lists, use the icon in the upper left corner of the app\'s home screen.</string>
 
     <string-array name="final_steps">
         <item>Lock the screen</item>

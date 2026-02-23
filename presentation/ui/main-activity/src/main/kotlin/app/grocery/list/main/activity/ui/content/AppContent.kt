@@ -38,6 +38,8 @@ import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.values.StringValue
+import app.grocery.list.custom.lists.CustomListsScreen
+import app.grocery.list.custom.lists.settings.CustomListsSettingsScreen
 import app.grocery.list.faq.FaqScreen
 import app.grocery.list.final_.steps.FinalStepsScreen
 import app.grocery.list.main.activity.R
@@ -55,6 +57,7 @@ import app.grocery.list.settings.child.screens.use.icons.on.bottom.bar.switch_.U
 internal fun AppContent(
     backStack: List<NavKey>,
     numberOfEnabledProducts: Int?,
+    isCustomListsFeatureEnabled: Boolean,
     progress: Boolean,
     hasEmojiIfEnoughSpace: Boolean,
     dialog: AppLevelDialog?,
@@ -97,6 +100,7 @@ internal fun AppContent(
                             counter = numberOfEnabledProducts,
                             isOnStart = backStack.size == 1,
                             hasEmojiIfEnoughSpace = hasEmojiIfEnoughSpace,
+                            isCustomListsFeatureEnabled = isCustomListsFeatureEnabled,
                         ),
                     progress = progress,
                 ),
@@ -203,6 +207,12 @@ internal fun AppContent(
                 entry<Faq> {
                     FaqScreen()
                 }
+                entry<CustomLists> {
+                    CustomListsScreen()
+                }
+                entry<CustomListsSettings> {
+                    CustomListsSettingsScreen()
+                }
             },
         )
     }
@@ -236,6 +246,7 @@ private fun AppContentPreview() {
     GroceryListTheme {
         AppContent(
             numberOfEnabledProducts = 42,
+            isCustomListsFeatureEnabled = true,
             progress = false,
             hasEmojiIfEnoughSpace = true,
             dialog = null,

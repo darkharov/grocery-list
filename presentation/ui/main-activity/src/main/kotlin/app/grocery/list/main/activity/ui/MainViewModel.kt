@@ -7,6 +7,8 @@ import androidx.navigation3.runtime.NavKey
 import app.grocery.list.domain.formatter.ProductTitleWithoutEmojiFormatter
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
+import app.grocery.list.domain.product.list.CustomListsFeatureState
+import app.grocery.list.domain.product.list.CustomListsSettingsRepository
 import app.grocery.list.domain.settings.ProductTitleFormat
 import app.grocery.list.domain.settings.SettingsRepository
 import app.grocery.list.kotlin.ellipsize
@@ -15,6 +17,8 @@ import app.grocery.list.main.activity.ui.content.AppLevelDialog
 import app.grocery.list.main.activity.ui.content.AppSnackbar
 import app.grocery.list.main.activity.ui.content.BottomBarSettings
 import app.grocery.list.main.activity.ui.content.ClearNotificationsReminder
+import app.grocery.list.main.activity.ui.content.CustomLists
+import app.grocery.list.main.activity.ui.content.CustomListsSettings
 import app.grocery.list.main.activity.ui.content.Faq
 import app.grocery.list.main.activity.ui.content.FinalSteps
 import app.grocery.list.main.activity.ui.content.ListFormatSettings
@@ -23,6 +27,7 @@ import app.grocery.list.main.activity.ui.content.ProductListActions
 import app.grocery.list.main.activity.ui.content.ProductListPreview
 import app.grocery.list.main.activity.ui.content.Settings
 import app.grocery.list.storage.value.kotlin.get
+import commons.android.customStateIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
@@ -38,6 +43,7 @@ import kotlinx.coroutines.launch
 class MainViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val productRepository: ProductRepository,
+    customListsSettingsRepository: CustomListsSettingsRepository,
 ) : ViewModel(),
     AppContentContract {
 
@@ -69,6 +75,11 @@ class MainViewModel @Inject constructor(
             }
             .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
+    val isCustomListsFeatureEnabled = customListsSettingsRepository
+        .featureState()
+        .map { it == CustomListsFeatureState.Enabled }
+        .customStateIn(this, defaultValue = false)
+
     val progress = MutableStateFlow(false)
 
     override fun onUpIconClick() {
@@ -76,7 +87,7 @@ class MainViewModel @Inject constructor(
     }
 
     override fun onAllListsClick() {
-        // todo
+        backStack.add(CustomLists)
     }
 
     override fun onSettingsClick() {
@@ -153,6 +164,10 @@ class MainViewModel @Inject constructor(
 
     override fun backToListPreview() {
         backStack.retainAll { it is ProductListPreview }
+    }
+
+    override fun goToCustomProductListsSettings() {
+        backStack.add(CustomListsSettings)
     }
 
     fun notifyPushNotificationsGranted() {

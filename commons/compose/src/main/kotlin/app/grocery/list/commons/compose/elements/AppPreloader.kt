@@ -18,3 +18,15 @@ fun AppPreloader(
         AppCircularProgressIndicator()
     }
 }
+
+@Composable
+inline fun <reified T : Any> AppPreloaderOrContent(
+    props: T?,
+    content: (props: T) -> Unit,
+) {
+    if (props != null) {
+        content(props)
+    } else {
+        AppPreloader()
+    }
+}

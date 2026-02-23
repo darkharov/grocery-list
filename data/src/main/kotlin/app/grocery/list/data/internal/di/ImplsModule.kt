@@ -1,15 +1,19 @@
 package app.grocery.list.data.internal.di
 
+import app.grocery.list.data.achievement.AchievementRepositoryImpl
 import app.grocery.list.data.category.CategoryRepositoryImpl
 import app.grocery.list.data.faq.FaqItemRepositoryImpl
 import app.grocery.list.data.product.ProductRepositoryImpl
-import app.grocery.list.data.product.list.CustomProductListRepositoryImpl
+import app.grocery.list.data.product.list.ProductListRepositoryImpl
+import app.grocery.list.data.product.list.settings.CustomListsSettingsRepositoryImpl
 import app.grocery.list.data.settings.SettingsRepositoryImpl
 import app.grocery.list.data.templates.TemplateRepositoryImpl
+import app.grocery.list.domain.achievements.AchievementRepository
 import app.grocery.list.domain.category.CategoryRepository
 import app.grocery.list.domain.faq.FaqItemRepository
 import app.grocery.list.domain.product.ProductRepository
-import app.grocery.list.domain.product.list.CustomProductListRepository
+import app.grocery.list.domain.product.list.CustomListsSettingsRepository
+import app.grocery.list.domain.product.list.ProductListRepository
 import app.grocery.list.domain.settings.SettingsRepository
 import app.grocery.list.domain.template.TemplateRepository
 import dagger.Binds
@@ -37,5 +41,11 @@ internal interface ImplsModule {
     fun faqItemRepository(impl: FaqItemRepositoryImpl): FaqItemRepository
 
     @Binds
-    fun customProductListRepository(impl: CustomProductListRepositoryImpl): CustomProductListRepository
+    fun productListRepository(impl: ProductListRepositoryImpl): ProductListRepository
+
+    @Binds
+    fun customListsSettingsRepository(impl: CustomListsSettingsRepositoryImpl): CustomListsSettingsRepository
+
+    @Binds
+    fun achievementRepository(impl: AchievementRepositoryImpl): AchievementRepository
 }
