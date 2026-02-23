@@ -16,16 +16,18 @@ import app.grocery.list.commons.compose.values.StringValue
 @Composable
 fun AppTwoOptionsDialog(
     icon: Painter? = null,
+    title: StringValue? = null,
     text: StringValue,
     onDismiss: () -> Unit,
     firstOption: StringValue,
     isFirstOptionSensitive: Boolean = false,
     onFirstOption: () -> Unit,
     secondOption: StringValue = StringValue.ResId(android.R.string.cancel),
-    onSecondOption: () -> Unit,
+    onSecondOption: () -> Unit = onDismiss,
 ) {
     AppTextWithButtonsRowDialog(
         icon = icon,
+        title = title,
         text = text,
         onDismiss = onDismiss,
     ) {

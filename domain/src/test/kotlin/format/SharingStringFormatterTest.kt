@@ -30,7 +30,6 @@ internal class SharingStringFormatterTest {
         emojiAndKeyword = emojiAndCategoryId.emoji,
         categoryId = emojiAndCategoryId.categoryId,
         enabled = true,
-        customListId = null,
     )
 
     @Test

@@ -10,11 +10,11 @@ import kotlinx.coroutines.flow.takeWhile
 
 @Singleton
 class AtLeastOneProductJustAddedUseCase @Inject constructor(
-    private val productRepository: ProductRepository,
+    private val getNumberOfProducts: GetNumberOfProductsUseCase,
 ) {
     fun execute(): Flow<Boolean> =
-        productRepository
-            .count()
+        getNumberOfProducts
+            .execute(enabledOnly = true)
             .runningFold(Accumulator(), Accumulator::next)
             .map { it.increased }
             .takeWhile { increased -> !(increased) }

@@ -3,7 +3,10 @@ package app.grocery.list.main.activity.ui.content
 import app.grocery.list.clear.notifications.reminder.ClearNotificationsReminderContract
 import app.grocery.list.commons.compose.elements.toolbar.AppToolbarCallbacks
 import app.grocery.list.commons.compose.elements.toolbar.AppToolbarCallbacksMock
+import app.grocery.list.custom.product.lists.input.form.CustomListInputFormContract
+import app.grocery.list.custom.product.lists.picker.ProductListPickerContract
 import app.grocery.list.domain.product.Product
+import app.grocery.list.domain.product.list.ProductList
 import app.grocery.list.final_.steps.FinalStepsContract
 import app.grocery.list.product.input.form.ProductInputFormContract
 import app.grocery.list.product.list.actions.ProductListActionsContract
@@ -19,7 +22,9 @@ internal interface AppContentContract :
     ProductListPreviewContract,
     ClearNotificationsReminderContract,
     FinalStepsContract,
-    ProductInputFormContract {
+    ProductInputFormContract,
+    ProductListPickerContract,
+    CustomListInputFormContract {
     fun snackbars(): ReceiveChannel<AppSnackbar>
     fun undoProductDeletion(product: Product)
     fun openNotificationSettings()
@@ -45,4 +50,6 @@ internal object AppContentContractMock :
     override fun goToProductEditingForm(productId: Int) {}
     override fun goToFinalSteps() {}
     override fun backToListPreview() {}
+    override fun goToCustomProductListsSettings() {}
+    override fun goToCustomProductListInputForm(customListId: ProductList.Id.Custom?) {}
 }

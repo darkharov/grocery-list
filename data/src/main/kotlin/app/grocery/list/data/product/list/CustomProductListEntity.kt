@@ -2,24 +2,17 @@ package app.grocery.list.data.product.list
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Index
 import androidx.room.PrimaryKey
 import app.grocery.list.data.internal.db.SqlAffixes
 
 @Entity(
     tableName = CustomProductListEntity.Table.NAME,
-    indices = [
-        Index(
-            value = [CustomProductListEntity.Table.Columns.TITLE],
-            unique = true,
-        )
-    ]
 )
 internal class CustomProductListEntity(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(Table.Columns.ID)
-    val id: Int?,
+    val id: Int,
 
     @ColumnInfo(name = Table.Columns.TITLE)
     val title: String,

@@ -28,7 +28,6 @@ class SharingStringFormatter @Inject constructor(
                         emojiAndKeyword = emojiAndCategoryId.emoji,
                         enabled = true,
                         categoryId = emojiAndCategoryId.categoryId,
-                        customListId = null,
                     )
                     product
                 }

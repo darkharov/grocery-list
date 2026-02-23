@@ -8,17 +8,21 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.grocery.list.commons.compose.EventConsumer
-import app.grocery.list.commons.compose.theme.ThemeUtil
+import app.grocery.list.commons.compose.elements.AppPreloader
+import app.grocery.list.commons.compose.elements.color.scheme.AppColorSchemeProps
+import app.grocery.list.commons.compose.elements.toolbar.AppToolbarProps
+import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.main.activity.ui.MainViewModel.Event
 import app.grocery.list.main.activity.ui.content.AppContent
+import app.grocery.list.main.activity.ui.content.AppLevelDialog
 import app.grocery.list.main.activity.ui.content.FinalSteps
 import app.grocery.list.notifications.NotificationPublisher
 import commons.android.PermissionUtil
@@ -31,7 +35,6 @@ class MainActivity :
     ComponentActivity(),
     PermissionUtil.Contract {
 
-    @Inject lateinit var themeUtil: ThemeUtil
     @Inject lateinit var notificationPublisher: NotificationPublisher
 
     private val viewModel by viewModels<MainViewModel>()
@@ -59,18 +62,14 @@ class MainActivity :
 
     private fun setupContent() {
         setContent {
-            val numberOfEnabledProducts by viewModel.numberOfEnabledProducts.collectAsState()
-            val progress by viewModel.progress.collectAsState()
-            val hasEmojiIfEnoughSpace by viewModel.hasEmojiIfEnoughSpace.collectAsState()
+            val props by viewModel.props.collectAsStateWithLifecycle()
             val dialog by viewModel.dialog().collectAsStateWithLifecycle()
-            themeUtil.GroceryListTheme {
-                AppContent(
-                    backStack = viewModel.backStack,
-                    numberOfEnabledProducts = numberOfEnabledProducts,
-                    progress = progress,
-                    hasEmojiIfEnoughSpace = hasEmojiIfEnoughSpace,
+            GroceryListTheme(
+                colorScheme = props?.colorScheme ?: AppColorSchemeProps.Yellow,
+            ) {
+                PreloaderOrContent(
+                    toolbarProps = props?.toolbar,
                     dialog = dialog,
-                    contract = viewModel,
                 )
                 LaunchedEffect(Unit) {
                     snapshotFlow {
@@ -93,6 +92,23 @@ class MainActivity :
                     }
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun PreloaderOrContent(
+        toolbarProps: AppToolbarProps?,
+        dialog: AppLevelDialog?,
+    ) {
+        if (toolbarProps == null) {
+            AppPreloader()
+        } else {
+            AppContent(
+                toolbarProps = toolbarProps,
+                backStack = viewModel.backStack,
+                dialog = dialog,
+                contract = viewModel,
+            )
         }
     }
 

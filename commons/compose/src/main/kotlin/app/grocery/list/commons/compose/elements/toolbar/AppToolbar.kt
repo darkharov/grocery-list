@@ -1,5 +1,6 @@
 package app.grocery.list.commons.compose.elements.toolbar
 
+import android.content.res.Resources
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -32,8 +33,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.layout.SubcomposeMeasureScope
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -44,11 +45,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
-import app.grocery.list.commons.compose.LocalToolbarEmojiProvider
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
+import app.grocery.list.commons.compose.values.value
+import kotlin.random.Random
 
 private val CounterPaddingSp = 4.sp
 private val CounterSizeSp = 32.sp
@@ -62,8 +64,8 @@ fun AppToolbar(
     val screenHorizontalPadding = dimensionResource(R.dimen.margin_16_32_64)
     val counterSize = with(LocalDensity.current) { CounterSizeSp.toDp() }
     val counterPadding = with(LocalDensity.current) { CounterPaddingSp.toDp() }
-    val emojiProvider = LocalToolbarEmojiProvider.current
-    val emoji = rememberSaveable { emojiProvider.get(1) }
+    val resources = LocalResources.current
+    val emoji = rememberSaveable { resources.randomToolbarEmoji() }
 
     MeasureContentParts(
         emoji = emoji,
@@ -94,7 +96,7 @@ fun AppToolbar(
                 horizontalArrangement = Arrangement.Center,
             ) {
                 AppToolbarIconOrSpace(
-                    props = props.leadingIcon,
+                    props = props.icons.leading,
                     callbacks = callbacks,
                 )
                 Spacer(
@@ -105,7 +107,7 @@ fun AppToolbar(
                     modifier = Modifier
                         .width(sideItemOffset - emojiWithOffsetWidth),
                 )
-                if (props.hasEmojiIfEnoughSpace && !(shouldEmojiBeSkipped)) {
+                if (props.mightHaveEmoji && !(shouldEmojiBeSkipped)) {
                     Emoji(
                         emoji = emoji,
                     )
@@ -120,7 +122,7 @@ fun AppToolbar(
                         .width(emojiTitleOffset),
                 )
                 Text(
-                    text = stringResource(props.titleId),
+                    text = props.title.value(),
                     modifier = Modifier
                         .widthIn(
                             max = titleMaxWidth,
@@ -149,7 +151,7 @@ fun AppToolbar(
                         .weight(1f),
                 )
                 AppToolbarIconOrSpace(
-                    props = props.trailingIcon,
+                    props = props.icons.trailing,
                     callbacks = callbacks,
                 )
             }
@@ -164,6 +166,12 @@ fun AppToolbar(
             }
         }
     }
+}
+
+private fun Resources.randomToolbarEmoji(): String {
+    val emojis = getStringArray(R.array.toolbar_emojis)
+    val index = Random.nextInt(emojis.size)
+    return emojis[index]
 }
 
 @Composable

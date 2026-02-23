@@ -29,6 +29,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.theme.LocalAppColors
+import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.commons.compose.values.value
 
@@ -38,6 +39,7 @@ val APP_DIALOG_PADDING = 16.dp
 @Composable
 fun AppBaseDialog(
     icon: Painter? = null,
+    title: StringValue? = null,
     text: StringValue,
     onDismiss: () -> Unit,
     textStyle: TextStyle = LocalTextStyle.current,
@@ -78,6 +80,18 @@ fun AppBaseDialog(
                     modifier = Modifier
                         .height(APP_DIALOG_PADDING),
                 )
+                if (title != null) {
+                    Text(
+                        text = title.value(),
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally),
+                        style = LocalAppTypography.current.dialogTitle
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .height(APP_DIALOG_PADDING),
+                    )
+                }
                 Text(
                     text = text.value(),
                     color = LocalAppColors.current.blackOrWhite,
@@ -99,6 +113,7 @@ fun AppBaseDialog(
 @Composable
 internal fun AppTextWithButtonsRowDialog(
     icon: Painter? = null,
+    title: StringValue? = null,
     text: StringValue,
     onDismiss: () -> Unit,
     buttons: @Composable (RowScope.() -> Unit),
@@ -106,6 +121,7 @@ internal fun AppTextWithButtonsRowDialog(
     AppBaseDialog(
         icon = icon,
         onDismiss = onDismiss,
+        title = title,
         text = text,
         additionalContent = {
             Row(

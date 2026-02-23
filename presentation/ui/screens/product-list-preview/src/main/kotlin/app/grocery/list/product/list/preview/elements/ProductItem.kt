@@ -2,30 +2,23 @@ package app.grocery.list.product.list.preview.elements
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
 import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import app.grocery.list.commons.compose.elements.AppDeleteAction
 import app.grocery.list.commons.compose.elements.AppSwipeToDismissBox
 import app.grocery.list.commons.compose.elements.switch_.AppSwitch
-import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.product.list.preview.ProductListPreviewProps
@@ -37,13 +30,11 @@ internal fun ProductItem(
     callbacks: ProductItemCallbacks,
     modifier: Modifier = Modifier,
 ) {
-    val horizontalPadding = dimensionResource(R.dimen.margin_16_32_64)
     AppSwipeToDismissBox(
         enableDismissFromStartToEnd = false,
         backgroundContent = { swipeToDismissBoxState ->
             Actions(
                 state = swipeToDismissBoxState,
-                horizontalPadding = horizontalPadding,
             )
         },
         onDismiss = {
@@ -69,7 +60,6 @@ internal fun ProductItem(
     ) {
         Content(
             product = product,
-            horizontalPadding = horizontalPadding,
             callbacks = callbacks,
         )
     }
@@ -78,28 +68,14 @@ internal fun ProductItem(
 @Composable
 private fun Actions(
     state: SwipeToDismissBoxState,
-    horizontalPadding: Dp,
+    modifier: Modifier = Modifier,
 ) {
     when (state.dismissDirection) {
         SwipeToDismissBoxValue.StartToEnd -> {
             // nothing to show
         }
         SwipeToDismissBoxValue.EndToStart -> {
-            Row(
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Red),
-            ) {
-                Icon(
-                    painter = rememberVectorPainter(AppIcons.delete),
-                    contentDescription = stringResource(R.string.delete),
-                    tint = Color.White,
-                    modifier = Modifier
-                        .padding(end = horizontalPadding),
-                )
-            }
+            AppDeleteAction(modifier)
         }
         SwipeToDismissBoxValue.Settled -> {
             // nothing to show
@@ -110,7 +86,6 @@ private fun Actions(
 @Composable
 private fun Content(
     product: ProductListPreviewProps.Items.Product,
-    horizontalPadding: Dp,
     callbacks: ProductItemCallbacks,
 ) {
     val checked = product.enabled
@@ -118,7 +93,7 @@ private fun Content(
         modifier = Modifier
             .background(LocalAppColors.current.background)
             .padding(
-                horizontal = horizontalPadding,
+                horizontal = dimensionResource(R.dimen.margin_16_32_64),
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {

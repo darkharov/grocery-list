@@ -2,7 +2,6 @@ package app.grocery.list.data.product
 
 import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.MapColumn
 import androidx.room.OnConflictStrategy.Companion.ABORT
 import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
@@ -28,26 +27,39 @@ internal interface ProductDao {
         return entity
     }
 
-    @Query("DELETE FROM product")
-    suspend fun deleteAll()
+    @Query("DELETE FROM product WHERE :customListId IS fk_custom_list_id")
+    suspend fun deleteAll(customListId: Int?)
 
     @Query(
         """
-            SELECT product.*
-              FROM product
-             WHERE :enabledOnly == 0
-                OR enabled == 1
+             SELECT *
+               FROM product
+              WHERE (:customListId IS fk_custom_list_id)
+                AND (NOT :enabledOnly OR enabled)
           ORDER BY non_fk_category_id,
                    title
         """
     )
-    fun select(enabledOnly: Boolean): Flow<Map<@MapColumn("non_fk_category_id") Int, List<ProductEntity>>>
+    fun select(
+        customListId: Int?,
+        enabledOnly: Boolean,
+    ): Flow<List<ProductEntity>>
 
     @Query("SELECT * FROM product WHERE product_id == :productId")
     fun select(productId: Int): ProductEntity
 
-    @Query("SELECT COUNT(*) FROM product")
-    fun count(): Flow<Int>
+    @Query(
+        """
+             SELECT COUNT(*)
+               FROM product
+              WHERE (:customListId IS fk_custom_list_id)
+                AND (NOT :enabledOnly OR enabled)
+        """
+    )
+    fun count(
+        customListId: Int?,
+        enabledOnly: Boolean,
+    ): Flow<Int>
 
     @Query("SELECT COUNT(*) FROM product WHERE enabled == 1")
     fun countOfEnabled(): Flow<Int>
@@ -68,11 +80,12 @@ internal interface ProductDao {
         """
             SELECT COUNT(*) > 0
               FROM product
-             WHERE enabled == 1
+             WHERE (:customListId IS fk_custom_list_id)
+               AND (NOT :enabledOnly OR enabled)
              LIMIT 1
         """
     )
-    fun atLeastOneProductEnabled(): Flow<Boolean>
+    fun any(customListId: Int?, enabledOnly: Boolean): Flow<Boolean>
 
     @Query("UPDATE product SET enabled = :enabled")
     suspend fun setEnabledFlagForAll(enabled: Boolean)

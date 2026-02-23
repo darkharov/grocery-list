@@ -34,6 +34,7 @@ android {
 dependencies {
     implementation(project(":commons:resources"))
     implementation(project(":domain"))
+    api(libs.kotlinx.collections.immutable)
     api(platform(libs.androidx.compose.bom))
     api(libs.androidx.material.icons.extended)
     api(libs.androidx.ui)

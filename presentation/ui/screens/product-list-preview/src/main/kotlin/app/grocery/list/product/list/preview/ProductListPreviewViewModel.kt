@@ -7,6 +7,7 @@ import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.domain.preview.GetProductListPreviewUseCase
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
+import app.grocery.list.domain.product.list.ProductListRepository
 import app.grocery.list.domain.template.GetTemplateProductsUseCase
 import commons.android.customStateIn
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,8 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 internal class ProductListPreviewViewModel @Inject constructor(
     private val getPreview: GetProductListPreviewUseCase,
-    private val repository: ProductRepository,
+    private val productRepository: ProductRepository,
+    private val productListRepository: ProductListRepository,
     private val getFormattedTemplateProducts: GetTemplateProductsUseCase,
 ) : ViewModel(),
     ProductListPreviewCallbacks {
@@ -38,7 +40,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
 
     override fun onDelete(productId: Int) {
         viewModelScope.launch {
-            val deletedProduct = repository.delete(productId = productId)
+            val deletedProduct = productRepository.delete(productId = productId)
             val event = Event.OnProductDeleted(deletedProduct)
             events.trySend(event)
         }
@@ -46,7 +48,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
 
     override fun onProductEnabledChange(productId: Int, newValue: Boolean) {
         viewModelScope.launch {
-            repository.setEnabled(
+            productRepository.setEnabled(
                 productId = productId,
                 enabled = newValue,
             )
@@ -59,13 +61,13 @@ internal class ProductListPreviewViewModel @Inject constructor(
 
     override fun onEnableAll() {
         viewModelScope.launch {
-            repository.enableAll()
+            productRepository.enableAll()
         }
     }
 
     override fun onDisableEnableAll() {
         viewModelScope.launch {
-            repository.disableAll()
+            productRepository.disableAll()
         }
     }
 
@@ -89,7 +91,17 @@ internal class ProductListPreviewViewModel @Inject constructor(
     override fun onPasteProductsConfirmed(products: List<Product>) {
         removeDialog()
         viewModelScope.launch {
-            repository.put(products)
+            productRepository.put(products)
+        }
+    }
+
+    override fun onNeedMoreListsClick() {
+        events.trySend(Event.OnNeedMoreListsClick)
+    }
+
+    override fun onNeedMoreListsClose() {
+        viewModelScope.launch {
+            productListRepository.setFeatureEnabled(false)
         }
     }
 
@@ -106,5 +118,6 @@ internal class ProductListPreviewViewModel @Inject constructor(
     sealed class Event {
         data class OnProductDeleted(val product: Product) : Event()
         data class OnEditProduct(val productId: Int) : Event()
+        data object OnNeedMoreListsClick : Event()
     }
 }

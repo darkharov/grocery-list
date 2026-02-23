@@ -1,16 +1,24 @@
 package app.grocery.list.domain.formatter
 
-import app.grocery.list.domain.product.Product
-
 class ProductTitlesFormatter(
     private val separator: Separator,
     private val formatter: ProductTitleFormatter,
 ) {
-    fun print(products: List<Product>): String =
-        products.joinToString(
-            separator = separator.value,
-            transform = formatter::printToString,
-        )
+    fun print(
+        products: List<ProductTitleFormatter.Params>,
+        ellipsize: Boolean = false,
+    ): String =
+        buildList {
+            addAll(
+                products.map { formatter.printToString(it) }
+            )
+            if (ellipsize) {
+                add("…")
+            }
+        }.joinToString(separator = separator.value)
+
+    fun toStubFormatter() =
+        ProductListStubFormatter(this)
 
     enum class Separator(
         val value: String,

@@ -32,6 +32,7 @@
     <string name="delete">Видалити</string>
     <string name="next">Далі</string>
     <string name="list_is_empty">Список порожній…</string>
+    <string name="template_no_products_in_custom_list_yet">У списку \'%s\' поки немає товарів…</string>
     <string name="ceaser_salad_with_chicken">Салат \"Цезар\" з куркою</string>
     <string name="greek_salad">Салат Грецький</string>
     <string name="berries_fruits_and_honey">Ягоди, фрукти та мед</string>
@@ -71,6 +72,18 @@
     <string name="privacy_policy">Політика конфіденційності</string>
     <string name="browser_app_not_found">Додаток браузера на жаль не знайдено</string>
     <string name="all_lists">Усі списки</string>
+    <string name="need_more_lists">Потрібно більше списків?</string>
+    <string name="additional_lists">Додаткові списки</string>
+    <string name="enable_multiple_lists">Увімкнути можливість використовувати кілька списків</string>
+    <string name="multiple_lists_icon_explanation">Щоб переключатися між списками, використовуйте іконку у верхньому лівому куті на початковому екрані програми</string>
+    <string name="default_list">Список за налаштуванням</string>
+    <string name="add_another_one">Додати ще один</string>
+    <string name="product_list_picker_item_empty">(порожній)</string>
+    <string name="product_list">Список продуктів</string>
+    <string name="new_product_list">Новий список</string>
+    <string name="product_list_title">Назва списку</string>
+    <string name="color_scheme">Кольорова схема</string>
+    <string name="delete_product_list_confirmation">Ви дійсно бажаєте видалити цей список?</string>
 
     <string-array name="final_steps">
         <item>Заблокуйте екран</item>

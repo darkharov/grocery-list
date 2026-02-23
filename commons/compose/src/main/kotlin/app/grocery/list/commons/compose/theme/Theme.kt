@@ -5,19 +5,17 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import app.grocery.list.commons.compose.LocalToolbarEmojiProvider
-import app.grocery.list.commons.compose.ToolbarEmojiProvider
-import javax.inject.Inject
-import javax.inject.Singleton
+import app.grocery.list.commons.compose.elements.color.scheme.AppColorSchemeProps
 
 @Composable
 fun GroceryListTheme(
+    colorScheme: AppColorSchemeProps = AppColorSchemeProps.Yellow,
     content: @Composable () -> Unit,
 ) {
     val colors = if (isSystemInDarkTheme()) {
-        DarkColors
+        colorScheme.darkColors
     } else {
-        LightColors
+        colorScheme.lightColors
     }
     MaterialTheme {
         CompositionLocalProvider(
@@ -26,32 +24,5 @@ fun GroceryListTheme(
         ) {
             content()
         }
-    }
-}
-
-@Composable
-private fun GroceryListTheme(
-    toolbarEmojiProvider: ToolbarEmojiProvider,
-    content: @Composable () -> Unit,
-) {
-    CompositionLocalProvider(
-        LocalToolbarEmojiProvider provides toolbarEmojiProvider,
-    ) {
-        GroceryListTheme(content)
-    }
-}
-
-@Singleton
-class ThemeUtil @Inject constructor(
-    private val emojiProvider: ToolbarEmojiProvider,
-) {
-    @Composable
-    fun GroceryListTheme(
-        content: @Composable () -> Unit,
-    ) {
-        GroceryListTheme(
-            toolbarEmojiProvider = emojiProvider,
-            content = content,
-        )
     }
 }

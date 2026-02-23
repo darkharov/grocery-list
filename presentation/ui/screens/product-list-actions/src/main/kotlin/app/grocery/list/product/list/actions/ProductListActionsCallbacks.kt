@@ -15,7 +15,7 @@ internal interface ProductListActionsCallbacks :
     fun onGoToActions()
     fun onClearListConfirmed()
     fun onExitFromApp()
-    fun onAttemptToStartShopping(atLeastOneProductEnabled: Boolean, numberOfProducts: Int)
+    fun onAttemptToStartShopping()
     fun onNoEnabledProductsToStartShopping(productCount: Int)
     fun onAttemptToShareCurrentList()
     fun onShareAll(dialog: ProductListActionsDialogProps.SublistToSharePicker)
@@ -37,7 +37,7 @@ internal object ProductListActionsCallbacksMock : ProductListActionsCallbacks {
     override fun onClearListConfirmed() {}
     override fun onDialogDismiss() {}
     override fun onExitFromApp() {}
-    override fun onAttemptToStartShopping(atLeastOneProductEnabled: Boolean, numberOfProducts: Int) {}
+    override fun onAttemptToStartShopping() {}
     override fun onNoEnabledProductsToStartShopping(productCount: Int) {}
     override fun onAttemptToShareCurrentList() {}
     override fun onShareAll(dialog: ProductListActionsDialogProps.SublistToSharePicker) {}

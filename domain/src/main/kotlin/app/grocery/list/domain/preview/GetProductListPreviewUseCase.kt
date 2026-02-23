@@ -4,37 +4,59 @@ import app.grocery.list.domain.category.CategoryRepository
 import app.grocery.list.domain.formatter.GetProductTitleFormatterUseCase
 import app.grocery.list.domain.formatter.ProductTitleFormatter
 import app.grocery.list.domain.product.CategoryProducts
-import app.grocery.list.domain.product.ProductRepository
+import app.grocery.list.domain.product.GetCategorizedProductsUseCase
+import app.grocery.list.domain.product.list.ProductListRepository
 import app.grocery.list.domain.template.TemplateRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 @Singleton
 class GetProductListPreviewUseCase @Inject internal constructor(
     private val getProductTitleFormatter: GetProductTitleFormatterUseCase,
-    private val productRepository: ProductRepository,
+    private val getProducts: GetCategorizedProductsUseCase,
     private val templateRepository: TemplateRepository,
     private val categoryRepository: CategoryRepository,
+    private val productListRepository: ProductListRepository,
+    private val shouldShowNeedMoreListsQuestion: ShouldShowNeedMoreListsQuestionUseCase,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     fun execute(): Flow<ProductListPreview> =
-        productRepository
-            .all()
+        getProducts
+            .execute()
             .flatMapLatest { items ->
                 when {
                     items.isEmpty() -> {
-                        flowOf(ProductListPreview.Empty(templateRepository.all()))
+                        productListRepository
+                            .titleOfCurrentCustomListOrNull()
+                            .map { customListTitle ->
+                                if (customListTitle != null) {
+                                    ProductListPreview.Empty.CustomList(
+                                        title = customListTitle,
+                                    )
+                                } else {
+                                    ProductListPreview.Empty.Default(
+                                        templates = templateRepository.all(),
+                                    )
+                                }
+                            }
                     }
                     else -> {
-                        getProductTitleFormatter.execute()
-                            .map { result ->
-                                items(items, result.formatter)
-                            }
+                        combine(
+                            getProductTitleFormatter.execute(),
+                            shouldShowNeedMoreListsQuestion.execute(),
+                        ) { formatterResult,
+                            shouldShowNeedMoreListsQuestion ->
+                            items(
+                                categoryProducts = items,
+                                formatter = formatterResult.formatter,
+                                shouldShowNeedMoreListsQuestion = shouldShowNeedMoreListsQuestion,
+                            )
+                        }
                     }
                 }
             }
@@ -42,6 +64,7 @@ class GetProductListPreviewUseCase @Inject internal constructor(
     private suspend fun items(
         categoryProducts: List<CategoryProducts>,
         formatter: ProductTitleFormatter,
+        shouldShowNeedMoreListsQuestion: Boolean,
     ): ProductListPreview.Items {
         val productCount = categoryProducts.fold(0) { acc, item ->
             acc + item.products.size
@@ -76,7 +99,8 @@ class GetProductListPreviewUseCase @Inject internal constructor(
                 )
             } else {
                 null
-            }
+            },
+            needMoreListsQuestion = shouldShowNeedMoreListsQuestion,
         )
     }
 

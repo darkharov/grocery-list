@@ -32,6 +32,7 @@
     <string name="delete">Delete</string>
     <string name="next">Next</string>
     <string name="list_is_empty">The list is empty…</string>
+    <string name="template_no_products_in_custom_list_yet">No products in \'%s\' yet…</string>
     <string name="ceaser_salad_with_chicken">Caesar salad with chicken</string>
     <string name="greek_salad">Greek salad</string>
     <string name="berries_fruits_and_honey">Berries, fruits and honey</string>
@@ -70,7 +71,19 @@
     <string name="faq">FAQ</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="browser_app_not_found">Unfortunately, the browser application was not found.</string>
-    <string name="all_lists">All lists</string>
+    <string name="all_lists">All Lists</string>
+    <string name="need_more_lists">Need more lists?</string>
+    <string name="additional_lists">Additional Lists</string>
+    <string name="enable_multiple_lists">Enable the ability to use multiple lists</string>
+    <string name="multiple_lists_icon_explanation">To switch between lists, use the icon in the upper left corner of the app\'s home screen.</string>
+    <string name="default_list">Default list</string>
+    <string name="add_another_one">Add another one</string>
+    <string name="product_list_picker_item_empty">(empty)</string>
+    <string name="product_list">Product List</string>
+    <string name="new_product_list">New Product List</string>
+    <string name="product_list_title">List Title</string>
+    <string name="color_scheme">Color scheme</string>
+    <string name="delete_product_list_confirmation">Are you sure you want to delete this list?</string>
 
     <string-array name="final_steps">
         <item>Lock the screen</item>

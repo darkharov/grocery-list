@@ -107,6 +107,9 @@ private fun EventConsumer(
             SettingsViewModel.Event.OnBottomBarItemClick -> {
                 contract.goToBottomBarSettings()
             }
+            SettingsViewModel.Event.OnAdditionalListsClick -> {
+                contract.goToCustomProductListsSettings()
+            }
         }
     }
 }
@@ -149,6 +152,15 @@ private fun SettingsScreen(
                 ),
                 onClick = {
                     callbacks.onBottomBarItemClick()
+                },
+            )
+            SettingsMenuItem(
+                leadingIcon = painterResource(R.drawable.ic_cards_stack),
+                text = StringValue.StringWrapper(
+                    value = stringResource(R.string.additional_lists),
+                ),
+                onClick = {
+                    callbacks.onAdditionalListsClick()
                 },
             )
             SettingsMenuItem(

@@ -13,13 +13,42 @@ val BrandColor70 = Color(0xFF_ffd65c)
 val BrandColor80 = Color(0xFF_fff4d6)
 val BrandColor90 = Color(0XFF_fffdfa)
 
+val BlueColor00 = Color(0xFF_000000)
+val BlueColor10 = Color(0xFF_001319)
+val BlueColor20 = Color(0xFF_002633)
+val BlueColor30 = Color(0xFF_004c66)
+val BlueColor40 = Color(0xFF_0087b4)
+val BlueColor50 = Color(0xFF_01c0ff)
+val BlueColor60 = Color(0xFF_34cdff)
+val BlueColor70 = Color(0xFF_5cd7ff)
+val BlueColor80 = Color(0xFF_d6f5ff)
+val BlueColor90 = Color(0XFF_fafeff)
+
+val GreenColor00 = Color(0xFF_000000)
+val GreenColor10 = Color(0xFF_0f1302)
+val GreenColor20 = Color(0xFF_1f2705)
+val GreenColor30 = Color(0xFF_3e4f0a)
+val GreenColor40 = Color(0xFF_678310)
+val GreenColor50 = Color(0xFF_9cc719)
+val GreenColor60 = Color(0xFF_b8e52e)
+val GreenColor70 = Color(0xFF_c6ea57)
+val GreenColor80 = Color(0xFF_f0f9d5)
+val GreenColor90 = Color(0XFF_fdfefa)
+
+val MagentaColor00 = Color(0xFF_000000)
+val MagentaColor10 = Color(0xFF_331a2c)
+val MagentaColor20 = Color(0xFF_4c2743)
+val MagentaColor30 = Color(0xFF_7f4170)
+val MagentaColor40 = Color(0xFF_ff69da)
+val MagentaColor50 = Color(0xFF_ff82e0)
+val MagentaColor60 = Color(0xFF_ff9be6)
+val MagentaColor70 = Color(0xFF_ffafeb)
+val MagentaColor80 = Color(0xFF_ffebfa)
+val MagentaColor90 = Color(0XFF_fffdfe)
+
 val Inactive1Light = Color(0xFFF0F0F0)
 val Inactive2Light = Color(0xFFA0A0A0)
 val Inactive3Light = Color(0xFF424242)
-
-val Inactive1Dark = BrandColor20
-val Inactive2Dark = BrandColor30
-val Inactive3Dark = BrandColor80
 
 val PositiveActionColor = Color(0xFF_b8e52e)
 val NegativeActionColor = Color(0xFF_ff855c)
