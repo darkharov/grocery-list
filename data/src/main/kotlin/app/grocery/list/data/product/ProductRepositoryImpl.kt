@@ -3,22 +3,23 @@ package app.grocery.list.data.product
 import android.content.Context
 import app.grocery.list.data.R
 import app.grocery.list.data.category.CategoryDao
-import app.grocery.list.domain.product.CategoryProducts
 import app.grocery.list.domain.product.EmojiAndCategoryId
 import app.grocery.list.domain.product.EmojiAndKeyword
-import app.grocery.list.domain.product.EnabledAndDisabledProducts
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
+import app.grocery.list.domain.product.ProductsCriteria
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Singleton
 internal class ProductRepositoryImpl @Inject constructor(
     @param:ApplicationContext
@@ -28,37 +29,14 @@ internal class ProductRepositoryImpl @Inject constructor(
     private val categoryDao: CategoryDao,
 ) : ProductRepository {
 
-    override fun all(): Flow<List<CategoryProducts>> =
-        select(enabledOnly = false)
-
-    private fun select(enabledOnly: Boolean): Flow<List<CategoryProducts>> =
+    override fun get(criteria: ProductsCriteria): Flow<List<Product>> =
         productDao
-            .select(enabledOnly = enabledOnly)
+            .select(
+                enabledOnly = criteria.enabledOnly,
+                customListId = criteria.idOfSelectedCustomList,
+            )
+            .map(productMapper::toDomainModels)
             .flowOn(Dispatchers.IO)
-            .map { categorizedProducts ->
-                categorizedProducts.map { (categoryId, products) ->
-                    CategoryProducts(
-                        categoryId = categoryId,
-                        products = productMapper.toDomainModels(products),
-                    )
-                }
-            }
-
-    override fun enabledOnly(): Flow<List<CategoryProducts>> =
-        select(enabledOnly = true)
-
-    override fun groupEnabledAndDisabled(): Flow<EnabledAndDisabledProducts> =
-        productDao
-            .select(enabledOnly = false)
-            .flowOn(Dispatchers.IO)
-            .map { productMapper.toDomainModels(it.values.flatten()) }
-            .map { products ->
-                EnabledAndDisabledProducts(
-                    all = products,
-                    enabled = products.filter { it.enabled },
-                    disabled = products.filter { !(it.enabled) },
-                )
-            }
 
     override suspend fun get(id: Int): Product {
         val entity = withContext(Dispatchers.IO) {

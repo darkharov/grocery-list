@@ -53,6 +53,7 @@ internal object ProductListPreviewMapper {
                             disableAllAvailable = enableAndDisableAllFeatures.disableAllAvailable,
                         )
                     },
+                    needMoreListsButtonVisible = preview.needMoreListsQuestion,
                 )
             }
         }

@@ -43,6 +43,7 @@ dependencies {
     implementation(project(":presentation:ui:screens:final-steps"))
     implementation(project(":presentation:ui:screens:settings"))
     implementation(project(":presentation:ui:screens:faq"))
+    implementation(project(":presentation:ui:screens:custom-lists"))
 
     // Navigation
     implementation(libs.androidx.navigation3.runtime)

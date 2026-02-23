@@ -7,6 +7,13 @@ import javax.inject.Singleton
 @Singleton
 internal class CustomProductListMapper @Inject constructor() {
 
+    fun nullableToDomain(entity: CustomProductListEntity?): ProductList.Custom? =
+        if (entity != null) {
+            toDomain(entity)
+        } else {
+            null
+        }
+
     fun toDomain(entity: CustomProductListEntity): ProductList.Custom =
         ProductList.Custom(
             id = entity.id ?: throw IllegalStateException("CustomProductListEntity must be queried from DB"),

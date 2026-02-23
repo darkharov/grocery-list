@@ -71,6 +71,7 @@
     <string name="privacy_policy">Политика конфиденциальности</string>
     <string name="browser_app_not_found">Приложение браузера к сожалению не найдено</string>
     <string name="all_lists">Все списки</string>
+    <string name="need_more_lists">Нужно больше списков?</string>
 
     <string-array name="final_steps">
         <item>Заблокируйте экран</item>

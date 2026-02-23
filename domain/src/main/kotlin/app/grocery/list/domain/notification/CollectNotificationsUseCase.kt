@@ -3,8 +3,8 @@ package app.grocery.list.domain.notification
 import app.grocery.list.domain.formatter.GetProductTitleFormatterUseCase
 import app.grocery.list.domain.formatter.ProductTitleFormatter
 import app.grocery.list.domain.product.CategoryProducts
+import app.grocery.list.domain.product.GetCategorizedProductsUseCase
 import app.grocery.list.domain.product.Product
-import app.grocery.list.domain.product.ProductRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
@@ -13,14 +13,14 @@ import kotlinx.coroutines.flow.map
 
 @Singleton
 internal class CollectNotificationsUseCase @Inject constructor(
-    private val productRepository: ProductRepository,
+    private val getProducts: GetCategorizedProductsUseCase,
     private val getProductTitleFormatter: GetProductTitleFormatterUseCase,
     private val formatNotificationTitle: FormatNotificationTitleUseCase,
 ) {
     fun execute(maxNumberOfItems: Int): Flow<List<NotificationContent>> =
         combine(
             getProductTitleFormatter.execute().map { it.formatter },
-            productRepository.enabledOnly(),
+            getProducts.execute(enabledOnly = true),
         ) { formatter, products ->
             groupProducts(
                 products = products,

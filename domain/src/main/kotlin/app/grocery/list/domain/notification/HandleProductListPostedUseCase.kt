@@ -1,5 +1,7 @@
 package app.grocery.list.domain.notification
 
+import app.grocery.list.domain.achievements.AchievementEvent
+import app.grocery.list.domain.achievements.AchievementRepository
 import app.grocery.list.domain.settings.BottomBarRoadmapStep
 import app.grocery.list.domain.settings.SettingsRepository
 import javax.inject.Inject
@@ -7,10 +9,11 @@ import javax.inject.Singleton
 
 @Singleton
 class HandleProductListPostedUseCase @Inject internal constructor(
-    private val repository: SettingsRepository,
+    private val settingsRepository: SettingsRepository,
+    private val achievementRepository: AchievementRepository,
 ) {
     suspend fun execute() {
-        repository
+        settingsRepository
             .bottomBarRoadmapStep
             .edit { currentState ->
                 if (currentState == BottomBarRoadmapStep.Initial) {
@@ -19,5 +22,6 @@ class HandleProductListPostedUseCase @Inject internal constructor(
                     currentState
                 }
             }
+        achievementRepository.put(AchievementEvent.ProductListPosted)
     }
 }

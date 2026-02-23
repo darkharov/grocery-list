@@ -46,6 +46,7 @@ internal class ProductEntity(
     @ColumnInfo(
         Table.Columns.FK_CUSTOM_LIST_ID,
         defaultValue = "NULL",
+        index = true,
     )
     val customListId: Int?,
 ) {
@@ -61,7 +62,7 @@ internal class ProductEntity(
             const val KEYWORD = "keyword"
             const val ENABLED = "enabled"
             const val NON_FK_CATEGORY_ID = "non_fk_category_id" // categories are not stored in db
-            const val FK_CUSTOM_LIST_ID = "fk_custom_list_id"
+            const val FK_CUSTOM_LIST_ID = SqlAffixes.FK_ + "custom_list_id"
         }
     }
 
@@ -105,7 +106,7 @@ internal class ProductEntity(
             )
         }
 
-        fun toDomainModels(entities: List<ProductEntity>) =
+        fun toDomainModels(entities: List<ProductEntity>): List<Product> =
             entities.map(::toDomainModel)
     }
 }

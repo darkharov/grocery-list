@@ -4,9 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ProductRepository {
 
-    fun all(): Flow<List<CategoryProducts>>
-    fun enabledOnly(): Flow<List<CategoryProducts>>
-    fun groupEnabledAndDisabled(): Flow<EnabledAndDisabledProducts>
+    fun get(criteria: ProductsCriteria): Flow<List<Product>>
     fun count(): Flow<Int>
     fun numberOfEnabled(): Flow<Int>
     fun atLeastOneEnabled(): Flow<Boolean>

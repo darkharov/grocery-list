@@ -45,4 +45,5 @@ internal object AppContentContractMock :
     override fun goToProductEditingForm(productId: Int) {}
     override fun goToFinalSteps() {}
     override fun backToListPreview() {}
+    override fun goToProductListsSettings() {}
 }

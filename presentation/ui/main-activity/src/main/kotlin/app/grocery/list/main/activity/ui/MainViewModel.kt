@@ -155,6 +155,10 @@ class MainViewModel @Inject constructor(
         backStack.retainAll { it is ProductListPreview }
     }
 
+    override fun goToProductListsSettings() {
+        // TODO
+    }
+
     fun notifyPushNotificationsGranted() {
         viewModelScope.launch {
             progress.value = true

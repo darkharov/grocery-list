@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -35,6 +36,7 @@ import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.elements.button.text.AppTextButton
+import app.grocery.list.commons.compose.elements.button.text.AppUnderlinedTextButton
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialog
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
@@ -80,6 +82,9 @@ private fun EventConsumer(
                 contract.goToProductEditingForm(
                     productId = event.productId,
                 )
+            }
+            is Event.OnNeedMoreListsClick -> {
+                contract.goToProductListsSettings()
             }
         }
     }
@@ -275,6 +280,32 @@ private fun LazyListScope.items(
                 modifier = Modifier
                     .animateItem(),
             )
+        }
+    }
+    if (props.needMoreListsButtonVisible) {
+        item(
+            key = "Need more lists",
+            contentType = "Need more lists",
+        ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 12.dp,
+                    )
+                    .padding(
+                        horizontal = dimensionResource(R.dimen.margin_16_32_64),
+                    )
+                    .animateItem(),
+            ) {
+                AppUnderlinedTextButton(
+                    text = StringValue.ResId(R.string.need_more_lists),
+                    onClick = {
+                        callbacks.onNeedMoreListsClick()
+                    },
+                )
+            }
         }
     }
 }

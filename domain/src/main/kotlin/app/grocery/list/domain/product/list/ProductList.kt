@@ -24,8 +24,10 @@ sealed class ProductList {
         )
 
         data class Summary(
+            val title: String,
+            val colorScheme: ColorScheme,
             val itemCount: Int,
             val stub: String,
-        ) : ProductList()
+        )
     }
 }

@@ -12,6 +12,7 @@ import app.grocery.list.domain.product.AtLeastOneProductJustAddedUseCase
 import app.grocery.list.domain.product.EmojiAndKeyword
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
+import app.grocery.list.domain.product.PutProductFromInputFormUseCase
 import app.grocery.list.product.input.form.elements.category.picker.CategoryMapper
 import app.grocery.list.product.input.form.elements.category.picker.CategoryPickerProps
 import app.grocery.list.product.input.form.elements.category.picker.CategoryProps
@@ -42,6 +43,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
     @Assisted
     private val productId: Int?,
     private val productRepository: ProductRepository,
+    private val putProductFromInputForm: PutProductFromInputFormUseCase,
     private val categoryRepository: CategoryRepository,
     private val categoryMapper: CategoryMapper,
     private val emojiMapper: EmojiMapper,
@@ -182,7 +184,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
             customListId = null,
         )
         viewModelScope.launch {
-            productRepository.put(product)
+            putProductFromInputForm.execute(product)
         }
     }
 

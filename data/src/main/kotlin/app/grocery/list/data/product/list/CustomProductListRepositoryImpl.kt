@@ -18,8 +18,16 @@ internal class CustomProductListRepositoryImpl @Inject constructor(
 
     override fun all(): Flow<List<ProductList.Custom>> =
         dao.all()
-            .flowOn(Dispatchers.IO)
             .map(mapper::listToDomain)
+            .flowOn(Dispatchers.IO)
+
+    override fun get(id: Int): Flow<ProductList.Custom?> =
+        dao.select(id = id)
+            .map { mapper.nullableToDomain(it) }
+            .flowOn(Dispatchers.IO)
+
+    override fun contains(id: Int): Flow<Boolean> =
+        dao.contains(id = id)
 
     override suspend fun put(params: ProductList.Custom.CreateParams) {
         withContext(Dispatchers.IO) {

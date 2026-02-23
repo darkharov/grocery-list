@@ -38,6 +38,7 @@ import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.values.StringValue
+import app.grocery.list.custom.lists.CustomListsScreen
 import app.grocery.list.faq.FaqScreen
 import app.grocery.list.final_.steps.FinalStepsScreen
 import app.grocery.list.main.activity.R
@@ -202,6 +203,9 @@ internal fun AppContent(
                 }
                 entry<Faq> {
                     FaqScreen()
+                }
+                entry<CustomLists> {
+                    CustomListsScreen()
                 }
             },
         )

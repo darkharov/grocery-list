@@ -71,6 +71,7 @@
     <string name="privacy_policy">Політика конфіденційності</string>
     <string name="browser_app_not_found">Додаток браузера на жаль не знайдено</string>
     <string name="all_lists">Усі списки</string>
+    <string name="need_more_lists">Потрібно більше списків?</string>
 
     <string-array name="final_steps">
         <item>Заблокуйте екран</item>

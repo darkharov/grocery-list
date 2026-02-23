@@ -13,6 +13,7 @@ sealed class ProductListPreview {
     data class Items(
         val categories: List<CategoryContent>,
         val enableAndDisableAllFeatures: EnableAndDisableAll?,
+        val needMoreListsQuestion: Boolean,
     ) : ProductListPreview() {
 
         data class EnableAndDisableAll(

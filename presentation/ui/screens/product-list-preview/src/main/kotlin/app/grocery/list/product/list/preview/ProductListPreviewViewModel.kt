@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 internal class ProductListPreviewViewModel @Inject constructor(
     private val getPreview: GetProductListPreviewUseCase,
-    private val repository: ProductRepository,
+    private val productRepository: ProductRepository,
     private val getFormattedTemplateProducts: GetTemplateProductsUseCase,
 ) : ViewModel(),
     ProductListPreviewCallbacks {
@@ -38,7 +38,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
 
     override fun onDelete(productId: Int) {
         viewModelScope.launch {
-            val deletedProduct = repository.delete(productId = productId)
+            val deletedProduct = productRepository.delete(productId = productId)
             val event = Event.OnProductDeleted(deletedProduct)
             events.trySend(event)
         }
@@ -46,7 +46,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
 
     override fun onProductEnabledChange(productId: Int, newValue: Boolean) {
         viewModelScope.launch {
-            repository.setEnabled(
+            productRepository.setEnabled(
                 productId = productId,
                 enabled = newValue,
             )
@@ -59,13 +59,13 @@ internal class ProductListPreviewViewModel @Inject constructor(
 
     override fun onEnableAll() {
         viewModelScope.launch {
-            repository.enableAll()
+            productRepository.enableAll()
         }
     }
 
     override fun onDisableEnableAll() {
         viewModelScope.launch {
-            repository.disableAll()
+            productRepository.disableAll()
         }
     }
 
@@ -89,8 +89,12 @@ internal class ProductListPreviewViewModel @Inject constructor(
     override fun onPasteProductsConfirmed(products: List<Product>) {
         removeDialog()
         viewModelScope.launch {
-            repository.put(products)
+            productRepository.put(products)
         }
+    }
+
+    override fun onNeedMoreListsClick() {
+        events.trySend(Event.OnNeedMoreListsClick)
     }
 
     private fun removeDialog() {
@@ -106,5 +110,6 @@ internal class ProductListPreviewViewModel @Inject constructor(
     sealed class Event {
         data class OnProductDeleted(val product: Product) : Event()
         data class OnEditProduct(val productId: Int) : Event()
+        data object OnNeedMoreListsClick : Event()
     }
 }

@@ -31,6 +31,7 @@ internal object MigrationFrom4To5 : Migration(4, 5) {
 
             execSQL("DROP TABLE `product`")
             execSQL("CREATE TABLE `product` (`product_id` INTEGER, `title` TEXT NOT NULL, `emoji` TEXT, `keyword` TEXT, `enabled` INTEGER NOT NULL, `non_fk_category_id` INTEGER NOT NULL, `fk_custom_list_id` INTEGER DEFAULT NULL, PRIMARY KEY(`product_id`), FOREIGN KEY(`fk_custom_list_id`) REFERENCES `custom_product_list`(`custom_product_list_id`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+            execSQL("CREATE INDEX `index_product_fk_custom_list_id` ON `product` (`fk_custom_list_id`)")
             for (product in products) {
                 execSQL(
                     """
