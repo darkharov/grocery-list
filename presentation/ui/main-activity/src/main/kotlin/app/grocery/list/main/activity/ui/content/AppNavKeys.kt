@@ -31,3 +31,9 @@ data object BottomBarSettings : NavKey
 
 @Serializable
 data object Faq : NavKey
+
+@Serializable
+data object ProductListPicker : NavKey
+
+@Serializable
+data object CustomListsSettings : NavKey

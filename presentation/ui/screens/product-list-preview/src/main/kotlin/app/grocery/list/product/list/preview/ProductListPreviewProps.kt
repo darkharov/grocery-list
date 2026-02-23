@@ -27,6 +27,7 @@ sealed class ProductListPreviewProps {
     data class Items(
         val items: ImmutableList<CategoryAndFormattedProducts>,
         val enableAndDisableAll: EnableAndDisableAll?,
+        val needMoreListsButtonVisible: Boolean,
     ) : ProductListPreviewProps() {
 
         @Immutable
@@ -152,6 +153,7 @@ internal class ProductListPreviewMocks : PreviewParameterProvider<ProductListPre
                 ),
             ),
         ),
+        needMoreListsButtonVisible = true,
     )
 
     override val values: Sequence<ProductListPreviewProps?> =

@@ -41,7 +41,6 @@ internal class LegacySharingStringFormatter @Inject internal constructor() {
                 null
             },
             enabled = true,
-            customListId = null,
         )
     }
 

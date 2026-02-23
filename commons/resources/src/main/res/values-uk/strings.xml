@@ -71,6 +71,14 @@
     <string name="privacy_policy">Політика конфіденційності</string>
     <string name="browser_app_not_found">Додаток браузера на жаль не знайдено</string>
     <string name="all_lists">Усі списки</string>
+    <string name="need_more_lists">Потрібно більше списків?</string>
+    <string name="additional_lists">Додаткові списки</string>
+    <string name="enable_multiple_lists">Увімкнути можливість використовувати кілька списків</string>
+    <string name="multiple_lists_icon_explanation">Щоб переключатися між списками, використовуйте іконку у верхньому лівому куті на початковому екрані програми</string>
+    <string name="default_list">Список за налаштуванням</string>
+    <string name="add_another_one">Додати ще один</string>
+    <string name="product_list_picker_item_empty">(порожній)</string>
+    <string name="my_lists">Мої списки</string>
 
     <string-array name="final_steps">
         <item>Заблокуйте екран</item>

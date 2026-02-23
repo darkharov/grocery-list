@@ -19,7 +19,7 @@ internal class CustomProductListEntity(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(Table.Columns.ID)
-    val id: Int?,
+    val id: Int,
 
     @ColumnInfo(name = Table.Columns.TITLE)
     val title: String,

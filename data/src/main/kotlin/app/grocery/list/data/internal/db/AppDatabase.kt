@@ -4,8 +4,8 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import app.grocery.list.data.product.ProductDao
 import app.grocery.list.data.product.ProductEntity
-import app.grocery.list.data.product.list.CustomProductListDao
 import app.grocery.list.data.product.list.CustomProductListEntity
+import app.grocery.list.data.product.list.ProductListDao
 
 @Database(
     version = 5,
@@ -16,5 +16,5 @@ import app.grocery.list.data.product.list.CustomProductListEntity
 )
 internal abstract class AppDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDao
-    abstract fun customProductListDao(): CustomProductListDao
+    abstract fun productListDao(): ProductListDao
 }

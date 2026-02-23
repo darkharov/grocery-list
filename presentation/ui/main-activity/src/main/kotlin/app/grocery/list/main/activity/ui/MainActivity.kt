@@ -61,12 +61,14 @@ class MainActivity :
         setContent {
             val numberOfEnabledProducts by viewModel.numberOfEnabledProducts.collectAsState()
             val progress by viewModel.progress.collectAsState()
+            val isCustomListsFeatureEnabled by viewModel.isCustomListsFeatureEnabled.collectAsState()
             val hasEmojiIfEnoughSpace by viewModel.hasEmojiIfEnoughSpace.collectAsState()
             val dialog by viewModel.dialog().collectAsStateWithLifecycle()
             themeUtil.GroceryListTheme {
                 AppContent(
                     backStack = viewModel.backStack,
                     numberOfEnabledProducts = numberOfEnabledProducts,
+                    isCustomListsFeatureEnabled = isCustomListsFeatureEnabled,
                     progress = progress,
                     hasEmojiIfEnoughSpace = hasEmojiIfEnoughSpace,
                     dialog = dialog,

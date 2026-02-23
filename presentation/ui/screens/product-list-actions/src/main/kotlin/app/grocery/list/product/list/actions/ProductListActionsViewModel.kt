@@ -6,6 +6,7 @@ import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogProps
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.domain.product.EnabledAndDisabledProducts
+import app.grocery.list.domain.product.GroupEnabledAndDisabledProductsUseCase
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.domain.settings.SettingsRepository
@@ -28,6 +29,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 internal class ProductListActionsViewModel @Inject constructor(
     private val productRepository: ProductRepository,
+    private val groupEnabledAndDisabled: GroupEnabledAndDisabledProductsUseCase,
     private val settingsRepository: SettingsRepository,
     private val getProductSharingString: GetProductSharingStringUseCase,
     private val parseProductList: ParseAndFormatProductsUseCase,
@@ -222,9 +224,7 @@ internal class ProductListActionsViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            val products = productRepository
-                .groupEnabledAndDisabled()
-                .first()
+            val products = groupEnabledAndDisabled.execute()
 
             loadingListToShare.value = false
 

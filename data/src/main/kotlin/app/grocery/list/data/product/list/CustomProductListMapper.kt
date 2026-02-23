@@ -7,20 +7,17 @@ import javax.inject.Singleton
 @Singleton
 internal class CustomProductListMapper @Inject constructor() {
 
-    fun toDomain(entity: CustomProductListEntity): ProductList.Custom =
-        ProductList.Custom(
-            id = entity.id ?: throw IllegalStateException("CustomProductListEntity must be queried from DB"),
-            title = entity.title,
-            colorScheme = ProductList.Custom.ColorScheme.entries[entity.colorScheme]
+    fun toData(details: ProductList.CreateParams): CustomProductListEntity =
+        CustomProductListEntity(
+            id = 0,
+            title = details.title,
+            colorScheme = details.colorScheme.ordinal,
         )
 
-    fun listToDomain(entity: List<CustomProductListEntity>): List<ProductList.Custom> =
-        entity.map(::toDomain)
-
-    fun toData(createParams: ProductList.Custom.CreateParams): CustomProductListEntity=
-        CustomProductListEntity(
-            id = null,
-            title = createParams.title,
-            colorScheme = createParams.colorScheme.ordinal,
+    fun toDomain(entity: CustomProductListEntity): ProductList =
+        ProductList(
+            id = ProductList.Id.Custom(entity.id),
+            title = entity.title,
+            colorScheme = ProductList.ColorScheme.entries[entity.colorScheme],
         )
 }
