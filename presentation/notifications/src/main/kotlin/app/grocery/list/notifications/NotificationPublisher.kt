@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.util.Log
+import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -107,6 +108,7 @@ class NotificationPublisher @Inject internal constructor(
         notificationManager.cancelAll()
     }
 
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     private suspend fun post(notifications: List<NotificationContent>) {
         val reversed = notifications.reversed() // The last ones rise to the top, but we need opposite behavior
         for (notification in reversed) {
