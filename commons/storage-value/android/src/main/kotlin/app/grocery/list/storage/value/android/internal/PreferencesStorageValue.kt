@@ -29,6 +29,11 @@ internal sealed class PreferencesStorageValue<T> : StorageValue<T> {
             .map { preferences -> read(preferences) }
             .distinctUntilChanged()
 
+    final override suspend fun edit(mutation: (T) -> T) {
+        dataStore.edit { preferences ->
+            write(preferences, mutation(read(preferences)))
+        }
+    }
 
     private class CustomValue<T>(
         override val dataStore: DataStore<Preferences>,
