@@ -8,7 +8,6 @@ import app.grocery.list.storage.value.kotlin.StorageValue
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 internal sealed class PreferencesStorageValue<T> : StorageValue<T> {
@@ -27,7 +26,6 @@ internal sealed class PreferencesStorageValue<T> : StorageValue<T> {
         dataStore
             .data
             .map { preferences -> read(preferences) }
-            .distinctUntilChanged()
 
     final override suspend fun edit(mutation: (T) -> T) {
         dataStore.edit { preferences ->
