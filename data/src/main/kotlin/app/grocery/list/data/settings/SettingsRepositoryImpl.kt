@@ -9,34 +9,43 @@ import javax.inject.Singleton
 
 @Singleton
 internal class SettingsRepositoryImpl @Inject constructor(
-    factory: StorageValueFactory,
+    storageValueFactory: StorageValueFactory,
 ) : SettingsRepository {
 
     override val productTitleFormat =
-        factory.enum(
-            defaultValue = ProductTitleFormat.EmojiAndFullText,
-            keyPrefix = "$OLD_KEY_PREFIX\$productTitleFormatter",
+        storageValueFactory.enum(
+            key = PRODUCT_TITLE_FORMATTER,
+            defaultValue = ProductTitleFormat.EmojiAndFullText
         )
 
     override val clearNotificationsReminderEnabled =
-        factory.boolean(
+        storageValueFactory.boolean(
+            key = CLEAR_NOTIFICATIONS_REMINDER_ENABLED,
             defaultValue = true,
-            key = "$OLD_KEY_PREFIX\$clearNotificationsReminderEnabled",
         )
 
     override val bottomBarRoadmapStep =
-        factory.enum(
+        storageValueFactory.enum(
+            key = BOTTOM_BAR_ROADMAP_STEP,
             defaultValue = BottomBarRoadmapStep.Initial,
-            keyPrefix = "$OLD_KEY_PREFIX\$bottomBarRoadmapStep",
         )
 
     override val recommendAppWhenSharingList =
-        factory.boolean(
+        storageValueFactory.boolean(
+            key = RECOMMEND_APP_WHEN_SHARING_LIST,
             defaultValue = true,
-            key = "$OLD_KEY_PREFIX\$recommendAppWhenSharingList",
         )
 
     companion object {
-        const val OLD_KEY_PREFIX = "app.grocery.list.data.AppRepositoryImpl"
+
+        const val PRODUCT_TITLE_FORMATTER = "app.grocery.list.data.settings.PRODUCT_TITLE_FORMATTER"
+        const val BOTTOM_BAR_ROADMAP_STEP = "app.grocery.list.data.settings.BOTTOM_BAR_ROADMAP_STEP"
+        const val RECOMMEND_APP_WHEN_SHARING_LIST = "app.grocery.list.data.settings.RECOMMEND_APP_WHEN_SHARING_LIST"
+        const val CLEAR_NOTIFICATIONS_REMINDER_ENABLED = "app.grocery.list.data.settings.CLEAR_NOTIFICATIONS_REMINDER_ENABLED"
+
+        const val OLD_KEY_PRODUCT_TITLE_FORMATTER = $$"app.grocery.list.data.AppRepositoryImpl$productTitleFormatterordinal"
+        const val OLD_KEY_BOTTOM_BAR_ROADMAP_STEP = $$"app.grocery.list.data.AppRepositoryImpl$bottomBarRoadmapStepordinal"
+        const val OLD_KEY_RECOMMEND_APP_WHEN_SHARING_LIST = $$"app.grocery.list.data.AppRepositoryImpl$recommendAppWhenSharingList"
+        const val OLD_KEY_CLEAR_NOTIFICATIONS_REMINDER_ENABLED = $$"app.grocery.list.data.AppRepositoryImpl$clearNotificationsReminderEnabled"
     }
 }

@@ -11,3 +11,11 @@ interface StorageValue<T> {
 
 suspend fun <T> StorageValue<T>.get(): T =
     observe().first()
+
+suspend fun StorageValue<Int>.inc() {
+    this.edit { it + 1 }
+}
+
+suspend fun StorageValue<Int>.dec() {
+    this.edit { it + 1 }
+}
