@@ -1,4 +1,4 @@
-package app.grocery.list.product.list.actions.bar
+package app.grocery.list.commons.compose.elements
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -18,9 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ProductListActionsBarContainer(
-    horizontalArrangement: Arrangement.Horizontal,
+fun AppBottomBarContainer(
     modifier: Modifier = Modifier,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.SpaceEvenly,
     content: @Composable RowScope.() -> Unit,
 ) {
     Row(

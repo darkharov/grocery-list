@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import app.grocery.list.commons.compose.elements.AppBottomBarContainer
 import app.grocery.list.commons.compose.elements.button.AppButtonAdd
 import app.grocery.list.commons.compose.elements.button.AppButtonNext
 import app.grocery.list.commons.compose.theme.GroceryListTheme
@@ -20,7 +21,7 @@ internal fun ProductListActionsButtonBar(
     callbacks: ProductListActionsCallbacks,
     modifier: Modifier = Modifier,
 ) {
-    ProductListActionsBarContainer(
+    AppBottomBarContainer(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
             .padding(

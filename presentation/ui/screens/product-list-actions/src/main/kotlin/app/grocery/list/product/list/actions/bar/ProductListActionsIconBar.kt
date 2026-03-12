@@ -1,6 +1,5 @@
 package app.grocery.list.product.list.actions.bar
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContentPaste
@@ -15,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import app.grocery.list.commons.compose.elements.AppBottomBarContainer
 import app.grocery.list.commons.compose.elements.button.AppButtonStateProps
 import app.grocery.list.commons.compose.elements.button.icon.AppIconButton
 import app.grocery.list.commons.compose.theme.GroceryListTheme
@@ -31,8 +31,7 @@ internal fun ProductListActionsIconBar(
     callbacks: ProductListActionsCallbacks,
     modifier: Modifier = Modifier,
 ) {
-    ProductListActionsBarContainer(
-        horizontalArrangement = Arrangement.SpaceEvenly,
+    AppBottomBarContainer(
         modifier = modifier
             .padding(
                 horizontal = dimensionResource(R.dimen.margin_16_32_64) - 16.dp,
