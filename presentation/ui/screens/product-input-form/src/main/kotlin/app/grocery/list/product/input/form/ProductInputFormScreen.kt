@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -28,7 +27,7 @@ import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -260,54 +259,48 @@ private fun Buttons(
     }
 }
 
-@PreviewLightDark
+@Preview
 @Composable
 private fun ProductInputScreenInitialStatePreview() {
     GroceryListTheme {
-        Scaffold { padding ->
-            Content(
-                title = TextFieldState(),
-                props = ProductInputFormProps(
-                    productId = null,
-                    emoji = EmojiProps(
-                        value = "🍎",
-                    ),
-                    categoryPicker = CategoryPickerProps(),
-                    enabled = true,
-                    atLeastOneProductJustAdded = false,
+        Content(
+            title = TextFieldState(),
+            props = ProductInputFormProps(
+                productId = null,
+                emoji = EmojiProps(
+                    value = "🍎",
                 ),
-                callbacks = ProductInputFormCallbacksMock,
-                titleFocusRequester = remember { FocusRequester() },
-                categoryFocusRequester = remember { FocusRequester() },
-                modifier = Modifier
-                    .padding(padding),
-            )
-        }
+                categoryPicker = CategoryPickerProps(),
+                enabled = true,
+                atLeastOneProductJustAdded = false,
+            ),
+            callbacks = ProductInputFormCallbacksMock,
+            titleFocusRequester = remember { FocusRequester() },
+            categoryFocusRequester = remember { FocusRequester() },
+            modifier = Modifier,
+        )
     }
 }
 
-@PreviewLightDark
+@Preview
 @Composable
 private fun ProductInputScreenPreview() {
     GroceryListTheme {
-        Scaffold { padding ->
-            Content(
-                title = TextFieldState(),
-                props = ProductInputFormProps(
-                    productId = null,
-                    emoji = EmojiProps(
-                        value = "🍎",
-                    ),
-                    categoryPicker = CategoryPickerProps(),
-                    enabled = true,
-                    atLeastOneProductJustAdded = false,
+        Content(
+            title = TextFieldState(),
+            props = ProductInputFormProps(
+                productId = null,
+                emoji = EmojiProps(
+                    value = "🍎",
                 ),
-                callbacks = ProductInputFormCallbacksMock,
-                titleFocusRequester = remember { FocusRequester() },
-                categoryFocusRequester = remember { FocusRequester() },
-                modifier = Modifier
-                    .padding(padding),
-            )
-        }
+                categoryPicker = CategoryPickerProps(),
+                enabled = true,
+                atLeastOneProductJustAdded = false,
+            ),
+            callbacks = ProductInputFormCallbacksMock,
+            titleFocusRequester = remember { FocusRequester() },
+            categoryFocusRequester = remember { FocusRequester() },
+            modifier = Modifier,
+        )
     }
 }
