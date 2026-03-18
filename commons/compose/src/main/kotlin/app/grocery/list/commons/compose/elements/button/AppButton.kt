@@ -39,58 +39,60 @@ fun AppButton(
     modifier: Modifier = Modifier,
     endIcon: Painter? = null,
     background: AppButtonBackgroundProps = AppButtonBackgroundProps.Normal,
-    state: AppButtonStateProps = AppButtonStateProps.Enabled,
+    state: AppButtonStateProps = AppButtonStateProps.Normal,
 ) {
-    Button(
-        onClick = onClick,
-        modifier = modifier,
-        shape = RoundedCornerShape(8.dp),
-        enabled = state.enabled,
-        colors = ButtonDefaults.buttonColors(
-            contentColor = Color.Black,
-            containerColor = background.toColor(),
-            disabledContainerColor = LocalAppColors.current.inactive1,
-            disabledContentColor = LocalAppColors.current.inactive2,
-        ),
-    ) {
-        Box(
-            modifier = Modifier
-                .weight(1f),
+    if (state != AppButtonStateProps.Gone) {
+        Button(
+            onClick = onClick,
+            modifier = modifier,
+            shape = RoundedCornerShape(8.dp),
+            enabled = state == AppButtonStateProps.Normal,
+            colors = ButtonDefaults.buttonColors(
+                contentColor = Color.Black,
+                containerColor = background.toColor(),
+                disabledContainerColor = LocalAppColors.current.inactive1,
+                disabledContentColor = LocalAppColors.current.inactive2,
+            ),
         ) {
-            Text(
-                text = title.value(),
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = if (endIcon != null) {
-                            TrailingElementOffset + TrailingElementSize
-                        } else {
-                            0.dp
-                        },
+                    .weight(1f),
+            ) {
+                Text(
+                    text = title.value(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = if (endIcon != null) {
+                                TrailingElementOffset + TrailingElementSize
+                            } else {
+                                0.dp
+                            },
+                        )
+                        .align(Alignment.Center),
+                    textAlign = TextAlign.Center,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                    style = LocalAppTypography.current.button,
+                )
+                if (state == AppButtonStateProps.Loading) {
+                    CircularProgressIndicator(
+                        color = Color.Black,
+                        modifier = Modifier
+                            .size(24.dp)
+                            .align(Alignment.CenterEnd),
                     )
-                    .align(Alignment.Center),
-                textAlign = TextAlign.Center,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1,
-                style = LocalAppTypography.current.button,
-            )
-            if (state.loading) {
-                CircularProgressIndicator(
-                    color = Color.Black,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .align(Alignment.CenterEnd),
-                )
-            } else if (endIcon != null) {
-                Icon(
-                    painter = endIcon,
-                    contentDescription = null,
-                    tint = Color.Black,
-                    modifier = Modifier
-                        .padding(start = TrailingElementOffset)
-                        .width(TrailingElementSize)
-                        .align(Alignment.CenterEnd),
-                )
+                } else if (endIcon != null) {
+                    Icon(
+                        painter = endIcon,
+                        contentDescription = null,
+                        tint = Color.Black,
+                        modifier = Modifier
+                            .padding(start = TrailingElementOffset)
+                            .width(TrailingElementSize)
+                            .align(Alignment.CenterEnd),
+                    )
+                }
             }
         }
     }
@@ -100,7 +102,7 @@ fun AppButton(
 fun AppButtonDone(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    state: AppButtonStateProps = AppButtonStateProps.Enabled,
+    state: AppButtonStateProps = AppButtonStateProps.Normal,
 ) {
     AppButton(
         title = StringValue.ResId(prefix = "✓ ", resId = R.string.done),
@@ -115,7 +117,7 @@ fun AppButtonDone(
 fun AppButtonNext(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    state: AppButtonStateProps = AppButtonStateProps.Enabled,
+    state: AppButtonStateProps = AppButtonStateProps.Normal,
     titleId: Int = R.string.next,
 ) {
     AppButton(
@@ -131,7 +133,7 @@ fun AppButtonNext(
 fun AppButtonAdd(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    state: AppButtonStateProps = AppButtonStateProps.Enabled,
+    state: AppButtonStateProps = AppButtonStateProps.Normal,
 ) {
     AppButton(
         title = StringValue.ResId(prefix = "+ ", resId = R.string.add),

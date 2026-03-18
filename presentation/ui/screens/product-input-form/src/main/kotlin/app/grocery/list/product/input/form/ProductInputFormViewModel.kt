@@ -12,22 +12,18 @@ import app.grocery.list.domain.product.AtLeastOneProductJustAddedUseCase
 import app.grocery.list.domain.product.EmojiAndKeyword
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
-import app.grocery.list.product.input.form.elements.category.picker.CategoryMapper
-import app.grocery.list.product.input.form.elements.category.picker.CategoryPickerProps
-import app.grocery.list.product.input.form.elements.category.picker.CategoryProps
+import app.grocery.list.kotlin.customCombine
 import commons.android.customStateIn
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -43,43 +39,35 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
     private val productId: Int?,
     private val productRepository: ProductRepository,
     private val categoryRepository: CategoryRepository,
-    private val categoryMapper: CategoryMapper,
     private val emojiMapper: EmojiMapper,
     private val atLeastOneProductJustAdded: AtLeastOneProductJustAddedUseCase,
+    private val productInputFormPropsMapper: ProductInputFormPropsMapper,
 ) : ViewModel(),
     ProductInputFormCallbacks {
 
     private val events = Channel<Event>(Channel.UNLIMITED)
     private val enabled = MutableStateFlow(true)
-    private val currentEmoji = MutableStateFlow<EmojiProps?>(null)
+    private val currentEmoji = MutableStateFlow<EmojiAndKeyword?>(null)
     private val selectedCategoryId = MutableStateFlow<Int?>(null)
     private val categoryPickerExpanded = MutableStateFlow(false)
 
     val title = TextFieldState()
-    val props = props().customStateIn(this, ProductInputFormProps())
+    val props = props().customStateIn(this, ProductInputFormProps(productId = productId))
 
     private fun props(): Flow<ProductInputFormProps> =
-        combine(
+        customCombine(
+            flowOf(productId),
             enabled,
             currentOrSuggestedEmoji(),
-            categoryPicker(),
+            categoryRepository.all(),
+            selectedOrSuggestedCategory(),
+            categoryPickerExpanded,
             atLeastOneProductJustAdded.execute(),
-        ) {
-                enabled,
-                emoji,
-                categoryPicker,
-                atLeastOneProductJustAdded,
-            ->
-            ProductInputFormProps(
-                productId = productId,
-                emoji = emoji,
-                enabled = enabled,
-                categoryPicker = categoryPicker,
-                atLeastOneProductJustAdded = atLeastOneProductJustAdded,
-            )
-        }
+            snapshotFlow { title.text },
+            ProductInputFormPropsMapper::Params
+        ).map(productInputFormPropsMapper::transform)
 
-    private fun currentOrSuggestedEmoji(): Flow<EmojiProps?> =
+    private fun currentOrSuggestedEmoji(): Flow<EmojiAndKeyword?> =
         currentEmoji
             .flatMapLatest { current ->
                 if (current != null) {
@@ -87,29 +75,10 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
                 } else {
                     snapshotFlow { title.text }
                         .mapLatest { title ->
-                            val emoji = productRepository.findEmoji(title)
-                            emojiMapper.toPresentationNullable(emoji)
+                            productRepository.findEmoji(title)
                         }
                 }
             }
-
-    private fun categoryPicker(): Flow<CategoryPickerProps> =
-        combine(
-            categories(),
-            selectedOrSuggestedCategory(),
-            categoryPickerExpanded,
-        ) { items, selectedOne, expanded ->
-            CategoryPickerProps(
-                items = items,
-                expanded = expanded,
-                selectedOne = categoryMapper.transformNullable(selectedOne),
-            )
-        }
-
-    private fun categories(): Flow<ImmutableList<CategoryProps>> =
-        categoryRepository
-            .all()
-            .map(categoryMapper::transformList)
 
     private fun selectedOrSuggestedCategory(): Flow<Category?> =
         selectedCategoryId
@@ -132,7 +101,7 @@ internal class ProductInputFormViewModel @AssistedInject constructor(
                     placeCursorAtEnd()
                 }
                 enabled.value = product.enabled
-                currentEmoji.value = emojiMapper.toPresentationNullable(product.emojiAndKeyword)
+                currentEmoji.value = product.emojiAndKeyword
                 selectedCategoryId.value = product.categoryId
             }
         }

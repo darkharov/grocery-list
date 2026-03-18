@@ -6,30 +6,20 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
 @Immutable
 enum class AppButtonStateProps {
-    Enabled,
+    Gone,
+    Normal,
     Disabled,
     Loading,
     ;
-
-    val enabled get() = (this == Enabled)
-    val loading get() = (this == Loading)
 
     companion object {
 
         @Stable
         fun enabled(enabled: Boolean) =
             if (enabled) {
-                Enabled
+                Normal
             } else {
                 Disabled
-            }
-
-        @Stable
-        fun progress(progress: Boolean) =
-            if (progress) {
-                Loading
-            } else {
-                Enabled
             }
     }
 }

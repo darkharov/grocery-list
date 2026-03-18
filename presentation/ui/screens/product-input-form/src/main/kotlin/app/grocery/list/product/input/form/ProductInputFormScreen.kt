@@ -1,6 +1,5 @@
 package app.grocery.list.product.input.form
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,9 +32,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.KeyboardOnComposition
+import app.grocery.list.commons.compose.elements.AppAddAndDoneButtonPanel
 import app.grocery.list.commons.compose.elements.AppTextField
-import app.grocery.list.commons.compose.elements.button.AppButtonAdd
-import app.grocery.list.commons.compose.elements.button.AppButtonDone
 import app.grocery.list.commons.compose.elements.button.AppButtonStateProps
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
@@ -149,10 +147,18 @@ internal fun Content(
             modifier = Modifier
                 .height(32.dp),
         )
-        Buttons(
-            title = title,
-            props = props,
-            callbacks = callbacks,
+        AppAddAndDoneButtonPanel(
+            addButtonState = props.addButtonState,
+            doneButtonState = props.doneButtonState,
+            onAddClick = {
+                callbacks.onAttemptToCompleteProductInput(
+                    productTitle = title.text.toString(),
+                    props = props,
+                )
+            },
+            onDoneClick = {
+                callbacks.onComplete()
+            },
         )
     }
 }
@@ -206,59 +212,6 @@ private fun TitleAndEmoji(
     }
 }
 
-@Composable
-private fun Buttons(
-    title: TextFieldState,
-    props: ProductInputFormProps,
-    callbacks: ProductInputFormCallbacks,
-    modifier: Modifier = Modifier,
-) {
-    when (props.state) {
-        is ProductInputFormProps.State.Initial -> {
-            // no ui elements
-        }
-        is ProductInputFormProps.State.Adding -> {
-            Row(
-                modifier = modifier,
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                AppButtonAdd(
-                    onClick = {
-                        callbacks.onAttemptToCompleteProductInput(
-                            productTitle = title.text.toString(),
-                            props = props,
-                        )
-                    },
-                    modifier = Modifier
-                        .weight(1f),
-                    state = AppButtonStateProps.enabled(title.text.isNotBlank()),
-                )
-                AppButtonDone(
-                    onClick = {
-                        callbacks.onComplete()
-                    },
-                    modifier = Modifier
-                        .weight(1f),
-                    state = AppButtonStateProps.enabled(
-                        enabled = props.atLeastOneProductJustAdded && title.text.isBlank(),
-                    ),
-                )
-            }
-        }
-        is ProductInputFormProps.State.Editing -> {
-            AppButtonDone(
-                onClick = {
-                    callbacks.onAttemptToCompleteProductInput(
-                        productTitle = title.text.toString(),
-                        props = props,
-                    )
-                },
-                modifier = modifier,
-            )
-        }
-    }
-}
-
 @Preview
 @Composable
 private fun ProductInputScreenInitialStatePreview() {
@@ -266,13 +219,14 @@ private fun ProductInputScreenInitialStatePreview() {
         Content(
             title = TextFieldState(),
             props = ProductInputFormProps(
-                productId = null,
+                productId = 1,
                 emoji = EmojiProps(
                     value = "🍎",
                 ),
                 categoryPicker = CategoryPickerProps(),
                 enabled = true,
-                atLeastOneProductJustAdded = false,
+                addButtonState = AppButtonStateProps.Normal,
+                doneButtonState = AppButtonStateProps.Disabled,
             ),
             callbacks = ProductInputFormCallbacksMock,
             titleFocusRequester = remember { FocusRequester() },
@@ -289,13 +243,14 @@ private fun ProductInputScreenPreview() {
         Content(
             title = TextFieldState(),
             props = ProductInputFormProps(
-                productId = null,
+                productId = 1,
                 emoji = EmojiProps(
                     value = "🍎",
                 ),
                 categoryPicker = CategoryPickerProps(),
                 enabled = true,
-                atLeastOneProductJustAdded = false,
+                addButtonState = AppButtonStateProps.Normal,
+                doneButtonState = AppButtonStateProps.Gone,
             ),
             callbacks = ProductInputFormCallbacksMock,
             titleFocusRequester = remember { FocusRequester() },

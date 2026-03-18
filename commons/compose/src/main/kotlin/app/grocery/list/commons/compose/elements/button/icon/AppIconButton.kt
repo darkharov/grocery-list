@@ -47,7 +47,7 @@ fun AppIconButton(
     contentDescription: StringValue,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    state: AppButtonStateProps = AppButtonStateProps.Enabled,
+    state: AppButtonStateProps = AppButtonStateProps.Normal,
 ) {
     Content(
         modifier = modifier,
@@ -68,39 +68,45 @@ private fun Content(
     type: AppIconButtonType,
     onClick: () -> Unit,
 ) {
-    if (state == AppButtonStateProps.Loading) {
-        AppCircularProgressIndicator(
-            modifier = modifier
-                .requiredSize(
-                    size = type.size,
-                ),
-        )
-    } else {
-        Image(
-            painter = painter,
-            contentDescription = contentDescription.value(),
-            modifier = modifier
-                .requiredSize(
-                    size = type.size,
-                )
-                .clip(RoundedCornerShape(8.dp))
-                .clickable(
-                    enabled = state.enabled,
-                    onClick = onClick,
-                )
-                .padding(type.padding),
-            colorFilter = ColorFilter
-                .tint(
-                    color = LocalAppColors.current.blackOrWhite
-                        .copy(
-                            alpha = if (state.enabled) {
-                                1f
-                            } else {
-                                0.33f
-                            }
-                        ),
-                ),
-        )
+    when (state) {
+        AppButtonStateProps.Gone -> {
+            // nothing to show
+        }
+        AppButtonStateProps.Loading -> {
+            AppCircularProgressIndicator(
+                modifier = modifier
+                    .requiredSize(
+                        size = type.size,
+                    ),
+            )
+        }
+        else -> {
+            Image(
+                painter = painter,
+                contentDescription = contentDescription.value(),
+                modifier = modifier
+                    .requiredSize(
+                        size = type.size,
+                    )
+                    .clip(RoundedCornerShape(8.dp))
+                    .clickable(
+                        enabled = state == AppButtonStateProps.Normal,
+                        onClick = onClick,
+                    )
+                    .padding(type.padding),
+                colorFilter = ColorFilter
+                    .tint(
+                        color = LocalAppColors.current.blackOrWhite
+                            .copy(
+                                alpha = if (state == AppButtonStateProps.Disabled) {
+                                    0.33f
+                                } else {
+                                    1f
+                                }
+                            ),
+                    ),
+            )
+        }
     }
 }
 
@@ -109,7 +115,7 @@ fun AppCloseButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     contentDescription: StringValue = StringValue.ResId(R.string.close),
-    state: AppButtonStateProps = AppButtonStateProps.Enabled,
+    state: AppButtonStateProps = AppButtonStateProps.Normal,
 ) {
     Content(
         painter = rememberVectorPainter(AppIcons.close),

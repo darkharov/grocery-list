@@ -15,3 +15,7 @@ kotlin {
         jvmTarget = JvmTarget.valueOf(Configs.Java.JVM_TARGET)
     }
 }
+
+dependencies {
+    implementation(libs.kotlinx.coroutines.core)
+}
