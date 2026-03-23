@@ -1,5 +1,6 @@
 package app.grocery.list.custom.product.lists.settings
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBars
@@ -48,17 +49,22 @@ private fun Content(
                 horizontal = dimensionResource(R.dimen.margin_16_32_64),
             ),
     ) {
-        AppExplanationImage(
-            imageId = if (props.featureEnabled) {
-                R.drawable.home_screen_with_custom_lists_icon
-            } else {
-                R.drawable.home_screen
-            },
+        Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
-                .weight(1f)
-                .padding(vertical = 32.dp),
-        )
+                .weight(1f),
+        ) {
+            AppExplanationImage(
+                imageId = if (props.featureEnabled) {
+                    R.drawable.home_screen_with_custom_lists_icon
+                } else {
+                    R.drawable.home_screen
+                },
+                modifier = Modifier
+                    .padding(vertical = 32.dp),
+            )
+        }
         AppTitledSwitch(
             text = StringValue.ResId(R.string.enable_multiple_lists),
             checked = props.featureEnabled,
