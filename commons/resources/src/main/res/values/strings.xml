@@ -75,7 +75,7 @@
     <string name="need_more_lists">Need more lists?</string>
     <string name="additional_lists">Additional Lists</string>
     <string name="enable_multiple_lists">Enable the ability to use multiple lists</string>
-    <string name="multiple_lists_icon_explanation">To switch between lists, use the icon in the upper left corner of the app\'s home screen.</string>
+    <string name="multiple_lists_icon_explanation">Use the icon in the upper left corner of the app\'s home screen.</string>
     <string name="default_list">Default list</string>
     <string name="add_another_one">Add another one</string>
     <string name="product_list_picker_item_empty">(empty)</string>
