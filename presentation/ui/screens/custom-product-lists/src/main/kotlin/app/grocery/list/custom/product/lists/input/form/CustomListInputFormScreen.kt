@@ -26,6 +26,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -133,6 +134,7 @@ private fun Content(
                 },
             label = StringValue.ResId(R.string.product_list_title),
             keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences,
                 imeAction = ImeAction.Done,
             ),
             onKeyboardAction = {
