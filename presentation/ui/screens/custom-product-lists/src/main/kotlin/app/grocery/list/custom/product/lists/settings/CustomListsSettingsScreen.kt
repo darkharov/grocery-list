@@ -1,5 +1,6 @@
 package app.grocery.list.custom.product.lists.settings
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -13,7 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -22,6 +23,7 @@ import app.grocery.list.commons.compose.elements.AppExplanationImage
 import app.grocery.list.commons.compose.elements.AppPreloaderOrContent
 import app.grocery.list.commons.compose.elements.switch_.AppTitledSwitch
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.custom.product.lists.R
 
@@ -30,7 +32,7 @@ fun CustomListsSettingsScreen() {
     val viewModel = hiltViewModel<CustomListsSettingsViewModel>()
     val props by viewModel.props.collectAsStateWithLifecycle()
     AppPreloaderOrContent(props = props) { props ->
-        Content(
+        CustomListsSettingsScreen(
             props = props,
             callbacks = viewModel
         )
@@ -38,13 +40,14 @@ fun CustomListsSettingsScreen() {
 }
 
 @Composable
-private fun Content(
+private fun CustomListsSettingsScreen(
     props: CustomListsSettingsProps,
     callbacks: CustomListsSettingsCallbacks,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
+        modifier = modifier
             .padding(
                 horizontal = dimensionResource(R.dimen.margin_16_32_64),
             ),
@@ -75,12 +78,12 @@ private fun Content(
             descriptionAlpha = if (props.featureEnabled) 1f else 0f,
             modifier = Modifier
                 .windowInsetsPadding(WindowInsets.navigationBars)
-                .padding(bottom = 16.dp),
+                .padding(bottom = 36.dp),
         )
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 private fun CustomListsSettingsScreenPreview(
     @PreviewParameter(
@@ -89,9 +92,11 @@ private fun CustomListsSettingsScreenPreview(
     props: CustomListsSettingsProps,
 ) {
     GroceryListTheme {
-        Content(
+        CustomListsSettingsScreen(
             props = props,
             callbacks = CustomListsSettingsCallbacksMock,
+            modifier = Modifier
+                .background(LocalAppColors.current.background),
         )
     }
 }
