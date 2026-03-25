@@ -22,7 +22,10 @@ internal class ProductInputFormPropsMapper @Inject constructor(
                 emoji = emojiMapper.toPresentationNullable(currentOrSuggestedEmoji),
                 enabled = enabled,
                 categoriesDropdown = categoriesMapper.toPresentation(categories),
-                productListsDropdown = if (productLists != null) {
+                productListsDropdown = if (
+                    productLists != null &&
+                    productLists.items.size > 1
+                ) {
                     productListsMapper.toPresentation(productLists)
                 } else {
                     null
