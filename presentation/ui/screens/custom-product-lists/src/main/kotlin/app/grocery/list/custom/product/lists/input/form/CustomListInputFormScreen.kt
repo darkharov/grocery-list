@@ -117,7 +117,7 @@ private fun Content(
     ) {
         Spacer(
             modifier = Modifier
-                .weight(1f),
+                .height(dimensionResource(R.dimen.margin_16_32_64)),
         )
         AppTextField(
             state = title,
