@@ -89,7 +89,7 @@ data class CustomListInputForm(
         AppNavKey.Title.Custom(
             StringValue.ResId(
                 if (customListId == null) {
-                    R.string.new_product_list
+                    R.string.new_list
                 } else {
                     R.string.editing
                 }
