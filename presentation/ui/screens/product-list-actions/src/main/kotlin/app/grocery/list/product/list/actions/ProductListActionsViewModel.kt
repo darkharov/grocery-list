@@ -8,6 +8,7 @@ import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDi
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.domain.product.AtLeastOneProductInCurrentListUseCase
 import app.grocery.list.domain.product.ClearCurrentListUseCase
+import app.grocery.list.domain.product.EnableAllProductsInCurrentListUseCase
 import app.grocery.list.domain.product.EnabledAndDisabledProducts
 import app.grocery.list.domain.product.GetNumberOfProductsUseCase
 import app.grocery.list.domain.product.GroupEnabledAndDisabledProductsUseCase
@@ -40,6 +41,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     private val atLeastOneProductInCurrentList: AtLeastOneProductInCurrentListUseCase,
     private val getNumberOfProducts: GetNumberOfProductsUseCase,
     private val clearCurrentList: ClearCurrentListUseCase,
+    private val enableAllProductsInCurrentList: EnableAllProductsInCurrentListUseCase,
 ) : ViewModel(),
     ProductListActionsCallbacks {
 
@@ -87,7 +89,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     override fun onEnableAllAndStartShopping() {
         dialog.value = null
         viewModelScope.launch {
-            productRepository.enableAll()
+            enableAllProductsInCurrentList.execute()
             events.trySend(Event.OnStartShopping)
         }
     }

@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogProps
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.domain.preview.GetProductListPreviewUseCase
+import app.grocery.list.domain.product.DisableAllProductsInCurrentListUseCase
+import app.grocery.list.domain.product.EnableAllProductsInCurrentListUseCase
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.domain.product.list.ProductListRepository
@@ -25,6 +27,8 @@ internal class ProductListPreviewViewModel @Inject constructor(
     private val productRepository: ProductRepository,
     private val productListRepository: ProductListRepository,
     private val getFormattedTemplateProducts: GetTemplateProductsUseCase,
+    private val enableAllInCurrentList: EnableAllProductsInCurrentListUseCase,
+    private val disableAllInCurrentList: DisableAllProductsInCurrentListUseCase,
 ) : ViewModel(),
     ProductListPreviewCallbacks {
 
@@ -61,13 +65,13 @@ internal class ProductListPreviewViewModel @Inject constructor(
 
     override fun onEnableAll() {
         viewModelScope.launch {
-            productRepository.enableAll()
+            enableAllInCurrentList.execute()
         }
     }
 
     override fun onDisableEnableAll() {
         viewModelScope.launch {
-            productRepository.disableAll()
+            disableAllInCurrentList.execute()
         }
     }
 
