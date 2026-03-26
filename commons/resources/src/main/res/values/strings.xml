@@ -80,7 +80,7 @@
     <string name="add_another_one">Add another one</string>
     <string name="product_list_picker_item_empty">(empty)</string>
     <string name="product_list">Product List</string>
-    <string name="new_product_list">New Product List</string>
+    <string name="new_list">New List</string>
     <string name="product_list_title">List Title</string>
     <string name="color_scheme">Color scheme</string>
     <string name="delete_product_list_confirmation">Are you sure you want to delete this list?</string>

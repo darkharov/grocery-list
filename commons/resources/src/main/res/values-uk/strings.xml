@@ -80,7 +80,7 @@
     <string name="add_another_one">Додати ще один</string>
     <string name="product_list_picker_item_empty">(порожній)</string>
     <string name="product_list">Список продуктів</string>
-    <string name="new_product_list">Новий список</string>
+    <string name="new_list">Новий список</string>
     <string name="product_list_title">Назва списку</string>
     <string name="color_scheme">Кольорова схема</string>
     <string name="delete_product_list_confirmation">Ви дійсно бажаєте видалити цей список?</string>
