@@ -20,6 +20,6 @@ interface ProductRepository {
     suspend fun put(products: List<Product>)
     suspend fun setEnabled(productId: Int, enabled: Boolean)
     suspend fun setEnabled(productIds: List<Int>, enabled: Boolean)
-    suspend fun enableAll()
-    suspend fun disableAll()
+    suspend fun enableAll(productListId: ProductList.Id)
+    suspend fun disableAll(productListId: ProductList.Id)
 }

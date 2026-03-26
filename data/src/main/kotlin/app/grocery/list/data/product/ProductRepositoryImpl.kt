@@ -3,6 +3,7 @@ package app.grocery.list.data.product
 import android.content.Context
 import app.grocery.list.data.R
 import app.grocery.list.data.category.CategoryDao
+import app.grocery.list.data.product.list.CustomProductListIdMapper
 import app.grocery.list.domain.product.EmojiAndCategoryId
 import app.grocery.list.domain.product.EmojiAndKeyword
 import app.grocery.list.domain.product.Product
@@ -27,12 +28,13 @@ internal class ProductRepositoryImpl @Inject constructor(
     private val productDao: ProductDao,
     private val productMapper: ProductMapper,
     private val categoryDao: CategoryDao,
+    private val customProductListIdMapper: CustomProductListIdMapper,
 ) : ProductRepository {
 
     override fun get(criteria: Product.Criteria): Flow<List<Product>> =
         productDao
             .select(
-                customListId = (criteria.productListId as? ProductList.Id.Custom)?.backingId,
+                customListId = customProductListIdMapper.toData(criteria.productListId),
                 enabledOnly = criteria.enabledOnly,
             )
             .map { entities ->
@@ -60,7 +62,7 @@ internal class ProductRepositoryImpl @Inject constructor(
     override suspend fun deleteAll(productListId: ProductList.Id) {
         withContext(Dispatchers.IO) {
             productDao.deleteAll(
-                customListId = (productListId as? ProductList.Id.Custom)?.backingId,
+                customListId = customProductListIdMapper.toData(productListId),
             )
         }
     }
@@ -102,7 +104,7 @@ internal class ProductRepositoryImpl @Inject constructor(
     override fun count(criteria: Product.Criteria): Flow<Int> =
         productDao
             .count(
-                customListId = (criteria.productListId as? ProductList.Id.Custom)?.backingId,
+                customListId = customProductListIdMapper.toData(criteria.productListId),
                 enabledOnly = criteria.enabledOnly,
             )
             .flowOn(Dispatchers.IO)
@@ -113,7 +115,7 @@ internal class ProductRepositoryImpl @Inject constructor(
     override fun any(criteria: Product.Criteria): Flow<Boolean> =
         productDao
             .any(
-                customListId = (criteria.productListId as? ProductList.Id.Custom)?.backingId,
+                customListId = customProductListIdMapper.toData(criteria.productListId),
                 enabledOnly = criteria.enabledOnly,
             )
             .flowOn(Dispatchers.IO)
@@ -137,15 +139,21 @@ internal class ProductRepositoryImpl @Inject constructor(
                 }
         )
 
-    override suspend fun enableAll() {
+    override suspend fun enableAll(productListId: ProductList.Id) {
         withContext(Dispatchers.IO) {
-            productDao.setEnabledFlagForAll(enabled = true)
+            productDao.setEnabledFlag(
+                enabled = true,
+                customListId = customProductListIdMapper.toData(productListId),
+            )
         }
     }
 
-    override suspend fun disableAll() {
+    override suspend fun disableAll(productListId: ProductList.Id) {
         withContext(Dispatchers.IO) {
-            productDao.setEnabledFlagForAll(enabled = false)
+            productDao.setEnabledFlag(
+                enabled = false,
+                customListId = customProductListIdMapper.toData(productListId),
+            )
         }
     }
 }

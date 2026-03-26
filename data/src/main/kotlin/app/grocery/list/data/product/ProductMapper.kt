@@ -1,14 +1,15 @@
 package app.grocery.list.data.product
 
 import app.grocery.list.data.product.emoji.and.keyword.EmojiAndKeywordMapper
+import app.grocery.list.data.product.list.CustomProductListIdMapper
 import app.grocery.list.domain.product.Product
-import app.grocery.list.domain.product.list.ProductList
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 internal class ProductMapper @Inject constructor(
     private val emojiAndKeywordMapper: EmojiAndKeywordMapper,
+    private val customProductListIdMapper: CustomProductListIdMapper,
 ) {
     fun toData(product: Product): ProductEntity =
         ProductEntity(
@@ -19,12 +20,13 @@ internal class ProductMapper @Inject constructor(
             ),
             enabled = product.enabled,
             nonFkCategoryId = product.categoryId,
-            customListId = (product.productListId as? ProductList.Id.Custom)?.backingId,
+            customListId = customProductListIdMapper.toData(
+                productListId = product.productListId,
+            ),
         )
 
-    fun toDomain(entity: ProductEntity): Product {
-        val customListId = entity.customListId
-        return Product(
+    fun toDomain(entity: ProductEntity) =
+        Product(
             id = entity.id ?: throw IllegalStateException("ProductEntity must be queried from DB"),
             title = entity.title,
             emojiAndKeyword = emojiAndKeywordMapper.toDomain(
@@ -32,11 +34,8 @@ internal class ProductMapper @Inject constructor(
             ),
             enabled = entity.enabled,
             categoryId = entity.nonFkCategoryId,
-            productListId = if (customListId != null) {
-                ProductList.Id.Custom(backingId = customListId)
-            } else {
-                ProductList.Id.Default
-            },
+            productListId = customProductListIdMapper.toDomain(
+                customProductListId = entity.customListId,
+            ),
         )
-    }
 }

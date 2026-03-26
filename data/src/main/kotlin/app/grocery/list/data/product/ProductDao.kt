@@ -87,8 +87,17 @@ internal interface ProductDao {
     )
     fun any(customListId: Int?, enabledOnly: Boolean): Flow<Boolean>
 
-    @Query("UPDATE product SET enabled = :enabled")
-    suspend fun setEnabledFlagForAll(enabled: Boolean)
+    @Query(
+        """
+             UPDATE product
+                SET enabled = :enabled
+              WHERE :customListId IS fk_custom_list_id
+        """
+    )
+    suspend fun setEnabledFlag(
+        enabled: Boolean,
+        customListId: Int?,
+    )
 
     @Query("SELECT COUNT(*) > 0 FROM product LIMIT 1")
     fun isThereAtLeastOne(): Flow<Boolean>
