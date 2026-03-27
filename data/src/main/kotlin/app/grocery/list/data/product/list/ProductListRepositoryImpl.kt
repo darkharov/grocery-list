@@ -15,7 +15,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
@@ -47,13 +46,6 @@ internal class ProductListRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun get(id: ProductList.Id.Custom): ProductList =
-        productListDao
-            .select(id = id.backingId)
-            .map { customProductListMapper.toDomain(it!!) }
-            .flowOn(Dispatchers.IO)
-            .first()
-
     override suspend fun delete(id: ProductList.Id.Custom) {
         withContext(Dispatchers.IO) {
             val backingId = id.backingId
@@ -82,6 +74,19 @@ internal class ProductListRepositoryImpl @Inject constructor(
                 }
             }
             .flowOn(Dispatchers.IO)
+
+    override fun get(id: ProductList.Id): Flow<ProductList> =
+        when (id) {
+            is ProductList.Id.Default -> {
+                flowOf(defaultList())
+            }
+            is ProductList.Id.Custom -> {
+                productListDao
+                    .select(id = id.backingId)
+                    .map { customProductListMapper.toDomain(it!!) }
+                    .flowOn(Dispatchers.IO)
+            }
+        }
 
     override fun allSummarized(): Flow<List<ProductList.RawSummary>> =
         combine(
