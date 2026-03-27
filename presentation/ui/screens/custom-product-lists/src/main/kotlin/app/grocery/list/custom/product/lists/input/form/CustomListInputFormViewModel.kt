@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -56,7 +57,7 @@ internal class CustomListInputFormViewModel @AssistedInject constructor(
     fun assignInitialValues() {
         if (id != null) {
             viewModelScope.launch {
-                val list = productListRepository.get(id)
+                val list = productListRepository.get(id).first()
                 initial.value = list
                 title.edit {
                     append(list.title)
