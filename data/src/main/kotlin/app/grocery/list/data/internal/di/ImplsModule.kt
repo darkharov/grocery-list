@@ -1,13 +1,13 @@
 package app.grocery.list.data.internal.di
 
-import app.grocery.list.data.achievement.AchievementRepositoryImpl
+import app.grocery.list.data.achievement.AchievementEventRepositoryImpl
 import app.grocery.list.data.category.CategoryRepositoryImpl
 import app.grocery.list.data.faq.FaqItemRepositoryImpl
 import app.grocery.list.data.product.ProductRepositoryImpl
 import app.grocery.list.data.product.list.ProductListRepositoryImpl
 import app.grocery.list.data.settings.SettingsRepositoryImpl
 import app.grocery.list.data.templates.TemplateRepositoryImpl
-import app.grocery.list.domain.achievements.AchievementRepository
+import app.grocery.list.domain.achievements.AchievementEventRepository
 import app.grocery.list.domain.category.CategoryRepository
 import app.grocery.list.domain.faq.FaqItemRepository
 import app.grocery.list.domain.product.ProductRepository
@@ -42,5 +42,5 @@ internal interface ImplsModule {
     fun productListRepository(impl: ProductListRepositoryImpl): ProductListRepository
 
     @Binds
-    fun achievementRepository(impl: AchievementRepositoryImpl): AchievementRepository
+    fun achievementEventRepository(impl: AchievementEventRepositoryImpl): AchievementEventRepository
 }

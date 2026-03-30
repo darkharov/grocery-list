@@ -6,6 +6,7 @@ import app.grocery.list.domain.formatter.ProductTitleFormatter
 import app.grocery.list.domain.product.CategoryProducts
 import app.grocery.list.domain.product.GetCategorizedProductsUseCase
 import app.grocery.list.domain.product.list.ProductListRepository
+import app.grocery.list.domain.question.NeedMoreListsQuestion
 import app.grocery.list.domain.template.TemplateRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,7 +23,7 @@ class GetProductListPreviewUseCase @Inject internal constructor(
     private val templateRepository: TemplateRepository,
     private val categoryRepository: CategoryRepository,
     private val productListRepository: ProductListRepository,
-    private val shouldShowNeedMoreListsQuestion: ShouldShowNeedMoreListsQuestionUseCase,
+    private val needMoreListsQuestion: NeedMoreListsQuestion,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     fun execute(): Flow<ProductListPreview> =
@@ -48,7 +49,7 @@ class GetProductListPreviewUseCase @Inject internal constructor(
                     else -> {
                         combine(
                             getProductTitleFormatter.execute(),
-                            shouldShowNeedMoreListsQuestion.execute(),
+                            needMoreListsQuestion.shouldBeAsked(),
                         ) { formatterResult,
                             shouldShowNeedMoreListsQuestion ->
                             items(

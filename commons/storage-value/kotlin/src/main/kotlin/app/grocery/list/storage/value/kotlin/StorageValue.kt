@@ -2,6 +2,7 @@ package app.grocery.list.storage.value.kotlin
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 
 interface StorageValue<T> {
     suspend fun set(newValue: T)
@@ -18,4 +19,16 @@ suspend fun StorageValue<Int>.inc() {
 
 suspend fun StorageValue<Int>.dec() {
     this.edit { it + 1 }
+}
+
+fun StorageValue<Int>.containsFlags(mask: Int): Flow<Boolean> =
+    observe()
+        .map { flags ->
+            (flags and mask) != 0
+        }
+
+suspend fun StorageValue<Int>.enableFlags(mask: Int) {
+    edit { flags ->
+        flags or mask
+    }
 }

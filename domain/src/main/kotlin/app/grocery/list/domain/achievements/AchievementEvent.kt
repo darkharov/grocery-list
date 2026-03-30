@@ -1,6 +1,9 @@
 package app.grocery.list.domain.achievements
 
-sealed class AchievementEvent {
-    data object ProductListPosted : AchievementEvent()
-    data object ProductAddedManually : AchievementEvent()
+sealed interface AchievementEvent {
+    sealed interface OneTime : AchievementEvent
+    sealed interface Counting : AchievementEvent
 }
+
+data object ProductListWasPosted : AchievementEvent.Counting
+data object ProductWasAddedManually : AchievementEvent.Counting
