@@ -13,7 +13,6 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -55,18 +54,6 @@ internal class UseIconsOnBottomBarSwitchViewModel @AssistedInject constructor(
                     strategy = strategy,
                 ),
             )
-
-    init {
-        if (strategy.shouldExitIfToggledOn) {
-            viewModelScope.launch {
-                repository
-                    .bottomBarRoadmapStep
-                    .observe()
-                    .first { it.useIcons }
-                events.trySend(Event.OnGoBack)
-            }
-        }
-    }
 
     override fun onClose() {    // user rejected the offer to switch to icons
         viewModelScope.launch {
