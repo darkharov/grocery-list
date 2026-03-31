@@ -32,7 +32,7 @@ internal class AchievementEventRepositoryImpl @Inject constructor(
             }
         }
 
-    override fun allHappened(vararg events: AchievementEvent.OneTime): Flow<Boolean> {
+    override fun happened(vararg events: AchievementEvent.OneTime): Flow<Boolean> {
         val result = oneTimeAchievementEventMapper.toData(events)
         return oneTimeAchievementEventFlags.containsFlags(result.mask)
     }
