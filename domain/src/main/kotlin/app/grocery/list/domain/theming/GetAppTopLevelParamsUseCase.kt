@@ -1,7 +1,7 @@
 package app.grocery.list.domain.theming
 
 import app.grocery.list.domain.product.GetNumberOfProductsUseCase
-import app.grocery.list.domain.product.list.CustomProductListsFeatureSetting
+import app.grocery.list.domain.product.list.CustomProductListsSetting
 import app.grocery.list.domain.product.list.ProductListRepository
 import app.grocery.list.domain.settings.SettingsRepository
 import javax.inject.Inject
@@ -18,7 +18,7 @@ class GetAppTopLevelParamsUseCase @Inject internal constructor(
     fun execute(): Flow<AppTopLevelParams> =
         combine(
             productListRepository.selectedOne(),
-            productListRepository.customListsFeatureSetting(),
+            productListRepository.customListsSetting(),
             getNumberOfProducts.execute(enabledOnly = true),
             settingsRepository.productTitleFormat.observe(),
         ) {
@@ -32,7 +32,7 @@ class GetAppTopLevelParamsUseCase @Inject internal constructor(
                 productTitleFormat = productTitleFormat,
                 numberOfEnabledProducts = numberOfEnabledProducts,
                 customListsFeatureEnabled =
-                    (customListsFeatureSetting == CustomProductListsFeatureSetting.Enabled),
+                    (customListsFeatureSetting == CustomProductListsSetting.Enabled),
             )
         }
 }

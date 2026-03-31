@@ -15,9 +15,9 @@ class GetProductListsIfFeatureEnabledUseCase @Inject internal constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     fun execute(): Flow<ProductListsAndSelection?> =
         productListRepository
-            .customListsFeatureSetting()
+            .customListsSetting()
             .flatMapLatest {
-                if (it == CustomProductListsFeatureSetting.Enabled) {
+                if (it == CustomProductListsSetting.Enabled) {
                     combine(
                         productListRepository.selectedOne(),
                         productListRepository.all(),

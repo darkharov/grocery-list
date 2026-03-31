@@ -2,7 +2,7 @@ package app.grocery.list.custom.product.lists.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.grocery.list.domain.product.list.CustomProductListsFeatureSetting
+import app.grocery.list.domain.product.list.CustomProductListsSetting
 import app.grocery.list.domain.product.list.ProductListRepository
 import commons.android.customStateIn
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,17 +19,23 @@ internal class CustomListsSettingsViewModel @Inject constructor(
 
     val props: StateFlow<CustomListsSettingsProps?> =
         repository
-            .customListsFeatureSetting()
+            .customListsSetting()
             .map {
                 CustomListsSettingsProps(
-                    featureEnabled = (it == CustomProductListsFeatureSetting.Enabled),
+                    featureEnabled = (it == CustomProductListsSetting.Enabled),
                 )
             }
             .customStateIn(this)
 
     override fun onCustomListsEnabledChange(newValue: Boolean) {
         viewModelScope.launch {
-            repository.setFeatureEnabled(newValue)
+            repository.setCustomListsFunctionState(
+                if (newValue) {
+                    CustomProductListsSetting.Enabled
+                } else {
+                    CustomProductListsSetting.Disabled
+                }
+            )
         }
     }
 }

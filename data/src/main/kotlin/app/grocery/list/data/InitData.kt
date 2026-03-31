@@ -2,6 +2,7 @@ package app.grocery.list.data
 
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import app.grocery.list.data.product.list.ProductListRepositoryImpl
 import app.grocery.list.data.settings.SettingsRepositoryImpl
 import app.grocery.list.storage.value.android.StorageValueMigrations
 import javax.inject.Inject
@@ -28,6 +29,10 @@ class InitData @Inject constructor(
                         StorageValueMigrations.Keys(
                             old = SettingsRepositoryImpl.OLD_KEY_BOTTOM_BAR_ROADMAP_STEP,
                             new = SettingsRepositoryImpl.BOTTOM_BAR_ROADMAP_STEP,
+                        ),
+                        StorageValueMigrations.Keys(
+                            old = ProductListRepositoryImpl.OLD_KEY_CUSTOM_PRODUCT_LISTS_SETTING,
+                            new = ProductListRepositoryImpl.CUSTOM_PRODUCT_LISTS_SETTING,
                         ),
                     ),
                     booleanKeys = listOf(

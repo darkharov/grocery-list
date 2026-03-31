@@ -2,8 +2,7 @@ package app.grocery.list.data.product.list
 
 import android.content.Context
 import app.grocery.list.data.R
-import app.grocery.list.domain.product.list.CustomProductListsFeatureSetting
-import app.grocery.list.domain.product.list.CustomProductListsFeatureSetting.NotSet
+import app.grocery.list.domain.product.list.CustomProductListsSetting
 import app.grocery.list.domain.product.list.ProductList
 import app.grocery.list.domain.product.list.ProductListRepository
 import app.grocery.list.domain.theming.ColorScheme
@@ -29,10 +28,11 @@ internal class ProductListRepositoryImpl @Inject constructor(
     private val productListStubMapper: ProductListStubMapper,
     private val productListCountersMapper: ProductListCountersMapper,
     private val customProductListMapper: CustomProductListMapper,
+    private val customProductListsSettingMapper: CustomProductListsSettingMapper,
     storageValueFactory: StorageValueFactory,
 ) : ProductListRepository {
 
-    private val featureState = storageValueFactory.enum(CUSTOM_LISTS_FEATURE_STATE, NotSet)
+    private val customProductListsSetting = storageValueFactory.int(CUSTOM_PRODUCT_LISTS_SETTING)
     private val selectedCustomListId = storageValueFactory.nullableInt(SELECTED_CUSTOM_LIST_ID)
 
     override suspend fun put(params: ProductList.PutParams) {
@@ -58,6 +58,11 @@ internal class ProductListRepositoryImpl @Inject constructor(
                 }
             }
         }
+    }
+
+    override suspend fun setCustomListsFunctionState(newValue: CustomProductListsSetting.Customizable) {
+        val mapped = customProductListsSettingMapper.toData(newValue)
+        customProductListsSetting.set(mapped)
     }
 
     override fun all(): Flow<List<ProductList>> =
@@ -132,8 +137,10 @@ internal class ProductListRepositoryImpl @Inject constructor(
             colorScheme = ColorScheme.Yellow,
         )
 
-    override fun customListsFeatureSetting(): Flow<CustomProductListsFeatureSetting> =
-        featureState.observe()
+    override fun customListsSetting(): Flow<CustomProductListsSetting> =
+        customProductListsSetting
+            .observe()
+            .map(customProductListsSettingMapper::toDomain)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun selectedOne(): Flow<ProductList> =
@@ -157,15 +164,6 @@ internal class ProductListRepositoryImpl @Inject constructor(
                 }
             }
 
-    override suspend fun setFeatureEnabled(enabled: Boolean) {
-        val newValue = if (enabled) {
-            CustomProductListsFeatureSetting.Enabled
-        } else {
-            CustomProductListsFeatureSetting.Disabled
-        }
-        featureState.set(newValue)
-    }
-
     override suspend fun setSelectedOne(newValue: ProductList.Id) {
         when (newValue) {
             is ProductList.Id.Custom -> {
@@ -179,12 +177,12 @@ internal class ProductListRepositoryImpl @Inject constructor(
 
     override fun idOfSelectedOne(): Flow<ProductList.Id> =
         combine(
-            featureState.observe(),
+            customListsSetting(),
             selectedCustomListId.observe(),
         ) { featureState, selectedCustomListId ->
             if (
                 selectedCustomListId != null &&
-                featureState == CustomProductListsFeatureSetting.Enabled
+                featureState == CustomProductListsSetting.Enabled
             ) {
                 ProductList.Id.Custom(backingId = selectedCustomListId)
             } else {
@@ -207,7 +205,8 @@ internal class ProductListRepositoryImpl @Inject constructor(
             }
 
     companion object {
-        const val CUSTOM_LISTS_FEATURE_STATE = "app.grocery.list.data.product.list.settings.CUSTOM_LISTS_FEATURE_STATE"
+        const val OLD_KEY_CUSTOM_PRODUCT_LISTS_SETTING = "app.grocery.list.data.product.list.settings.CUSTOM_LISTS_FEATURE_STATE"
+        const val CUSTOM_PRODUCT_LISTS_SETTING = "app.grocery.list.data.product.list.settings.CUSTOM_PRODUCT_LISTS_SETTING"
         const val SELECTED_CUSTOM_LIST_ID = "app.grocery.list.data.product.list.settings.SELECTED_CUSTOM_LIST_ID"
     }
 }

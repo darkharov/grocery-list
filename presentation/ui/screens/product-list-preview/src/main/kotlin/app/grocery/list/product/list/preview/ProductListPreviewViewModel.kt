@@ -9,7 +9,7 @@ import app.grocery.list.domain.product.DisableAllProductsInCurrentListUseCase
 import app.grocery.list.domain.product.EnableAllProductsInCurrentListUseCase
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
-import app.grocery.list.domain.product.list.ProductListRepository
+import app.grocery.list.domain.question.NeedMoreListsQuestion
 import app.grocery.list.domain.template.GetTemplateProductsUseCase
 import commons.android.customStateIn
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,10 +25,10 @@ import kotlinx.coroutines.launch
 internal class ProductListPreviewViewModel @Inject constructor(
     private val getPreview: GetProductListPreviewUseCase,
     private val productRepository: ProductRepository,
-    private val productListRepository: ProductListRepository,
     private val getFormattedTemplateProducts: GetTemplateProductsUseCase,
     private val enableAllInCurrentList: EnableAllProductsInCurrentListUseCase,
     private val disableAllInCurrentList: DisableAllProductsInCurrentListUseCase,
+    private val needMoreListsQuestion: NeedMoreListsQuestion,
 ) : ViewModel(),
     ProductListPreviewCallbacks {
 
@@ -105,7 +105,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
 
     override fun onNeedMoreListsClose() {
         viewModelScope.launch {
-            productListRepository.setFeatureEnabled(false)
+            needMoreListsQuestion.close()
         }
     }
 
