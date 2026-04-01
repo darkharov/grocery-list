@@ -24,7 +24,7 @@ suspend fun StorageValue<Int>.dec() {
 fun StorageValue<Int>.containsFlags(mask: Int): Flow<Boolean> =
     observe()
         .map { flags ->
-            (flags and mask) != 0
+            (flags and mask) == mask
         }
 
 suspend fun StorageValue<Int>.enableFlags(mask: Int) {
