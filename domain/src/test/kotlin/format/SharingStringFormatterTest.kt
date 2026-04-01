@@ -4,9 +4,12 @@ import app.grocery.list.domain.product.EmojiAndCategoryId
 import app.grocery.list.domain.product.EmojiAndKeyword
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
+import app.grocery.list.domain.product.list.ProductList
+import app.grocery.list.domain.product.list.ProductListRepository
 import app.grocery.list.domain.sharing.SharingStringFormatter
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
@@ -30,6 +33,7 @@ internal class SharingStringFormatterTest {
         emojiAndKeyword = emojiAndCategoryId.emoji,
         categoryId = emojiAndCategoryId.categoryId,
         enabled = true,
+        productListId = ProductList.Id.Default,
     )
 
     @Test
@@ -48,15 +52,19 @@ internal class SharingStringFormatterTest {
 
     private fun `one product formatted and parsed correctly`(prototype: Product) {
 
-        val repository = mockk<ProductRepository>()
+        val productRepository = mockk<ProductRepository>()
         val emojiAndCategoryId = EmojiAndCategoryId(
             emoji = prototype.emojiAndKeyword,
             categoryId = prototype.categoryId,
         )
-        coEvery { repository.findEmojiAndCategoryId(any()) } returns emojiAndCategoryId
+        coEvery { productRepository.findEmojiAndCategoryId(any()) } returns emojiAndCategoryId
+
+        val productListRepository = mockk<ProductListRepository>()
+        coEvery { productListRepository.idOfSelectedOne() } returns flowOf(ProductList.Id.Default)
         val formatter = SharingStringFormatter(
             recommendationToUseApp = "",
-            repository = repository,
+            productRepository = productRepository,
+            productListRepository = productListRepository,
         )
         val actualFormatWithPostfix = formatter.toSharingString(listOf(prototype), includeRecommendationToUseApp = true)
         assert(actualFormatWithPostfix == productTitleWithPostfix)

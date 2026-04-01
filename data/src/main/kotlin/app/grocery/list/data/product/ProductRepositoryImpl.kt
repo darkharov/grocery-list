@@ -135,6 +135,7 @@ internal class ProductRepositoryImpl @Inject constructor(
                             keyword = parts.next(),
                         ),
                         enabled = true,
+                        productListId = ProductList.Id.Default,
                     )
                 }
         )

@@ -9,7 +9,7 @@ data class Product(
     override val emojiAndKeyword: EmojiAndKeyword?,
     val enabled: Boolean,
     val categoryId: Int,
-    val productListId: ProductList.Id = ProductList.Id.Default,
+    val productListId: ProductList.Id,
 ) : ProductTitleFormatter.Params {
 
     val disabled = !(enabled)

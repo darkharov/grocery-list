@@ -2,6 +2,7 @@ package app.grocery.list.domain.sharing
 
 import app.grocery.list.domain.product.EmojiAndKeyword
 import app.grocery.list.domain.product.Product
+import app.grocery.list.domain.product.list.ProductList
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.io.encoding.Base64
@@ -41,6 +42,7 @@ internal class LegacySharingStringFormatter @Inject internal constructor() {
                 null
             },
             enabled = true,
+            productListId = ProductList.Id.Default,
         )
     }
 

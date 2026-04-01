@@ -2,17 +2,22 @@ package app.grocery.list.domain.sharing
 
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
+import app.grocery.list.domain.product.list.ProductListRepository
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.first
 
 @Singleton
 class SharingStringFormatter @Inject constructor(
     @param:Named(RECOMMENDATION_TO_USE_APP)
     private val recommendationToUseApp: String,
-    private val repository: ProductRepository,
+    private val productRepository: ProductRepository,
+    private val productListRepository: ProductListRepository,
 ) {
     suspend fun parse(sharingString: String): Result<List<Product>> {
+
+        val productListId = productListRepository.idOfSelectedOne().first()
 
         val products =
             sharingString
@@ -21,13 +26,14 @@ class SharingStringFormatter @Inject constructor(
                 .map { it.trim() }
                 .filter { it.isNotEmpty() }
                 .map { title ->
-                    val emojiAndCategoryId = repository.findEmojiAndCategoryId(search = title)
+                    val emojiAndCategoryId = productRepository.findEmojiAndCategoryId(search = title)
                     val product = Product(
                         id = 0,
                         title = title.replaceFirstChar { it.titlecaseChar() },
                         emojiAndKeyword = emojiAndCategoryId.emoji,
                         enabled = true,
                         categoryId = emojiAndCategoryId.categoryId,
+                        productListId = productListId,
                     )
                     product
                 }
