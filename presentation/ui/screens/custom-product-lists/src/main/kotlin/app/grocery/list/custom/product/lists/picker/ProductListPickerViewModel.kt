@@ -6,9 +6,11 @@ import app.grocery.list.custom.product.lists.picker.dialog.ProductListPickerDial
 import app.grocery.list.custom.product.lists.picker.item.ProductListPickerItemProps
 import app.grocery.list.custom.product.lists.picker.item.mappers.ProductListIdMapper
 import app.grocery.list.custom.product.lists.picker.item.mappers.ProductListPickerItemMapper
+import app.grocery.list.domain.product.list.DeleteCustomProductListUseCase
 import app.grocery.list.domain.product.list.ProductList
 import app.grocery.list.domain.product.list.ProductListRepository
 import app.grocery.list.domain.product.list.SummarizeProductListsUseCase
+import app.grocery.list.domain.question.HowToDeleteOrRenameCustomList
 import app.grocery.list.kotlin.SimpleBuffer
 import commons.android.customStateIn
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,6 +31,8 @@ internal class ProductListPickerViewModel @Inject constructor(
     private val productListIdMapper: ProductListIdMapper,
     private val itemMapper: ProductListPickerItemMapper,
     private val productListRepository: ProductListRepository,
+    private val deleteCustomProductList: DeleteCustomProductListUseCase,
+    private val howToDeleteOrRenameCustomList: HowToDeleteOrRenameCustomList,
 ) : ViewModel(),
     ProductListPickerCallbacks {
 
@@ -40,6 +44,7 @@ internal class ProductListPickerViewModel @Inject constructor(
         combine(
             summarizeProductLists.execute(),
             idsOfExcludedOnes.observe(),
+            howToDeleteOrRenameCustomList.takeIfShouldBeAsked(),
             ProductListPickerMapper::Params,
         ).map(pickerMapper::toPresentation)
             .customStateIn(this)
@@ -86,7 +91,7 @@ internal class ProductListPickerViewModel @Inject constructor(
             val id = productListIdMapper.toDomain(customProductListId)
             when (id) {
                 is ProductList.Id.Custom -> {
-                    productListRepository.delete(id)
+                    deleteCustomProductList.execute(id)
                 }
                 is ProductList.Id.Default -> {
                     throw IllegalStateException("The default list should not be deletable")
@@ -100,6 +105,24 @@ internal class ProductListPickerViewModel @Inject constructor(
     override fun onDeletionRejected(customProductListId: String) {
         dialog.value = null
         idsOfExcludedOnes -= productListIdMapper.toDomain(customProductListId)
+    }
+
+    override fun onQuestionClick(question: ProductListPickerProps.Question) {
+        when (question) {
+            ProductListPickerProps.Question.HowToRenameOrDeleteCustomList -> {
+                dialog.value = ProductListPickerDialogProps.HowToRenameOrDeleteCustomList
+            }
+        }
+    }
+
+    override fun onQuestionClose(question: ProductListPickerProps.Question) {
+        viewModelScope.launch {
+            howToDeleteOrRenameCustomList.close()
+        }
+    }
+
+    override fun onQuestionDialogClose() {
+        dialog.value = null
     }
 
     fun events(): ReceiveChannel<Event> =

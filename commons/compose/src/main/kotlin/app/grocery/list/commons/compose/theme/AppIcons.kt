@@ -8,6 +8,7 @@ import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.ContentPaste
 import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.Done
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material.icons.outlined.Fingerprint
 import androidx.compose.material.icons.outlined.Notifications
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.SupportAgent
 import androidx.compose.material.icons.outlined.ToggleOff
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.vector.ImageVector
 
 @Immutable
 object AppIcons {
@@ -37,4 +39,5 @@ object AppIcons {
     val questionMark = Icons.Outlined.QuestionMark
     val support = Icons.Outlined.SupportAgent
     val privacy = Icons.Outlined.PrivacyTip
+    val edit: ImageVector = Icons.Outlined.Edit
 }

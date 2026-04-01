@@ -11,14 +11,19 @@ internal sealed class ProductListPickerDialogProps {
         val id: String,
         val title: String,
     ) : ProductListPickerDialogProps()
+
+    @Immutable
+    data object HowToRenameOrDeleteCustomList : ProductListPickerDialogProps()
 }
 
 internal class ProductListPickerDialogMocks : PreviewParameterProvider<ProductListPickerDialogProps> {
 
-    override val values = sequenceOf<ProductListPickerDialogProps>(
-        ProductListPickerDialogProps.CustomListDeletionConfirmation(
-            id = "1",
-            title = "My List",
+    override val values =
+        sequenceOf(
+            ProductListPickerDialogProps.CustomListDeletionConfirmation(
+                id = "1",
+                title = "My List",
+            ),
+            ProductListPickerDialogProps.HowToRenameOrDeleteCustomList,
         )
-    )
 }

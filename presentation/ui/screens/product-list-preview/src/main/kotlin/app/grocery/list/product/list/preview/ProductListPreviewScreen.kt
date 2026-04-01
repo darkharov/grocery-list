@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -33,10 +32,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppPreloader
+import app.grocery.list.commons.compose.elements.AppQuestion
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
-import app.grocery.list.commons.compose.elements.button.icon.AppCloseButton
 import app.grocery.list.commons.compose.elements.button.text.AppTextButton
-import app.grocery.list.commons.compose.elements.button.text.AppUnderlinedTextButton
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialog
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
@@ -291,34 +289,18 @@ private fun LazyListScope.items(
             key = "Need more lists",
             contentType = "Need more lists",
         ) {
-            Box(
-                contentAlignment = Alignment.Center,
+            AppQuestion(
+                text = StringValue.ResId(app.grocery.list.commons.compose.R.string.need_more_lists),
+                onClick = {
+                    callbacks.onNeedMoreListsClick()
+                },
+                onClose = {
+                    callbacks.onNeedMoreListsClose()
+                },
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        top = 12.dp,
-                    )
-                    .padding(
-                        horizontal = dimensionResource(R.dimen.margin_16_32_64),
-                    )
+                    .padding(top = 16.dp)
                     .animateItem(),
-            ) {
-                AppUnderlinedTextButton(
-                    text = StringValue.ResId(R.string.need_more_lists),
-                    onClick = {
-                        callbacks.onNeedMoreListsClick()
-                    },
-                    modifier = Modifier
-                        .padding(horizontal = 52.dp)
-                )
-                AppCloseButton(
-                    onClick = {
-                        callbacks.onNeedMoreListsClose()
-                    },
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd),
-                )
-            }
+            )
         }
     }
 }

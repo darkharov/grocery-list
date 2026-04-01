@@ -16,4 +16,5 @@ interface ProductListRepository {
     fun idOfSelectedOne(): Flow<ProductList.Id>
     fun customListsSetting(): Flow<CustomProductListsSetting>
     fun titleOfCurrentCustomListOrNull(): Flow<String?>
+    fun containsAtLeastOneCustomList(): Flow<Boolean>
 }

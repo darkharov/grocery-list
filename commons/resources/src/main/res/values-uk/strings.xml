@@ -84,6 +84,11 @@
     <string name="product_list_title">Назва списку</string>
     <string name="color_scheme">Кольорова схема</string>
     <string name="delete_product_list_confirmation">Ви дійсно бажаєте видалити цей список?</string>
+    <string name="how_to_edit_items">Як змінювати елементи?</string>
+    <string name="how_to_edit_items_answer">Щоб перейменувати, натисніть\nта утримуйте.\n\nЩоб видалити, змахніть вліво</string>
+    <string name="how_to_edit_items_answer_highlight_1">перейменувати</string>
+    <string name="how_to_edit_items_answer_highlight_2">видалити</string>
+    <string name="default_list_is_uneditable_notice">Стандартний список незмінний</string>
 
     <string-array name="final_steps">
         <item>Заблокуйте екран</item>

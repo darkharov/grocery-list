@@ -4,7 +4,9 @@ import app.grocery.list.commons.compose.elements.color.scheme.ColorSchemeMapper
 import app.grocery.list.custom.product.lists.picker.item.ProductListPickerItemProps
 import app.grocery.list.domain.product.list.ProductList
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 internal class ProductListPickerItemMapper @Inject constructor(
     private val demoColorsMapper: ColorSchemeMapper,
     private val productListIdMapper: ProductListIdMapper,

@@ -84,6 +84,11 @@
     <string name="product_list_title">Название списка</string>
     <string name="color_scheme">Цветовая схема</string>
     <string name="delete_product_list_confirmation">Вы действиельно хотите удалить этот список?</string>
+    <string name="how_to_edit_items">Как изменять элементы?</string>
+    <string name="how_to_edit_items_answer">Чтобы переименовать,\nнажмите и удерживайте.\n\nЧтобы удалить, смахните влево.</string>
+    <string name="how_to_edit_items_answer_highlight_1">переименовать</string>
+    <string name="how_to_edit_items_answer_highlight_2">удалить</string>
+    <string name="default_list_is_uneditable_notice">Cтандартный список неизменяем.</string>
 
     <string-array name="final_steps">
         <item>Заблокируйте экран</item>

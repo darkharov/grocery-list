@@ -11,6 +11,8 @@ internal interface ProductListPickerCallbacks :
     ProductListPickerItemCallbacks,
     ProductListPickerDialogCallbacks {
     fun onAddClick()
+    fun onQuestionClick(question: ProductListPickerProps.Question)
+    fun onQuestionClose(question: ProductListPickerProps.Question)
 }
 
 internal object ProductListPickerCallbacksMock :
@@ -18,4 +20,6 @@ internal object ProductListPickerCallbacksMock :
     ProductListPickerItemCallbacks by ProductListPickerItemCallbacksMock,
     ProductListPickerDialogCallbacks by ProductListPickerDialogCallbacksMock {
     override fun onAddClick() {}
+    override fun onQuestionClick(question: ProductListPickerProps.Question) {}
+    override fun onQuestionClose(question: ProductListPickerProps.Question) {}
 }

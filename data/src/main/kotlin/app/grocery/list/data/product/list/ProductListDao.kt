@@ -69,4 +69,13 @@ internal interface ProductListDao {
         """
     )
     fun stubs(): Flow<Map<@MapColumn("fk_custom_list_id") Int?, List<ProductListStubQuery>>>
+
+    @Query(
+        """
+            SELECT COUNT(*) >= 1
+              FROM custom_product_list
+             LIMIT 1
+        """
+    )
+    fun containsAtLeastOneCustomList(): Flow<Boolean>
 }

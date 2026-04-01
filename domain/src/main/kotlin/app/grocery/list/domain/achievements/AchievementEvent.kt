@@ -7,3 +7,7 @@ sealed interface AchievementEvent {
 
 data object ProductListWasPosted : AchievementEvent.Counting
 data object ProductWasAddedManually : AchievementEvent.Counting
+
+data object AtLeastOneCustomProductListWasDeleted : AchievementEvent.OneTime
+data object AtLeastOneCustomProductListWasUpdated : AchievementEvent.OneTime
+data object HowToDeleteOrRenameCustomListWasClosed : AchievementEvent.OneTime

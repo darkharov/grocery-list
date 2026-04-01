@@ -9,6 +9,7 @@ import app.grocery.list.commons.compose.elements.color.scheme.AppColorSchemeProp
 import app.grocery.list.commons.compose.elements.color.scheme.ColorSchemeMapper
 import app.grocery.list.domain.product.list.ProductList
 import app.grocery.list.domain.product.list.ProductListRepository
+import app.grocery.list.domain.product.list.PutProductListUseCase
 import app.grocery.list.domain.theming.ColorScheme
 import commons.android.customStateIn
 import dagger.assisted.Assisted
@@ -35,6 +36,7 @@ internal class CustomListInputFormViewModel @AssistedInject constructor(
     private val colorSchemeMapper: ColorSchemeMapper,
     private val customListInputFormMapper: CustomListInputFormMapper,
     private val productListRepository: ProductListRepository,
+    private val putProductList: PutProductListUseCase,
 ) : ViewModel(),
     CustomListInputFormCallbacks {
 
@@ -76,7 +78,7 @@ internal class CustomListInputFormViewModel @AssistedInject constructor(
 
     override fun onComplete(title: String, colorScheme: AppColorSchemeProps) {
         viewModelScope.launch {
-            productListRepository.put(
+            putProductList.execute(
                 ProductList.PutParams(
                     customListId = id,
                     title = title

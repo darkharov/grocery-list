@@ -204,6 +204,9 @@ internal class ProductListRepositoryImpl @Inject constructor(
                 }
             }
 
+    override fun containsAtLeastOneCustomList(): Flow<Boolean> =
+        productListDao.containsAtLeastOneCustomList()
+
     companion object {
         const val OLD_KEY_CUSTOM_PRODUCT_LISTS_SETTING = "app.grocery.list.data.product.list.settings.CUSTOM_LISTS_FEATURE_STATE"
         const val CUSTOM_PRODUCT_LISTS_SETTING = "app.grocery.list.data.product.list.settings.CUSTOM_PRODUCT_LISTS_SETTING"

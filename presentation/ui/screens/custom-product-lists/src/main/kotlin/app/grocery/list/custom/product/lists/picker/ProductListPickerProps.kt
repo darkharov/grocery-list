@@ -10,13 +10,22 @@ import kotlinx.collections.immutable.toPersistentList
 @Immutable
 internal class ProductListPickerProps(
     val items: ImmutableList<ProductListPickerItemProps>,
-)
+    val question: Question?,
+) {
+    @Immutable
+    sealed class Question {
+
+        @Immutable
+        data object HowToRenameOrDeleteCustomList : Question()
+    }
+}
 
 internal class ProductListPickerMocks : PreviewParameterProvider<ProductListPickerProps?> {
     override val values = sequenceOf(
         null,
         ProductListPickerProps(
-            ProductListPickerItemMocks().values.toPersistentList(),
+            items = ProductListPickerItemMocks().values.toPersistentList(),
+            question = null,
         ),
     )
 }
