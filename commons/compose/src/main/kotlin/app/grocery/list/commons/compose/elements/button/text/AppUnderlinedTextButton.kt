@@ -32,10 +32,10 @@ fun AppUnderlinedTextButton(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
             .clickable { onClick() }
-            .padding(horizontal = 8.dp)
+            .padding(horizontal = 12.dp)
             .padding(
-                top = 6.dp,
-                bottom = 10.dp,
+                top = 10.dp,
+                bottom = 14.dp,
             ),
     )
 }
