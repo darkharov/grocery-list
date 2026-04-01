@@ -1,12 +1,8 @@
 package app.grocery.list.commons.compose.elements.dialog.list
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -21,13 +17,10 @@ import androidx.compose.ui.unit.times
 import app.grocery.list.commons.compose.AppGradientDirection
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.drawGradient
-import app.grocery.list.commons.compose.elements.button.text.AppTextButton
-import app.grocery.list.commons.compose.elements.dialog.APP_DIALOG_PADDING
-import app.grocery.list.commons.compose.elements.dialog.AppBaseDialog
+import app.grocery.list.commons.compose.elements.dialog.AppSimpleDialog
 import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
-import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
 
 @Composable
@@ -35,13 +28,9 @@ fun ConfirmPastedListDialog(
     props: ConfirmPastedListDialogProps,
     callbacks: ConfirmPastedListDialogCallbacks,
 ) {
-    AppBaseDialog(
+    AppSimpleDialog(
         icon = rememberVectorPainter(AppIcons.paste),
-        text = props.title,
-        textStyle = LocalAppTypography.current.dialogTitle,
-        onDismiss = {
-            callbacks.onDialogDismiss()
-        },
+        title = props.title,
         additionalContent = {
             val offset = 48.dp
             val state = rememberScrollState()
@@ -70,26 +59,13 @@ fun ConfirmPastedListDialog(
                         .widthIn(max = 180.dp),
                 )
             }
-            Spacer(
-                modifier = Modifier
-                    .padding(4.dp),
-            )
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(APP_DIALOG_PADDING),
-            ) {
-                AppTextButton(
-                    text = StringValue.ResId(android.R.string.cancel),
-                    onClick = {
-                        callbacks.onDialogDismiss()
-                    },
-                )
-                AppTextButton(
-                    text = StringValue.ResId(R.string.add),
-                    onClick = {
-                        callbacks.onPasteProductsConfirmed(props.productList)
-                    },
-                )
-            }
+        },
+        onDismiss = {
+            callbacks.onDialogDismiss()
+        },
+        mainButtonText = StringValue.ResId(R.string.add),
+        onMainButtonClick = {
+            callbacks.onPasteProductsConfirmed(props.productList)
         },
     )
 }

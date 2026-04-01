@@ -223,11 +223,9 @@ internal fun AppContent(
                     onDismiss = {
                         contract.dismissDialog()
                     },
-                    onCancel = {
-                        contract.dismissDialog()
-                    },
-                    confirmButtonText = StringValue.ResId(R.string.give_permission),
-                    onConfirm = {
+                    cancelButtonVisible = true,
+                    mainButtonText = StringValue.ResId(R.string.give_permission),
+                    onMainButtonClick = {
                         contract.dismissDialog()
                         contract.openNotificationSettings()
                     },

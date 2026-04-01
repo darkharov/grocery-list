@@ -20,9 +20,6 @@ internal fun SettingsDialog(
             AppSimpleDialog(
                 icon = rememberVectorPainter(AppIcons.browserNotSupported),
                 text = StringValue.ResId(R.string.browser_app_not_found),
-                onConfirm = {
-                    callbacks.onDismiss()
-                },
                 onDismiss = {
                     callbacks.onDismiss()
                 },

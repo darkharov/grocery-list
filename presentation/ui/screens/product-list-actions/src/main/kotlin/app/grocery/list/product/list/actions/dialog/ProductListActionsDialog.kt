@@ -1,7 +1,5 @@
 package app.grocery.list.product.list.actions.dialog
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,14 +13,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.elements.AppTitledCheckbox
 import app.grocery.list.commons.compose.elements.button.text.AppTextButton
-import app.grocery.list.commons.compose.elements.dialog.APP_DIALOG_PADDING
 import app.grocery.list.commons.compose.elements.dialog.AppBaseDialog
 import app.grocery.list.commons.compose.elements.dialog.AppSimpleDialog
 import app.grocery.list.commons.compose.elements.dialog.AppTwoOptionsDialog
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialog
 import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
-import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.product.list.actions.ProductListActionsCallbacks
 import app.grocery.list.product.list.actions.ProductListActionsCallbacksMock
@@ -68,7 +64,7 @@ private fun ProductListActionsDialog(
             AppSimpleDialog(
                 icon = rememberVectorPainter(AppIcons.paste),
                 text = StringValue.ResId(R.string.copied_product_list_not_found),
-                onConfirm = {
+                onMainButtonClick = {
                     callbacks.onDialogDismiss()
                 },
                 onDismiss = {
@@ -102,7 +98,7 @@ private fun ProductListActionsDialog(
                     dialog.count,
                     useCountAsArgument = true,
                 ),
-                onConfirm = {
+                onMainButtonClick = {
                     callbacks.onDialogDismiss()
                 },
                 onDismiss = {
@@ -117,41 +113,42 @@ private fun ProductListActionsDialog(
                 onDismiss = {
                     callbacks.onDialogDismiss()
                 },
-            ) {
-                AppTextButton(
-                    text = StringValue.ResId(
-                        resId = R.string.pattern_disabled_to_send,
-                        arguments = listOf(dialog.disabledItemsCount),
-                    ),
-                    onClick = {
-                        callbacks.onShareDisabledOnly(dialog)
-                    },
-                )
-                AppTextButton(
-                    text = StringValue.ResId(
-                        resId = R.string.pattern_enabled_to_send,
-                        arguments = listOf(dialog.enabledItemsCount),
-                    ),
-                    onClick = {
-                        callbacks.onShareEnabledOnly(dialog)
-                    },
-                    modifier = Modifier,
-                )
-                AppTextButton(
-                    text = StringValue.ResId(
-                        resId = R.string.pattern_all,
-                        arguments = listOf(dialog.productListSize),
-                    ),
-                    onClick = {
-                        callbacks.onShareAll(dialog)
-                    },
-                    modifier = Modifier,
-                )
-                Spacer(
-                    modifier = Modifier
-                        .height(8.dp),
-                )
-            }
+                buttons = {
+                    AppTextButton(
+                        text = StringValue.ResId(
+                            resId = R.string.pattern_disabled_to_send,
+                            arguments = listOf(dialog.disabledItemsCount),
+                        ),
+                        onClick = {
+                            callbacks.onShareDisabledOnly(dialog)
+                        },
+                    )
+                    AppTextButton(
+                        text = StringValue.ResId(
+                            resId = R.string.pattern_enabled_to_send,
+                            arguments = listOf(dialog.enabledItemsCount),
+                        ),
+                        onClick = {
+                            callbacks.onShareEnabledOnly(dialog)
+                        },
+                        modifier = Modifier,
+                    )
+                    AppTextButton(
+                        text = StringValue.ResId(
+                            resId = R.string.pattern_all,
+                            arguments = listOf(dialog.productListSize),
+                        ),
+                        onClick = {
+                            callbacks.onShareAll(dialog)
+                        },
+                        modifier = Modifier,
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .height(8.dp),
+                    )
+                },
+            )
         }
         is ProductListActionsDialogProps.EnableAllAndStartShopping -> {
             AppSimpleDialog(
@@ -163,13 +160,11 @@ private fun ProductListActionsDialog(
                 onDismiss = {
                     callbacks.onDialogDismiss()
                 },
-                confirmButtonText = StringValue.ResId(R.string.enable_all_and_start),
-                onConfirm = {
+                mainButtonText = StringValue.ResId(R.string.enable_all_and_start),
+                onMainButtonClick = {
                     callbacks.onEnableAllAndStartShopping()
                 },
-                onCancel = {
-                    callbacks.onDialogDismiss()
-                },
+                cancelButtonVisible = true,
             )
         }
         is ProductListActionsDialogProps.ConfirmPastedListWrapper -> {
@@ -179,14 +174,13 @@ private fun ProductListActionsDialog(
             )
         }
         is ProductListActionsDialogProps.ConfirmSharing -> {
-            AppBaseDialog(
+            AppSimpleDialog(
                 icon = rememberVectorPainter(AppIcons.share),
-                text = StringValue.PluralResId(
+                title = StringValue.PluralResId(
                     resId = R.plurals.pattern_products_collected,
                     count = dialog.numberOfProducts,
                     useCountAsArgument = true,
                 ),
-                textStyle = LocalAppTypography.current.dialogTitle,
                 onDismiss = {
                     callbacks.onDialogDismiss()
                 },
@@ -209,22 +203,11 @@ private fun ProductListActionsDialog(
                         modifier = Modifier
                             .height(24.dp)
                     )
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(APP_DIALOG_PADDING),
-                    ) {
-                        AppTextButton(
-                            text = StringValue.ResId(android.R.string.cancel),
-                            onClick = {
-                                callbacks.onDialogDismiss()
-                            },
-                        )
-                        AppTextButton(
-                            text = StringValue.ResId(R.string.share),
-                            onClick = {
-                                callbacks.onSharingConfirmed(dialog)
-                            },
-                        )
-                    }
+                },
+                cancelButtonVisible = true,
+                mainButtonText = StringValue.ResId(R.string.share),
+                onMainButtonClick = {
+                    callbacks.onSharingConfirmed(dialog)
                 },
             )
         }

@@ -86,7 +86,7 @@ private fun Content() {
             onDismiss = {
                 fingerprintDialogShown = false
             },
-            onConfirm = {
+            onMainButtonClick = {
                 fingerprintDialogShown = false
             }
         )

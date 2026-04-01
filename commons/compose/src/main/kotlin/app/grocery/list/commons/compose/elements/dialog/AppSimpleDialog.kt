@@ -1,46 +1,62 @@
 package app.grocery.list.commons.compose.elements.dialog
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.elements.button.text.AppTextButton
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppSimpleDialog(
-    icon: Painter,
-    text: StringValue,
     onDismiss: () -> Unit,
-    onConfirm: () -> Unit,
-    confirmButtonText: StringValue = StringValue.ResId(android.R.string.ok),
-    onCancel: (() -> Unit)? = null,
+    icon: Painter? = null,
+    title: StringValue? = null,
+    text: StringValue? = null,
+    additionalContent: (@Composable ColumnScope.() -> Unit)? = null,
+    cancelButtonVisible: Boolean = false,
+    mainButtonText: StringValue = StringValue.ResId(android.R.string.ok),
+    onMainButtonClick: () -> Unit = onDismiss,
 ) {
-    AppTextWithButtonsRowDialog(
-        icon = icon,
-        text = text,
+    AppBaseDialog(
         onDismiss = onDismiss,
+        icon = icon,
+        title = title,
+        text = text,
+        additionalContent = additionalContent,
         buttons = {
-            if (onCancel != null) {
+            Row(
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier
+                    .align(Alignment.End),
+            ) {
+                if (cancelButtonVisible) {
+                    AppTextButton(
+                        text = StringValue.ResId(android.R.string.cancel),
+                        onClick = onDismiss,
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .width(APP_DIALOG_BUTTON_PADDING),
+                    )
+                }
                 AppTextButton(
-                    text = StringValue.ResId(android.R.string.cancel),
-                    onClick = onCancel,
-                )
-                Spacer(
-                    modifier = Modifier
-                        .width(8.dp)
+                    text = mainButtonText,
+                    onClick = onMainButtonClick,
                 )
             }
-            AppTextButton(
-                text = confirmButtonText,
-                onClick = onConfirm,
-            )
         },
     )
 }
@@ -52,9 +68,9 @@ private fun AppSimpleDialogWithIconPreview() {
         AppSimpleDialog(
             icon = painterResource(R.drawable.ic_android),
             text = StringValue.StringWrapper("Alert text of this dialog to the user"),
-            onConfirm = {},
+            onMainButtonClick = {},
             onDismiss = {},
-            onCancel = {},
+            cancelButtonVisible = true,
         )
     }
 }
@@ -66,7 +82,7 @@ private fun AppSimpleDialogOkOnlyPreview() {
         AppSimpleDialog(
             icon = painterResource(R.drawable.ic_android),
             text = StringValue.StringWrapper("Alert text of this dialog"),
-            onConfirm = {},
+            onMainButtonClick = {},
             onDismiss = {},
         )
     }
