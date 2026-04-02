@@ -74,7 +74,7 @@
     <string name="all_lists">Усі списки</string>
     <string name="need_more_lists">Потрібно більше списків?</string>
     <string name="additional_lists">Додаткові списки</string>
-    <string name="enable_multiple_lists">Увімкнути можливість використовувати кілька списків</string>
+    <string name="use_multiple_lists">Використовувати кілька списків</string>
     <string name="multiple_lists_icon_explanation">Використовуйте іконку у верхньому лівому куті на початковому екрані програми</string>
     <string name="default_list">Список за налаштуванням</string>
     <string name="add_another_one">Додати ще один</string>

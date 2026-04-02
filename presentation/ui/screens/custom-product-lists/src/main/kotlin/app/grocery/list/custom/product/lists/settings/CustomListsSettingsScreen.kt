@@ -69,7 +69,7 @@ private fun CustomListsSettingsScreen(
             )
         }
         AppTitledSwitch(
-            text = StringValue.ResId(R.string.enable_multiple_lists),
+            text = StringValue.ResId(R.string.use_multiple_lists),
             checked = props.featureEnabled,
             onCheckedChange = { newValue ->
                 callbacks.onCustomListsEnabledChange(newValue)
