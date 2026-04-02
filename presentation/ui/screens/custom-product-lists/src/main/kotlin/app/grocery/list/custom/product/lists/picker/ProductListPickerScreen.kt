@@ -155,7 +155,7 @@ private fun Items(
                                 callbacks.onQuestionClose(question)
                             },
                             modifier = Modifier
-                                .padding(top = 24.dp)
+                                .padding(top = 40.dp)
                                 .animateItem(),
                         )
                     }
