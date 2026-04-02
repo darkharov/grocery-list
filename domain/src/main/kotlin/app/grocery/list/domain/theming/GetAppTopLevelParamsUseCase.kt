@@ -1,6 +1,6 @@
 package app.grocery.list.domain.theming
 
-import app.grocery.list.domain.product.GetNumberOfProductsUseCase
+import app.grocery.list.domain.product.GetNumberOfProductsInSelectedListUseCase
 import app.grocery.list.domain.product.list.CustomProductListsSetting
 import app.grocery.list.domain.product.list.ProductListRepository
 import app.grocery.list.domain.settings.SettingsRepository
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.combine
 class GetAppTopLevelParamsUseCase @Inject internal constructor(
     private val productListRepository: ProductListRepository,
     private val settingsRepository: SettingsRepository,
-    private val getNumberOfProducts: GetNumberOfProductsUseCase,
+    private val getNumberOfProducts: GetNumberOfProductsInSelectedListUseCase,
 ) {
     fun execute(): Flow<AppTopLevelParams> =
         combine(

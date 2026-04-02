@@ -10,7 +10,7 @@ import app.grocery.list.domain.product.AtLeastOneProductInCurrentListUseCase
 import app.grocery.list.domain.product.ClearCurrentListUseCase
 import app.grocery.list.domain.product.EnableAllProductsInCurrentListUseCase
 import app.grocery.list.domain.product.EnabledAndDisabledProducts
-import app.grocery.list.domain.product.GetNumberOfProductsUseCase
+import app.grocery.list.domain.product.GetNumberOfProductsInSelectedListUseCase
 import app.grocery.list.domain.product.GroupEnabledAndDisabledProductsUseCase
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
@@ -39,7 +39,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     private val getProductSharingString: GetProductSharingStringUseCase,
     private val parseProductList: ParseAndFormatProductsUseCase,
     private val atLeastOneProductInCurrentList: AtLeastOneProductInCurrentListUseCase,
-    private val getNumberOfProducts: GetNumberOfProductsUseCase,
+    private val getNumberOfProducts: GetNumberOfProductsInSelectedListUseCase,
     private val clearCurrentList: ClearCurrentListUseCase,
     private val enableAllProductsInCurrentList: EnableAllProductsInCurrentListUseCase,
 ) : ViewModel(),

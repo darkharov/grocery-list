@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 
 @Singleton
-class GetNumberOfProductsUseCase @Inject constructor(
+class GetNumberOfProductsInSelectedListUseCase @Inject constructor(
     private val productRepository: ProductRepository,
     private val productListRepository: ProductListRepository,
 ) {
