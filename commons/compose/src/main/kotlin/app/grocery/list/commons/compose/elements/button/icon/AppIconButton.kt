@@ -4,7 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,7 +27,7 @@ import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.commons.compose.values.value
 
-private enum class AppIconButtonType(
+enum class AppIconButtonSize(
     val size: Dp,
     val padding: Dp,
 ) {
@@ -54,7 +54,7 @@ fun AppIconButton(
         painter = painter,
         state = state,
         contentDescription = contentDescription,
-        type = AppIconButtonType.Normal,
+        type = AppIconButtonSize.Normal,
         onClick = onClick,
     )
 }
@@ -65,7 +65,7 @@ private fun Content(
     painter: Painter,
     state: AppButtonStateProps,
     contentDescription: StringValue,
-    type: AppIconButtonType,
+    type: AppIconButtonSize,
     onClick: () -> Unit,
 ) {
     when (state) {
@@ -75,7 +75,7 @@ private fun Content(
         AppButtonStateProps.Loading -> {
             AppCircularProgressIndicator(
                 modifier = modifier
-                    .requiredSize(
+                    .size(
                         size = type.size,
                     ),
             )
@@ -85,7 +85,7 @@ private fun Content(
                 painter = painter,
                 contentDescription = contentDescription.value(),
                 modifier = modifier
-                    .requiredSize(
+                    .size(
                         size = type.size,
                     )
                     .clip(RoundedCornerShape(8.dp))
@@ -116,12 +116,13 @@ fun AppCloseButton(
     modifier: Modifier = Modifier,
     contentDescription: StringValue = StringValue.ResId(R.string.close),
     state: AppButtonStateProps = AppButtonStateProps.Normal,
+    type: AppIconButtonSize = AppIconButtonSize.Normal,
 ) {
     Content(
         painter = rememberVectorPainter(AppIcons.close),
         state = state,
         contentDescription = contentDescription,
-        type = AppIconButtonType.Compact,
+        type = type,
         onClick = onClick,
         modifier = modifier,
     )

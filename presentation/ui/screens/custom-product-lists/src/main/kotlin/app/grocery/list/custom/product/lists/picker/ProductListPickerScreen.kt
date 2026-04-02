@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -119,6 +120,7 @@ private fun Items(
             contentPadding = PaddingValues(
                 vertical = dimensionResource(R.dimen.margin_16_32_64),
             ),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             items(
                 items = props.items,
@@ -153,7 +155,7 @@ private fun Items(
                                 callbacks.onQuestionClose(question)
                             },
                             modifier = Modifier
-                                .padding(12.dp)
+                                .padding(top = 24.dp)
                                 .animateItem(),
                         )
                     }
