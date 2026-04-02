@@ -101,4 +101,7 @@ internal interface ProductDao {
 
     @Query("SELECT COUNT(*) > 0 FROM product LIMIT 1")
     fun isThereAtLeastOne(): Flow<Boolean>
+
+    @Query("SELECT COUNT(*) FROM product")
+    fun totalNumber(): Flow<Int>
 }

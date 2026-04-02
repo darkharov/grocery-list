@@ -112,6 +112,9 @@ internal class ProductRepositoryImpl @Inject constructor(
     override fun numberOfEnabled(): Flow<Int> =
         productDao.countOfEnabled().flowOn(Dispatchers.IO)
 
+    override fun totalNumber(): Flow<Int> =
+        productDao.totalNumber()
+
     override fun any(criteria: Product.Criteria): Flow<Boolean> =
         productDao
             .any(

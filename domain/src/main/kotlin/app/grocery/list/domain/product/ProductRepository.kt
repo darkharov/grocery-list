@@ -8,6 +8,7 @@ interface ProductRepository {
     fun get(criteria: Product.Criteria): Flow<List<Product>>
     fun count(criteria: Product.Criteria = Product.Criteria(false, ProductList.Id.Default)): Flow<Int>
     fun numberOfEnabled(): Flow<Int>
+    fun totalNumber(): Flow<Int>
     fun samples(): Flow<List<Product>>
     fun any(criteria: Product.Criteria): Flow<Boolean>
 
