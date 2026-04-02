@@ -163,13 +163,16 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     override fun onPasteProductsConfirmed(products: List<Product>) {
         viewModelScope.launch {
-            val numberOfAddedProducts = productRepository.count().first()
-            if (numberOfAddedProducts == 0) {
-                addProducts(products)
-            } else {
+            val atLeastOneProductInCurrentList =
+                atLeastOneProductInCurrentList
+                    .execute(enabledOnly = false)
+                    .first()
+            if (atLeastOneProductInCurrentList) {
                 dialog.value = ProductListActionsDialogProps.HowToPutPastedProducts(
                     productList = products,
                 )
+            } else {
+                addProducts(products)
             }
         }
     }
