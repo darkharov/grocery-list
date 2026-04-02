@@ -14,6 +14,7 @@ import app.grocery.list.domain.product.GetNumberOfProductsInSelectedListUseCase
 import app.grocery.list.domain.product.GroupEnabledAndDisabledProductsUseCase
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
+import app.grocery.list.domain.product.RewriteCurrentListUseCase
 import app.grocery.list.domain.settings.SettingsRepository
 import app.grocery.list.domain.sharing.GetProductSharingStringUseCase
 import app.grocery.list.domain.sharing.ParseAndFormatProductsUseCase
@@ -42,6 +43,7 @@ internal class ProductListActionsViewModel @Inject constructor(
     private val getNumberOfProducts: GetNumberOfProductsInSelectedListUseCase,
     private val clearCurrentList: ClearCurrentListUseCase,
     private val enableAllProductsInCurrentList: EnableAllProductsInCurrentListUseCase,
+    private val rewriteCurrentList: RewriteCurrentListUseCase,
 ) : ViewModel(),
     ProductListActionsCallbacks {
 
@@ -188,8 +190,7 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     override fun onReplaceProductsBy(productList: List<Product>) {
         viewModelScope.launch {
-            clearCurrentList.execute()
-            productRepository.put(productList)
+            rewriteCurrentList.execute(productList)
             dialog.value = ProductListActionsDialogProps.ProductSuccessfullyAdded(
                 count = productList.size,
             )
