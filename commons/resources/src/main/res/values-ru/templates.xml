@@ -58,7 +58,7 @@
         <item>Чернослив</item>
         <item>Курага</item>
         <item>Изюм</item>
-        <item>Орех</item>
+        <item>Орех|Орешки</item>
         <item>Миндаль</item>
         <item>Грецкий орех|Грецкие орехи</item>
         <item>Лесной орех|Лесные орехи</item>
@@ -158,6 +158,7 @@
         <item>Порошок</item>
         <item>Губки|Губка</item>
         <item>Салатница</item>
+        <item>Шампунь</item>
         <item>{🧻}Туалетная бумага|Туалетка</item>
         <item>{🧼}Мыло</item>
         <item>{🧴}Жидкое мыло|Мыло жидкое</item>
@@ -182,6 +183,9 @@
         <item>Пельмени</item>
         <item>Хинкали</item>
         <item>Вареники</item>
+        <item>Маргарин</item>
+        <item>Котлеты</item>
+        <item>Ваниль</item>
         <item>{🍕}Пицца</item>
         <item>{🍷}Вино|Винчик|Винище</item>
         <item>{🥂}Вино белое|Белое вино</item>
