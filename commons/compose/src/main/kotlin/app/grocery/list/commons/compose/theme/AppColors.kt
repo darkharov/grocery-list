@@ -18,6 +18,7 @@ data class AppColors(
     val inactive3: Color,
 
     val brand_00_50: Color,
+    val brand_20_80: Color,
     val brand_30_40: Color,
     val brand_40_40: Color,
     val brand_40_50: Color,
@@ -41,6 +42,7 @@ data class AppColors(
                 inactive2 = Inactive2Light,
                 inactive3 = Inactive3Light,
                 brand_00_50 = colorScheme.color00,
+                brand_20_80 = colorScheme.color20,
                 brand_30_40 = colorScheme.color30,
                 brand_40_40 = colorScheme.color40,
                 brand_40_50 = colorScheme.color40,
@@ -61,6 +63,7 @@ data class AppColors(
                 inactive3 = palette.color80,
 
                 brand_00_50 = palette.color50,
+                brand_20_80 = palette.color80,
                 brand_30_40 = palette.color40,
                 brand_40_40 = palette.color40,
                 brand_40_50 = palette.color50,

@@ -12,6 +12,7 @@ import app.grocery.list.commons.compose.R
 val LocalAppTypography = staticCompositionLocalOf { AppTypography() }
 
 private val Inter = FontFamily(
+    Font(R.font.inter_extra_bold, FontWeight.ExtraBold),
     Font(R.font.inter_bold, FontWeight.Bold),
     Font(R.font.inter_semi_bold, FontWeight.SemiBold),
     Font(R.font.inter_medium, FontWeight.Medium),

@@ -19,6 +19,7 @@ import app.grocery.list.commons.compose.elements.dialog.AppSimpleDialog
 import app.grocery.list.commons.compose.elements.dialog.AppTwoOptionsDialog
 import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.custom.product.lists.R
@@ -52,12 +53,16 @@ internal fun ProductListPickerOptionalDialog(
                 },
                 additionalContent = {
                     val textAlign = TextAlign.Center
+                    val color = LocalAppColors.current.brand_20_80
                     Text(
                         text = buildAnnotatedString {
+
                             val answer = stringResource(R.string.how_to_edit_items_answer)
                             append(answer)
 
-                            val bold = SpanStyle(fontWeight = FontWeight.Bold)
+                            val bold = SpanStyle(
+                                fontWeight = FontWeight.ExtraBold,
+                            )
 
                             val highlight1 = stringResource(R.string.how_to_edit_items_answer_highlight_1)
                             val highlight1Start = answer.indexOf(highlight1)
@@ -76,6 +81,7 @@ internal fun ProductListPickerOptionalDialog(
                                 end = highlight2Start + highlight2.length,
                             )
                         },
+                        color = color,
                         style = LocalAppTypography.current.plainText,
                         textAlign = textAlign,
                         modifier = Modifier
@@ -88,6 +94,7 @@ internal fun ProductListPickerOptionalDialog(
                     Text(
                         text = stringResource(R.string.default_list_is_uneditable_notice),
                         textAlign = textAlign,
+                        color = color,
                         modifier = Modifier
                             .fillMaxWidth(),
                     )
