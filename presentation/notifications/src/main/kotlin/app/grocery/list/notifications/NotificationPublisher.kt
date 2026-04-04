@@ -76,7 +76,6 @@ class NotificationPublisher @Inject internal constructor(
                         maxNumberOfItems = NotificationConfigs.MAX_VISIBLE_AT_THE_SAME_TIME,
                     )
                 }.collect { action ->
-                    Log.e(TAG, "action: $action")
                     when (action) {
                         is GetNotificationListActionUseCase.Result.Repost -> {
                             tryToRepost(notifications = action.notifications)
@@ -123,7 +122,6 @@ class NotificationPublisher @Inject internal constructor(
     }
 
     fun notifyIsUserOnFinalScreenChange(newValue: Boolean) {
-        Log.e(TAG, "notifyIsUserOnFinalScreenChange: $newValue")
         isUserOnFinalScreen.tryEmit(newValue)
     }
 

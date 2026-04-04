@@ -30,11 +30,11 @@ import app.grocery.list.commons.compose.theme.AppIcons
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.product.list.actions.dialog.ProductListActionsOptionalDialog
+import app.grocery.list.product.list.actions.suggestion.to.switch_.to.icons.SuggestionToSwitchToIcons
 
 @Composable
 fun ProductListActionsScreen(
     contract: ProductListActionsContract,
-    bottomElement: @Composable () -> Unit,
 ) {
     val viewModel = hiltViewModel<ProductListActionsViewModel>()
     val items by viewModel.props.collectAsState()
@@ -47,7 +47,6 @@ fun ProductListActionsScreen(
     ProductListActionsScreen(
         props = items,
         callbacks = viewModel,
-        bottomElement = bottomElement,
     )
     ProductListActionsOptionalDialog(
         dialog = dialog,
@@ -59,7 +58,6 @@ fun ProductListActionsScreen(
 private fun ProductListActionsScreen(
     props: ProductListActionsProps?,
     callbacks: ProductListActionsCallbacks,
-    bottomElement: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (props == null) {
@@ -68,7 +66,6 @@ private fun ProductListActionsScreen(
         Content(
             props = props,
             callbacks = callbacks,
-            bottomElement = bottomElement,
             modifier = modifier,
         )
     }
@@ -78,7 +75,6 @@ private fun ProductListActionsScreen(
 private fun Content(
     props: ProductListActionsProps,
     callbacks: ProductListActionsCallbacks,
-    bottomElement: @Composable () -> Unit,
     modifier: Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -91,7 +87,10 @@ private fun Content(
             verticalArrangement = Arrangement.Center,
         ) {
             Buttons(props, callbacks)
-            bottomElement()
+            SuggestionToSwitchToIcons(
+                visible = props.suggestionToSwitchToIconsVisible,
+                callbacks = callbacks,
+            )
             Spacer(
                 modifier = Modifier
                     .windowInsetsBottomHeight(WindowInsets.navigationBars),
@@ -164,7 +163,6 @@ private fun ProductListActionsScreenPreview(
             ProductListActionsScreen(
                 props = props,
                 callbacks = ProductListActionsCallbacksMock,
-                bottomElement = {},
                 modifier = Modifier
                     .padding(padding),
             )

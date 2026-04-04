@@ -5,14 +5,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +26,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import app.grocery.list.commons.compose.elements.AppCircularProgressIndicator
 import app.grocery.list.commons.compose.elements.LoremIpsum
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
@@ -39,10 +36,10 @@ import app.grocery.list.commons.compose.values.value
 @Composable
 fun AppTitledSwitch(
     text: StringValue,
-    checked: Boolean?,
+    checked: Boolean,
     onCheckedChange: (newValue: Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    description: StringValue? = null,
+    explanation: StringValue? = null,
     @FloatRange(from = 0.0, to = 1.0)
     descriptionAlpha: Float = 1f,
 ) {
@@ -56,9 +53,7 @@ fun AppTitledSwitch(
             modifier = Modifier
                 .clip(shape)
                 .clickable {
-                    if (checked != null) {
-                        onCheckedChange(!(checked))
-                    }
+                    onCheckedChange(!(checked))
                 }
                 .border(
                     width = strokeWidth,
@@ -80,28 +75,16 @@ fun AppTitledSwitch(
                 modifier = Modifier
                     .padding(8.dp),
             )
-            val height = 32.dp
-            Box {
-                if (checked == null) {
-                    AppCircularProgressIndicator(
-                        modifier = Modifier
-                            .size(height)
-                            .padding(4.dp),
-                        strokeWidth = strokeWidth,
-                    )
-                } else {
-                    AppSwitch(
-                        checked = checked,
-                        onCheckedChange = null,
-                        modifier = Modifier
-                            .height(height),
-                    )
-                }
-            }
+            AppSwitch(
+                checked = checked,
+                onCheckedChange = null,
+                modifier = Modifier
+                    .height(32.dp),
+            )
         }
-        if (description != null) {
+        if (explanation != null) {
             Text(
-                text = description.value(),
+                text = explanation.value(),
                 modifier = Modifier
                     .graphicsLayer {
                         alpha = descriptionAlpha
@@ -124,7 +107,7 @@ private fun AppTitledSwitchPreview() {
         var checked by remember { mutableStateOf(true) }
         AppTitledSwitch(
             text = StringValue.StringWrapper("Title"),
-            description = StringValue.StringWrapper(LoremIpsum.substring(0, 100)),
+            explanation = StringValue.StringWrapper(LoremIpsum.substring(0, 100)),
             checked = checked,
             onCheckedChange = { newValue ->
                 checked = newValue
@@ -141,8 +124,8 @@ private fun AppTitledSwitchNullPreview() {
     GroceryListTheme {
         AppTitledSwitch(
             text = StringValue.StringWrapper("Title"),
-            description = StringValue.StringWrapper(LoremIpsum.substring(0, 100)),
-            checked = null,
+            explanation = StringValue.StringWrapper(LoremIpsum.substring(0, 100)),
+            checked = true,
             onCheckedChange = {},
             modifier = Modifier
                 .background(LocalAppColors.current.background),

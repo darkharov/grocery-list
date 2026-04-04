@@ -5,11 +5,14 @@ import app.grocery.list.commons.compose.OnDialogDismiss
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogCallbacks
 import app.grocery.list.domain.product.Product
 import app.grocery.list.product.list.actions.dialog.ProductListActionsDialogProps
+import app.grocery.list.product.list.actions.suggestion.to.switch_.to.icons.SuggestionToSwitchToIconsCallbacks
+import app.grocery.list.product.list.actions.suggestion.to.switch_.to.icons.SuggestionToSwitchToIconsCallbacksMock
 
 @Stable
 internal interface ProductListActionsCallbacks :
     OnDialogDismiss,
-    ConfirmPastedListDialogCallbacks {
+    ConfirmPastedListDialogCallbacks,
+    SuggestionToSwitchToIconsCallbacks {
     fun onAttemptToClearList()
     fun onAdd()
     fun onGoToActions()
@@ -30,7 +33,8 @@ internal interface ProductListActionsCallbacks :
     fun onSharingConfirmed(dialog: ProductListActionsDialogProps.ConfirmSharing)
 }
 
-internal object ProductListActionsCallbacksMock : ProductListActionsCallbacks {
+internal object ProductListActionsCallbacksMock : ProductListActionsCallbacks,
+    SuggestionToSwitchToIconsCallbacks by SuggestionToSwitchToIconsCallbacksMock {
     override fun onAttemptToClearList() {}
     override fun onAdd() {}
     override fun onGoToActions() {}

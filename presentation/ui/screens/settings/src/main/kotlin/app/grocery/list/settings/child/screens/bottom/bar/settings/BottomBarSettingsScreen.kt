@@ -1,40 +1,62 @@
 package app.grocery.list.settings.child.screens.bottom.bar.settings
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.unit.dp
-import app.grocery.list.commons.compose.AbleToGoBack
-import app.grocery.list.commons.compose.AbleToGoBackMock
-import app.grocery.list.commons.compose.R
-import app.grocery.list.settings.child.screens.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitch
-import app.grocery.list.settings.child.screens.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import app.grocery.list.commons.compose.AppGradientDirection
+import app.grocery.list.commons.compose.elements.AppPreloaderOrContent
+import app.grocery.list.commons.compose.elements.AppSimpleSettingLayout
+import app.grocery.list.commons.compose.theme.GroceryListTheme
+import app.grocery.list.commons.compose.values.StringValue
+import app.grocery.list.settings.R
 
 @Composable
-fun BottomBarSettingsScreen(
-    contract: AbleToGoBack,
+fun BottomBarSettingsScreen() {
+    val viewModel = hiltViewModel<BottomBarSettingsViewModel>()
+    val props by viewModel.props.collectAsStateWithLifecycle()
+    AppPreloaderOrContent(props) { props ->
+        BottomBarSettings(
+            props = props,
+            callbacks = viewModel,
+        )
+    }
+}
+
+@Composable
+internal fun BottomBarSettings(
+    props: BottomBarSettingsProps,
+    callbacks: BottomBarSettingsCallbacks,
 ) {
-    UseIconsOnBottomBarSwitch(
-        strategy = UseIconsOnBottomBarSwitchStrategy.Screen,
-        contract = contract,
-        modifier = Modifier
-            .padding(
-                top = 16.dp,
-            )
-            .padding(
-                horizontal = dimensionResource(R.dimen.margin_16_32_64),
-            )
-            .fillMaxSize(),
+    AppSimpleSettingLayout(
+        checked = props.useIcons,
+        imageId = if (props.useIcons) {
+            R.drawable.home_screen_with_icons
+        } else {
+            R.drawable.home_screen_with_buttons
+        },
+        text = StringValue.ResId(R.string.use_icons_instead_of_buttons),
+        onCheckedChange = { newValue ->
+            callbacks.onCheckedChange(newValue = newValue)
+        },
+        gradientDirection = AppGradientDirection.Downward,
     )
 }
 
-@PreviewLightDark
 @Composable
-private fun BottomBarSettingsScreenPreview() {
-    BottomBarSettingsScreen(
-        contract = AbleToGoBackMock,
+@PreviewLightDark
+private fun BottomBarSettingsPreview(
+    @PreviewParameter(
+        provider = BottomBarSettingsMocks::class,
     )
+    props: BottomBarSettingsProps,
+) {
+    GroceryListTheme {
+        BottomBarSettings(
+            props = props,
+            callbacks = BottomBarSettingsCallbacksMock,
+        )
+    }
 }

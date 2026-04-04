@@ -52,8 +52,6 @@ import app.grocery.list.product.list.preview.ProductListPreviewScreen
 import app.grocery.list.settings.SettingsScreen
 import app.grocery.list.settings.child.screens.bottom.bar.settings.BottomBarSettingsScreen
 import app.grocery.list.settings.child.screens.list.format.ListFormatSettingsScreen
-import app.grocery.list.settings.child.screens.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitch
-import app.grocery.list.settings.child.screens.use.icons.on.bottom.bar.switch_.UseIconsOnBottomBarSwitchStrategy
 
 @Composable
 internal fun AppContent(
@@ -162,12 +160,6 @@ internal fun AppContent(
                 entry<ProductListActions> {
                     ProductListActionsScreen(
                         contract = contract,
-                        bottomElement = {
-                            UseIconsOnBottomBarSwitch(
-                                strategy = UseIconsOnBottomBarSwitchStrategy.EmbeddedElement,
-                                contract = contract,
-                            )
-                        },
                     )
                 }
                 entry<ProductListPreview> {
@@ -189,9 +181,7 @@ internal fun AppContent(
                     ListFormatSettingsScreen()
                 }
                 entry<BottomBarSettings> {
-                    BottomBarSettingsScreen(
-                        contract = contract,
-                    )
+                    BottomBarSettingsScreen()
                 }
                 entry<Faq> {
                     FaqScreen()

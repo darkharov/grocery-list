@@ -10,6 +10,7 @@ internal class ProductListActionsProps(
     val useIconsOnBottomBar: Boolean,
     val exitButtonTitle: StringValue,
     val listActionButtonsState: AppButtonStateProps,
+    val suggestionToSwitchToIconsVisible: Boolean,
 )
 
 internal class ProductListActionsMocks : PreviewParameterProvider<ProductListActionsProps> {
@@ -20,6 +21,7 @@ internal class ProductListActionsMocks : PreviewParameterProvider<ProductListAct
                 useIconsOnBottomBar = false,
                 exitButtonTitle = StringValue.ResId(R.string.exit),
                 listActionButtonsState = AppButtonStateProps.Normal,
+                suggestionToSwitchToIconsVisible = true,
             )
         }
 }

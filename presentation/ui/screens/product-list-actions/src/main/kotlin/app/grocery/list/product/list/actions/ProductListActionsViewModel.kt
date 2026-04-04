@@ -16,6 +16,7 @@ import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.domain.product.RewriteCurrentListUseCase
 import app.grocery.list.domain.product.list.ProductListRepository
+import app.grocery.list.domain.settings.BottomBarSetting
 import app.grocery.list.domain.settings.SettingsRepository
 import app.grocery.list.domain.sharing.GetProductSharingStringUseCase
 import app.grocery.list.domain.sharing.ParseAndFormatProductsUseCase
@@ -54,14 +55,16 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     val props =
         combine(
-            settingsRepository.bottomBarRoadmapStep.observe(),
+            settingsRepository.bottomBarSetting.observe(),
             atLeastOneProductInCurrentList.execute(enabledOnly = false),
         ) {
-                bottomBarRoadMapStep,
+                bottomBarSetting,
                 atLeastOneProduct,
             ->
+            // TODO: create separate props classes for the screen and for the bottom bar
             ProductListActionsProps(
-                useIconsOnBottomBar = bottomBarRoadMapStep.useIcons,
+                useIconsOnBottomBar =
+                    (bottomBarSetting == BottomBarSetting.IconsModeIsExplicitlySelected),
                 exitButtonTitle = if (atLeastOneProduct) {
                     StringValue.ResId(R.string.save_and_exit)
                 } else {
@@ -69,6 +72,8 @@ internal class ProductListActionsViewModel @Inject constructor(
                 },
                 listActionButtonsState = AppButtonStateProps
                     .enabled(atLeastOneProduct),
+                suggestionToSwitchToIconsVisible =
+                    (bottomBarSetting == BottomBarSetting.TimeToSuggestSwitchingToIcons),
             )
         }.customStateIn(this)
 
@@ -259,6 +264,23 @@ internal class ProductListActionsViewModel @Inject constructor(
             } else {
                 showConfirmSharingDialog(products = products.all)
             }
+        }
+    }
+
+    override fun onRefuseToSwitchToIcons() {
+        viewModelScope.launch {
+            settingsRepository.bottomBarSetting.set(
+                BottomBarSetting.ButtonsIsExplicitlySelected,
+            )
+        }
+    }
+
+    override fun onSwitchToIcons() {
+        viewModelScope.launch {
+            settingsRepository.bottomBarSetting.set(
+                BottomBarSetting.IconsModeIsExplicitlySelected,
+            )
+            events.trySend(Event.OnGoBack)
         }
     }
 

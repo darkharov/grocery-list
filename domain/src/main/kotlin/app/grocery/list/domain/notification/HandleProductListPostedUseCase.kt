@@ -2,7 +2,7 @@ package app.grocery.list.domain.notification
 
 import app.grocery.list.domain.achievements.AchievementEventRepository
 import app.grocery.list.domain.achievements.ProductListWasPosted
-import app.grocery.list.domain.settings.BottomBarRoadmapStep
+import app.grocery.list.domain.settings.BottomBarSetting
 import app.grocery.list.domain.settings.SettingsRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,10 +14,10 @@ class HandleProductListPostedUseCase @Inject internal constructor(
 ) {
     suspend fun execute() {
         settingsRepository
-            .bottomBarRoadmapStep
+            .bottomBarSetting
             .edit { currentState ->
-                if (currentState == BottomBarRoadmapStep.Initial) {
-                    BottomBarRoadmapStep.ProductListPostedAtLeastOnce
+                if (currentState == BottomBarSetting.Initial) {
+                    BottomBarSetting.TimeToSuggestSwitchingToIcons
                 } else {
                     currentState
                 }

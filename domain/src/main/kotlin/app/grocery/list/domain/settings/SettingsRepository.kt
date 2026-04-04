@@ -5,6 +5,6 @@ import app.grocery.list.storage.value.kotlin.StorageValue
 interface SettingsRepository {
     val productTitleFormat: StorageValue<ProductTitleFormat>
     val clearNotificationsReminderEnabled: StorageValue<Boolean>
-    val bottomBarRoadmapStep: StorageValue<BottomBarRoadmapStep>
+    val bottomBarSetting: StorageValue<BottomBarSetting>
     val recommendAppWhenSharingList: StorageValue<Boolean>
 }

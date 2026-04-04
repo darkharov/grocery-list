@@ -1,6 +1,6 @@
 package app.grocery.list.data.settings
 
-import app.grocery.list.domain.settings.BottomBarRoadmapStep
+import app.grocery.list.domain.settings.BottomBarSetting
 import app.grocery.list.domain.settings.ProductTitleFormat
 import app.grocery.list.domain.settings.SettingsRepository
 import app.grocery.list.storage.value.android.StorageValueFactory
@@ -24,10 +24,10 @@ internal class SettingsRepositoryImpl @Inject constructor(
             defaultValue = true,
         )
 
-    override val bottomBarRoadmapStep =
+    override val bottomBarSetting =
         storageValueFactory.enum(
             key = BOTTOM_BAR_ROADMAP_STEP,
-            defaultValue = BottomBarRoadmapStep.Initial,
+            defaultValue = BottomBarSetting.Initial,
         )
 
     override val recommendAppWhenSharingList =
