@@ -4,12 +4,17 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogProps
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListMock
+import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.domain.product.Product
 
 @Immutable
 internal sealed class ProductListActionsDialogProps {
 
-    data object ConfirmClearList : ProductListActionsDialogProps()
+    @Immutable
+    data class ConfirmClearList(
+        val listTitle: StringValue?,
+    ) : ProductListActionsDialogProps()
+
     data object CopiedProductListNotFound : ProductListActionsDialogProps()
 
     @Immutable
@@ -47,7 +52,12 @@ internal sealed class ProductListActionsDialogProps {
 internal class ProductListActionsDialogMocks :
     CollectionPreviewParameterProvider<ProductListActionsDialogProps?>(
         listOf(
-            ProductListActionsDialogProps.ConfirmClearList,
+            ProductListActionsDialogProps.ConfirmClearList(
+                listTitle = null,
+            ),
+            ProductListActionsDialogProps.ConfirmClearList(
+                listTitle = StringValue.StringWrapper("Custom List"),
+            ),
             ProductListActionsDialogProps.ConfirmPastedListWrapper(
                 ConfirmPastedListMock.prototype
             ),

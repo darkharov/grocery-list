@@ -46,7 +46,14 @@ private fun ProductListActionsDialog(
         is ProductListActionsDialogProps.ConfirmClearList -> {
             AppTwoOptionsDialog(
                 icon = rememberVectorPainter(AppIcons.delete),
-                text = StringValue.ResId(R.string.clear_product_list_confirmation),
+                title = dialog.listTitle,
+                text = StringValue.ResId(
+                    if (dialog.listTitle != null) {
+                        R.string.clear_this_product_list_confirmation
+                    } else {
+                        R.string.clear_product_list_confirmation
+                    }
+                ),
                 firstOption = StringValue.ResId(R.string.delete),
                 isFirstOptionSensitive = true,
                 onFirstOption = {

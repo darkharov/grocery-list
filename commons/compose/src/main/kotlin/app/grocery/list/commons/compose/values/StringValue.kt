@@ -57,6 +57,11 @@ sealed class StringValue {
                 resources.getQuantityString(resId, count)
             }
     }
+
+    companion object {
+        fun nullableString(value: String?) =
+            value?.let(::StringWrapper)
+    }
 }
 
 @Composable

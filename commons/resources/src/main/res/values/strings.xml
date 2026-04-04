@@ -20,6 +20,7 @@
     <string name="actions">Actions</string>
     <string name="clear_list">Clear list</string>
     <string name="clear_product_list_confirmation">Are you sure you want to remove all products from the list?</string>
+    <string name="clear_this_product_list_confirmation">Are you sure you want to remove all products from this list?</string>
     <string name="exit">Exit</string>
     <string name="save_and_exit">Save and exit</string>
     <string name="share_current_list">Share current list</string>

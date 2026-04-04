@@ -20,6 +20,7 @@
     <string name="actions">Дії</string>
     <string name="clear_list">Очистити список</string>
     <string name="clear_product_list_confirmation">Ви дійсно хочете видалити всі елементи зі списку?</string>
+    <string name="clear_this_product_list_confirmation">Ви дійсно хочете видалити всі елементи з цього списку?</string>
     <string name="exit">Вийти</string>
     <string name="save_and_exit">Зберегти та вийти</string>
     <string name="share_current_list">Поділитись поточним списком</string>
