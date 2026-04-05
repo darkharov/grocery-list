@@ -3,27 +3,27 @@ package app.grocery.list.product.list.preview
 import androidx.compose.runtime.Stable
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogCallbacks
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogCallbacksMock
+import app.grocery.list.commons.compose.elements.question.AppQuestionCallbacks
+import app.grocery.list.commons.compose.elements.question.AppQuestionCallbacksMock
 import app.grocery.list.product.list.preview.elements.ProductItemCallbacks
 import app.grocery.list.product.list.preview.elements.ProductItemCallbacksMock
 
 @Stable
 internal interface ProductListPreviewCallbacks :
     ProductItemCallbacks,
-    ConfirmPastedListDialogCallbacks {
+    ConfirmPastedListDialogCallbacks,
+    AppQuestionCallbacks {
     fun onEnableAll()
     fun onDisableEnableAll()
     fun onTemplateClick(template: ProductListPreviewProps.Empty.Template)
-    fun onNeedMoreListsClick()
-    fun onNeedMoreListsClose()
 }
 
 internal object ProductListPreviewCallbacksMock :
     ProductListPreviewCallbacks,
     ProductItemCallbacks by ProductItemCallbacksMock,
-    ConfirmPastedListDialogCallbacks by ConfirmPastedListDialogCallbacksMock {
+    ConfirmPastedListDialogCallbacks by ConfirmPastedListDialogCallbacksMock,
+    AppQuestionCallbacks by AppQuestionCallbacksMock {
     override fun onEnableAll() {}
     override fun onDisableEnableAll() {}
     override fun onTemplateClick(template: ProductListPreviewProps.Empty.Template) {}
-    override fun onNeedMoreListsClick() {}
-    override fun onNeedMoreListsClose() {}
 }

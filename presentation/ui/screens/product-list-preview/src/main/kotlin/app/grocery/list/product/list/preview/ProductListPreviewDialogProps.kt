@@ -7,6 +7,9 @@ import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDi
 sealed class ProductListPreviewDialogProps {
 
     @Immutable
+    object HowToEditProducts : ProductListPreviewDialogProps()
+
+    @Immutable
     class ConfirmPastedProductsWrapper(
         val dialog: ConfirmPastedListDialogProps,
     ) : ProductListPreviewDialogProps()

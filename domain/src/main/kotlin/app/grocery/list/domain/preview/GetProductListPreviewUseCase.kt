@@ -6,7 +6,9 @@ import app.grocery.list.domain.formatter.ProductTitleFormatter
 import app.grocery.list.domain.product.CategoryProducts
 import app.grocery.list.domain.product.GetCategorizedProductsUseCase
 import app.grocery.list.domain.product.list.ProductListRepository
+import app.grocery.list.domain.question.HowToEditProductsQuestion
 import app.grocery.list.domain.question.NeedMoreListsQuestion
+import app.grocery.list.domain.question.Question
 import app.grocery.list.domain.template.TemplateRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -23,7 +25,8 @@ class GetProductListPreviewUseCase @Inject internal constructor(
     private val templateRepository: TemplateRepository,
     private val categoryRepository: CategoryRepository,
     private val productListRepository: ProductListRepository,
-    private val needMoreListsQuestion: NeedMoreListsQuestion,
+    private val needMoreLists: NeedMoreListsQuestion,
+    private val howToEditProducts: HowToEditProductsQuestion,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     fun execute(): Flow<ProductListPreview> =
@@ -49,13 +52,13 @@ class GetProductListPreviewUseCase @Inject internal constructor(
                     else -> {
                         combine(
                             getProductTitleFormatter.execute(),
-                            needMoreListsQuestion.shouldBeAsked(),
+                            howToEditProducts.takeIfShouldBeAskedOr { needMoreLists },
                         ) { formatterResult,
-                            shouldShowNeedMoreListsQuestion ->
+                            question ->
                             items(
                                 categoryProducts = items,
                                 formatter = formatterResult.formatter,
-                                shouldShowNeedMoreListsQuestion = shouldShowNeedMoreListsQuestion,
+                                question = question,
                             )
                         }
                     }
@@ -65,7 +68,7 @@ class GetProductListPreviewUseCase @Inject internal constructor(
     private suspend fun items(
         categoryProducts: List<CategoryProducts>,
         formatter: ProductTitleFormatter,
-        shouldShowNeedMoreListsQuestion: Boolean,
+        question: Question?,
     ): ProductListPreview.Items {
         val productCount = categoryProducts.fold(0) { acc, item ->
             acc + item.products.size
@@ -101,7 +104,7 @@ class GetProductListPreviewUseCase @Inject internal constructor(
             } else {
                 null
             },
-            needMoreListsQuestion = shouldShowNeedMoreListsQuestion,
+            question = question,
         )
     }
 

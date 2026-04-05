@@ -1,6 +1,8 @@
 package app.grocery.list.custom.product.lists.picker
 
 import androidx.compose.runtime.Stable
+import app.grocery.list.commons.compose.elements.question.AppQuestionCallbacks
+import app.grocery.list.commons.compose.elements.question.AppQuestionCallbacksMock
 import app.grocery.list.custom.product.lists.picker.dialog.ProductListPickerDialogCallbacks
 import app.grocery.list.custom.product.lists.picker.dialog.ProductListPickerDialogCallbacksMock
 import app.grocery.list.custom.product.lists.picker.item.ProductListPickerItemCallbacks
@@ -9,17 +11,15 @@ import app.grocery.list.custom.product.lists.picker.item.ProductListPickerItemCa
 @Stable
 internal interface ProductListPickerCallbacks :
     ProductListPickerItemCallbacks,
-    ProductListPickerDialogCallbacks {
+    ProductListPickerDialogCallbacks,
+    AppQuestionCallbacks {
     fun onAddClick()
-    fun onQuestionClick(question: ProductListPickerProps.Question)
-    fun onQuestionClose(question: ProductListPickerProps.Question)
 }
 
 internal object ProductListPickerCallbacksMock :
     ProductListPickerCallbacks,
     ProductListPickerItemCallbacks by ProductListPickerItemCallbacksMock,
-    ProductListPickerDialogCallbacks by ProductListPickerDialogCallbacksMock {
+    ProductListPickerDialogCallbacks by ProductListPickerDialogCallbacksMock,
+    AppQuestionCallbacks by AppQuestionCallbacksMock {
     override fun onAddClick() {}
-    override fun onQuestionClick(question: ProductListPickerProps.Question) {}
-    override fun onQuestionClose(question: ProductListPickerProps.Question) {}
 }

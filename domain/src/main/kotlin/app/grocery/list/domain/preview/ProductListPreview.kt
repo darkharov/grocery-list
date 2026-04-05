@@ -2,6 +2,7 @@ package app.grocery.list.domain.preview
 
 import app.grocery.list.domain.category.Category
 import app.grocery.list.domain.formatter.ProductTitleFormatter
+import app.grocery.list.domain.question.Question
 import app.grocery.list.domain.template.Template
 
 sealed class ProductListPreview {
@@ -14,7 +15,7 @@ sealed class ProductListPreview {
     data class Items(
         val categories: List<CategoryContent>,
         val enableAndDisableAllFeatures: EnableAndDisableAll?,
-        val needMoreListsQuestion: Boolean,
+        val question: Question?,
     ) : ProductListPreview() {
 
         data class EnableAndDisableAll(

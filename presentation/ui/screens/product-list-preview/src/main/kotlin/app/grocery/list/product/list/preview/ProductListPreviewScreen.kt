@@ -32,10 +32,11 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppPreloader
-import app.grocery.list.commons.compose.elements.AppQuestion
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.elements.button.text.AppTextButton
+import app.grocery.list.commons.compose.elements.dialog.AppHowToEditListItemsDialog
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialog
+import app.grocery.list.commons.compose.elements.question.optionalAppQuestion
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
@@ -284,25 +285,12 @@ private fun LazyListScope.items(
             )
         }
     }
-    if (props.needMoreListsButtonVisible) {
-        item(
-            key = "Need more lists",
-            contentType = "Need more lists",
-        ) {
-            AppQuestion(
-                text = StringValue.ResId(app.grocery.list.commons.compose.R.string.need_more_lists),
-                onClick = {
-                    callbacks.onNeedMoreListsClick()
-                },
-                onClose = {
-                    callbacks.onNeedMoreListsClose()
-                },
-                modifier = Modifier
-                    .padding(top = 16.dp)
-                    .animateItem(),
-            )
-        }
-    }
+    optionalAppQuestion(
+        props = props.question,
+        callbacks = callbacks,
+        modifier = Modifier
+            .padding(top = 16.dp),
+    )
 }
 
 private fun LazyListScope.enableAndDisableAll(
@@ -362,6 +350,11 @@ private fun OptionalDialog(
             is ProductListPreviewDialogProps.ConfirmPastedProductsWrapper -> {
                 ConfirmPastedListDialog(
                     props = props.dialog,
+                    callbacks = callbacks,
+                )
+            }
+            is ProductListPreviewDialogProps.HowToEditProducts -> {
+                AppHowToEditListItemsDialog(
                     callbacks = callbacks,
                 )
             }

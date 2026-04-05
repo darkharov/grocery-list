@@ -3,12 +3,16 @@ package app.grocery.list.product.list.preview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogProps
+import app.grocery.list.commons.compose.elements.question.AppQuestionMapper
+import app.grocery.list.commons.compose.elements.question.AppQuestionProps
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.domain.preview.GetProductListPreviewUseCase
+import app.grocery.list.domain.product.DeleteProductUseCase
 import app.grocery.list.domain.product.DisableAllProductsInCurrentListUseCase
 import app.grocery.list.domain.product.EnableAllProductsInCurrentListUseCase
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
+import app.grocery.list.domain.question.HowToEditProductsQuestion
 import app.grocery.list.domain.question.NeedMoreListsQuestion
 import app.grocery.list.domain.template.GetTemplateProductsUseCase
 import commons.android.customStateIn
@@ -25,10 +29,12 @@ import kotlinx.coroutines.launch
 internal class ProductListPreviewViewModel @Inject constructor(
     private val getPreview: GetProductListPreviewUseCase,
     private val productRepository: ProductRepository,
+    private val deleteProduct: DeleteProductUseCase,
     private val getFormattedTemplateProducts: GetTemplateProductsUseCase,
     private val enableAllInCurrentList: EnableAllProductsInCurrentListUseCase,
     private val disableAllInCurrentList: DisableAllProductsInCurrentListUseCase,
-    private val needMoreListsQuestion: NeedMoreListsQuestion,
+    private val productListPreviewMapper: ProductListPreviewMapper,
+    private val questionMapper: AppQuestionMapper,
 ) : ViewModel(),
     ProductListPreviewCallbacks {
 
@@ -39,12 +45,12 @@ internal class ProductListPreviewViewModel @Inject constructor(
     private fun createPropsStateFlow() =
         getPreview
             .execute()
-            .map(ProductListPreviewMapper::transform)
+            .map(productListPreviewMapper::transform)
             .customStateIn(this)
 
     override fun onDelete(productId: Int) {
         viewModelScope.launch {
-            val deletedProduct = productRepository.delete(productId = productId)
+            val deletedProduct = deleteProduct.execute(productId = productId)
             val event = Event.OnProductDeleted(deletedProduct)
             events.trySend(event)
         }
@@ -99,13 +105,26 @@ internal class ProductListPreviewViewModel @Inject constructor(
         }
     }
 
-    override fun onNeedMoreListsClick() {
-        events.trySend(Event.OnNeedMoreListsClick)
+    override fun onQuestionClose(question: AppQuestionProps) {
+        viewModelScope.launch {
+            questionMapper
+                .toDomain(question)
+                .close()
+        }
     }
 
-    override fun onNeedMoreListsClose() {
-        viewModelScope.launch {
-            needMoreListsQuestion.close()
+    override fun onQuestionClick(question: AppQuestionProps) {
+        val mapped = questionMapper.toDomain(question)
+        when (mapped) {
+            is HowToEditProductsQuestion -> {
+                dialog.value = ProductListPreviewDialogProps.HowToEditProducts
+            }
+            is NeedMoreListsQuestion -> {
+                events.trySend(Event.OnNeedMoreListsClick)
+            }
+            else -> {
+                throw UnsupportedOperationException("Unknown question: $question")
+            }
         }
     }
 

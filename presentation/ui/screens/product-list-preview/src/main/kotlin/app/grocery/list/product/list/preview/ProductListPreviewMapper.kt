@@ -4,13 +4,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import app.grocery.list.commons.compose.elements.question.AppQuestionMapper
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.domain.formatter.ProductTitleFormatter
 import app.grocery.list.domain.preview.ProductListPreview
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.collections.immutable.toImmutableList
 
-internal object ProductListPreviewMapper {
-
+@Singleton
+internal class ProductListPreviewMapper @Inject constructor(
+    private val questionMapper: AppQuestionMapper,
+) {
     fun transform(preview: ProductListPreview): ProductListPreviewProps =
         when (preview) {
             is ProductListPreview.Empty.Default -> {
@@ -64,7 +69,7 @@ internal object ProductListPreviewMapper {
                             disableAllAvailable = enableAndDisableAllFeatures.disableAllAvailable,
                         )
                     },
-                    needMoreListsButtonVisible = preview.needMoreListsQuestion,
+                    question = questionMapper.toPresentationNullable(preview.question),
                 )
             }
         }

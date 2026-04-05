@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import app.grocery.list.commons.compose.elements.question.AppQuestionProps
 import app.grocery.list.commons.compose.values.StringValue
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -29,7 +30,7 @@ sealed class ProductListPreviewProps {
     data class Items(
         val items: ImmutableList<CategoryAndFormattedProducts>,
         val enableAndDisableAll: EnableAndDisableAll?,
-        val needMoreListsButtonVisible: Boolean,
+        val question: AppQuestionProps?,
     ) : ProductListPreviewProps() {
 
         @Immutable
@@ -155,7 +156,7 @@ internal class ProductListPreviewMocks : PreviewParameterProvider<ProductListPre
                 ),
             ),
         ),
-        needMoreListsButtonVisible = true,
+        question = null,
     )
 
     override val values: Sequence<ProductListPreviewProps?> =

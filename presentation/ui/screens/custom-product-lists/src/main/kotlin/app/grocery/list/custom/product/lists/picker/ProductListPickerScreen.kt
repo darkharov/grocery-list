@@ -24,12 +24,11 @@ import app.grocery.list.commons.compose.elements.AppBottomBarContainer
 import app.grocery.list.commons.compose.elements.AppHorizontalDivider
 import app.grocery.list.commons.compose.elements.AppHorizontalDividerMode
 import app.grocery.list.commons.compose.elements.AppPreloader
-import app.grocery.list.commons.compose.elements.AppQuestion
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.elements.button.AppButtonAdd
+import app.grocery.list.commons.compose.elements.question.optionalAppQuestion
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
-import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.custom.product.lists.R
 import app.grocery.list.custom.product.lists.picker.dialog.ProductListPickerOptionalDialog
 import app.grocery.list.custom.product.lists.picker.item.ProductListPickerItem
@@ -140,30 +139,12 @@ private fun Items(
                     )
                 },
             )
-            when (val question = props.question) {
-                ProductListPickerProps.Question.HowToRenameOrDeleteCustomList -> {
-                    item(
-                        key = props.question.toString(),
-                        contentType = "Question",
-                    ) {
-                        AppQuestion(
-                            text = StringValue.ResId(R.string.how_to_edit_items),
-                            onClick = {
-                                callbacks.onQuestionClick(question)
-                            },
-                            onClose = {
-                                callbacks.onQuestionClose(question)
-                            },
-                            modifier = Modifier
-                                .padding(top = 40.dp)
-                                .animateItem(),
-                        )
-                    }
-                }
-                null -> {
-                    // nothing to show
-                }
-            }
+            optionalAppQuestion(
+                props = props.question,
+                callbacks = callbacks,
+                modifier = Modifier
+                    .padding(top = 40.dp),
+            )
         }
     }
 }

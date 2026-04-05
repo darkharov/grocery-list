@@ -2,6 +2,8 @@ package app.grocery.list.custom.product.lists.picker
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import app.grocery.list.commons.compose.elements.question.AppQuestionMapper
+import app.grocery.list.commons.compose.elements.question.AppQuestionProps
 import app.grocery.list.custom.product.lists.picker.dialog.ProductListPickerDialogProps
 import app.grocery.list.custom.product.lists.picker.item.ProductListPickerItemProps
 import app.grocery.list.custom.product.lists.picker.item.mappers.ProductListIdMapper
@@ -33,6 +35,7 @@ internal class ProductListPickerViewModel @Inject constructor(
     private val productListRepository: ProductListRepository,
     private val deleteCustomProductList: DeleteCustomProductListUseCase,
     private val howToDeleteOrRenameCustomList: HowToDeleteOrRenameCustomList,
+    private val questionMapper: AppQuestionMapper,
 ) : ViewModel(),
     ProductListPickerCallbacks {
 
@@ -107,21 +110,24 @@ internal class ProductListPickerViewModel @Inject constructor(
         idsOfExcludedOnes -= productListIdMapper.toDomain(customProductListId)
     }
 
-    override fun onQuestionClick(question: ProductListPickerProps.Question) {
-        when (question) {
-            ProductListPickerProps.Question.HowToRenameOrDeleteCustomList -> {
+    override fun onQuestionClick(question: AppQuestionProps) {
+        when (val mapped = questionMapper.toDomain(question)) {
+            is HowToDeleteOrRenameCustomList -> {
                 dialog.value = ProductListPickerDialogProps.HowToRenameOrDeleteCustomList
+            }
+            else -> {
+                throw UnsupportedOperationException("Unknown question: $mapped")
             }
         }
     }
 
-    override fun onQuestionClose(question: ProductListPickerProps.Question) {
+    override fun onQuestionClose(question: AppQuestionProps) {
         viewModelScope.launch {
             howToDeleteOrRenameCustomList.close()
         }
     }
 
-    override fun onQuestionDialogClose() {
+    override fun onDialogDismiss() {
         dialog.value = null
     }
 
