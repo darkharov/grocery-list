@@ -9,7 +9,7 @@ import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 
 @Singleton
-class HowToDeleteOrRenameCustomList @Inject internal constructor(
+class HowToEditCustomListsQuestion @Inject internal constructor(
     private val productListRepository: ProductListRepository,
 ) : ExperienceBasedQuestion() {
 

@@ -12,7 +12,7 @@ import app.grocery.list.domain.product.list.DeleteCustomProductListUseCase
 import app.grocery.list.domain.product.list.ProductList
 import app.grocery.list.domain.product.list.ProductListRepository
 import app.grocery.list.domain.product.list.SummarizeProductListsUseCase
-import app.grocery.list.domain.question.HowToDeleteOrRenameCustomList
+import app.grocery.list.domain.question.HowToEditCustomListsQuestion
 import app.grocery.list.kotlin.SimpleBuffer
 import commons.android.customStateIn
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,7 +34,7 @@ internal class ProductListPickerViewModel @Inject constructor(
     private val itemMapper: ProductListPickerItemMapper,
     private val productListRepository: ProductListRepository,
     private val deleteCustomProductList: DeleteCustomProductListUseCase,
-    private val howToDeleteOrRenameCustomList: HowToDeleteOrRenameCustomList,
+    private val howToEditCustomListsQuestion: HowToEditCustomListsQuestion,
     private val questionMapper: AppQuestionMapper,
 ) : ViewModel(),
     ProductListPickerCallbacks {
@@ -47,7 +47,7 @@ internal class ProductListPickerViewModel @Inject constructor(
         combine(
             summarizeProductLists.execute(),
             idsOfExcludedOnes.observe(),
-            howToDeleteOrRenameCustomList.takeIfShouldBeAsked(),
+            howToEditCustomListsQuestion.takeIfShouldBeAsked(),
             ProductListPickerMapper::Params,
         ).map(pickerMapper::toPresentation)
             .customStateIn(this)
@@ -112,7 +112,7 @@ internal class ProductListPickerViewModel @Inject constructor(
 
     override fun onQuestionClick(question: AppQuestionProps) {
         when (val mapped = questionMapper.toDomain(question)) {
-            is HowToDeleteOrRenameCustomList -> {
+            is HowToEditCustomListsQuestion -> {
                 dialog.value = ProductListPickerDialogProps.HowToRenameOrDeleteCustomList
             }
             else -> {
@@ -123,7 +123,7 @@ internal class ProductListPickerViewModel @Inject constructor(
 
     override fun onQuestionClose(question: AppQuestionProps) {
         viewModelScope.launch {
-            howToDeleteOrRenameCustomList.close()
+            howToEditCustomListsQuestion.close()
         }
     }
 

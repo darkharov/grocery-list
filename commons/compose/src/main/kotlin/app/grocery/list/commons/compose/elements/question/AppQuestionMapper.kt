@@ -2,7 +2,7 @@ package app.grocery.list.commons.compose.elements.question
 
 import app.grocery.list.commons.compose.R
 import app.grocery.list.commons.compose.values.StringValue
-import app.grocery.list.domain.question.HowToDeleteOrRenameCustomList
+import app.grocery.list.domain.question.HowToEditCustomListsQuestion
 import app.grocery.list.domain.question.HowToEditProductsQuestion
 import app.grocery.list.domain.question.NeedMoreListsQuestion
 import app.grocery.list.domain.question.Question
@@ -24,8 +24,8 @@ class AppQuestionMapper @Inject constructor() {
             is NeedMoreListsQuestion -> {
                 "NeedMoreListsQuestion" to StringValue.ResId(R.string.need_more_lists)
             }
-            is HowToDeleteOrRenameCustomList -> {
-                "HowToDeleteOrRenameCustomList" to StringValue.ResId(R.string.how_to_edit_items)
+            is HowToEditCustomListsQuestion -> {
+                "HowToEditCustomListsQuestion" to StringValue.ResId(R.string.how_to_edit_items)
             }
             is HowToEditProductsQuestion -> {
                 "HowToEditProductsQuestion" to StringValue.ResId(R.string.how_to_edit_items)
