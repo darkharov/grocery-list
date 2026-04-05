@@ -86,9 +86,9 @@
     <string name="color_scheme">Color scheme</string>
     <string name="delete_product_list_confirmation">Are you sure you want to delete this list?</string>
     <string name="how_to_edit_items">How to edit items?</string>
+    <string name="how_to_edit_items_answer">To rename, press and hold.\nTo delete, swipe left.</string>
     <string name="how_to_edit_items_answer_highlight_1">rename</string>
     <string name="how_to_edit_items_answer_highlight_2">delete</string>
-    <string name="how_to_edit_items_answer">To rename, press and hold.\nTo delete, swipe left.</string>
     <string name="default_list_is_uneditable_notice">The default list cannot be changed.</string>
 
     <string-array name="final_steps">
