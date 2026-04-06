@@ -90,6 +90,7 @@
     <string name="how_to_edit_items_answer_highlight_1">перейменувати</string>
     <string name="how_to_edit_items_answer_highlight_2">видалити</string>
     <string name="default_list_is_uneditable_notice">Стандартний список незмінний</string>
+    <string name="to_products">До продуктів</string>
 
     <string-array name="final_steps">
         <item>Заблокуйте екран</item>

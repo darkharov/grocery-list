@@ -1,6 +1,7 @@
 package app.grocery.list.custom.product.lists.picker
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,6 +27,7 @@ import app.grocery.list.commons.compose.elements.AppHorizontalDividerMode
 import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.elements.button.AppButtonAdd
+import app.grocery.list.commons.compose.elements.button.AppButtonPrev
 import app.grocery.list.commons.compose.elements.question.optionalAppQuestion
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
@@ -49,6 +51,9 @@ fun ProductListPickerScreen(
             }
             is ProductListPickerViewModel.Event.OnAddNew -> {
                 contract.goToCustomProductListInputForm()
+            }
+            is ProductListPickerViewModel.Event.OnExit -> {
+                contract.goBack()
             }
         }
     }
@@ -153,15 +158,27 @@ private fun Items(
 private fun Buttons(
     callbacks: ProductListPickerCallbacks,
 ) {
-    AppBottomBarContainer {
+    AppBottomBarContainer(
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier
+            .padding(
+                horizontal = dimensionResource(R.dimen.margin_16_32_64),
+            )
+    ) {
+        AppButtonPrev(
+            titleId = R.string.to_products,
+            onClick = {
+                callbacks.onGoToProductsClick()
+            },
+            modifier = Modifier
+                .weight(1f),
+        )
         AppButtonAdd(
             onClick = {
                 callbacks.onAddClick()
             },
             modifier = Modifier
-                .padding(
-                    horizontal = dimensionResource(R.dimen.margin_16_32_64),
-                ),
+                .weight(1f),
         )
     }
 }

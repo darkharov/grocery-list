@@ -90,6 +90,7 @@
     <string name="how_to_edit_items_answer_highlight_1">rename</string>
     <string name="how_to_edit_items_answer_highlight_2">delete</string>
     <string name="default_list_is_uneditable_notice">The default list cannot be changed.</string>
+    <string name="to_products">To products</string>
 
     <string-array name="final_steps">
         <item>Lock the screen</item>

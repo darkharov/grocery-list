@@ -130,6 +130,25 @@ fun AppButtonNext(
 }
 
 @Composable
+fun AppButtonPrev(
+    titleId: Int,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    state: AppButtonStateProps = AppButtonStateProps.Normal,
+) {
+    AppButton(
+        title = StringValue.ResId(
+            prefix = "<< ",
+            resId = titleId
+        ),
+        modifier = modifier,
+        endIcon = null,
+        state = state,
+        onClick = onClick,
+    )
+}
+
+@Composable
 fun AppButtonAdd(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,

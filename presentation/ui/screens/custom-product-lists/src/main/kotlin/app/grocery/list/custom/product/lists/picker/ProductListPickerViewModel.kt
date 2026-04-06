@@ -127,6 +127,10 @@ internal class ProductListPickerViewModel @Inject constructor(
         }
     }
 
+    override fun onGoToProductsClick() {
+        events.trySend(Event.OnExit)
+    }
+
     override fun onDialogDismiss() {
         dialog.value = null
     }
@@ -140,5 +144,6 @@ internal class ProductListPickerViewModel @Inject constructor(
     sealed class Event {
         data class OnEdit(val customListId: ProductList.Id.Custom) : Event()
         data object OnAddNew : Event()
+        data object OnExit : Event()
     }
 }
