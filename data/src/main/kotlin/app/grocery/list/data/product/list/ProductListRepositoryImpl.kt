@@ -29,6 +29,7 @@ internal class ProductListRepositoryImpl @Inject constructor(
     private val productListCountersMapper: ProductListCountersMapper,
     private val customProductListMapper: CustomProductListMapper,
     private val customProductListsSettingMapper: CustomProductListsSettingMapper,
+    private val optionalCustomListMapper: OptionalCustomListMapper,
     storageValueFactory: StorageValueFactory,
 ) : ProductListRepository {
 
@@ -95,37 +96,14 @@ internal class ProductListRepositoryImpl @Inject constructor(
 
     override fun allSummarized(): Flow<List<ProductList.RawSummary>> =
         combine(
-            productListDao.defaultListCounters(),
-            productListDao.customListsAndCounters(),
             productListDao.stubs(),
-        ) {
-                defaultListSize,
-                customListsAndSizes,
-                stubs,
-            ->
-            buildList {
-                add(
-                    ProductList.RawSummary(
-                        productList = defaultList(),
-                        counters = productListCountersMapper.toDomain(defaultListSize),
-                        items = stubs[null].orEmpty().map { item ->
-                            productListStubMapper.toDomain(item)
-                        },
-                    )
-                )
-                addAll(
-                    customListsAndSizes.map {
-                        val customList = it.customList
-                        ProductList.RawSummary(
-                            productList = customProductListMapper.toDomain(customList),
-                            counters = productListCountersMapper.toDomain(it.counters),
-                            items = stubs[customList.id]
-                                .orEmpty()
-                                .map { item ->
-                                    productListStubMapper.toDomain(item)
-                                },
-                        )
-                    }
+            productListDao.listsAndCounters(),
+        ) { stubs, listsAndCounters ->
+            listsAndCounters.map { (customList, counters) ->
+                ProductList.RawSummary(
+                    productList = optionalCustomListMapper.toDomain(customList) ?: defaultList(),
+                    counters = productListCountersMapper.toDomain(counters),
+                    items = stubs[customList.id].orEmpty().map(productListStubMapper::toDomain),
                 )
             }
         }.flowOn(Dispatchers.IO)

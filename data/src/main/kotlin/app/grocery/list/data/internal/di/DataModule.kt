@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import app.grocery.list.data.internal.db.AppDatabase
 import app.grocery.list.data.internal.di.migrations.MigrationFrom4To5
+import app.grocery.list.data.internal.di.migrations.MigrationFrom5To6
 import app.grocery.list.data.product.ProductDao
 import app.grocery.list.data.product.list.ProductListDao
 import dagger.Module
@@ -28,6 +29,7 @@ internal class DataModule {
             "app_database",
         ).addMigrations(
             MigrationFrom4To5,
+            MigrationFrom5To6,
         ).build()
 
     @Provides

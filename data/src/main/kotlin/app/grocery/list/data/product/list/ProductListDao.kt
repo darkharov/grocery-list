@@ -28,28 +28,8 @@ internal interface ProductListDao {
     @Query("SELECT * FROM custom_product_list")
     fun selectAll(): Flow<List<CustomProductListEntity>>
 
-    @Query(
-        """
-             SELECT custom_product_list.*,
-                    COUNT(product_id) AS total_size,
-                    COUNT(IIF(enabled, 1, NULL)) AS number_of_enabled_items
-               FROM custom_product_list
-          LEFT JOIN product
-                 ON fk_custom_list_id = custom_product_list_id
-           GROUP BY custom_product_list_id
-        """
-    )
-    fun customListsAndCounters(): Flow<List<CustomListAndCountersQuery>>
-
-    @Query(
-        """
-             SELECT COUNT(product_id) AS total_size,
-                    COUNT(IIF(enabled, 1, NULL)) AS number_of_enabled_items
-               FROM product
-              WHERE fk_custom_list_id IS NULL
-        """
-    )
-    fun defaultListCounters(): Flow<ProductListCountersQuery>
+    @Query("SELECT * FROM product_list_and_counters")
+    fun listsAndCounters(): Flow<Map<OptionalCustomListQuery, ProductListCountersQuery>>
 
     @Query(
         """

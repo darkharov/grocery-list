@@ -5,13 +5,17 @@ import androidx.room.RoomDatabase
 import app.grocery.list.data.product.ProductDao
 import app.grocery.list.data.product.ProductEntity
 import app.grocery.list.data.product.list.CustomProductListEntity
+import app.grocery.list.data.product.list.ProductListAndCountersView
 import app.grocery.list.data.product.list.ProductListDao
 
 @Database(
-    version = 5,
+    version = 6,
     entities = [
         ProductEntity::class,
         CustomProductListEntity::class,
+    ],
+    views = [
+        ProductListAndCountersView::class,
     ],
 )
 internal abstract class AppDatabase : RoomDatabase() {
