@@ -120,7 +120,7 @@ internal fun ProductListPickerItem(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier
-                            .alpha(if (props.counter.totalSize == 0) 0.4f else 0.82f),
+                            .alpha(0.82f),
                     )
                 } else {
                     Text(
