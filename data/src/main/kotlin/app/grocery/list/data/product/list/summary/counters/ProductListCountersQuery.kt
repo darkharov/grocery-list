@@ -1,8 +1,8 @@
-package app.grocery.list.data.product.list
+package app.grocery.list.data.product.list.summary.counters
 
 import androidx.room.ColumnInfo
 
-internal class ProductListCountersQuery(
+internal data class ProductListCountersQuery(
 
     @ColumnInfo("total_size")
     val totalSize: Int,

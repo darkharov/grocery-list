@@ -5,7 +5,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class CustomProductListIdMapper @Inject constructor() {
+internal class ProductListIdMapper @Inject constructor() {
 
     fun toData(productListId: ProductList.Id): Int? =
         when (productListId) {
@@ -17,7 +17,7 @@ internal class CustomProductListIdMapper @Inject constructor() {
             }
         }
 
-    fun toDomain(customProductListId: Int?) =
+    fun toDomain(customProductListId: Int?): ProductList.Id =
         if (customProductListId != null) {
             ProductList.Id.Custom(backingId = customProductListId)
         } else {

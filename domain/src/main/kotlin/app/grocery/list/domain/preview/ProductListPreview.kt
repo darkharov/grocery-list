@@ -2,12 +2,17 @@ package app.grocery.list.domain.preview
 
 import app.grocery.list.domain.category.Category
 import app.grocery.list.domain.formatter.ProductTitleFormatter
+import app.grocery.list.domain.product.list.ProductList
 import app.grocery.list.domain.question.Question
 import app.grocery.list.domain.template.Template
 
-sealed class ProductListPreview {
+data class ProductListPreview(
+    val currentList: CurrentListContent,
+    val neighbours: ProductList.Neighbours,
+) {
+    sealed class CurrentListContent
 
-    sealed class Empty : ProductListPreview() {
+    sealed class Empty : CurrentListContent() {
         data class Default(val templates: List<Template>) : Empty()
         data class CustomList(val title: String) : Empty()
     }
@@ -16,7 +21,7 @@ sealed class ProductListPreview {
         val categories: List<CategoryContent>,
         val enableAndDisableAllFeatures: EnableAndDisableAll?,
         val question: Question?,
-    ) : ProductListPreview() {
+    ) : CurrentListContent() {
 
         data class EnableAndDisableAll(
             val enableAllAvailable: Boolean,

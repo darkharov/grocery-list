@@ -1,7 +1,7 @@
 package app.grocery.list.data.product
 
 import app.grocery.list.data.product.emoji.and.keyword.EmojiAndKeywordMapper
-import app.grocery.list.data.product.list.CustomProductListIdMapper
+import app.grocery.list.data.product.list.ProductListIdMapper
 import app.grocery.list.domain.product.Product
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -9,7 +9,7 @@ import javax.inject.Singleton
 @Singleton
 internal class ProductMapper @Inject constructor(
     private val emojiAndKeywordMapper: EmojiAndKeywordMapper,
-    private val customProductListIdMapper: CustomProductListIdMapper,
+    private val productListIdMapper: ProductListIdMapper,
 ) {
     fun toData(product: Product): ProductEntity =
         ProductEntity(
@@ -20,7 +20,7 @@ internal class ProductMapper @Inject constructor(
             ),
             enabled = product.enabled,
             nonFkCategoryId = product.categoryId,
-            customListId = customProductListIdMapper.toData(
+            customListId = productListIdMapper.toData(
                 productListId = product.productListId,
             ),
         )
@@ -34,7 +34,7 @@ internal class ProductMapper @Inject constructor(
             ),
             enabled = entity.enabled,
             categoryId = entity.nonFkCategoryId,
-            productListId = customProductListIdMapper.toDomain(
+            productListId = productListIdMapper.toDomain(
                 customProductListId = entity.customListId,
             ),
         )

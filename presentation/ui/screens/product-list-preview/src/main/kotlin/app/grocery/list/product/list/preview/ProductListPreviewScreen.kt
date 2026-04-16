@@ -6,14 +6,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,17 +33,19 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
-import app.grocery.list.commons.compose.elements.button.text.AppTextButton
 import app.grocery.list.commons.compose.elements.dialog.AppHowToEditListItemsDialog
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialog
 import app.grocery.list.commons.compose.elements.question.optionalAppQuestion
+import app.grocery.list.commons.compose.elements.start.and.end.button.panel.AppStartAndEndButtonPanel
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.commons.compose.values.value
 import app.grocery.list.product.list.preview.ProductListPreviewViewModel.Event
-import app.grocery.list.product.list.preview.elements.ProductItem
+import app.grocery.list.product.list.preview.elements.item.ProductItem
+import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighbours
+import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighboursProps
 
 @Composable
 fun ProductListPreviewScreen(
@@ -53,26 +55,11 @@ fun ProductListPreviewScreen(
     val viewModel = hiltViewModel<ProductListPreviewViewModel>()
     val props by viewModel.props.collectAsStateWithLifecycle()
     val dialog by viewModel.dialog().collectAsStateWithLifecycle()
-    EventConsumer(
-        viewModel = viewModel,
-        contract = contract,
-    )
     PreloaderOrContent(
         props = props,
+        callbacks = viewModel,
         bottomBar = bottomBar,
-        callbacks = viewModel,
     )
-    OptionalDialog(
-        props = dialog,
-        callbacks = viewModel,
-    )
-}
-
-@Composable
-private fun EventConsumer(
-    viewModel: ProductListPreviewViewModel,
-    contract: ProductListPreviewContract,
-) {
     EventConsumer(viewModel.events()) { event ->
         when (event) {
             is Event.OnProductDeleted -> {
@@ -88,6 +75,10 @@ private fun EventConsumer(
             }
         }
     }
+    OptionalDialog(
+        props = dialog,
+        callbacks = viewModel,
+    )
 }
 
 @Composable
@@ -125,16 +116,19 @@ private fun Content(
             modifier = Modifier
                 .weight(1f),
         ) {
-            when (props) {
+            when (val currentList = props.currentListContent) {
                 is ProductListPreviewProps.Empty -> {
                     ListEmptyAndTemplates(
-                        props = props,
+                        content = currentList,
+                        neighbours = props.neighbours,
                         callbacks = callbacks,
                     )
                 }
                 is ProductListPreviewProps.Items -> {
                     ListWithDividers(
-                        props = props,
+                        currentListContent = currentList,
+                        neighbours = props.neighbours,
+                        listState = rememberLazyListState(),
                         callbacks = callbacks,
                     )
                 }
@@ -146,22 +140,24 @@ private fun Content(
 
 @Composable
 private fun ListEmptyAndTemplates(
-    props: ProductListPreviewProps.Empty,
+    content: ProductListPreviewProps.Empty,
+    neighbours: ProductListNeighboursProps?,
     callbacks: ProductListPreviewCallbacks,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
-            .padding(
-                horizontal = 16.dp + dimensionResource(R.dimen.margin_16_32_64),
-            )
             .fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
-        Column {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp + dimensionResource(R.dimen.margin_16_32_64)),
+        ) {
             val startPadding = 8.dp
             Text(
-                text = props.text.value(),
+                text = content.text.value(),
+                color = LocalAppColors.current.blackOrWhite,
                 style = LocalAppTypography.current.label,
                 modifier = Modifier
                     .padding(start = startPadding),
@@ -170,7 +166,7 @@ private fun ListEmptyAndTemplates(
                 modifier = Modifier
                     .height(16.dp),
             )
-            val templates = props.templates
+            val templates = content.templates
             if (templates != null) {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -195,16 +191,26 @@ private fun ListEmptyAndTemplates(
                 }
             }
         }
+        if (neighbours != null) {
+            ProductListNeighbours(
+                props = neighbours,
+                callbacks = callbacks,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter),
+            )
+        }
     }
 }
 
 @Composable
 private fun ListWithDividers(
-    props: ProductListPreviewProps.Items,
+    currentListContent: ProductListPreviewProps.Items,
+    neighbours: ProductListNeighboursProps?,
+    listState: LazyListState,
     callbacks: ProductListPreviewCallbacks,
     modifier: Modifier = Modifier,
 ) {
-    val listState = rememberLazyListState()
     ScrollableContentWithShadows(
         scrollableState = listState,
         modifier = modifier,
@@ -219,7 +225,8 @@ private fun ListWithDividers(
             ),
         ) {
             items(
-                props = props,
+                currentListContent = currentListContent,
+                neighbours = neighbours,
                 callbacks = callbacks,
             )
         }
@@ -227,17 +234,18 @@ private fun ListWithDividers(
 }
 
 private fun LazyListScope.items(
-    props: ProductListPreviewProps.Items,
+    currentListContent: ProductListPreviewProps.Items,
+    neighbours: ProductListNeighboursProps?,
     callbacks: ProductListPreviewCallbacks,
 ) {
-    val enableAndDisableAll = props.enableAndDisableAll
+    val enableAndDisableAll = currentListContent.enableAndDisableAll
     if (enableAndDisableAll != null) {
         enableAndDisableAll(
             enableAndDisableAll = enableAndDisableAll,
             callbacks = callbacks,
         )
     }
-    for ((index, item) in props.items.withIndex()) {
+    for ((index, item) in currentListContent.items.withIndex()) {
         val category = item.category
         if (category != null) {
             if (index > 0) {
@@ -286,11 +294,26 @@ private fun LazyListScope.items(
         }
     }
     optionalAppQuestion(
-        props = props.question,
+        props = currentListContent.question,
         callbacks = callbacks,
         modifier = Modifier
             .padding(top = 16.dp),
     )
+    if (neighbours != null) {
+        item(
+            key = neighbours.key,
+            contentType = "Neighbours",
+        ) {
+            ProductListNeighbours(
+                props = neighbours,
+                callbacks = callbacks,
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .fillParentMaxWidth()
+                    .animateItem(),
+            )
+        }
+    }
 }
 
 private fun LazyListScope.enableAndDisableAll(
@@ -298,45 +321,23 @@ private fun LazyListScope.enableAndDisableAll(
     callbacks: ProductListPreviewCallbacks,
 ) {
     item(
+        contentType = "Disable All and Enable All",
         key = enableAndDisableAll.key,
     ) {
-        val buttonHorizontalPadding = 8.dp
-        val buttonPaddingValues = PaddingValues(
-            horizontal = buttonHorizontalPadding,
-            vertical = 12.dp,
-        )
-        val desiredHorizontalOffset = dimensionResource(R.dimen.margin_16_32_64)
-        val finalHorizontalOffset = desiredHorizontalOffset - buttonHorizontalPadding
-        val maxWidth = 160.dp
-        Row(
+        AppStartAndEndButtonPanel(
+            startButtonText = StringValue.ResId(R.string.disable_all),
+            startButtonEnabled = enableAndDisableAll.disableAllAvailable,
+            onStartClick = {
+                callbacks.onDisableEnableAll()
+            },
+            endButtonText = StringValue.ResId(R.string.enable_all),
+            endButtonEnabled = enableAndDisableAll.enableAllAvailable,
+            onEndClick = {
+                callbacks.onEnableAll()
+            },
             modifier = Modifier
-                .fillParentMaxWidth()
-                .padding(
-                    horizontal = finalHorizontalOffset,
-                ),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            AppTextButton(
-                text = StringValue.ResId(R.string.disable_all),
-                onClick = {
-                    callbacks.onDisableEnableAll()
-                },
-                enabled = enableAndDisableAll.disableAllAvailable,
-                padding = buttonPaddingValues,
-                modifier = Modifier
-                    .widthIn(max = maxWidth),
-            )
-            AppTextButton(
-                text = StringValue.ResId(R.string.enable_all),
-                enabled = enableAndDisableAll.enableAllAvailable,
-                padding = buttonPaddingValues,
-                onClick = {
-                    callbacks.onEnableAll()
-                },
-                modifier = Modifier
-                    .widthIn(max = maxWidth),
-            )
-        }
+                .fillParentMaxWidth(),
+        )
     }
 }
 

@@ -1,13 +1,13 @@
 package app.grocery.list.data.product.list
 
-import android.content.Context
-import app.grocery.list.data.R
+import app.grocery.list.data.internal.di.DefaultProductList
+import app.grocery.list.data.product.list.custom.CustomProductListMapper
+import app.grocery.list.data.product.list.setting.CustomProductListsSettingMapper
+import app.grocery.list.data.product.list.summary.ProductListRawSummaryMapper
 import app.grocery.list.domain.product.list.CustomProductListsSetting
 import app.grocery.list.domain.product.list.ProductList
 import app.grocery.list.domain.product.list.ProductListRepository
-import app.grocery.list.domain.theming.ColorScheme
 import app.grocery.list.storage.value.android.StorageValueFactory
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.Dispatchers
@@ -22,14 +22,13 @@ import kotlinx.coroutines.withContext
 
 @Singleton
 internal class ProductListRepositoryImpl @Inject constructor(
-    @param:ApplicationContext
-    private val context: Context,
+    @param:DefaultProductList
+    private val defaultProductList: ProductList,
     private val productListDao: ProductListDao,
-    private val productListStubMapper: ProductListStubMapper,
-    private val productListCountersMapper: ProductListCountersMapper,
+    private val rawSummaryMapper: ProductListRawSummaryMapper,
     private val customProductListMapper: CustomProductListMapper,
     private val customProductListsSettingMapper: CustomProductListsSettingMapper,
-    private val optionalCustomListMapper: OptionalCustomListMapper,
+    private val neighboursMapper: ProductListNeighboursMapper,
     storageValueFactory: StorageValueFactory,
 ) : ProductListRepository {
 
@@ -71,7 +70,7 @@ internal class ProductListRepositoryImpl @Inject constructor(
             .selectAll()
             .map { entities ->
                 buildList {
-                    add(defaultList())
+                    add(defaultProductList)
                     addAll(
                         entities.map { entity ->
                             customProductListMapper.toDomain(entity)
@@ -84,7 +83,7 @@ internal class ProductListRepositoryImpl @Inject constructor(
     override fun get(id: ProductList.Id): Flow<ProductList> =
         when (id) {
             is ProductList.Id.Default -> {
-                flowOf(defaultList())
+                flowOf(defaultProductList)
             }
             is ProductList.Id.Custom -> {
                 productListDao
@@ -97,23 +96,10 @@ internal class ProductListRepositoryImpl @Inject constructor(
     override fun allSummarized(): Flow<List<ProductList.RawSummary>> =
         combine(
             productListDao.stubs(),
-            productListDao.listsAndCounters(),
-        ) { stubs, listsAndCounters ->
-            listsAndCounters.map { (customList, counters) ->
-                ProductList.RawSummary(
-                    productList = optionalCustomListMapper.toDomain(customList) ?: defaultList(),
-                    counters = productListCountersMapper.toDomain(counters),
-                    items = stubs[customList.id].orEmpty().map(productListStubMapper::toDomain),
-                )
-            }
-        }.flowOn(Dispatchers.IO)
-
-    private fun defaultList(): ProductList =
-        ProductList(
-            id = ProductList.Id.Default,
-            title = context.getString(R.string.grocery_list),
-            colorScheme = ColorScheme.Yellow,
-        )
+            productListDao.selectAllWithCounters(),
+            ProductListRawSummaryMapper::Params,
+        ).map(rawSummaryMapper::toDomain)
+            .flowOn(Dispatchers.IO)
 
     override fun customListsSetting(): Flow<CustomProductListsSetting> =
         customProductListsSetting
@@ -126,14 +112,14 @@ internal class ProductListRepositoryImpl @Inject constructor(
             .flatMapLatest { id ->
                 when (id) {
                     is ProductList.Id.Default -> {
-                        flowOf(defaultList())
+                        flowOf(defaultProductList)
                     }
                     is ProductList.Id.Custom -> {
                         productListDao
                             .select(id = id.backingId)
                             .map { entity ->
                                 if (entity == null) {
-                                    defaultList()
+                                    defaultProductList
                                 } else {
                                     customProductListMapper.toDomain(entity)
                                 }
@@ -181,6 +167,29 @@ internal class ProductListRepositoryImpl @Inject constructor(
                     flowOf(null)
                 }
             }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun neighbours(): Flow<ProductList.Neighbours> =
+        combine(
+            customListsSetting(),
+            selectedCustomListId.observe(),
+            ::Pair,
+        ).flatMapLatest { (featureState, selectedCustomListId) ->
+            if (featureState != CustomProductListsSetting.Enabled) {
+                flowOf(
+                    ProductList.Neighbours(
+                        leading = null,
+                        trailing = null,
+                    )
+                )
+            } else {
+                combine(
+                    productListDao.selectTrailingList(id = selectedCustomListId),
+                    productListDao.selectLeadingList(id = selectedCustomListId),
+                    transform = neighboursMapper::toDomain,
+                )
+            }
+        }
 
     override fun containsAtLeastOneCustomList(): Flow<Boolean> =
         productListDao.containsAtLeastOneCustomList()

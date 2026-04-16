@@ -135,7 +135,7 @@ internal fun ProductListPickerItem(
                 }
             }
             Text(
-                text = counter.toString(),
+                text = counter.formattedValue,
                 color = LocalAppColors.current.brand_30_40,
                 fontSize = fontSizeOfTitleAndCounter,
                 maxLines = 1,

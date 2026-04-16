@@ -12,9 +12,12 @@ import app.grocery.list.domain.product.DisableAllProductsInCurrentListUseCase
 import app.grocery.list.domain.product.EnableAllProductsInCurrentListUseCase
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
+import app.grocery.list.domain.product.list.ProductListRepository
 import app.grocery.list.domain.question.HowToEditProductsQuestion
 import app.grocery.list.domain.question.NeedMoreListsQuestion
 import app.grocery.list.domain.template.GetTemplateProductsUseCase
+import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighboursMapper
+import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighboursProps
 import commons.android.customStateIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -29,12 +32,14 @@ import kotlinx.coroutines.launch
 internal class ProductListPreviewViewModel @Inject constructor(
     private val getPreview: GetProductListPreviewUseCase,
     private val productRepository: ProductRepository,
+    private val productListRepository: ProductListRepository,
     private val deleteProduct: DeleteProductUseCase,
     private val getFormattedTemplateProducts: GetTemplateProductsUseCase,
     private val enableAllInCurrentList: EnableAllProductsInCurrentListUseCase,
     private val disableAllInCurrentList: DisableAllProductsInCurrentListUseCase,
     private val productListPreviewMapper: ProductListPreviewMapper,
     private val questionMapper: AppQuestionMapper,
+    private val productListNeighboursMapper: ProductListNeighboursMapper,
 ) : ViewModel(),
     ProductListPreviewCallbacks {
 
@@ -45,7 +50,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
     private fun createPropsStateFlow() =
         getPreview
             .execute()
-            .map(productListPreviewMapper::transform)
+            .map(productListPreviewMapper::toPresentation)
             .customStateIn(this)
 
     override fun onDelete(productId: Int) {
@@ -125,6 +130,13 @@ internal class ProductListPreviewViewModel @Inject constructor(
             else -> {
                 throw UnsupportedOperationException("Unknown question: $question")
             }
+        }
+    }
+
+    override fun onNeighbourProductListClick(item: ProductListNeighboursProps.Item) {
+        viewModelScope.launch {
+            val listWithCounters = productListNeighboursMapper.toDomain(item)
+            productListRepository.setSelectedOne(listWithCounters.productList.id)
         }
     }
 

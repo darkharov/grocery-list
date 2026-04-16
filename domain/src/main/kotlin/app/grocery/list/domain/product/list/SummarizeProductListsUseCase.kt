@@ -22,8 +22,10 @@ class SummarizeProductListsUseCase @Inject internal constructor(
             ->
             all.map { rawSummary ->
                 ProductList.Summary(
-                    productList = rawSummary.productList,
-                    counters = rawSummary.counters,
+                    listWithCounters = ProductList.WithCounters(
+                        productList = rawSummary.productList,
+                        counters = rawSummary.counters,
+                    ),
                     formattedStub = formatter.print(rawSummary),
                     isSelected = (rawSummary.productList.id == idOfSelectedOne),
                 )

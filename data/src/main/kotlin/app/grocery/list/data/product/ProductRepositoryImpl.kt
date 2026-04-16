@@ -3,7 +3,7 @@ package app.grocery.list.data.product
 import android.content.Context
 import app.grocery.list.data.R
 import app.grocery.list.data.category.CategoryDao
-import app.grocery.list.data.product.list.CustomProductListIdMapper
+import app.grocery.list.data.product.list.ProductListIdMapper
 import app.grocery.list.domain.product.EmojiAndCategoryId
 import app.grocery.list.domain.product.EmojiAndKeyword
 import app.grocery.list.domain.product.Product
@@ -28,13 +28,13 @@ internal class ProductRepositoryImpl @Inject constructor(
     private val productDao: ProductDao,
     private val productMapper: ProductMapper,
     private val categoryDao: CategoryDao,
-    private val customProductListIdMapper: CustomProductListIdMapper,
+    private val productListIdMapper: ProductListIdMapper,
 ) : ProductRepository {
 
     override fun get(criteria: Product.Criteria): Flow<List<Product>> =
         productDao
             .select(
-                customListId = customProductListIdMapper.toData(criteria.productListId),
+                customListId = productListIdMapper.toData(criteria.productListId),
                 enabledOnly = criteria.enabledOnly,
             )
             .map { entities ->
@@ -62,7 +62,7 @@ internal class ProductRepositoryImpl @Inject constructor(
     override suspend fun deleteAll(productListId: ProductList.Id) {
         withContext(Dispatchers.IO) {
             productDao.deleteAll(
-                customListId = customProductListIdMapper.toData(productListId),
+                customListId = productListIdMapper.toData(productListId),
             )
         }
     }
@@ -104,7 +104,7 @@ internal class ProductRepositoryImpl @Inject constructor(
     override fun count(criteria: Product.Criteria): Flow<Int> =
         productDao
             .count(
-                customListId = customProductListIdMapper.toData(criteria.productListId),
+                customListId = productListIdMapper.toData(criteria.productListId),
                 enabledOnly = criteria.enabledOnly,
             )
             .flowOn(Dispatchers.IO)
@@ -115,7 +115,7 @@ internal class ProductRepositoryImpl @Inject constructor(
     override fun any(criteria: Product.Criteria): Flow<Boolean> =
         productDao
             .any(
-                customListId = customProductListIdMapper.toData(criteria.productListId),
+                customListId = productListIdMapper.toData(criteria.productListId),
                 enabledOnly = criteria.enabledOnly,
             )
             .flowOn(Dispatchers.IO)
@@ -144,7 +144,7 @@ internal class ProductRepositoryImpl @Inject constructor(
         withContext(Dispatchers.IO) {
             productDao.setEnabledFlag(
                 enabled = true,
-                customListId = customProductListIdMapper.toData(productListId),
+                customListId = productListIdMapper.toData(productListId),
             )
         }
     }
@@ -153,7 +153,7 @@ internal class ProductRepositoryImpl @Inject constructor(
         withContext(Dispatchers.IO) {
             productDao.setEnabledFlag(
                 enabled = false,
-                customListId = customProductListIdMapper.toData(productListId),
+                customListId = productListIdMapper.toData(productListId),
             )
         }
     }

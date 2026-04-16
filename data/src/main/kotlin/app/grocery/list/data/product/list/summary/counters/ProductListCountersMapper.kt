@@ -1,4 +1,4 @@
-package app.grocery.list.data.product.list
+package app.grocery.list.data.product.list.summary.counters
 
 import app.grocery.list.domain.product.list.ProductList
 import javax.inject.Inject

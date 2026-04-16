@@ -1,4 +1,4 @@
-package app.grocery.list.data.product.list
+package app.grocery.list.data.product.list.custom
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

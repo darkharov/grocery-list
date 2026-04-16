@@ -2,11 +2,14 @@ package app.grocery.list.data.internal.di
 
 import android.content.Context
 import androidx.room.Room
+import app.grocery.list.data.R
 import app.grocery.list.data.internal.db.AppDatabase
 import app.grocery.list.data.internal.di.migrations.MigrationFrom4To5
 import app.grocery.list.data.internal.di.migrations.MigrationFrom5To6
 import app.grocery.list.data.product.ProductDao
 import app.grocery.list.data.product.list.ProductListDao
+import app.grocery.list.domain.product.list.ProductList
+import app.grocery.list.domain.theming.ColorScheme
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,4 +48,16 @@ internal class DataModule {
         appDatabase: AppDatabase,
     ): ProductListDao =
         appDatabase.productListDao()
+
+    @Provides
+    @DefaultProductList
+    @Singleton
+    fun defaultProductList(
+        @ApplicationContext context: Context,
+    ): ProductList =
+        ProductList(
+            id = ProductList.Id.Default,
+            title = context.getString(R.string.grocery_list),
+            colorScheme = ColorScheme.Yellow,
+        )
 }

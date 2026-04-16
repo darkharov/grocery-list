@@ -30,40 +30,52 @@ class GetProductListPreviewUseCase @Inject internal constructor(
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     fun execute(): Flow<ProductListPreview> =
-        getProducts
-            .execute()
-            .flatMapLatest { items ->
-                when {
-                    items.isEmpty() -> {
-                        productListRepository
-                            .titleOfCurrentCustomListOrNull()
-                            .map { customListTitle ->
-                                if (customListTitle != null) {
-                                    ProductListPreview.Empty.CustomList(
-                                        title = customListTitle,
-                                    )
-                                } else {
-                                    ProductListPreview.Empty.Default(
-                                        templates = templateRepository.all(),
-                                    )
-                                }
+        combine(
+            currentList(),
+            productListRepository.neighbours(),
+        ) { currentList, neighbours ->
+            ProductListPreview(
+                currentList = currentList,
+                neighbours = neighbours,
+            )
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun currentList(): Flow<ProductListPreview.CurrentListContent> =
+        getProducts.execute().flatMapLatest { items ->
+            when {
+                items.isEmpty() -> {
+                    productListRepository
+                        .titleOfCurrentCustomListOrNull()
+                        .map { customListTitle ->
+                            if (customListTitle != null) {
+                                ProductListPreview.Empty.CustomList(
+                                    title = customListTitle,
+                                )
+                            } else {
+                                ProductListPreview.Empty.Default(
+                                    templates = templateRepository.all(),
+                                )
                             }
-                    }
-                    else -> {
-                        combine(
-                            getProductTitleFormatter.execute(),
-                            howToEditProducts.takeIfShouldBeAskedOr { needMoreLists },
-                        ) { formatterResult,
-                            question ->
-                            items(
-                                categoryProducts = items,
-                                formatter = formatterResult.formatter,
-                                question = question,
-                            )
                         }
+                }
+                else -> {
+                    combine(
+                        getProductTitleFormatter.execute(),
+                        howToEditProducts.takeIfShouldBeAskedOr { needMoreLists },
+                    ) {
+                            formatterResult,
+                            question,
+                        ->
+                        items(
+                            categoryProducts = items,
+                            formatter = formatterResult.formatter,
+                            question = question,
+                        )
                     }
                 }
             }
+        }
 
     private suspend fun items(
         categoryProducts: List<CategoryProducts>,

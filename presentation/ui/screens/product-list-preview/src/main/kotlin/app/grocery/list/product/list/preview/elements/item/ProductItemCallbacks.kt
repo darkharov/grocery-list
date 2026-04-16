@@ -1,4 +1,4 @@
-package app.grocery.list.product.list.preview.elements
+package app.grocery.list.product.list.preview.elements.item
 
 internal interface ProductItemCallbacks {
     fun onDelete(productId: Int)

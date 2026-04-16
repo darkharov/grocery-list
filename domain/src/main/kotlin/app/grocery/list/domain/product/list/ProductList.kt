@@ -32,17 +32,21 @@ data class ProductList(
     )
 
     data class Summary(
-        val productList: ProductList,
-        val counters: Counters,
+        val listWithCounters: WithCounters,
         val formattedStub: String,
         val isSelected: Boolean,
-    )
+    ) {
+        val counters get() = listWithCounters.counters
+        val productList get() = listWithCounters.productList
+    }
 
     data class RawSummary(
-        val productList: ProductList,
-        val counters: Counters,
+        val listWithCounters: WithCounters,
         override val items: List<Item>,
     ) : ProductListStubFormatter.ProductListStub {
+
+        val counters get() = listWithCounters.counters
+        val productList get() = listWithCounters.productList
 
         override val totalSize = counters.totalSize
 
@@ -51,4 +55,14 @@ data class ProductList(
             override val emojiAndKeyword: EmojiAndKeyword?,
         ) : ProductTitleFormatter.Params
     }
+
+    data class WithCounters(
+        val productList: ProductList,
+        val counters: Counters,
+    )
+
+    data class Neighbours(
+        val trailing: WithCounters?,
+        val leading: WithCounters?,
+    )
 }

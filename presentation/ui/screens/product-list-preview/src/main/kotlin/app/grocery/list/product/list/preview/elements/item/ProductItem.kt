@@ -1,4 +1,4 @@
-package app.grocery.list.product.list.preview.elements
+package app.grocery.list.product.list.preview.elements.item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable

@@ -59,8 +59,19 @@ sealed class StringValue {
     }
 
     companion object {
+
         fun nullableString(value: String?) =
             value?.let(::StringWrapper)
+
+        fun <T : Any> nullableToString(
+            value: T?,
+            toString: T.() -> String,
+        ) =
+            if (value != null) {
+                StringWrapper(toString(value))
+            } else {
+                null
+            }
     }
 }
 

@@ -7,7 +7,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import app.grocery.list.data.internal.db.SqlAffixes
 import app.grocery.list.data.product.emoji.and.keyword.EmojiAndKeywordQuery
-import app.grocery.list.data.product.list.CustomProductListEntity
+import app.grocery.list.data.product.list.custom.CustomProductListEntity
 
 @Entity(
     tableName = ProductEntity.Table.NAME,

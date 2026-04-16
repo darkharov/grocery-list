@@ -6,18 +6,25 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import app.grocery.list.commons.compose.elements.question.AppQuestionProps
 import app.grocery.list.commons.compose.values.StringValue
+import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighboursMocks
+import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighboursProps
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.parcelize.Parcelize
 
 @Immutable
-sealed class ProductListPreviewProps {
+data class ProductListPreviewProps(
+    val currentListContent: CurrentListContent,
+    val neighbours: ProductListNeighboursProps?,
+) {
+    @Immutable
+    sealed class CurrentListContent
 
     @Immutable
     data class Empty(
         val text: StringValue,
         val templates: List<Template>?,
-    ) : ProductListPreviewProps() {
+    ) : CurrentListContent() {
 
         @Immutable
         data class Template(
@@ -31,7 +38,7 @@ sealed class ProductListPreviewProps {
         val items: ImmutableList<CategoryAndFormattedProducts>,
         val enableAndDisableAll: EnableAndDisableAll?,
         val question: AppQuestionProps?,
-    ) : ProductListPreviewProps() {
+    ) : CurrentListContent() {
 
         @Immutable
         data class EnableAndDisableAll(
@@ -89,7 +96,7 @@ internal class ProductListPreviewMocks : PreviewParameterProvider<ProductListPre
     private val productIds = generateSequence(1) { it + 1 }.iterator()
     private val categoryIds = generateSequence(1) { it + 1 }.iterator()
 
-    private val prototype = ProductListPreviewProps.Items(
+    private val currentListContentPrototype = ProductListPreviewProps.Items(
         enableAndDisableAll = ProductListPreviewProps.Items.EnableAndDisableAll(
             enableAllAvailable = true,
             disableAllAvailable = false,
@@ -162,6 +169,25 @@ internal class ProductListPreviewMocks : PreviewParameterProvider<ProductListPre
     override val values: Sequence<ProductListPreviewProps?> =
         sequenceOf(
             null,
-            prototype,
+            ProductListPreviewProps(
+                currentListContent = currentListContentPrototype,
+                neighbours = ProductListNeighboursMocks.prototype,
+            ),
+            ProductListPreviewProps(
+                currentListContent = ProductListPreviewProps.Empty(
+                    text = StringValue.StringWrapper("Text"),
+                    templates = listOf(
+                        ProductListPreviewProps.Empty.Template(
+                            id = 1,
+                            title = "Template1",
+                        ),
+                        ProductListPreviewProps.Empty.Template(
+                            id = 2,
+                            title = "Template2",
+                        ),
+                    ),
+                ),
+                neighbours = ProductListNeighboursMocks.prototype,
+            ),
         )
 }
