@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
@@ -297,6 +298,8 @@ private fun LazyListScope.items(
         props = currentListContent.question,
         callbacks = callbacks,
         modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentWidth(Alignment.CenterHorizontally)
             .padding(top = 16.dp),
     )
     if (neighbours != null) {
@@ -309,7 +312,6 @@ private fun LazyListScope.items(
                 callbacks = callbacks,
                 modifier = Modifier
                     .padding(top = 16.dp)
-                    .fillParentMaxWidth()
                     .animateItem(),
             )
         }

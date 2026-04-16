@@ -1,4 +1,4 @@
-package app.grocery.list.data.internal.di.migrations
+package app.grocery.list.data.internal.db.migrations
 
 import androidx.core.database.getStringOrNull
 import androidx.room.migration.Migration

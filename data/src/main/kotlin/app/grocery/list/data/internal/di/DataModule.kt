@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import app.grocery.list.data.R
 import app.grocery.list.data.internal.db.AppDatabase
-import app.grocery.list.data.internal.di.migrations.MigrationFrom4To5
-import app.grocery.list.data.internal.di.migrations.MigrationFrom5To6
+import app.grocery.list.data.internal.db.migrations.MigrationFrom4To5
+import app.grocery.list.data.internal.db.migrations.MigrationFrom5To6
 import app.grocery.list.data.product.ProductDao
 import app.grocery.list.data.product.list.ProductListDao
 import app.grocery.list.domain.product.list.ProductList

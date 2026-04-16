@@ -1,4 +1,4 @@
-package app.grocery.list.data.internal.di.migrations
+package app.grocery.list.data.internal.db.migrations
 
 import androidx.room.migration.Migration
 import androidx.sqlite.SQLiteConnection
