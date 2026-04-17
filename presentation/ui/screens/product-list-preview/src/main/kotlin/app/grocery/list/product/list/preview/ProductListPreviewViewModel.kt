@@ -16,6 +16,7 @@ import app.grocery.list.domain.product.list.ProductListRepository
 import app.grocery.list.domain.question.HowToEditProductsQuestion
 import app.grocery.list.domain.question.NeedMoreListsQuestion
 import app.grocery.list.domain.template.GetTemplateProductsUseCase
+import app.grocery.list.product.list.preview.elements.empty.list.placeholder.EmptyListPlaceholderProps
 import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighboursMapper
 import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighboursProps
 import commons.android.customStateIn
@@ -86,7 +87,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
         }
     }
 
-    override fun onTemplateClick(template: ProductListPreviewProps.Empty.Template) {
+    override fun onTemplateClick(template: EmptyListPlaceholderProps.Template) {
         viewModelScope.launch {
             val products = getFormattedTemplateProducts.execute(templateId = template.id)
             dialog.value = ProductListPreviewDialogProps.ConfirmPastedProductsWrapper(

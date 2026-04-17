@@ -5,6 +5,8 @@ import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDi
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialogCallbacksMock
 import app.grocery.list.commons.compose.elements.question.AppQuestionCallbacks
 import app.grocery.list.commons.compose.elements.question.AppQuestionCallbacksMock
+import app.grocery.list.product.list.preview.elements.empty.list.placeholder.EmptyListPlaceholderCallbacks
+import app.grocery.list.product.list.preview.elements.empty.list.placeholder.EmptyListPlaceholderCallbacksMock
 import app.grocery.list.product.list.preview.elements.item.ProductItemCallbacks
 import app.grocery.list.product.list.preview.elements.item.ProductItemCallbacksMock
 import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighboursCallbacks
@@ -12,22 +14,22 @@ import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeig
 
 @Stable
 internal interface ProductListPreviewCallbacks :
+    EmptyListPlaceholderCallbacks,
     ProductItemCallbacks,
     ConfirmPastedListDialogCallbacks,
     AppQuestionCallbacks,
     ProductListNeighboursCallbacks {
     fun onEnableAll()
     fun onDisableEnableAll()
-    fun onTemplateClick(template: ProductListPreviewProps.Empty.Template)
 }
 
 internal object ProductListPreviewCallbacksMock :
     ProductListPreviewCallbacks,
+    EmptyListPlaceholderCallbacks by EmptyListPlaceholderCallbacksMock,
     ProductItemCallbacks by ProductItemCallbacksMock,
     ConfirmPastedListDialogCallbacks by ConfirmPastedListDialogCallbacksMock,
     AppQuestionCallbacks by AppQuestionCallbacksMock,
     ProductListNeighboursCallbacks by ProductListNeighboursCallbacksMock {
     override fun onEnableAll() {}
     override fun onDisableEnableAll() {}
-    override fun onTemplateClick(template: ProductListPreviewProps.Empty.Template) {}
 }

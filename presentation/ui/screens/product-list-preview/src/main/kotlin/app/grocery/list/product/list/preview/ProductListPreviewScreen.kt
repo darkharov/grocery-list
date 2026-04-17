@@ -1,8 +1,5 @@
 package app.grocery.list.product.list.preview
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,22 +14,19 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.grocery.list.commons.compose.EventConsumer
-import app.grocery.list.commons.compose.elements.AppPreloader
+import app.grocery.list.commons.compose.elements.AppPreloaderOrContent
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.elements.dialog.AppHowToEditListItemsDialog
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialog
@@ -42,12 +36,13 @@ import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
-import app.grocery.list.commons.compose.values.value
 import app.grocery.list.product.list.preview.ProductListPreviewViewModel.Event
+import app.grocery.list.product.list.preview.elements.empty.list.placeholder.EmptyListPlaceholder
 import app.grocery.list.product.list.preview.elements.item.ProductItem
 import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighbours
 import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighboursProps
 import app.grocery.list.product.list.preview.elements.neighbours.productListNeighbours
+import kotlinx.coroutines.channels.ReceiveChannel
 
 @Composable
 fun ProductListPreviewScreen(
@@ -57,12 +52,27 @@ fun ProductListPreviewScreen(
     val viewModel = hiltViewModel<ProductListPreviewViewModel>()
     val props by viewModel.props.collectAsStateWithLifecycle()
     val dialog by viewModel.dialog().collectAsStateWithLifecycle()
-    PreloaderOrContent(
+    EventConsumer(
+        events = viewModel.events(),
+        contract = contract,
+    )
+    OptionalDialog(
+        props = dialog,
+        callbacks = viewModel,
+    )
+    ProductListPreviewScreen(
         props = props,
         callbacks = viewModel,
-        bottomBar = bottomBar,
+        bottomBar = bottomBar
     )
-    EventConsumer(viewModel.events()) { event ->
+}
+
+@Composable
+private fun EventConsumer(
+    events: ReceiveChannel<Event>,
+    contract: ProductListPreviewContract,
+) {
+    EventConsumer(events) { event ->
         when (event) {
             is Event.OnProductDeleted -> {
                 contract.showUndoProductDeletionSnackbar(event.product)
@@ -77,29 +87,42 @@ fun ProductListPreviewScreen(
             }
         }
     }
-    OptionalDialog(
-        props = dialog,
-        callbacks = viewModel,
-    )
 }
 
 @Composable
-private fun PreloaderOrContent(
+private fun OptionalDialog(
+    props: ProductListPreviewDialogProps?,
+    callbacks: ProductListPreviewCallbacks,
+) {
+    when (props) {
+        is ProductListPreviewDialogProps.ConfirmPastedProductsWrapper -> {
+            ConfirmPastedListDialog(
+                props = props.dialog,
+                callbacks = callbacks,
+            )
+        }
+        is ProductListPreviewDialogProps.HowToEditProducts -> {
+            AppHowToEditListItemsDialog(
+                callbacks = callbacks,
+            )
+        }
+        null -> {
+            // nothing to show
+        }
+    }
+}
+
+@Composable
+private fun ProductListPreviewScreen(
     props: ProductListPreviewProps?,
     callbacks: ProductListPreviewCallbacks,
-    bottomBar: @Composable () -> Unit,
-    modifier: Modifier = Modifier,
+    bottomBar: @Composable (() -> Unit),
 ) {
-    if (props == null) {
-        AppPreloader(
-            modifier = modifier,
-        )
-    } else {
+    AppPreloaderOrContent(props) { props ->
         Content(
             props = props,
             callbacks = callbacks,
             bottomBar = bottomBar,
-            modifier = modifier,
         )
     }
 }
@@ -114,94 +137,44 @@ private fun Content(
     Column(
         modifier = modifier,
     ) {
+        val listContent = props.currentListContent
+        val neighbours = props.neighbours
         Box(
             modifier = Modifier
+                .fillMaxWidth()
                 .weight(1f),
         ) {
-            when (val currentList = props.currentListContent) {
+            when (listContent) {
                 is ProductListPreviewProps.Empty -> {
-                    ListEmptyAndTemplates(
-                        content = currentList,
-                        neighbours = props.neighbours,
+                    EmptyListPlaceholder(
+                        props = listContent.backing,
                         callbacks = callbacks,
+                        modifier = Modifier
+                            .align(Alignment.Center),
                     )
                 }
                 is ProductListPreviewProps.Items -> {
                     ListWithDividers(
-                        currentListContent = currentList,
-                        neighbours = props.neighbours,
+                        currentListContent = listContent,
+                        neighbours = neighbours,
                         listState = rememberLazyListState(),
                         callbacks = callbacks,
                     )
                 }
             }
         }
-        bottomBar()
-    }
-}
-
-@Composable
-private fun ListEmptyAndTemplates(
-    content: ProductListPreviewProps.Empty,
-    neighbours: ProductListNeighboursProps?,
-    callbacks: ProductListPreviewCallbacks,
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier = modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 16.dp + dimensionResource(R.dimen.margin_16_32_64)),
+        if (
+            listContent is ProductListPreviewProps.Empty &&
+            neighbours != null
         ) {
-            val startPadding = 8.dp
-            Text(
-                text = content.text.value(),
-                color = LocalAppColors.current.blackOrWhite,
-                style = LocalAppTypography.current.label,
-                modifier = Modifier
-                    .padding(start = startPadding),
-            )
-            Spacer(
-                modifier = Modifier
-                    .height(16.dp),
-            )
-            val templates = content.templates
-            if (templates != null) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
-                ) {
-                    for (template in templates) {
-                        Text(
-                            text = "+ ${template.title}",
-                            color = LocalAppColors.current.brand_40_40,
-                            textAlign = TextAlign.Start,
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(8.dp))
-                                .clickable {
-                                    callbacks.onTemplateClick(template)
-                                }
-                                .padding(vertical = 6.dp)
-                                .padding(
-                                    end = 12.dp,
-                                    start = startPadding,
-                                ),
-                        )
-                    }
-                }
-            }
-        }
-        if (neighbours != null) {
             ProductListNeighbours(
                 props = neighbours,
                 callbacks = callbacks,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter),
+                    .fillMaxWidth(),
             )
         }
+        bottomBar()
     }
 }
 
@@ -335,28 +308,6 @@ private fun LazyListScope.enableAndDisableAll(
 }
 
 @Composable
-private fun OptionalDialog(
-    props: ProductListPreviewDialogProps?,
-    callbacks: ProductListPreviewCallbacks,
-) {
-    if (props != null) {
-        when (props) {
-            is ProductListPreviewDialogProps.ConfirmPastedProductsWrapper -> {
-                ConfirmPastedListDialog(
-                    props = props.dialog,
-                    callbacks = callbacks,
-                )
-            }
-            is ProductListPreviewDialogProps.HowToEditProducts -> {
-                AppHowToEditListItemsDialog(
-                    callbacks = callbacks,
-                )
-            }
-        }
-    }
-}
-
-@Composable
 @PreviewLightDark
 private fun ProductListPreviewPreview(
     @PreviewParameter(
@@ -365,10 +316,8 @@ private fun ProductListPreviewPreview(
     props: ProductListPreviewProps,
 ) {
     GroceryListTheme {
-        PreloaderOrContent(
+        ProductListPreviewScreen(
             props = props,
-            modifier = Modifier
-                .background(LocalAppColors.current.background),
             callbacks = ProductListPreviewCallbacksMock,
             bottomBar = {},
         )

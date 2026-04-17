@@ -5,7 +5,8 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import app.grocery.list.commons.compose.elements.question.AppQuestionProps
-import app.grocery.list.commons.compose.values.StringValue
+import app.grocery.list.product.list.preview.elements.empty.list.placeholder.EmptyListPlaceholderMocks
+import app.grocery.list.product.list.preview.elements.empty.list.placeholder.EmptyListPlaceholderProps
 import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighboursMocks
 import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighboursProps
 import kotlinx.collections.immutable.ImmutableList
@@ -22,16 +23,8 @@ data class ProductListPreviewProps(
 
     @Immutable
     data class Empty(
-        val text: StringValue,
-        val templates: List<Template>?,
-    ) : CurrentListContent() {
-
-        @Immutable
-        data class Template(
-            val id: Int,
-            val title: String,
-        )
-    }
+        val backing: EmptyListPlaceholderProps,
+    ) : CurrentListContent()
 
     @Immutable
     data class Items(
@@ -175,17 +168,7 @@ internal class ProductListPreviewMocks : PreviewParameterProvider<ProductListPre
             ),
             ProductListPreviewProps(
                 currentListContent = ProductListPreviewProps.Empty(
-                    text = StringValue.StringWrapper("Text"),
-                    templates = listOf(
-                        ProductListPreviewProps.Empty.Template(
-                            id = 1,
-                            title = "Template1",
-                        ),
-                        ProductListPreviewProps.Empty.Template(
-                            id = 2,
-                            title = "Template2",
-                        ),
-                    ),
+                    EmptyListPlaceholderMocks.prototype,
                 ),
                 neighbours = ProductListNeighboursMocks.prototype,
             ),
