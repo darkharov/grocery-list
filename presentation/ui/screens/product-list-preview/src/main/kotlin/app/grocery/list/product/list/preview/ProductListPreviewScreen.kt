@@ -36,7 +36,7 @@ import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.elements.dialog.AppHowToEditListItemsDialog
 import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialog
-import app.grocery.list.commons.compose.elements.question.optionalAppQuestion
+import app.grocery.list.commons.compose.elements.question.appQuestion
 import app.grocery.list.commons.compose.elements.start.and.end.button.panel.AppStartAndEndButtonPanel
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
@@ -294,7 +294,7 @@ private fun LazyListScope.items(
             )
         }
     }
-    optionalAppQuestion(
+    appQuestion(
         props = currentListContent.question,
         callbacks = callbacks,
         modifier = Modifier

@@ -28,7 +28,7 @@ import app.grocery.list.commons.compose.elements.AppPreloader
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.elements.button.AppButtonAdd
 import app.grocery.list.commons.compose.elements.button.AppButtonPrev
-import app.grocery.list.commons.compose.elements.question.optionalAppQuestion
+import app.grocery.list.commons.compose.elements.question.appQuestion
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.custom.product.lists.R
@@ -144,7 +144,7 @@ private fun Items(
                     )
                 },
             )
-            optionalAppQuestion(
+            appQuestion(
                 props = props.question,
                 callbacks = callbacks,
                 modifier = Modifier

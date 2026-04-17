@@ -56,7 +56,7 @@ fun AppQuestion(
     }
 }
 
-fun LazyListScope.optionalAppQuestion(
+fun LazyListScope.appQuestion(
     props: AppQuestionProps?,
     callbacks: AppQuestionCallbacks,
     modifier: Modifier = Modifier,
