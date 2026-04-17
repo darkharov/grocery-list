@@ -47,6 +47,7 @@ import app.grocery.list.product.list.preview.ProductListPreviewViewModel.Event
 import app.grocery.list.product.list.preview.elements.item.ProductItem
 import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighbours
 import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighboursProps
+import app.grocery.list.product.list.preview.elements.neighbours.productListNeighbours
 
 @Composable
 fun ProductListPreviewScreen(
@@ -302,20 +303,10 @@ private fun LazyListScope.items(
             .wrapContentWidth(Alignment.CenterHorizontally)
             .padding(top = 16.dp),
     )
-    if (neighbours != null) {
-        item(
-            key = neighbours.key,
-            contentType = "Neighbours",
-        ) {
-            ProductListNeighbours(
-                props = neighbours,
-                callbacks = callbacks,
-                modifier = Modifier
-                    .padding(top = 16.dp)
-                    .animateItem(),
-            )
-        }
-    }
+    productListNeighbours(
+        props = neighbours,
+        callbacks = callbacks,
+    )
 }
 
 private fun LazyListScope.enableAndDisableAll(
