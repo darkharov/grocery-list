@@ -18,8 +18,10 @@ internal class ProductListNeighboursMapper @Inject constructor(
             trailing != null ||
             leading != null
         ) {
+            val trailingId = trailing?.productList?.id
+            val leadingId = leading?.productList?.id
             ProductListNeighboursProps(
-                key = "$KEY_PREFIX trailing=${trailing?.productList?.id}, leading=${leading?.productList?.id}",
+                key = "$KEY_PREFIX trailing=$trailingId, leading=$leadingId",
                 trailing = trailing?.let(::toPresentation),
                 leading = leading?.let(::toPresentation),
             )
