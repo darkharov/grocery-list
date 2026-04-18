@@ -7,12 +7,12 @@ import app.grocery.list.domain.question.Question
 import app.grocery.list.domain.template.Template
 
 data class ProductListPreview(
-    val currentList: CurrentListContent,
+    val currentList: Content,
     val neighbours: ProductList.Neighbours,
 ) {
-    sealed class CurrentListContent
+    sealed class Content
 
-    sealed class Empty : CurrentListContent() {
+    sealed class Empty : Content() {
         data class Default(val templates: List<Template>) : Empty()
         data class CustomList(val title: String) : Empty()
     }
@@ -21,7 +21,7 @@ data class ProductListPreview(
         val categories: List<CategoryContent>,
         val enableAndDisableAllFeatures: EnableAndDisableAll?,
         val question: Question?,
-    ) : CurrentListContent() {
+    ) : Content() {
 
         data class EnableAndDisableAll(
             val enableAllAvailable: Boolean,

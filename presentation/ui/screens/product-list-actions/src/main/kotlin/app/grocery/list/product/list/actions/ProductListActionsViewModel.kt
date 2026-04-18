@@ -15,7 +15,7 @@ import app.grocery.list.domain.product.GroupEnabledAndDisabledProductsUseCase
 import app.grocery.list.domain.product.Product
 import app.grocery.list.domain.product.ProductRepository
 import app.grocery.list.domain.product.RewriteCurrentListUseCase
-import app.grocery.list.domain.product.list.ProductListRepository
+import app.grocery.list.domain.product.list.title.GetTitleOfSelectedCustomListUseCase
 import app.grocery.list.domain.settings.BottomBarSetting
 import app.grocery.list.domain.settings.SettingsRepository
 import app.grocery.list.domain.sharing.GetProductSharingStringUseCase
@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 internal class ProductListActionsViewModel @Inject constructor(
     private val productRepository: ProductRepository,
-    private val productListRepository: ProductListRepository,
+    private val getTitleOfSelectedCustomList: GetTitleOfSelectedCustomListUseCase,
     private val groupEnabledAndDisabled: GroupEnabledAndDisabledProductsUseCase,
     private val settingsRepository: SettingsRepository,
     private val getProductSharingString: GetProductSharingStringUseCase,
@@ -210,9 +210,9 @@ internal class ProductListActionsViewModel @Inject constructor(
 
     override fun onAttemptToClearList() {
         viewModelScope.launch {
-            val listTitle = productListRepository.titleOfCurrentCustomListOrNull().first()
+            val customListTitle = getTitleOfSelectedCustomList.execute()
             dialog.value = ProductListActionsDialogProps.ConfirmClearList(
-                listTitle = StringValue.nullableString(listTitle),
+                listTitle = StringValue.nullableString(customListTitle),
             )
         }
     }

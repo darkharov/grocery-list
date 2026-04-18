@@ -9,9 +9,11 @@ import kotlinx.coroutines.flow.map
 internal class GetCategorizedProductsUseCase @Inject constructor(
     private val getProducts: GetProductsUseCase,
 ) {
-    fun execute(enabledOnly: Boolean = false): Flow<List<CategoryProducts>> =
+    fun execute(
+        criteria: Product.RawCriteria = Product.RawCriteria(),
+    ): Flow<List<CategoryProducts>> =
         getProducts
-            .execute(enabledOnly = enabledOnly)
+            .execute(criteria)
             .map { products ->
                 products
                     .groupBy { it.categoryId }

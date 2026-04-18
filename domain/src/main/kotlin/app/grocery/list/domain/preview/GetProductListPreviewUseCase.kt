@@ -5,6 +5,9 @@ import app.grocery.list.domain.formatter.GetProductTitleFormatterUseCase
 import app.grocery.list.domain.formatter.ProductTitleFormatter
 import app.grocery.list.domain.product.CategoryProducts
 import app.grocery.list.domain.product.GetCategorizedProductsUseCase
+import app.grocery.list.domain.product.Product
+import app.grocery.list.domain.product.list.ProductList
+import app.grocery.list.domain.product.list.ProductListIdStrategy
 import app.grocery.list.domain.product.list.ProductListRepository
 import app.grocery.list.domain.question.HowToEditProductsQuestion
 import app.grocery.list.domain.question.NeedMoreListsQuestion
@@ -15,8 +18,10 @@ import javax.inject.Singleton
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.mapLatest
 
 @Singleton
 class GetProductListPreviewUseCase @Inject internal constructor(
@@ -30,34 +35,52 @@ class GetProductListPreviewUseCase @Inject internal constructor(
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     fun execute(): Flow<ProductListPreview> =
-        combine(
-            currentList(),
-            productListRepository.neighbours(),
-        ) { currentList, neighbours ->
-            ProductListPreview(
-                currentList = currentList,
-                neighbours = neighbours,
-            )
+        productListRepository.idOfSelectedOne().flatMapLatest { productListId ->
+            combine(
+                currentList(productListId),
+                productListRepository.neighbours(productListId),
+            ) { currentList, neighbours ->
+                ProductListPreview(
+                    currentList = currentList,
+                    neighbours = neighbours,
+                )
+            }
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun currentList(): Flow<ProductListPreview.CurrentListContent> =
-        getProducts.execute().flatMapLatest { items ->
+    private fun currentList(productListId: ProductList.Id): Flow<ProductListPreview.Content> =
+        getProducts.execute(
+            criteria = Product.RawCriteria(
+                listIdStrategy = ProductListIdStrategy.SpecificOne(
+                    id = productListId,
+                ),
+            )
+        ).flatMapLatest { items ->
             when {
                 items.isEmpty() -> {
-                    productListRepository
-                        .titleOfCurrentCustomListOrNull()
-                        .map { customListTitle ->
-                            if (customListTitle != null) {
-                                ProductListPreview.Empty.CustomList(
-                                    title = customListTitle,
-                                )
-                            } else {
+                    when (productListId) {
+                        is ProductList.Id.Custom -> {
+                            productListRepository
+                                .title(productListId = productListId)
+                                .mapLatest { title ->
+                                    if (title != null) {
+                                        ProductListPreview.Empty.CustomList(
+                                            title = title,
+                                        )
+                                    } else {
+                                        null
+                                    }
+                                }
+                                .filterNotNull()
+                        }
+                        is ProductList.Id.Default -> {
+                            flowOf(
                                 ProductListPreview.Empty.Default(
                                     templates = templateRepository.all(),
                                 )
-                            }
+                            )
                         }
+                    }
                 }
                 else -> {
                     combine(

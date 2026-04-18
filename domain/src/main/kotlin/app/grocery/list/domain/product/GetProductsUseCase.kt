@@ -14,16 +14,18 @@ internal class GetProductsUseCase @Inject constructor(
     private val productListRepository: ProductListRepository,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun execute(enabledOnly: Boolean = false): Flow<List<Product>> =
-        productListRepository
-            .idOfSelectedOne()
+    fun execute(
+        criteria: Product.RawCriteria = Product.RawCriteria(),
+    ): Flow<List<Product>> =
+        criteria
+            .listIdStrategy
+            .productListId(productListRepository)
             .map { productListId ->
                 Product.Criteria(
                     productListId = productListId,
-                    enabledOnly = enabledOnly,
+                    enabledOnly = criteria.enabledOnly,
                 )
-            }
-            .flatMapLatest { criteria ->
+            }.flatMapLatest { criteria ->
                 productRepository.get(criteria)
             }
 }

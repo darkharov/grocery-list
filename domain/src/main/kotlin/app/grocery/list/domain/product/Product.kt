@@ -2,6 +2,7 @@ package app.grocery.list.domain.product
 
 import app.grocery.list.domain.formatter.ProductTitleFormatter
 import app.grocery.list.domain.product.list.ProductList
+import app.grocery.list.domain.product.list.ProductListIdStrategy
 
 data class Product(
     val id: Int,
@@ -13,6 +14,11 @@ data class Product(
 ) : ProductTitleFormatter.Params {
 
     val disabled = !(enabled)
+
+    data class RawCriteria(
+        val enabledOnly: Boolean = false,
+        val listIdStrategy: ProductListIdStrategy = ProductListIdStrategy.CurrentSelection,
+    )
 
     data class Criteria(
         val enabledOnly: Boolean,

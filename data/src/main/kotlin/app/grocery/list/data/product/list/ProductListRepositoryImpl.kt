@@ -27,6 +27,7 @@ internal class ProductListRepositoryImpl @Inject constructor(
     private val productListDao: ProductListDao,
     private val rawSummaryMapper: ProductListRawSummaryMapper,
     private val customProductListMapper: CustomProductListMapper,
+    private val idMapper: ProductListIdMapper,
     private val customProductListsSettingMapper: CustomProductListsSettingMapper,
     private val neighboursMapper: ProductListNeighboursMapper,
     storageValueFactory: StorageValueFactory,
@@ -155,26 +156,21 @@ internal class ProductListRepositoryImpl @Inject constructor(
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun titleOfCurrentCustomListOrNull(): Flow<String?> =
-        selectedCustomListId
-            .observe()
-            .flatMapLatest { selectedCustomListId ->
-                if (selectedCustomListId != null) {
-                    productListDao
-                        .selectTitleOfCustomList(id = selectedCustomListId)
-                        .flowOn(Dispatchers.IO)
-                } else {
-                    flowOf(null)
-                }
+    override fun title(productListId: ProductList.Id): Flow<String?> =
+        when (productListId) {
+            is ProductList.Id.Custom -> {
+                productListDao
+                    .selectTitleOfCustomList(id = productListId.backingId)
+                    .flowOn(Dispatchers.IO)
             }
+            is ProductList.Id.Default -> {
+                flowOf(defaultProductList.title)
+            }
+        }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun neighbours(): Flow<ProductList.Neighbours> =
-        combine(
-            customListsSetting(),
-            selectedCustomListId.observe(),
-            ::Pair,
-        ).flatMapLatest { (featureState, selectedCustomListId) ->
+    override fun neighbours(productListId: ProductList.Id): Flow<ProductList.Neighbours> =
+        customListsSetting().flatMapLatest { featureState ->
             if (featureState != CustomProductListsSetting.Enabled) {
                 flowOf(
                     ProductList.Neighbours(
@@ -184,8 +180,8 @@ internal class ProductListRepositoryImpl @Inject constructor(
                 )
             } else {
                 combine(
-                    productListDao.selectTrailingList(id = selectedCustomListId),
-                    productListDao.selectLeadingList(id = selectedCustomListId),
+                    productListDao.selectTrailingList(id = idMapper.toData(productListId)),
+                    productListDao.selectLeadingList(id = idMapper.toData(productListId)),
                     transform = neighboursMapper::toDomain,
                 )
             }

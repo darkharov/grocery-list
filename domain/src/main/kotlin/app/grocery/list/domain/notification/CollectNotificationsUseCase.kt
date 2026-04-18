@@ -20,7 +20,11 @@ internal class CollectNotificationsUseCase @Inject constructor(
     fun execute(maxNumberOfItems: Int): Flow<List<NotificationContent>> =
         combine(
             getProductTitleFormatter.execute().map { it.formatter },
-            getProducts.execute(enabledOnly = true),
+            getProducts.execute(
+                Product.RawCriteria(
+                    enabledOnly = true,
+                )
+            ),
         ) { formatter, products ->
             groupProducts(
                 products = products,
