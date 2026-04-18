@@ -21,7 +21,7 @@ internal class ProductListNeighboursMapper @Inject constructor(
             val trailingId = trailing?.productList?.id
             val leadingId = leading?.productList?.id
             ProductListNeighboursProps(
-                key = "$KEY_PREFIX trailing=$trailingId, leading=$leadingId",
+                key = "ProductListNeighbours(trailingId=$trailingId, leadingId=${leadingId})",
                 trailing = trailing?.let(::toPresentation),
                 leading = leading?.let(::toPresentation),
             )
@@ -39,8 +39,4 @@ internal class ProductListNeighboursMapper @Inject constructor(
 
     fun toDomain(item: ProductListNeighboursProps.Item): ProductList.WithCounters =
         item.payload as ProductList.WithCounters
-
-    companion object {
-        private const val KEY_PREFIX = "app.grocery.list.product.list.preview.elements.neighbours"
-    }
 }

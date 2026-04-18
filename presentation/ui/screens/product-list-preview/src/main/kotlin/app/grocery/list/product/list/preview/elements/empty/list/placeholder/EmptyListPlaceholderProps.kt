@@ -6,6 +6,7 @@ import app.grocery.list.commons.compose.values.StringValue
 
 @Immutable
 data class EmptyListPlaceholderProps(
+    val key: String,
     val text: StringValue,
     val templates: List<Template>?,
 ) {
@@ -22,6 +23,7 @@ internal class EmptyListPlaceholderMocks : PreviewParameterProvider<EmptyListPla
 
     companion object {
         val prototype = EmptyListPlaceholderProps(
+            key = "EmptyListPlaceholderProps",
             text = StringValue.StringWrapper("Text"),
             templates = listOf(
                 EmptyListPlaceholderProps.Template(

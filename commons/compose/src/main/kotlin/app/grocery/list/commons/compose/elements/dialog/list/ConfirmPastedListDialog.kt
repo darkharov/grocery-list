@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import app.grocery.list.commons.compose.AppGradientDirection
@@ -70,7 +70,7 @@ fun ConfirmPastedListDialog(
     )
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 private fun ConfirmPastedListDialogPreview() {
     GroceryListTheme {

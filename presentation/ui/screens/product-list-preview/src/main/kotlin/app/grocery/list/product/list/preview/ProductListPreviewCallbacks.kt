@@ -7,10 +7,10 @@ import app.grocery.list.commons.compose.elements.question.AppQuestionCallbacks
 import app.grocery.list.commons.compose.elements.question.AppQuestionCallbacksMock
 import app.grocery.list.product.list.preview.elements.empty.list.placeholder.EmptyListPlaceholderCallbacks
 import app.grocery.list.product.list.preview.elements.empty.list.placeholder.EmptyListPlaceholderCallbacksMock
-import app.grocery.list.product.list.preview.elements.item.ProductItemCallbacks
-import app.grocery.list.product.list.preview.elements.item.ProductItemCallbacksMock
 import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighboursCallbacks
 import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighboursCallbacksMock
+import app.grocery.list.product.list.preview.elements.product.item.ProductItemCallbacks
+import app.grocery.list.product.list.preview.elements.product.item.ProductItemCallbacksMock
 
 @Stable
 internal interface ProductListPreviewCallbacks :

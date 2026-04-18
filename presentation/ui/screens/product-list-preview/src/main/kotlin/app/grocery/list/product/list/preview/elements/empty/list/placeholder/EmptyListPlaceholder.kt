@@ -3,13 +3,17 @@ package app.grocery.list.product.list.preview.elements.empty.list.placeholder
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
@@ -29,48 +33,69 @@ internal fun EmptyListPlaceholder(
     callbacks: EmptyListPlaceholderCallbacks,
     modifier: Modifier = Modifier,
 ) {
-    Column(
+    Box(
         modifier = modifier
-            .padding(
-                horizontal = 16.dp + dimensionResource(R.dimen.margin_16_32_64),
-            ),
+            .fillMaxWidth(),
+        contentAlignment = Alignment.Center,
     ) {
-        val startPadding = 8.dp
-        Text(
-            text = props.text.value(),
-            color = LocalAppColors.current.blackOrWhite,
-            style = LocalAppTypography.current.label,
+        Column(
             modifier = Modifier
-                .padding(start = startPadding),
-        )
-        Spacer(
-            modifier = Modifier
-                .height(16.dp),
-        )
-        val templates = props.templates
-        if (templates != null) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(4.dp),
-            ) {
-                for (template in templates) {
-                    Text(
-                        text = "+ ${template.title}",
-                        color = LocalAppColors.current.brand_40_40,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
-                            .clickable {
-                                callbacks.onTemplateClick(template)
-                            }
-                            .padding(vertical = 6.dp)
-                            .padding(
-                                end = 12.dp,
-                                start = startPadding,
-                            ),
-                    )
+                .padding(
+                    horizontal = 16.dp + dimensionResource(R.dimen.margin_16_32_64),
+                ),
+        ) {
+            val startPadding = 8.dp
+            Text(
+                text = props.text.value(),
+                color = LocalAppColors.current.blackOrWhite,
+                style = LocalAppTypography.current.label,
+                modifier = Modifier
+                    .padding(start = startPadding),
+            )
+            Spacer(
+                modifier = Modifier
+                    .height(16.dp),
+            )
+            val templates = props.templates
+            if (templates != null) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    for (template in templates) {
+                        Text(
+                            text = "+ ${template.title}",
+                            color = LocalAppColors.current.brand_40_40,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .clickable {
+                                    callbacks.onTemplateClick(template)
+                                }
+                                .padding(vertical = 6.dp)
+                                .padding(
+                                    end = 12.dp,
+                                    start = startPadding,
+                                ),
+                        )
+                    }
                 }
             }
         }
+    }
+}
+
+internal fun LazyListScope.emptyListPlaceholder(
+    props: EmptyListPlaceholderProps,
+    callbacks: EmptyListPlaceholderCallbacks,
+) {
+    item(
+        key = props.key,
+        contentType = "EmptyListPlaceholder"
+    ) {
+        EmptyListPlaceholder(
+            props = props,
+            callbacks = callbacks,
+        )
     }
 }
 

@@ -19,6 +19,8 @@ import app.grocery.list.domain.template.GetTemplateProductsUseCase
 import app.grocery.list.product.list.preview.elements.empty.list.placeholder.EmptyListPlaceholderProps
 import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighboursMapper
 import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighboursProps
+import app.grocery.list.product.list.preview.elements.product.item.ProductItemMapper
+import app.grocery.list.product.list.preview.elements.product.item.ProductItemProps
 import commons.android.customStateIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -41,6 +43,7 @@ internal class ProductListPreviewViewModel @Inject constructor(
     private val productListPreviewMapper: ProductListPreviewMapper,
     private val questionMapper: AppQuestionMapper,
     private val productListNeighboursMapper: ProductListNeighboursMapper,
+    private val productItemMapper: ProductItemMapper,
 ) : ViewModel(),
     ProductListPreviewCallbacks {
 
@@ -54,25 +57,29 @@ internal class ProductListPreviewViewModel @Inject constructor(
             .map(productListPreviewMapper::toPresentation)
             .customStateIn(this)
 
-    override fun onDelete(productId: Int) {
+    override fun onDelete(product: ProductItemProps) {
         viewModelScope.launch {
-            val deletedProduct = deleteProduct.execute(productId = productId)
+            val mapped = productItemMapper.toDomain(product)
+            val deletedProduct = deleteProduct.execute(productId = mapped.productId)
             val event = Event.OnProductDeleted(deletedProduct)
             events.trySend(event)
         }
     }
 
-    override fun onProductEnabledChange(productId: Int, newValue: Boolean) {
+    override fun onProductEnabledChange(product: ProductItemProps, newValue: Boolean) {
         viewModelScope.launch {
+            val mapped = productItemMapper.toDomain(product)
             productRepository.setEnabled(
-                productId = productId,
+                productId = mapped.productId,
                 enabled = newValue,
             )
         }
     }
 
-    override fun onEditProduct(productId: Int) {
-        events.trySend(Event.OnEditProduct(productId = productId))
+    override fun onEditProduct(product: ProductItemProps) {
+        val mapped = productItemMapper.toDomain(product)
+        val event = Event.OnEditProduct(productId = mapped.productId)
+        events.trySend(event)
     }
 
     override fun onEnableAll() {

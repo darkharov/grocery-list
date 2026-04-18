@@ -1,6 +1,5 @@
 package app.grocery.list.product.list.preview
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -11,8 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,8 +25,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.grocery.list.commons.compose.EventConsumer
 import app.grocery.list.commons.compose.elements.AppPreloaderOrContent
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
-import app.grocery.list.commons.compose.elements.dialog.AppHowToEditListItemsDialog
-import app.grocery.list.commons.compose.elements.dialog.list.ConfirmPastedListDialog
 import app.grocery.list.commons.compose.elements.question.appQuestion
 import app.grocery.list.commons.compose.elements.start.and.end.button.panel.AppStartAndEndButtonPanel
 import app.grocery.list.commons.compose.theme.GroceryListTheme
@@ -37,11 +32,9 @@ import app.grocery.list.commons.compose.theme.LocalAppColors
 import app.grocery.list.commons.compose.theme.LocalAppTypography
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.product.list.preview.ProductListPreviewViewModel.Event
-import app.grocery.list.product.list.preview.elements.empty.list.placeholder.EmptyListPlaceholder
-import app.grocery.list.product.list.preview.elements.item.ProductItem
-import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighbours
-import app.grocery.list.product.list.preview.elements.neighbours.ProductListNeighboursProps
+import app.grocery.list.product.list.preview.elements.empty.list.placeholder.emptyListPlaceholder
 import app.grocery.list.product.list.preview.elements.neighbours.productListNeighbours
+import app.grocery.list.product.list.preview.elements.product.item.products
 import kotlinx.coroutines.channels.ReceiveChannel
 
 @Composable
@@ -56,7 +49,7 @@ fun ProductListPreviewScreen(
         events = viewModel.events(),
         contract = contract,
     )
-    OptionalDialog(
+    ProductListPreviewDialog(
         props = dialog,
         callbacks = viewModel,
     )
@@ -90,87 +83,18 @@ private fun EventConsumer(
 }
 
 @Composable
-private fun OptionalDialog(
-    props: ProductListPreviewDialogProps?,
-    callbacks: ProductListPreviewCallbacks,
-) {
-    when (props) {
-        is ProductListPreviewDialogProps.ConfirmPastedProductsWrapper -> {
-            ConfirmPastedListDialog(
-                props = props.dialog,
-                callbacks = callbacks,
-            )
-        }
-        is ProductListPreviewDialogProps.HowToEditProducts -> {
-            AppHowToEditListItemsDialog(
-                callbacks = callbacks,
-            )
-        }
-        null -> {
-            // nothing to show
-        }
-    }
-}
-
-@Composable
 private fun ProductListPreviewScreen(
     props: ProductListPreviewProps?,
     callbacks: ProductListPreviewCallbacks,
     bottomBar: @Composable (() -> Unit),
 ) {
-    AppPreloaderOrContent(props) { props ->
-        Content(
-            props = props,
-            callbacks = callbacks,
-            bottomBar = bottomBar,
-        )
-    }
-}
-
-@Composable
-private fun Content(
-    props: ProductListPreviewProps,
-    callbacks: ProductListPreviewCallbacks,
-    bottomBar: @Composable () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier,
-    ) {
-        val listContent = props.currentListContent
-        val neighbours = props.neighbours
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-        ) {
-            when (listContent) {
-                is ProductListPreviewProps.Empty -> {
-                    EmptyListPlaceholder(
-                        props = listContent.backing,
-                        callbacks = callbacks,
-                        modifier = Modifier
-                            .align(Alignment.Center),
-                    )
-                }
-                is ProductListPreviewProps.Items -> {
-                    ListWithDividers(
-                        currentListContent = listContent,
-                        neighbours = neighbours,
-                        listState = rememberLazyListState(),
-                        callbacks = callbacks,
-                    )
-                }
-            }
-        }
-        if (
-            listContent is ProductListPreviewProps.Empty &&
-            neighbours != null
-        ) {
-            ProductListNeighbours(
-                props = neighbours,
+    Column {
+        AppPreloaderOrContent(props) { props ->
+            Content(
+                props = props,
                 callbacks = callbacks,
                 modifier = Modifier
+                    .weight(1f)
                     .fillMaxWidth(),
             )
         }
@@ -179,13 +103,14 @@ private fun Content(
 }
 
 @Composable
-private fun ListWithDividers(
-    currentListContent: ProductListPreviewProps.Items,
-    neighbours: ProductListNeighboursProps?,
-    listState: LazyListState,
+private fun Content(
+    props: ProductListPreviewProps,
     callbacks: ProductListPreviewCallbacks,
     modifier: Modifier = Modifier,
 ) {
+    val listState = rememberLazyListState()
+    val content = props.content
+    val neighbours = props.neighbours
     ScrollableContentWithShadows(
         scrollableState = listState,
         modifier = modifier,
@@ -198,10 +123,34 @@ private fun ListWithDividers(
                 top = 8.dp,
                 bottom = 16.dp,
             ),
+            verticalArrangement = content.arrangement,
         ) {
+            placeholderOrItems(
+                props = content,
+                callbacks = callbacks,
+            )
+            productListNeighbours(
+                props = neighbours,
+                callbacks = callbacks,
+            )
+        }
+    }
+}
+
+private fun LazyListScope.placeholderOrItems(
+    props: ProductListPreviewProps.ListContent,
+    callbacks: ProductListPreviewCallbacks,
+) {
+    when (props) {
+        is ProductListPreviewProps.Empty -> {
+            emptyListPlaceholder(
+                props = props.placeholder,
+                callbacks = callbacks,
+            )
+        }
+        is ProductListPreviewProps.Items -> {
             items(
-                currentListContent = currentListContent,
-                neighbours = neighbours,
+                content = props,
                 callbacks = callbacks,
             )
         }
@@ -209,76 +158,37 @@ private fun ListWithDividers(
 }
 
 private fun LazyListScope.items(
-    currentListContent: ProductListPreviewProps.Items,
-    neighbours: ProductListNeighboursProps?,
+    content: ProductListPreviewProps.Items,
     callbacks: ProductListPreviewCallbacks,
 ) {
-    val enableAndDisableAll = currentListContent.enableAndDisableAll
+    val enableAndDisableAll = content.enableAndDisableAll
     if (enableAndDisableAll != null) {
         enableAndDisableAll(
             enableAndDisableAll = enableAndDisableAll,
             callbacks = callbacks,
         )
     }
-    for ((index, item) in currentListContent.items.withIndex()) {
+    for ((index, item) in content.items.withIndex()) {
         val category = item.category
         if (category != null) {
             if (index > 0) {
-                // I am afraid of dynamic paddings in lazy columns
-                item(
-                    key = category.topOffsetKey,
-                    contentType = { "Category top offset" },
-                ) {
-                    Spacer(
-                        modifier = Modifier
-                            .height(26.dp),
-                    )
-                }
+                // I am afraid of non-static paddings of elements in lazy columns
+                categoryTopOffset(category)
             }
-            item(
-                key = category.key,
-                contentType = "Category",
-            ) {
-                Text(
-                    text = category.title,
-                    modifier = Modifier
-                        .padding(
-                            horizontal = dimensionResource(R.dimen.margin_16_32_64),
-                        )
-                        .padding(
-                            top = 6.dp,
-                            bottom = 6.dp,
-                        )
-                        .animateItem(),
-                    color = LocalAppColors.current.blackOrWhite,
-                    style = LocalAppTypography.current.header,
-                )
-            }
+            category(category)
         }
-        items(
+        products(
             items = item.products,
-            key = { it.key },
-            contentType = { "Product" },
-        ) { product ->
-            ProductItem(
-                product = product,
-                callbacks = callbacks,
-                modifier = Modifier
-                    .animateItem(),
-            )
-        }
+            callbacks = callbacks,
+        )
     }
     appQuestion(
-        props = currentListContent.question,
+        props = content.question,
         callbacks = callbacks,
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentWidth(Alignment.CenterHorizontally)
             .padding(top = 16.dp),
-    )
-    productListNeighbours(
-        props = neighbours,
-        callbacks = callbacks,
     )
 }
 
@@ -287,8 +197,8 @@ private fun LazyListScope.enableAndDisableAll(
     callbacks: ProductListPreviewCallbacks,
 ) {
     item(
-        contentType = "Disable All and Enable All",
-        key = enableAndDisableAll.key,
+        key = "EnableAndDisableAll",
+        contentType = "EnableAndDisableAll",
     ) {
         AppStartAndEndButtonPanel(
             startButtonText = StringValue.ResId(R.string.disable_all),
@@ -303,6 +213,42 @@ private fun LazyListScope.enableAndDisableAll(
             },
             modifier = Modifier
                 .fillParentMaxWidth(),
+        )
+    }
+}
+
+private fun LazyListScope.categoryTopOffset(
+    category: ProductListPreviewProps.Items.Category,
+) {
+    item(
+        key = category.topOffsetKey,
+        contentType = "CategoryTopOffset",
+    ) {
+        Spacer(
+            modifier = Modifier
+                .height(26.dp),
+        )
+    }
+}
+
+private fun LazyListScope.category(category: ProductListPreviewProps.Items.Category) {
+    item(
+        key = category.key,
+        contentType = "Category",
+    ) {
+        Text(
+            text = category.title,
+            modifier = Modifier
+                .padding(
+                    horizontal = dimensionResource(R.dimen.margin_16_32_64),
+                )
+                .padding(
+                    top = 6.dp,
+                    bottom = 6.dp,
+                )
+                .animateItem(),
+            color = LocalAppColors.current.blackOrWhite,
+            style = LocalAppTypography.current.header,
         )
     }
 }

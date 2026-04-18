@@ -1,4 +1,4 @@
-package app.grocery.list.product.list.preview.elements.item
+package app.grocery.list.product.list.preview.elements.product.item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
@@ -13,20 +15,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.elements.AppDeleteAction
 import app.grocery.list.commons.compose.elements.AppSwipeToDismissBox
 import app.grocery.list.commons.compose.elements.switch_.AppSwitch
 import app.grocery.list.commons.compose.theme.GroceryListTheme
 import app.grocery.list.commons.compose.theme.LocalAppColors
-import app.grocery.list.product.list.preview.ProductListPreviewProps
 import app.grocery.list.product.list.preview.R
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 internal fun ProductItem(
-    product: ProductListPreviewProps.Items.Product,
+    product: ProductItemProps,
     callbacks: ProductItemCallbacks,
     modifier: Modifier = Modifier,
 ) {
@@ -39,27 +41,27 @@ internal fun ProductItem(
         },
         onDismiss = {
             callbacks.onDelete(
-                productId = product.id,
+                product = product,
             )
         },
         modifier = modifier
             .combinedClickable(
                 onClick = {
                     callbacks.onProductEnabledChange(
-                        productId = product.id,
+                        product = product,
                         newValue = !(product.enabled),
                     )
                 },
                 onLongClick = {
                     callbacks.onEditProduct(
-                        productId = product.id,
+                        product = product,
                     )
                 },
             )
             .fillMaxWidth(),
     ) {
         Content(
-            product = product,
+            props = product,
             callbacks = callbacks,
         )
     }
@@ -85,10 +87,10 @@ private fun Actions(
 
 @Composable
 private fun Content(
-    product: ProductListPreviewProps.Items.Product,
+    props: ProductItemProps,
     callbacks: ProductItemCallbacks,
 ) {
-    val checked = product.enabled
+    val checked = props.enabled
     Row(
         modifier = Modifier
             .background(LocalAppColors.current.background)
@@ -98,7 +100,7 @@ private fun Content(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = product.title,
+            text = props.title,
             modifier = Modifier
                 .weight(1f),
             color = LocalAppColors.current.blackOrWhite,
@@ -111,7 +113,7 @@ private fun Content(
             checked = checked,
             onCheckedChange = { newValue ->
                 callbacks.onProductEnabledChange(
-                    productId = product.id,
+                    product = props,
                     newValue = newValue,
                 )
             },
@@ -119,16 +121,35 @@ private fun Content(
     }
 }
 
+internal fun LazyListScope.products(
+    items: ImmutableList<ProductItemProps>,
+    callbacks: ProductItemCallbacks,
+) {
+    items(
+        items = items,
+        key = { it.key },
+        contentType = { "Product" },
+    ) { product ->
+        ProductItem(
+            product = product,
+            callbacks = callbacks,
+            modifier = Modifier
+                .animateItem(),
+        )
+    }
+}
+
 @Composable
-@Preview
-private fun ProductItemPreview() {
+@PreviewLightDark
+private fun ProductItemPreview(
+    @PreviewParameter(
+        provider = ProductItemMocks::class,
+    )
+    props: ProductItemProps,
+) {
     GroceryListTheme {
         ProductItem(
-            product = ProductListPreviewProps.Items.Product(
-                id = 1,
-                title = AnnotatedString("🍅 Tomato"),
-                enabled = true,
-            ),
+            product = props,
             callbacks = ProductItemCallbacksMock,
             modifier = Modifier,
         )
