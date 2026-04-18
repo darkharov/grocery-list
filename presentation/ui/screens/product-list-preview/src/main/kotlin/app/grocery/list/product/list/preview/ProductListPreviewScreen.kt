@@ -123,7 +123,7 @@ private fun Content(
                 top = 8.dp,
                 bottom = 16.dp,
             ),
-            verticalArrangement = content.arrangement,
+            verticalArrangement = props.arrangement,
         ) {
             placeholderOrItems(
                 props = content,
