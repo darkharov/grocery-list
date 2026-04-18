@@ -20,19 +20,30 @@ data class ProductListPreviewProps(
     val content: ListContent,
     val neighbours: ProductListNeighboursProps?,
 ) {
+    @Stable
     val arrangement
         get() =
-            if (neighbours != null) {
-                content.arrangementWithNeighbours
-            } else {
-                Arrangement.Top
-            }
+            content.arrangements.get(hasNeighbours = neighbours != null)
 
     @Immutable
     sealed class ListContent {
 
+        @Immutable
+        data class Arrangements(
+            val withNeighbours: Arrangement.Vertical,
+            val withNoNeighbours: Arrangement.Vertical,
+        ) {
+            @Stable
+            fun get(hasNeighbours: Boolean) =
+                if (hasNeighbours) {
+                    withNeighbours
+                } else {
+                    withNoNeighbours
+                }
+        }
+
         @Stable
-        abstract val arrangementWithNeighbours: Arrangement.Vertical
+        abstract val arrangements: Arrangements
     }
 
     @Immutable
@@ -40,8 +51,10 @@ data class ProductListPreviewProps(
         val placeholder: EmptyListPlaceholderProps,
     ) : ListContent() {
 
-        @Stable
-        override val arrangementWithNeighbours get() = AppArrangement.LastAtBottomRestInCenter
+        override val arrangements = Arrangements(
+            withNeighbours = AppArrangement.LastAtBottomRestInCenter,
+            withNoNeighbours = Arrangement.Center,
+        )
     }
 
     @Immutable
@@ -51,8 +64,10 @@ data class ProductListPreviewProps(
         val question: AppQuestionProps?,
     ) : ListContent() {
 
-        @Stable
-        override val arrangementWithNeighbours get() = AppArrangement.LastAtBottomRestAtTop
+        override val arrangements = Arrangements(
+            withNeighbours = AppArrangement.LastAtBottomRestAtTop,
+            withNoNeighbours = Arrangement.Top,
+        )
 
         @Immutable
         data class EnableAndDisableAll(
