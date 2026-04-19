@@ -98,6 +98,7 @@ class NotificationPublisher @Inject internal constructor(
         ) {
             cancelAllNotifications()
             post(notifications)
+            handleProductListPublished.execute()
             true
         } else {
             false
@@ -108,7 +109,7 @@ class NotificationPublisher @Inject internal constructor(
     }
 
     @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-    private suspend fun post(notifications: List<NotificationContent>) {
+    private fun post(notifications: List<NotificationContent>) {
         val reversed = notifications.reversed() // The last ones rise to the top, but we need opposite behavior
         for (notification in reversed) {
             val androidNotification = mapper.transform(notification)
@@ -118,7 +119,6 @@ class NotificationPublisher @Inject internal constructor(
                 androidNotification,
             )
         }
-        handleProductListPublished.execute()
     }
 
     fun notifyIsUserOnFinalScreenChange(newValue: Boolean) {
