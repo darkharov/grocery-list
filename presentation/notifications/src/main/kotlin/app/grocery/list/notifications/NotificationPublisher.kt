@@ -117,8 +117,8 @@ class NotificationPublisher @Inject internal constructor(
                 notification.groupKey,
                 androidNotification,
             )
-            handleProductListPublished.execute()
         }
+        handleProductListPublished.execute()
     }
 
     fun notifyIsUserOnFinalScreenChange(newValue: Boolean) {
