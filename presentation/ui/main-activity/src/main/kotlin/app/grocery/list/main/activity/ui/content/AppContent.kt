@@ -101,6 +101,7 @@ internal fun AppContent(
                     Snackbar(
                         snackbarData = snackbarData,
                         modifier = Modifier
+                            .windowInsetsPadding(WindowInsets.navigationBars)
                             .padding(bottom = 120.dp),
                     )
                 }
