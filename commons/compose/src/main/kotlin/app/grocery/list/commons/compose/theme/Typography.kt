@@ -12,6 +12,7 @@ import app.grocery.list.commons.compose.R
 val LocalAppTypography = staticCompositionLocalOf { AppTypography() }
 
 private val Inter = FontFamily(
+    Font(R.font.inter_black, FontWeight.Black),
     Font(R.font.inter_extra_bold, FontWeight.ExtraBold),
     Font(R.font.inter_bold, FontWeight.Bold),
     Font(R.font.inter_semi_bold, FontWeight.SemiBold),
@@ -20,7 +21,9 @@ private val Inter = FontFamily(
 )
 
 private val RobotoCondenced = FontFamily(
-    Font(R.font.roboto_condensed_bold, FontWeight.Bold)
+    Font(R.font.roboto_condensed_bold, FontWeight.Bold),
+    Font(R.font.roboto_condensed_extra_bold, FontWeight.ExtraBold),
+    Font(R.font.roboto_condensed_black, FontWeight.Black),
 )
 
 @Immutable
@@ -46,8 +49,8 @@ class AppTypography {
 
     val toolbarTitle = TextStyle(
         fontFamily = Inter,
-        fontSize = 16.sp,
-        fontWeight = FontWeight.SemiBold,
+        fontSize = 15.sp,
+        fontWeight = FontWeight.Bold,
     )
 
     val header = TextStyle(
@@ -61,6 +64,12 @@ class AppTypography {
         fontFamily = Inter,
         fontSize = 16.sp,
         fontWeight = FontWeight.Bold,
+    )
+
+    val header3 = TextStyle(
+        fontSize = 16.sp,
+        fontWeight = FontWeight.Black,
+        fontFamily = Inter,
     )
 
     val label = TextStyle(

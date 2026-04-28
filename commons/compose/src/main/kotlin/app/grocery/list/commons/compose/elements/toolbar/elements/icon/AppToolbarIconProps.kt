@@ -1,4 +1,4 @@
-package app.grocery.list.commons.compose.elements.toolbar
+package app.grocery.list.commons.compose.elements.toolbar.elements.icon
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

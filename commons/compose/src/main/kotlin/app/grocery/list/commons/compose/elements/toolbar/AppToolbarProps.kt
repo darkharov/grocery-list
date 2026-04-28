@@ -3,6 +3,7 @@ package app.grocery.list.commons.compose.elements.toolbar
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import app.grocery.list.commons.compose.R
+import app.grocery.list.commons.compose.elements.toolbar.elements.icon.AppToolbarIconProps
 import app.grocery.list.commons.compose.values.StringValue
 
 @Immutable
@@ -18,6 +19,11 @@ data class AppToolbarProps(
         val leading: AppToolbarIconProps.Leading?,
         val trailing: AppToolbarIconProps.Trailing?,
     )
+
+    val noDecorations
+        get() =
+            !(mightHaveEmoji) &&
+            (counter == null)
 }
 
 class AppToolbarMocks : PreviewParameterProvider<AppToolbarProps> {

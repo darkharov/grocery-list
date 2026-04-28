@@ -1,7 +1,7 @@
 package app.grocery.list.main.activity.ui.content
 
-import app.grocery.list.commons.compose.elements.toolbar.AppToolbarIconProps
 import app.grocery.list.commons.compose.elements.toolbar.AppToolbarProps
+import app.grocery.list.commons.compose.elements.toolbar.elements.icon.AppToolbarIconProps
 import app.grocery.list.commons.compose.values.StringValue
 import app.grocery.list.domain.product.list.ProductList
 import app.grocery.list.domain.settings.ProductTitleFormat
