@@ -53,7 +53,7 @@ internal class ProductListPreviewMapper @Inject constructor(
             is ProductListPreview.Items -> {
                 val enableAndDisableAllFeatures = currentList.enableAndDisableAllFeatures
                 ProductListPreviewProps.Items(
-                    items = currentList.categories.map {
+                    items = currentList.categories.mapIndexed { index, it ->
                         val category = it.category
                         ProductListPreviewProps.Items.CategoryAndFormattedProducts(
                             category = if (category == null) {
@@ -62,6 +62,11 @@ internal class ProductListPreviewMapper @Inject constructor(
                                 ProductListPreviewProps.Items.Category(
                                     id = category.id,
                                     title = category.title,
+                                    topOffsetHolder = if (index == 0) {
+                                        ProductListPreviewProps.Items.Category.TopOffsetHolder.First
+                                    } else {
+                                        ProductListPreviewProps.Items.Category.TopOffsetHolder.Subsequent
+                                    },
                                 )
                             },
                             products = it

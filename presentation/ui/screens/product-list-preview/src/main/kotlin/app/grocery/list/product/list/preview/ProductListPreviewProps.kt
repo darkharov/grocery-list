@@ -5,6 +5,8 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import app.grocery.list.commons.compose.elements.question.AppQuestionProps
 import app.grocery.list.commons.compose.layout.AppArrangement
 import app.grocery.list.product.list.preview.elements.empty.list.placeholder.EmptyListPlaceholderMocks
@@ -85,9 +87,18 @@ data class ProductListPreviewProps(
         data class Category(
             val id: Int,
             val title: String,
+            private val topOffsetHolder: TopOffsetHolder = TopOffsetHolder.Subsequent,
         ) {
             val key = "Category $id"
-            val topOffsetKey = "CategoryTopOffset $id"
+            val topOffset get() = topOffsetHolder.value
+
+            @Immutable
+            enum class TopOffsetHolder(
+                val value: Dp,
+            ) {
+                First(value = 10.dp),
+                Subsequent(value = 28.dp),
+            }
         }
     }
 }
@@ -156,6 +167,7 @@ internal class ProductListPreviewMocks : PreviewParameterProvider<ProductListPre
                 category = ProductListPreviewProps.Items.Category(
                     id = categoryIds.next(),
                     title = "Veggies",
+                    topOffsetHolder = ProductListPreviewProps.Items.Category.TopOffsetHolder.First,
                 ),
                 products = veggies,
             ),

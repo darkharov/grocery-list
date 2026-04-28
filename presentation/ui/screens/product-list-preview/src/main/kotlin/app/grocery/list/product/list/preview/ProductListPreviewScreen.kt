@@ -1,11 +1,10 @@
 package app.grocery.list.product.list.preview
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -87,13 +86,14 @@ private fun ProductListPreviewScreen(
     props: ProductListPreviewProps?,
     callbacks: ProductListPreviewCallbacks,
     bottomBar: @Composable (() -> Unit),
+    modifier: Modifier = Modifier,
 ) {
     Column {
         AppPreloaderOrContent(props) { props ->
             Content(
                 props = props,
                 callbacks = callbacks,
-                modifier = Modifier
+                modifier = modifier
                     .weight(1f)
                     .fillMaxWidth(),
             )
@@ -168,13 +168,9 @@ private fun LazyListScope.items(
             callbacks = callbacks,
         )
     }
-    for ((index, item) in content.items.withIndex()) {
+    for (item in content.items) {
         val category = item.category
         if (category != null) {
-            if (index > 0) {
-                // I am afraid of non-static paddings of elements in lazy columns
-                categoryTopOffset(category)
-            }
             category(category)
         }
         products(
@@ -217,20 +213,6 @@ private fun LazyListScope.enableAndDisableAll(
     }
 }
 
-private fun LazyListScope.categoryTopOffset(
-    category: ProductListPreviewProps.Items.Category,
-) {
-    item(
-        key = category.topOffsetKey,
-        contentType = "CategoryTopOffset",
-    ) {
-        Spacer(
-            modifier = Modifier
-                .height(26.dp),
-        )
-    }
-}
-
 private fun LazyListScope.category(category: ProductListPreviewProps.Items.Category) {
     item(
         key = category.key,
@@ -243,12 +225,12 @@ private fun LazyListScope.category(category: ProductListPreviewProps.Items.Categ
                     horizontal = dimensionResource(R.dimen.margin_16_32_64),
                 )
                 .padding(
-                    top = 6.dp,
-                    bottom = 6.dp,
+                    top = category.topOffset,
+                    bottom = 8.dp,
                 )
                 .animateItem(),
             color = LocalAppColors.current.blackOrWhite,
-            style = LocalAppTypography.current.header,
+            style = LocalAppTypography.current.header3,
         )
     }
 }
@@ -266,6 +248,8 @@ private fun ProductListPreviewPreview(
             props = props,
             callbacks = ProductListPreviewCallbacksMock,
             bottomBar = {},
+            modifier = Modifier
+                .background(LocalAppColors.current.background),
         )
     }
 }
