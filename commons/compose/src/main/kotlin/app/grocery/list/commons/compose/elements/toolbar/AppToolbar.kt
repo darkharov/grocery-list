@@ -31,9 +31,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import app.grocery.list.commons.compose.R
-import app.grocery.list.commons.compose.elements.toolbar.elements.counter.AppToolbarCounterOrSpacer
+import app.grocery.list.commons.compose.elements.toolbar.elements.counter.AppCounterOrSpacer
 import app.grocery.list.commons.compose.elements.toolbar.elements.emoji.AppEmojiOrSpacer
 import app.grocery.list.commons.compose.elements.toolbar.elements.icon.AppToolbarIconOrSpace
 import app.grocery.list.commons.compose.theme.GroceryListTheme
@@ -87,28 +88,11 @@ fun AppToolbar(
                     title = props.title,
                 )
             } else {
-                AppEmojiOrSpacer(
-                    emoji = if (props.mightHaveEmoji) {
-                        emoji
-                    } else {
-                        null
-                    },
-                    modifier = Modifier
-                        .width(
-                            decorationItemSize +
-                            counterPadding * 2, // to sync spaces
-                        ),
-                )
-                Title(
-                    title = props.title,
-                    modifier = Modifier
-                        .animateContentSize(),
-                )
-                AppToolbarCounterOrSpacer(
-                    value = props.counter,
-                    modifier = Modifier
-                        .padding(counterPadding)
-                        .size(decorationItemSize),
+                DecoratedTitle(
+                    props = props,
+                    emoji = emoji,
+                    counterPadding = counterPadding,
+                    decorationItemSize = decorationItemSize,
                 )
             }
             Spacer(
@@ -130,6 +114,36 @@ fun AppToolbar(
             )
         }
     }
+}
+
+@Composable
+private fun DecoratedTitle(
+    props: AppToolbarProps,
+    emoji: String,
+    counterPadding: Dp,
+    decorationItemSize: Dp,
+) {
+    AppEmojiOrSpacer(
+        emoji = if (props.mightHaveEmoji) {
+            emoji
+        } else {
+            null
+        },
+        modifier = Modifier
+            .padding(start = counterPadding * 2) // to take the same space as counter
+            .width(decorationItemSize),
+    )
+    Title(
+        title = props.title,
+        modifier = Modifier
+            .animateContentSize(),
+    )
+    AppCounterOrSpacer(
+        value = props.counter,
+        modifier = Modifier
+            .padding(counterPadding)
+            .size(decorationItemSize),
+    )
 }
 
 private fun Resources.randomToolbarEmoji(): String {

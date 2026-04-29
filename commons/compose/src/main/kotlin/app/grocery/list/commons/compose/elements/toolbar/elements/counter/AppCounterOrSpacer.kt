@@ -33,7 +33,7 @@ import app.grocery.list.commons.compose.theme.GroceryListTheme
 private const val COUNTER_ANIMATION_DURATION = 250
 
 @Composable
-internal fun AppToolbarCounterOrSpacer(
+internal fun AppCounterOrSpacer(
     value: Int?,
     modifier: Modifier = Modifier,
 ) {
@@ -111,7 +111,7 @@ internal fun AppToolbarCounterOrSpacer(
 
 @Preview
 @Composable
-private fun AppToolbarCounterOrSpacerPreview() {
+private fun AppCounterOrSpacerPreview() {
     var value: Int by remember { mutableIntStateOf(13) }
     GroceryListTheme {
         Box(
@@ -120,7 +120,7 @@ private fun AppToolbarCounterOrSpacerPreview() {
                     value++
                 },
         ) {
-            AppToolbarCounterOrSpacer(
+            AppCounterOrSpacer(
                 value = value,
                 modifier = Modifier
                     .padding(4.dp)
@@ -132,9 +132,9 @@ private fun AppToolbarCounterOrSpacerPreview() {
 
 @Preview
 @Composable
-private fun AppToolbarCounterOrSpacerWithoutAnimationOnStartPreview() {
+private fun AppCounterOrSpacerWithoutAnimationOnStartPreview() {
     GroceryListTheme {
-        AppToolbarCounterOrSpacer(
+        AppCounterOrSpacer(
             value = 2,
             modifier = Modifier
                 .padding(4.dp)
