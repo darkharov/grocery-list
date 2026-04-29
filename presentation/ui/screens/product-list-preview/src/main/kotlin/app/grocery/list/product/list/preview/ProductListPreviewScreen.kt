@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.grocery.list.commons.compose.EventConsumer
+import app.grocery.list.commons.compose.OnKeyChange
 import app.grocery.list.commons.compose.elements.AppPreloaderOrContent
 import app.grocery.list.commons.compose.elements.ScrollableContentWithShadows
 import app.grocery.list.commons.compose.elements.question.appQuestion
@@ -112,10 +112,8 @@ private fun Content(
     val listState = rememberLazyListState()
     val content = props.content
     val neighbours = props.neighbours
-    LaunchedEffect(props.listKey) {
-        listState.animateScrollToItem(
-            index = 0,
-        )
+    OnKeyChange(props.listKey) {
+        listState.animateScrollToItem(0)
     }
     ScrollableContentWithShadows(
         scrollableState = listState,

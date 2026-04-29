@@ -2,6 +2,10 @@ package app.grocery.list.commons.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -9,6 +13,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.take
@@ -56,5 +61,20 @@ private fun KeyboardKeeper(
                 keyboard?.show()
                 return@collect
             }
+    }
+}
+
+@Suppress("AssignedValueIsNeverRead")
+@Composable
+fun OnKeyChange(
+    key: Any,
+    block: suspend CoroutineScope.() -> Unit,
+) {
+    var prevKey by rememberSaveable { mutableStateOf(key) }
+    LaunchedEffect(key) {
+        if (key != prevKey) {
+            block()
+            prevKey = key
+        }
     }
 }
