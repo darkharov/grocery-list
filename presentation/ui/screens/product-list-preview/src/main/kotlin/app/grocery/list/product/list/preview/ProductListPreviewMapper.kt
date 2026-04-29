@@ -18,6 +18,7 @@ internal class ProductListPreviewMapper @Inject constructor(
 ) {
     fun toPresentation(preview: ProductListPreview): ProductListPreviewProps =
         ProductListPreviewProps(
+            listKey = preview.listId.toString(),
             content = currentList(preview),
             neighbours = productListNeighboursMapper.toPresentation(preview.neighbours),
         )

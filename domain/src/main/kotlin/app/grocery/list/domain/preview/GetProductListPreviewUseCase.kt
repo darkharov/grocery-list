@@ -41,6 +41,7 @@ class GetProductListPreviewUseCase @Inject internal constructor(
                 productListRepository.neighbours(productListId),
             ) { currentList, neighbours ->
                 ProductListPreview(
+                    listId = productListId,
                     currentList = currentList,
                     neighbours = neighbours,
                 )

@@ -19,6 +19,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 data class ProductListPreviewProps(
+    val listKey: String,
     val content: ListContent,
     val neighbours: ProductListNeighboursProps?,
 ) {
@@ -193,10 +194,12 @@ internal class ProductListPreviewMocks : PreviewParameterProvider<ProductListPre
         sequenceOf(
             null,
             ProductListPreviewProps(
+                listKey = "listKey",
                 content = currentListContentPrototype,
                 neighbours = ProductListNeighboursMocks.prototype,
             ),
             ProductListPreviewProps(
+                listKey = "listKey",
                 content = ProductListPreviewProps.Empty(
                     placeholder = EmptyListPlaceholderMocks.prototype,
                 ),

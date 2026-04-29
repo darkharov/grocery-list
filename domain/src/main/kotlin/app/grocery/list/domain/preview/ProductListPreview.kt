@@ -7,6 +7,7 @@ import app.grocery.list.domain.question.Question
 import app.grocery.list.domain.template.Template
 
 data class ProductListPreview(
+    val listId: ProductList.Id,
     val currentList: Content,
     val neighbours: ProductList.Neighbours,
 ) {

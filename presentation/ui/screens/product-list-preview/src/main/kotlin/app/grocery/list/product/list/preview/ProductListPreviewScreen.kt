@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -111,6 +112,11 @@ private fun Content(
     val listState = rememberLazyListState()
     val content = props.content
     val neighbours = props.neighbours
+    LaunchedEffect(props.listKey) {
+        listState.animateScrollToItem(
+            index = 0,
+        )
+    }
     ScrollableContentWithShadows(
         scrollableState = listState,
         modifier = modifier,
