@@ -94,7 +94,10 @@ fun AppToolbar(
                         null
                     },
                     modifier = Modifier
-                        .width(decorationItemSize),
+                        .width(
+                            decorationItemSize +
+                            counterPadding * 2, // to sync spaces
+                        ),
                 )
                 Title(
                     title = props.title,
