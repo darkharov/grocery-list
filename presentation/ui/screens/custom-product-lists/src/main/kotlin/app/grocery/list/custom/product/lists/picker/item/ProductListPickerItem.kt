@@ -42,7 +42,6 @@ internal fun ProductListPickerItem(
     modifier: Modifier = Modifier,
 ) {
     val counter = props.counter
-    val fontSizeOfTitleAndCounter = 16.sp
     val fontSizeOfStubAndLabelEmpty = 13.sp
     val shape = RoundedCornerShape(8.dp)
     AppSwipeToDismissBox(
@@ -102,7 +101,6 @@ internal fun ProductListPickerItem(
                     Text(
                         text = props.title,
                         color = LocalAppColors.current.blackOrWhite,
-                        fontSize = fontSizeOfTitleAndCounter,
                         fontWeight = FontWeight.Bold,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,
@@ -137,7 +135,7 @@ internal fun ProductListPickerItem(
             Text(
                 text = counter.formattedValue,
                 color = LocalAppColors.current.brand_30_40,
-                fontSize = fontSizeOfTitleAndCounter,
+                fontSize = 14.sp,
                 maxLines = 1,
                 modifier = Modifier
                     .alpha(counter.alpha),
