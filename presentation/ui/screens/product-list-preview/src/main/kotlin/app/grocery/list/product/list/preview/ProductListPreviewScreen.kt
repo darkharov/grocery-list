@@ -213,7 +213,9 @@ private fun LazyListScope.enableAndDisableAll(
     }
 }
 
-private fun LazyListScope.category(category: ProductListPreviewProps.Items.Category) {
+private fun LazyListScope.category(
+    category: ProductListPreviewProps.Items.Category,
+) {
     item(
         key = category.key,
         contentType = "Category",
